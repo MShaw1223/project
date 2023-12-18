@@ -1,56 +1,43 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+//for main db table?
 import type { NextFetchEvent, NextRequest } from 'next/server';
 import { Pool } from '@neondatabase/serverless';
+import zod, { string } from 'zod';
+import sqlstring from 'sqlstring';
+import { extractBody } from '@/utils/extractBody';
 
 export const config = {
   runtime: 'edge',
 };
 
-async function extractBody(req: NextRequest) {
-  if(!req.body){
-    return null;
-  }
 
-  const decoder = new TextDecoder();
-
-  const reader = req.body.getReader();
-
-  let body = "";
-
-  while(true){
-    const {done, value} = await reader.read();
-    if(done){
-      try{
-        return JSON.parse(body)
-      }catch(e){
-        console.error(e)
-        return null
-      };
-    }
-    body = body + decoder.decode(value)
-
-  }
-
-}
+const schema = zod.object({
+  handle: string().max(100).min(1),
+})
 
 async function createPageHandler(req: NextRequest, event: NextFetchEvent) {
-  const body = req.body
+  const body = await extractBody(req);
   
+  const {handle} = schema.parse(body);
+
   console.log('body', body)
 
   const pool = new Pool({
     connectionString: process.env.DATABASE_URL
   })
 
-  const sql = 'SELECT NOW()'
+  const sql = sqlstring.format(`
+    INSERT INTO page (handle)
+    VALUES (?);  
+  `,[handle])
   
-  const {rows} = await pool.query(sql)
-  
-  const now = rows[0]
+  console.log("sql", sql)
+
+  await pool.query(sql)
   
   event.waitUntil(pool.end());
   
-  return new Response(JSON.stringify({ now }),{
+  return new Response(JSON.stringify({ handle }),{
     status: 200
   });
 }
