@@ -2,6 +2,7 @@ import { extractBody } from "@/utils/extractBody";
 import { useRouter } from "next/router";
 import { FormEvent } from "react";
 import { useMutation } from "react-query"
+import { ComboboxAccount } from "@/components/ui/comboBox";
 
 export default function Home() {
 
@@ -37,7 +38,7 @@ export default function Home() {
       {mutation.isLoading && <p>Creating Page...</p>}
       {!mutation.isLoading && (
         <div className="w-full flex justify-center">
-          
+          <ComboboxAccount></ComboboxAccount>
         </div>)}
     </main>
   )
