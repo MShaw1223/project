@@ -2,8 +2,7 @@ import { AccountDropdown } from "@/components/ui/selectAccount";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/router";
-import { useMutation } from "react-query";
-import { extractBody } from "@/utils/extractBody";
+import { useMutation } from "react-query"
 import { useState, FormEvent } from "react";
 
 
@@ -13,18 +12,18 @@ export default function Home() {
   const [selectedAccount, setSelectedAccount] = useState<string>('')
 
   const mutation = useMutation({
-    mutationFn: (handle: string) => {
-      return fetch("/api/entries",{
+    mutationFn: async (formData: string) => {
+      const response = await fetch("/api/entries",{
         method: "POST",
-        body: JSON.stringify({ handle })
-      })
+        body: formData
+         })
+         return response.json();
     },
-    onSuccess: async (res) => {
-      const body = await extractBody(res);
-      
-      const entryPrice = body.entryPrice;
-      const stopLoss = body.stopLoss;
-      const takeProfit = body.takeProfit;
+    onSuccess: (data) => {
+
+      const entryPrice = data.entryPrice;
+      const stopLoss = data.stopLoss;
+      const takeProfit = data.takeProfit;
       const composite = `/${entryPrice}/${stopLoss}/${takeProfit}`;
 
       router.push(composite);
@@ -37,19 +36,25 @@ export default function Home() {
 
   function handleSubmit(event: FormEvent<HTMLFormElement>){
     event.preventDefault()
-    const data = new FormData(event.target as HTMLFormElement)
-    const entryPrice = data.get("entryPrice")as string;
-    const stopLoss = data.get("stopLoss")as string;
-    const takeProfit = data.get("takeProfit")as string;
     
-    if(!entryPrice || !stopLoss || !takeProfit){
+    const data = new FormData(event.target as HTMLFormElement)
+    const entryPrice = parseFloat(data.get("entryPrice")as string);
+    const stopLoss = parseFloat(data.get("stopLoss")as string);
+    const takeProfit = parseFloat(data.get("takeProfit")as string);
+    const selectedAccountValue = selectedAccount;
+
+    if(!entryPrice || !stopLoss || !takeProfit || !selectedAccountValue){
       alert("Invalid entry");
       return;
     }
-    mutation.mutate(entryPrice);
-    mutation.mutate(stopLoss);
-    mutation.mutate(takeProfit);
-    mutation.mutate(selectedAccount);
+    const requestData = JSON.stringify({
+      entryPrice,
+      stopLoss,
+      takeProfit,
+      selectedAccount: selectedAccountValue,
+    });
+    
+    mutation.mutate(requestData);
 }
 
 

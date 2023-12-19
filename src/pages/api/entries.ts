@@ -53,12 +53,11 @@ async function createPageHandler(req: NextRequest, event: NextFetchEvent) {
   }
 
   const tradesAccountASql = sqlstring.format(`
-      INSERT INTO ${tradesTable} (trade_details, account_type)
+      INSERT INTO ${tradesTable} (details)
       VALUES (
-          ROW(?, ?, ?),
-          ?
+          ROW(?, ?, ?)
       );
-  `, [entryPrice, stopLoss, takeProfit, selectedAccount]);
+  `, [entryPrice, stopLoss, takeProfit]);
 
   const accountASql = sqlstring.format(`
       INSERT INTO ${accountTable} (id${accountTable.toLowerCase()})
