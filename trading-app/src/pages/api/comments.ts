@@ -5,10 +5,11 @@ import {v4 as uuidv4} from 'uuid';
 import sqlstring from 'sqlstring';
 import { Pool } from "@neondatabase/serverless";
 
+//this would be for SELECT to show the data has actually been entered to the db
+
 export const config = {
     runtime: 'edge'
 }
-
 const createCommentSchema = zod.object({
     page: z.string().max(100).min(1),
     comment: z.string().max(256),

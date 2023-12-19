@@ -1,35 +1,15 @@
-import { extractBody } from "@/utils/extractBody";
-import { useRouter } from "next/router";
-import { FormEvent } from "react";
-import { useMutation } from "react-query"
 import { AccountDropdown } from "@/components/ui/selectAccount";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { handleSubmit, mutation } from "@/utils/handleSubmits";
 
 export default function Home() {
 
-  const router = useRouter()
+  //have a utility for each of the submits --> handlesubmits.tsx\epsubmit.ts.....
+  
+  //issue with line 30, i have multiple inputs, could have submits
+  //one after the other?
 
-  const mutation = useMutation({
-    mutationFn: (handle: string) => {
-      return fetch("/api/pages",{
-        method: "POST",
-        body: JSON.stringify({ handle })
-      })
-    },
-    onSuccess: async (res) => {
-      const body = await extractBody(res);
-      const handle = body.handle;
-      router.push(`/${handle}`);
-    }
-  })
-  function handleSubmit(event: FormEvent<HTMLFormElement>){
-    event.preventDefault()
-    const data = new FormData(event.target as HTMLFormElement)
-    const handle = data.get("handle")as string;
-    if(!handle)return
-    mutation.mutate(handle);
-  }
   return (
     <main className="text-centre p-3 bg-slate-200 h-screen">
       <div className="flex flex-col items-center">
@@ -47,20 +27,20 @@ export default function Home() {
       </div>
       <div className="w-full md:w-1/2 lg:w-2/3 xl:w-3/4">
         <div className="flex flex-col items-center mx-auto">
-          <div className="my-auto w-80">
+          <form className="my-auto w-80" onSubmit={handleSubmit}>
             <div className="p-5">
-              <Input id="entryPrice" type="number" placeholder="Entry Price"></Input>
+              <Input id="entryPrice" name="entryPrice" type="number" placeholder="Entry Price"></Input>
             </div>
             <div className="p-5">
-              <Input id="stopLoss" type="number" placeholder="Stop Loss"></Input>
+              <Input id="stopLoss" name="stopLoss" type="number" placeholder="Stop Loss"></Input>
             </div>
             <div className="p-5">
-              <Input id="takeProfit" type="number" placeholder="Take Profit"></Input>
+              <Input id="takeProfit" name="takeProfit" type="number" placeholder="Take Profit"></Input>
             </div>
-          </div>
-          <div className="p-3">
-            <Button id="SubmitBut">Submit Entry</Button>
-          </div>
+            <div className="p-3">
+              <Button type="submit">Submit Entry</Button>
+            </div>
+          </form>
         </div>
       </div>
     </div>    
