@@ -4,7 +4,7 @@
 
 import type { NextFetchEvent, NextRequest } from 'next/server';
 import { Pool } from '@neondatabase/serverless';
-import zod, { number, string } from 'zod';
+import zod, { number } from 'zod';
 import sqlstring from 'sqlstring';
 import { extractBody } from '@/utils/extractBody';
 
@@ -17,12 +17,13 @@ const schema = zod.object({
   entryPrice: number().max(9999999.9999999).min(0.0000001), 
   stopLoss: number().max(9999999.9999999).min(0.0000001),
   takeProfit: number().max(9999999.9999999).min(0.0000001),
+  selectedAccount: zod.string(),
 })
 
 async function createPageHandler(req: NextRequest, event: NextFetchEvent) {
   const body = await extractBody(req);
   
-  const {entryPrice, stopLoss, takeProfit} = schema.parse(body);
+  const {entryPrice, stopLoss, takeProfit, selectedAccount} = schema.parse(body);
 
   console.log('body', body)
 
@@ -30,18 +31,40 @@ async function createPageHandler(req: NextRequest, event: NextFetchEvent) {
     connectionString: process.env.DATABASE_URL
   })
 
+  let tradesTable, accountTable;
+
+  switch (selectedAccount) {
+      case 'accountNumberOne':
+          tradesTable = 'tradesaccounta';
+          accountTable = 'accounta';
+          break;
+      case 'accountNumberTwo':
+          tradesTable = 'tradesaccountb';
+          accountTable = 'accountb';
+          break;
+      case 'accountNumberThree':
+          tradesTable = 'tradesaccountc';
+          accountTable = 'accountc';
+          break;
+      // Add more cases for additional accounts if needed
+
+      default:
+          throw new Error('Invalid selected account');
+  }
+
   const tradesAccountASql = sqlstring.format(`
-    INSERT INTO tradesaccounta (trade_details)
-    VALUES (
-      ROW(?, ?, ?)
-    );
-  `, [entryPrice, stopLoss, takeProfit]);
+      INSERT INTO ${tradesTable} (trade_details, account_type)
+      VALUES (
+          ROW(?, ?, ?),
+          ?
+      );
+  `, [entryPrice, stopLoss, takeProfit, selectedAccount]);
 
   const accountASql = sqlstring.format(`
-    INSERT INTO accounta (idaccounta)
-    VALUES (
-      (SELECT idAccountA FROM tradesaccounta LIMIT 1)
-    );
+      INSERT INTO ${accountTable} (id${accountTable.toLowerCase()})
+      VALUES (
+          (SELECT id${accountTable.toLowerCase()} FROM ${tradesTable} LIMIT 1)
+      );
   `);
 
   console.log("tradesAccountASql", tradesAccountASql);

@@ -4,11 +4,18 @@ import {
     SelectItem,
     SelectTrigger,
     SelectValue,
-  } from "@/components/ui/select"
+} from "@/components/ui/select"
 
-export function AccountDropdown(){
+interface AccountDropdownProps {
+    onAccountChange: (account: string) => void;
+}
+
+export function AccountDropdown({ onAccountChange }: AccountDropdownProps) {
+    const handleValueChange = (selectedAccount: string) => {
+        onAccountChange(selectedAccount);
+    };
     return(
-    <Select>
+    <Select onValueChange={handleValueChange} >
         <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Account Select..." />
         </SelectTrigger>

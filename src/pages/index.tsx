@@ -4,14 +4,13 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/router";
 import { useMutation } from "react-query";
 import { extractBody } from "@/utils/extractBody";
-import { FormEvent } from "react";
+import { useState, FormEvent } from "react";
 
 
 export default function Home() {
   const router = useRouter()
-  
-  //issue with line 30, i have multiple inputs, could have submits
-  //one after the other?
+
+  const [selectedAccount, setSelectedAccount] = useState<string>('')
 
   const mutation = useMutation({
     mutationFn: (handle: string) => {
@@ -26,12 +25,15 @@ export default function Home() {
       const entryPrice = body.entryPrice;
       const stopLoss = body.stopLoss;
       const takeProfit = body.takeProfit;
-      const composite = `/${entryPrice}/${stopLoss}${takeProfit}`;
+      const composite = `/${entryPrice}/${stopLoss}/${takeProfit}`;
 
       router.push(composite);
     }
   })
 
+  const handleAccountChange = (selectedAccount: string) => {
+    setSelectedAccount(selectedAccount);
+  };
 
   function handleSubmit(event: FormEvent<HTMLFormElement>){
     event.preventDefault()
@@ -47,6 +49,7 @@ export default function Home() {
     mutation.mutate(entryPrice);
     mutation.mutate(stopLoss);
     mutation.mutate(takeProfit);
+    mutation.mutate(selectedAccount);
 }
 
 
@@ -57,12 +60,12 @@ export default function Home() {
           Enter data
         </h1>
       </div>
-      {mutation.isLoading && <p>Submitting...</p>}
+      {mutation.isLoading && <p>Submitting Data...</p>}
       {!mutation.isLoading && (
       <div className="flex flex-row my-20">
       <div className="w-full md:w-1/2 lg:w-1/3 xl:w-1/4">
         <div className="ml-80 my-5">
-          <AccountDropdown></AccountDropdown>
+          <AccountDropdown onAccountChange={handleAccountChange}></AccountDropdown>
         </div>
       </div>
       <div className="w-full md:w-1/2 lg:w-2/3 xl:w-3/4">
