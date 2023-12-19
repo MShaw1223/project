@@ -14,9 +14,9 @@ export const config = {
 
 
 const schema = zod.object({
-  entryPrice: number().max(14).min(1), 
-  stopLoss: number().max(14).min(1),
-  takeProfit: number().max(14).min(1),
+  entryPrice: number().max(9999999.9999999).min(0.0000001), 
+  stopLoss: number().max(9999999.9999999).min(0.0000001),
+  takeProfit: number().max(9999999.9999999).min(0.0000001),
 })
 
 async function createPageHandler(req: NextRequest, event: NextFetchEvent) {
