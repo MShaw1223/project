@@ -73,7 +73,7 @@ export default function Home() {
             <div className="p-5">
               <Input id="takeProfit" name="takeProfit" type="number" placeholder="Take Profit..."></Input>
             </div>
-            <div className="p-3">
+            <div className="p-5">
               <Button type="submit">Submit Entry</Button>
             </div>
           </form>
