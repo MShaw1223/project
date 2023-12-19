@@ -31,16 +31,16 @@ async function createPageHandler(req: NextRequest, event: NextFetchEvent) {
   })
 
   const tradesAccountASql = sqlstring.format(`
-    INSERT INTO tradesAccountA (details)
+    INSERT INTO tradesaccounta (trade_details)
     VALUES (
       ROW(?, ?, ?)
     );
   `, [entryPrice, stopLoss, takeProfit]);
 
   const accountASql = sqlstring.format(`
-    INSERT INTO accountA (idAccountA)
+    INSERT INTO accounta (idaccounta)
     VALUES (
-      (SELECT idAccountA FROM tradesAccountA LIMIT 1)
+      (SELECT idAccountA FROM tradesaccounta LIMIT 1)
     );
   `);
 
