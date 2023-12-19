@@ -4,7 +4,7 @@
 
 import type { NextFetchEvent, NextRequest } from 'next/server';
 import { Pool } from '@neondatabase/serverless';
-import zod, { string } from 'zod';
+import zod, { number, string } from 'zod';
 import sqlstring from 'sqlstring';
 import { extractBody } from '@/utils/extractBody';
 
@@ -14,7 +14,7 @@ export const config = {
 
 
 const schema = zod.object({
-  handle: string().max(100).min(1),
+  handle: number().max(20).min(1),
 })
 
 async function createPageHandler(req: NextRequest, event: NextFetchEvent) {
@@ -31,10 +31,14 @@ async function createPageHandler(req: NextRequest, event: NextFetchEvent) {
   //change the name of the table --> table(field)
   //add to the handle array?
   const sql = sqlstring.format(`
-    INSERT INTO page (handle)
-    VALUES (?);  
+    INSERT INTO AccountA (trade_details)
+    VALUES (
+      ROW(
+        ?, ?, ?
+      )
+    );  
   `,[handle])
-  
+  //[entryPrice, stopLoss, takeProfit]
   console.log("sql", sql)
 
   await pool.query(sql)
