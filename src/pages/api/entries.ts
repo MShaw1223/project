@@ -14,13 +14,15 @@ export const config = {
 
 
 const schema = zod.object({
-  handle: number().max(20).min(1),
+  entryPrice: number().max(14).min(1), 
+  stopLoss: number().max(14).min(1),
+  takeProfit: number().max(14).min(1),
 })
 
 async function createPageHandler(req: NextRequest, event: NextFetchEvent) {
   const body = await extractBody(req);
   
-  const {handle} = schema.parse(body);
+  const {entryPrice, stopLoss, takeProfit} = schema.parse(body);
 
   console.log('body', body)
 
@@ -28,27 +30,36 @@ async function createPageHandler(req: NextRequest, event: NextFetchEvent) {
     connectionString: process.env.DATABASE_URL
   })
 
-  //change the name of the table --> table(field)
-  //add to the handle array?
-  const sql = sqlstring.format(`
-    INSERT INTO accounta (trade_details)
+  const tradesAccountASql = sqlstring.format(`
+    INSERT INTO tradesAccountA (details)
     VALUES (
-      ROW(
-        ?, ?, ?
-      )
-    );  
-  `,[handle])
-  //[entryPrice, stopLoss, takeProfit] --> this wont work :
-  // - work backwards find how to change handle / change handle const
-  // to an object of ep, sl, tp
-  // - change all instances with handle
-  console.log("sql", sql)
+      ROW(?, ?, ?)
+    );
+  `, [entryPrice, stopLoss, takeProfit]);
 
-  await pool.query(sql)
-  
+  const accountASql = sqlstring.format(`
+    INSERT INTO accountA (idAccountA)
+    VALUES (
+      (SELECT idAccountA FROM tradesAccountA LIMIT 1)
+    );
+  `);
+
+  console.log("tradesAccountASql", tradesAccountASql);
+  console.log("accountASql", accountASql);
+
+  await pool.query(tradesAccountASql);
+
+  await pool.query(accountASql);
+
   event.waitUntil(pool.end());
   
-  return new Response(JSON.stringify({ handle }),{
+  const responsePayload = {
+    entryPrice, 
+    stopLoss, 
+    takeProfit
+  };
+
+  return new Response(JSON.stringify({ responsePayload }),{
     status: 200
   });
 }

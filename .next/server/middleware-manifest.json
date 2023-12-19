@@ -1,6 +1,23 @@
 {
   "sortedMiddleware": [],
   "middleware": {},
-  "functions": {},
+  "functions": {
+    "/api/entries": {
+      "files": [
+        "server/edge-runtime-webpack.js",
+        "server/pages/api/entries.js"
+      ],
+      "name": "pages/api/entries",
+      "page": "/api/entries",
+      "matchers": [
+        {
+          "regexp": "^/api/entries$",
+          "originalSource": "/api/entries"
+        }
+      ],
+      "wasm": [],
+      "assets": []
+    }
+  },
   "version": 2
 }

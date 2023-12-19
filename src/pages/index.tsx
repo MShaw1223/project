@@ -15,7 +15,7 @@ export default function Home() {
 
   const mutation = useMutation({
     mutationFn: (handle: string) => {
-      return fetch("/api/pages",{
+      return fetch("/api/entries",{
         method: "POST",
         body: JSON.stringify({ handle })
       })
@@ -24,11 +24,11 @@ export default function Home() {
       const body = await extractBody(res);
       
       const entryPrice = body.entryPrice;
-      router.push(`/${entryPrice}`);
       const stopLoss = body.stopLoss;
-      router.push(`/${stopLoss}`);
       const takeProfit = body.takeProfit;
-      router.push(`/${takeProfit}`);
+      const composite = `/${entryPrice}/${stopLoss}${takeProfit}`;
+
+      router.push(composite);
     }
   })
 
@@ -38,8 +38,12 @@ export default function Home() {
     const data = new FormData(event.target as HTMLFormElement)
     const entryPrice = data.get("entryPrice")as string;
     const stopLoss = data.get("stopLoss")as string;
-    const takeProfit = data.get("takeprofit")as string;
-    if(!entryPrice || !stopLoss || !takeProfit)return
+    const takeProfit = data.get("takeProfit")as string;
+    
+    if(!entryPrice || !stopLoss || !takeProfit){
+      alert("Invalid entry");
+      return;
+    }
     mutation.mutate(entryPrice);
     mutation.mutate(stopLoss);
     mutation.mutate(takeProfit);
@@ -47,13 +51,13 @@ export default function Home() {
 
 
   return (
-    <main className="text-centre p-3 bg-slate-200 h-screen">
+    <main className="text-center p-3 bg-slate-200 h-screen">
       <div className="flex flex-col items-center">
         <h1 className="m-4 text-4xl font-extrabold text-black">
           Enter data
         </h1>
       </div>
-      {mutation.isLoading && <p>Creating Page...</p>}
+      {mutation.isLoading && <p>Submitting...</p>}
       {!mutation.isLoading && (
       <div className="flex flex-row my-20">
       <div className="w-full md:w-1/2 lg:w-1/3 xl:w-1/4">
