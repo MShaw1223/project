@@ -12,7 +12,6 @@ export const config = {
   runtime: 'edge',
 };
 
-
 const schema = zod.object({
   entryPrice: number().max(9999999.9999999).min(0.0000001), 
   stopLoss: number().max(9999999.9999999).min(0.0000001),

@@ -19,15 +19,17 @@ export default function Home() {
          })
          return response.json();
     },
-    onSuccess: (data) => {
+    /*onSuccess: (data) => {
 
-      const entryPrice = data.entryPrice;
-      const stopLoss = data.stopLoss;
-      const takeProfit = data.takeProfit;
-      const composite = `/${entryPrice}/${stopLoss}/${takeProfit}`;
+      const a = data;
+      const b = data;
+      const c = data;
+      const composite = `/${a}/${b}/${c}`;
 
       router.push(composite);
-    }
+    } this is useful to redirect to a new url after the 
+    process is successfully carried out
+    */
   })
 
   const handleAccountChange = (selectedAccount: string) => {
