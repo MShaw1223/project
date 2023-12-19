@@ -31,14 +31,17 @@ async function createPageHandler(req: NextRequest, event: NextFetchEvent) {
   //change the name of the table --> table(field)
   //add to the handle array?
   const sql = sqlstring.format(`
-    INSERT INTO AccountA (trade_details)
+    INSERT INTO accounta (trade_details)
     VALUES (
       ROW(
         ?, ?, ?
       )
     );  
   `,[handle])
-  //[entryPrice, stopLoss, takeProfit]
+  //[entryPrice, stopLoss, takeProfit] --> this wont work :
+  // - work backwards find how to change handle / change handle const
+  // to an object of ep, sl, tp
+  // - change all instances with handle
   console.log("sql", sql)
 
   await pool.query(sql)
