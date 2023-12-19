@@ -1,14 +1,40 @@
 import { AccountDropdown } from "@/components/ui/selectAccount";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { handleSubmit, mutation } from "@/utils/handleSubmits";
+import { useRouter } from "next/router";
+import { useMutation } from "react-query";
+import { extractBody } from "@/utils/extractBody";
+import { FormEvent } from "react";
+
 
 export default function Home() {
-
-  //have a utility for each of the submits --> handlesubmits.tsx\epsubmit.ts.....
+  const router = useRouter()
   
   //issue with line 30, i have multiple inputs, could have submits
   //one after the other?
+
+  const mutation = useMutation({
+    mutationFn: (handle: string) => {
+      return fetch("/api/pages",{
+        method: "POST",
+        body: JSON.stringify({ handle })
+      })
+    },
+    onSuccess: async (res) => {
+      const body = await extractBody(res);
+      const handle = body.handle;
+      router.push(`/${handle}`);
+    }
+  })
+
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>){
+    event.preventDefault()
+    const data = new FormData(event.target as HTMLFormElement)
+    const handle = data.get("takeProfit")as string;
+    if(!handle)return
+    mutation.mutate(handle);
+}
 
   return (
     <main className="text-centre p-3 bg-slate-200 h-screen">
