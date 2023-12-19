@@ -6,6 +6,7 @@ import sqlstring from 'sqlstring';
 import { Pool } from "@neondatabase/serverless";
 
 //this would be for SELECT to show the data has actually been entered to the db
+//may not actually need this page 
 
 export const config = {
     runtime: 'edge'

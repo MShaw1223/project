@@ -22,8 +22,13 @@ export default function Home() {
     },
     onSuccess: async (res) => {
       const body = await extractBody(res);
-      const handle = body.handle;
-      router.push(`/${handle}`);
+      
+      const entryPrice = body.entryPrice;
+      router.push(`/${entryPrice}`);
+      const stopLoss = body.stopLoss;
+      router.push(`/${stopLoss}`);
+      const takeProfit = body.takeProfit;
+      router.push(`/${takeProfit}`);
     }
   })
 
@@ -31,10 +36,15 @@ export default function Home() {
   function handleSubmit(event: FormEvent<HTMLFormElement>){
     event.preventDefault()
     const data = new FormData(event.target as HTMLFormElement)
-    const handle = data.get("takeProfit")as string;
-    if(!handle)return
-    mutation.mutate(handle);
+    const entryPrice = data.get("entryPrice")as string;
+    const stopLoss = data.get("stopLoss")as string;
+    const takeProfit = data.get("takeprofit")as string;
+    if(!entryPrice || !stopLoss || !takeProfit)return
+    mutation.mutate(entryPrice);
+    mutation.mutate(stopLoss);
+    mutation.mutate(takeProfit);
 }
+
 
   return (
     <main className="text-centre p-3 bg-slate-200 h-screen">
@@ -55,13 +65,13 @@ export default function Home() {
         <div className="flex flex-col items-center mx-auto">
           <form className="my-auto w-80" onSubmit={handleSubmit}>
             <div className="p-5">
-              <Input id="entryPrice" name="entryPrice" type="number" placeholder="Entry Price"></Input>
+              <Input id="entryPrice" name="entryPrice" type="number" placeholder="Entry Price..."></Input>
             </div>
             <div className="p-5">
-              <Input id="stopLoss" name="stopLoss" type="number" placeholder="Stop Loss"></Input>
+              <Input id="stopLoss" name="stopLoss" type="number" placeholder="Stop Loss..."></Input>
             </div>
             <div className="p-5">
-              <Input id="takeProfit" name="takeProfit" type="number" placeholder="Take Profit"></Input>
+              <Input id="takeProfit" name="takeProfit" type="number" placeholder="Take Profit..."></Input>
             </div>
             <div className="p-3">
               <Button type="submit">Submit Entry</Button>

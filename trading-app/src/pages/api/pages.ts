@@ -1,5 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-//for main db table?
+
+//this page for main db table?
+
 import type { NextFetchEvent, NextRequest } from 'next/server';
 import { Pool } from '@neondatabase/serverless';
 import zod, { string } from 'zod';
@@ -26,6 +28,8 @@ async function createPageHandler(req: NextRequest, event: NextFetchEvent) {
     connectionString: process.env.DATABASE_URL
   })
 
+  //change the name of the table --> table(field)
+  //add to the handle array?
   const sql = sqlstring.format(`
     INSERT INTO page (handle)
     VALUES (?);  

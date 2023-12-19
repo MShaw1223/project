@@ -22,6 +22,5 @@ export async function extractBody(req: NextRequest | Response) {
         };
       }
       body = body + decoder.decode(value)
-  
     }
   }
