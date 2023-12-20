@@ -27,8 +27,10 @@ export default function Home() {
       const composite = `/${a}/${b}/${c}`;
 
       router.push(composite);
-    } this is useful to redirect to a new url after the 
-    process is successfully carried out
+    } this is useful to redirect to a new url after a 
+    process is successfully carried out. 
+    If its many things to move thru then use a composite for router.push()
+    Else just use the router.push(`${xyzabc}`)
     */
   })
 
@@ -79,13 +81,13 @@ export default function Home() {
         <div className="flex flex-col items-center mx-auto">
           <form className="my-auto w-80" onSubmit={handleSubmit}>
             <div className="p-5">
-              <Input id="entryPrice" name="entryPrice" type="number" placeholder="Entry Price..."></Input>
+              <Input id="entryPrice" name="entryPrice" type="number" step="any" placeholder="Entry Price..."></Input>
             </div>
             <div className="p-5">
-              <Input id="stopLoss" name="stopLoss" type="number" placeholder="Stop Loss..."></Input>
+              <Input id="stopLoss" name="stopLoss" type="number" step="any" placeholder="Stop Loss..."></Input>
             </div>
             <div className="p-5">
-              <Input id="takeProfit" name="takeProfit" type="number" placeholder="Take Profit..."></Input>
+              <Input id="takeProfit" name="takeProfit" type="number" step="any" placeholder="Take Profit..."></Input>
             </div>
             <div className="p-5">
               <Button type="submit">Submit Entry</Button>

@@ -51,26 +51,19 @@ async function createPageHandler(req: NextRequest, event: NextFetchEvent) {
           throw new Error('Invalid selected account');
   }
 
-  const tradesAccountASql = sqlstring.format(`
-      INSERT INTO ${tradesTable} (details)
-      VALUES (
-          ROW(?, ?, ?)
-      );
-  `, [entryPrice, stopLoss, takeProfit]);
+  const SQLstatement = sqlstring.format(`
+      WITH X AS(
+        INSERT INTO ${tradesTable} (details)
+        VALUES (ROW(?, ?, ?))
+        RETURNING tradeId${accountTable.toLowerCase()}
+      )
+      INSERT INTO ${accountTable} (tradeId${accountTable.toLowerCase()})
+      SELECT tradeId${accountTable.toLowerCase()} FROM X;
+      `, [entryPrice, stopLoss, takeProfit]);
 
-  const accountASql = sqlstring.format(`
-      INSERT INTO ${accountTable} (id${accountTable.toLowerCase()})
-      VALUES (
-          (SELECT id${accountTable.toLowerCase()} FROM ${tradesTable} LIMIT 1)
-      );
-  `);
+  console.log("SQLstatement", SQLstatement);
 
-  console.log("tradesAccountASql", tradesAccountASql);
-  console.log("accountASql", accountASql);
-
-  await pool.query(tradesAccountASql);
-
-  await pool.query(accountASql);
+  await pool.query(SQLstatement);
 
   event.waitUntil(pool.end());
   
