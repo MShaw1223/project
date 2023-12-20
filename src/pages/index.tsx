@@ -66,10 +66,15 @@ export default function Home() {
     <main className="text-center p-3 bg-slate-200 h-screen">
       <div className="flex flex-col items-center">
         <h1 className="m-4 text-4xl font-extrabold text-black">
-          Enter data
+          Trade Entry - Prototype
         </h1>
+        <p className="font-light">
+          Enter a trade, with the entry fields being up to 7 digits long (ie 1,234,567),<br />
+          with up to 7 decimal places (ie 1,234,567.1234567). <br />
+          Entries <strong className="font-bold">MUST</strong> fall between 0.0000001 and 9999999.9999999. <br />
+        </p>
       </div>
-      {mutation.isLoading && <p>Submitting Data...</p>}
+      {mutation.isLoading && <p>Submitting Trade Data...</p>}
       {!mutation.isLoading && (
       <div className="flex flex-row my-20">
       <div className="w-full md:w-1/2 lg:w-1/3 xl:w-1/4">
@@ -80,16 +85,16 @@ export default function Home() {
       <div className="w-full md:w-1/2 lg:w-2/3 xl:w-3/4">
         <div className="flex flex-col items-center mx-auto">
           <form className="my-auto w-80" onSubmit={handleSubmit}>
-            <div className="p-5">
+            <div className="p-4">
               <Input id="entryPrice" name="entryPrice" type="number" step="any" placeholder="Entry Price..."></Input>
             </div>
-            <div className="p-5">
+            <div className="p-4">
               <Input id="stopLoss" name="stopLoss" type="number" step="any" placeholder="Stop Loss..."></Input>
             </div>
-            <div className="p-5">
+            <div className="p-4">
               <Input id="takeProfit" name="takeProfit" type="number" step="any" placeholder="Take Profit..."></Input>
             </div>
-            <div className="p-5">
+            <div className="p-4">
               <Button type="submit">Submit Entry</Button>
             </div>
           </form>
