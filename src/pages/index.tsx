@@ -15,21 +15,28 @@ export default function Home() {
     mutationFn: async (formData: string) => {
       const response = await fetch("/api/entries",{
         method: "POST",
-        body: formData
+        body: formData,
+        cache: 'no-store'
          })
-         return response.json();
-    },
+         if (!response.ok) {
+          throw new Error('Failed to submit trade data');
+        }
+    
+        return response.json();
+      },
+      onSettled: () => {
+        // Reset any state related to the mutation
+        setSelectedAccount('');
+      },
+      onError: (error) => {
+        console.error('Mutation error:', error);
+      },
     /*onSuccess: (data) => {
-
-      const a = data;
-      const b = data;
-      const c = data;
+      const a = data; const b = data; const c = data;
       const composite = `/${a}/${b}/${c}`;
-
       router.push(composite);
     } this is useful to redirect to a new url after a 
-    process is successfully carried out. 
-    If its many things to move thru then use a composite for router.push()
+    process is successfully carried out. If its many things to move thru then use a composite for router.push()
     Else just use the router.push(`${xyzabc}`)
     */
   })
@@ -47,7 +54,7 @@ export default function Home() {
     const takeProfit = parseFloat(data.get("takeProfit")as string);
     const selectedAccountValue = selectedAccount;
 
-    if(!entryPrice || !stopLoss || !takeProfit || !selectedAccountValue){
+    if(!entryPrice || !stopLoss || !takeProfit || selectedAccountValue === ''){
       alert("Invalid entry");
       return;
     }
