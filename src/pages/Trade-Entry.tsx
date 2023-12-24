@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/router";
 import { useMutation } from "react-query"
 import { useState, FormEvent } from "react";
-
+import Link from "next/link";
 
 export default function TradeEntry() {
   const router = useRouter()
@@ -65,13 +65,11 @@ export default function TradeEntry() {
     <main className="text-center p-3 bg-slate-200 h-screen">
       <div className="flex flex-col items-center">
         <h1 className="m-4 text-4xl font-extrabold text-black">
-          Trade Entry - Prototype
+          Trade Entry
         </h1>
-        <p className="font-light">
-          Enter a trade, with the entry fields being up to 7 digits long (ie 1,234,567),<br />
-          with up to 7 decimal places (ie 1,234,567.1234567). <br />
-          Entries <strong className="font-bold">MUST</strong> fall between 0.0000001 and 9999999.9999999. <br />
-        </p>
+        <h2 className="font-black p-4 outline outline-1 outline-black">
+          <Link href="/">Home</Link>
+        </h2>
       </div>
       {mutation.isLoading && <p>Submitting Trade Data...</p>}
       {!mutation.isLoading && (
