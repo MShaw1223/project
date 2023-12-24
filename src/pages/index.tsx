@@ -1,42 +1,24 @@
 import { NextPage } from "next";
 import Link from "next/link";
 
-const Home: NextPage = () => {
+const LogIn: NextPage = () => {
   //buff out and style --> also have the other pages set up
   //test if db works with different layout 
   //I have moved index over to trade entry, and coded below as the new entry page
   //Use react-icons to style icons for home screen / index (below)
   return (
-    <div className="text-center h-screen bg-slate-50 mx-auto my-auto">
-        <h1 className="text-4xl font-black p-8">
-          Trade Application
-        </h1>
-        <h1 className="text-2xl font-black p-2">To entry Page</h1>
-        <div className="w-full bg-slate-200">
-            <Link href="/Trade-Entry" > Trade Entry </Link>
-        </div>
-        
-        <h1 className="text-2xl font-black p-2">To other Page</h1>
-        <div className="w-full bg-slate-200">
-            <Link href="/Trade-Entry" >xx</Link>
-        </div>
-        
-        <h1 className="text-2xl font-black p-2">To xyz Page</h1>
-        <div className="w-full bg-slate-200">
-            <Link href="/Trade-Entry" >xx</Link>
-        </div>
-        
-        <h1 className="text-2xl font-black p-2">To abc Page</h1>
-        <div className="w-full bg-slate-200">
-            <Link href="/Trade-Entry" >xx</Link>
-        </div>
+    <div className="flex flex-col items-center">
+      <h1 className="text-center font-medium text-2xl">this is where the login page will be soon</h1>
+      <div className="p-4">
+        <Link href="/home"> Home Page</Link>
+      </div>
     </div>
   )
 }
 
-export default Home;
+export default LogIn;
 /*
-this wouldd be the other approach 
+use this for on success - of logging so ie user is valid - send thru to homepage
 onSuccess: (data) => {
   const a = data; const b = data; const c = data;
   const composite = `/${a}/${b}/${c}`;

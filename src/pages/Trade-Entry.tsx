@@ -5,39 +5,42 @@ import { useRouter } from "next/router";
 import { useMutation } from "react-query"
 import { useState, FormEvent } from "react";
 import Link from "next/link";
+import { FaHome } from "react-icons/fa";
+import { NextPage } from "next";
 
-export default function TradeEntry() {
+
+const TradeEntry: NextPage = () => {
   const router = useRouter()
-
+  
   const [selectedAccount, setSelectedAccount] = useState<string>('')
-
+  
   const mutation = useMutation({
     mutationFn: async (formData: string) => {
       const response = await fetch("/api/entries",{
         method: "POST",
         body: formData,
         cache: 'no-store'
-         })
-         if (!response.ok) {
-          throw new Error('Failed to submit trade data');
-        }
-    
-        return response.json();
-      },
-      onSettled: () => {
-        // Reset any state related to the mutation
-        setSelectedAccount('');
-      },
-      onError: (error) => {
-        console.error('Mutation error:', error);
-      },
-    })
-    
-    const handleAccountChange = (selectedAccount: string) => {
-      setSelectedAccount(selectedAccount);
-    };
-
-    function handleSubmit(event: FormEvent<HTMLFormElement>){
+      })
+      if (!response.ok) {
+        throw new Error('Failed to submit trade data');
+      }
+      
+      return response.json();
+    },
+    onSettled: () => {
+      // Reset any state related to the mutation
+      setSelectedAccount('');
+    },
+    onError: (error) => {
+      console.error('Mutation error:', error);
+    },
+  })
+  
+  const handleAccountChange = (selectedAccount: string) => {
+    setSelectedAccount(selectedAccount);
+  };
+  
+  function handleSubmit(event: FormEvent<HTMLFormElement>){
     event.preventDefault()
     
     const data = new FormData(event.target as HTMLFormElement)
@@ -45,7 +48,7 @@ export default function TradeEntry() {
     const stopLoss = parseFloat(data.get("stopLoss")as string);
     const takeProfit = parseFloat(data.get("takeProfit")as string);
     const selectedAccountValue = selectedAccount;
-
+    
     if(!entryPrice || !stopLoss || !takeProfit || selectedAccountValue === ''){
       alert("Invalid entry");
       return;
@@ -67,13 +70,15 @@ export default function TradeEntry() {
         <h1 className="m-4 text-4xl font-extrabold text-black">
           Trade Entry
         </h1>
-        <h2 className="font-black p-4 outline outline-1 outline-black">
-          <Link href="/">Home</Link>
-        </h2>
+        <div>
+            <Link href="/home">
+              <FaHome></FaHome>
+            </Link>
+        </div>
       </div>
       {mutation.isLoading && <p>Submitting Trade Data...</p>}
       {!mutation.isLoading && (
-      <div className="flex flex-row my-20">
+        <div className="flex flex-row my-20">
       <div className="w-full md:w-1/2 lg:w-1/3 xl:w-1/4">
         <div className="ml-80 my-5">
           <AccountDropdown onAccountChange={handleAccountChange}></AccountDropdown>
@@ -102,3 +107,4 @@ export default function TradeEntry() {
     </main>
   )
 }
+export default TradeEntry;
