@@ -19,7 +19,7 @@ const Home: NextPage = () => {
         </p>
         <div className="flex justify-center">
             <h1 className="text-2xl font-black p-2">Trade Entry Page</h1>
-            <Link href="/trade-entry">
+            <Link href="/trade-entry" >
               <FaCalculator className="w-10 h-10"></FaCalculator> 
             </Link>
         </div>

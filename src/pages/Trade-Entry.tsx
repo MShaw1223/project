@@ -1,16 +1,14 @@
 import { AccountDropdown } from "@/components/ui/selectAccount";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/router";
 import { useMutation } from "react-query"
 import { useState, FormEvent } from "react";
 import Link from "next/link";
 import { FaHome } from "react-icons/fa";
+import { NextPage } from "next";
 
 
-export default function TradeEntry() {
-  const router = useRouter()
-  
+const TradeEntry: NextPage = () => {
   const [selectedAccount, setSelectedAccount] = useState<string>('')
   
   const mutation = useMutation({
@@ -106,3 +104,5 @@ export default function TradeEntry() {
     </main>
   )
 }
+
+export default TradeEntry;
