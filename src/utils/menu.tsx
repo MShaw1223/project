@@ -5,7 +5,7 @@ import { MdOutlineAccountBalance, MdOutlineManageSearch } from "react-icons/md";
 export default function Menu(){
     //change the padding between divs
     return(
-        <div>
+        <div className="p-3">
             <div className="flex justify-center p-2">
                 <h1 className="text-2xl font-black p-2">Trade Entry Page</h1>
                 <Link href="/Trade-Entry" >
