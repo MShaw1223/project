@@ -6,10 +6,9 @@ import { useMutation } from "react-query"
 import { useState, FormEvent } from "react";
 import Link from "next/link";
 import { FaHome } from "react-icons/fa";
-import { NextPage } from "next";
 
 
-const TradeEntry: NextPage = () => {
+export default function TradeEntry() {
   const router = useRouter()
   
   const [selectedAccount, setSelectedAccount] = useState<string>('')
@@ -107,4 +106,3 @@ const TradeEntry: NextPage = () => {
     </main>
   )
 }
-export default TradeEntry;
