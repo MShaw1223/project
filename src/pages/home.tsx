@@ -4,6 +4,7 @@ import { FaCalculator } from "react-icons/fa";
 import { MdOutlineManageSearch } from "react-icons/md";
 import { FaUserFriends } from "react-icons/fa";
 import { MdOutlineAccountBalance } from "react-icons/md";
+import Menu from "@/utils/menu";
 
 
 const Home: NextPage = () => {
@@ -17,33 +18,7 @@ const Home: NextPage = () => {
             The links here are going to be moved to the dropdown that will be on the right <br />
             A table will be shown below of all the trades
         </p>
-        <div className="flex justify-center">
-            <h1 className="text-2xl font-black p-2">Trade Entry Page</h1>
-            <Link href="/trade-entry" >
-              <FaCalculator className="w-10 h-10"></FaCalculator> 
-            </Link>
-        </div>
-        
-        <div className="flex justify-center">
-            <h1 className="text-2xl font-black p-2">Entry Management Page</h1>
-            <Link href="/entry-management" >
-                <MdOutlineManageSearch className="w-10 h-10"></MdOutlineManageSearch>
-            </Link>
-        </div>
-        
-        <div className="flex justify-center">
-            <h1 className="text-2xl font-black p-2">Account Management Page</h1>
-            <Link href="/account-management" >
-                <MdOutlineAccountBalance className="w-10 h-10"></MdOutlineAccountBalance>
-            </Link>
-        </div>
-        
-        <div className="flex justify-center">
-            <h1 className="text-2xl font-black p-2">Users Page</h1>
-            <Link href="/users" >
-                <FaUserFriends className="w-10 h-10"></FaUserFriends>
-            </Link>
-        </div>
+        <Menu/>
     </div>
     )
 }
