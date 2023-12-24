@@ -75,30 +75,30 @@ const tradeEntry: NextPage = () => {
       </div>
       {mutation.isLoading && <p>Submitting Trade Data...</p>}
       {!mutation.isLoading && (
-        <div className="flex flex-row flex-wrap">
-      <div className="w-full">
-        <div className="ml-80 my-5">
-          <AccountDropdown onAccountChange={handleAccountChange}></AccountDropdown>
+      <div className="flex flex-row flex-wrap">
+        <div className="w-full">
+          <div className="mx-auto my-auto">
+            <AccountDropdown onAccountChange={handleAccountChange}></AccountDropdown>
+          </div>
         </div>
-      </div>
-      <div className="w-full md:w-1/2 lg:w-2/3 xl:w-3/4">
-        <div className="flex flex-col items-center mx-auto">
-          <form className="my-auto w-80" onSubmit={handleSubmit}>
-            <div className="p-4">
-              <Input id="entryPrice" name="entryPrice" type="number" step="any" placeholder="Entry Price..."></Input>
-            </div>
-            <div className="p-4">
-              <Input id="stopLoss" name="stopLoss" type="number" step="any" placeholder="Stop Loss..."></Input>
-            </div>
-            <div className="p-4">
-              <Input id="takeProfit" name="takeProfit" type="number" step="any" placeholder="Take Profit..."></Input>
-            </div>
-            <div className="p-4">
-              <Button type="submit">Submit Entry</Button>
-            </div>
-          </form>
+        <div className="w-full md:w-1/2 lg:w-2/3 xl:w-3/4">
+          <div className="flex flex-col items-center mx-auto">
+            <form className="my-auto w-80" onSubmit={handleSubmit}>
+              <div className="p-4">
+                <Input id="entryPrice" name="entryPrice" type="number" step="any" placeholder="Entry Price..."></Input>
+              </div>
+              <div className="p-4">
+                <Input id="stopLoss" name="stopLoss" type="number" step="any" placeholder="Stop Loss..."></Input>
+              </div>
+              <div className="p-4">
+                <Input id="takeProfit" name="takeProfit" type="number" step="any" placeholder="Take Profit..."></Input>
+              </div>
+              <div className="p-4">
+                <Button type="submit">Submit Entry</Button>
+              </div>
+            </form>
+          </div>
         </div>
-      </div>
     </div>    
       )}
     </main>
