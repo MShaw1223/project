@@ -8,7 +8,7 @@ import { FaHome } from "react-icons/fa";
 import { NextPage } from "next";
 
 
-const TradeEntry: NextPage = () => {
+const tradeEntry: NextPage = () => {
   const [selectedAccount, setSelectedAccount] = useState<string>('')
   
   const mutation = useMutation({
@@ -105,4 +105,4 @@ const TradeEntry: NextPage = () => {
   )
 }
 
-export default TradeEntry;
+export default tradeEntry;
