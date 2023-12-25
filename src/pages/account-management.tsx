@@ -4,13 +4,13 @@ import { FaHome } from "react-icons/fa";
 
  const accountManagement: NextPage = () =>{
     return(
-        <div>
-            <div>
-            <Link href="/home">
-              <FaHome></FaHome>
-            </Link>
+        <div className="flex flex-col flex-wrap justify-center">
+            <div className="p-3">
+                <Link href="/home">
+                    <FaHome></FaHome>
+                </Link>
             </div>
-            <div>
+            <div className="text-center font-extrabold text-xl">
                 <h1>Account Management</h1>
                 <p>This is where there Accounts can be deleted, created, and deposited into</p>
             </div>
@@ -18,4 +18,4 @@ import { FaHome } from "react-icons/fa";
     )
  }
 
- export default accountManagement;
+export default accountManagement;

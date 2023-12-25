@@ -67,7 +67,7 @@ const tradeEntry: NextPage = () => {
         <h1 className="m-4 text-4xl font-extrabold text-black">
           Trade Entry
         </h1>
-        <div>
+        <div className="p-2">
             <Link href="/home">
               <FaHome></FaHome>
             </Link>

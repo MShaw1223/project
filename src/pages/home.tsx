@@ -15,8 +15,8 @@ const Home: NextPage = () => {
           Trade Application - Home
         </h1>
         <p className="p-2">
-            The links here are going to be moved to the dropdown that will be on the right <br />
-            A table will be shown below of all the trades
+            The links below are going to be moved to the dropdown that will be on the left <br />
+            A table will be shown below of all the trades made and some stats on trades
         </p>
         <Menu/>
     </div>
