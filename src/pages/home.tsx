@@ -11,8 +11,8 @@ const Home: NextPage = () => {
     //make a menu.ts file on utils? as the dropdown will be on all pages
     return(
     <div className="text-center h-screen bg-slate-100 mx-auto my-auto">
-        <h1 className="text-xl font-black p-8">
-          Trade Application - Home
+        <h1 className="text-3xl font-black p-8">
+          Home
         </h1>
         <p className="p-2">
             The links below are going to be moved to the dropdown that will be on the left <br />
