@@ -67,22 +67,20 @@ const tradeEntry: NextPage = () => {
         <h1 className="m-4 text-4xl font-extrabold text-black">
           Trade Entry
         </h1>
-        <div className="p-2">
+        <div className="p-3">
             <Link href="/home">
-              <FaHome className="w-5 h-5"></FaHome>
+              <FaHome className="w-7 h-7"></FaHome>
             </Link>
         </div>
       </div>
       {mutation.isLoading && <p>Submitting Trade Data...</p>}
       {!mutation.isLoading && (
-      <div className="flex mx-auto static">
-        <div className="relative flex flex-col items-center">
-          <div>
-            <AccountDropdown onAccountChange={handleAccountChange}></AccountDropdown>
-          </div>
+      <div className="flex flex-col items-center">
+        <div>
+          <AccountDropdown onAccountChange={handleAccountChange}></AccountDropdown>
         </div>
         <div>
-          <div className="relative flex flex-col flex-wrap items-center mx-auto">
+          <div>
             <form className="my-auto w-80" onSubmit={handleSubmit}>
               <div className="p-3">
                 <Input id="entryPrice" name="entryPrice" type="number" step="any" placeholder="Entry Price..."></Input>
