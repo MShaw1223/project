@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { FaCalculator, FaUserFriends } from "react-icons/fa";
 import { MdOutlineAccountBalance, MdOutlineManageSearch } from "react-icons/md";
+import { BsFillJournalBookmarkFill } from "react-icons/bs";
 
 export default function Menu(){
     //change the padding between divs
@@ -9,14 +10,14 @@ export default function Menu(){
             <div className="flex justify-center p-2">
                 <h1 className="text-2xl font-black p-2">Trade Entry Page</h1>
                 <Link href="/Trade-Entry" >
-                    <FaCalculator className="w-10 h-10"></FaCalculator> 
+                    <BsFillJournalBookmarkFill className="w-10 h-10"></BsFillJournalBookmarkFill>
                 </Link>
             </div>
             
             <div className="flex justify-center p-2">
                 <h1 className="text-2xl font-black p-2">Entry Management Page</h1>
                 <Link href="/entry-management" >
-                    <MdOutlineManageSearch className="w-10 h-10"></MdOutlineManageSearch>
+                    <FaCalculator className="w-10 h-10"></FaCalculator> 
                 </Link>
             </div>
             

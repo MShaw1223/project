@@ -8,9 +8,9 @@ const LogIn: NextPage = () => {
   //Use react-icons to style icons for home screen / index (below)
   return (
     <div className="flex flex-col items-center">
-      <h1 className="text-center font-medium text-2xl mt-3">Login page will be here soon</h1>
-      <div className="p-4">
-        <Link href="/home"> Home Page</Link>
+      <h1 className="text-center font-medium text-2xl mt-56 p-3">Login page will be here soon...</h1>
+      <div className="p-1 outline-dashed outline-1">
+        <Link href="/home"> <strong>Home Page</strong></Link>
       </div>
     </div>
   )
