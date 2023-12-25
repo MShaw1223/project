@@ -4,12 +4,10 @@ import { FaHome } from "react-icons/fa";
 
 const EntryManagement: NextPage = () => {
     return(
-        <div className="flex flex-col flex-wrap justify-center">
-            <div className="p-3">
-                <Link href="/home">
-                    <FaHome></FaHome>
+        <div className="flex flex-col flex-wrap items-center mt-5">
+                <Link href="/home" className="p-3">
+                    <FaHome className="h-5 w-5"></FaHome>
                 </Link>
-            </div>
             <div className="text-center font-extrabold text-xl">
                 <h1>Entry Management</h1>
                 <p>This is where there will be trades searched for, deleted & edited</p>
