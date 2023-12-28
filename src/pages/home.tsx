@@ -8,7 +8,7 @@ const Home: NextPage = () => {
     <div className="flex h-screen">
       <Menu />
       <div className="flex-1 flex flex-col overflow-hidden">
-        <div className="flex p-3 text-3xl bg-slate-500">
+        <div className="flex p-3 text-3xl">
           <FaHome className="h-10 w-10"></FaHome>
           <span className="ml-4 my-auto font-sans font-bold">Home</span>
         </div>
