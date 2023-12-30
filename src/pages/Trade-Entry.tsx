@@ -3,9 +3,9 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useMutation } from "react-query";
 import { useState, FormEvent } from "react";
-import Link from "next/link";
-import { FaHome } from "react-icons/fa";
 import { NextPage } from "next";
+import Menu from "@/utils/menu";
+import { BsFillJournalBookmarkFill } from "react-icons/bs";
 
 const tradeEntry: NextPage = () => {
   const [selectedAccount, setSelectedAccount] = useState<string>("");
@@ -65,62 +65,65 @@ const tradeEntry: NextPage = () => {
   }
 
   return (
-    <main className="text-center p-3 bg-slate-200 h-screen">
-      <div className="flex flex-col items-center">
-        <h1 className="m-4 text-4xl font-extrabold text-black">Trade Entry</h1>
-        <div className="p-3">
-          <Link href="/home">
-            <FaHome className="w-7 h-7"></FaHome>
-          </Link>
+    <div className="flex h-screen">
+      <Menu />
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <div className="flex p-3 text-3xl">
+          <BsFillJournalBookmarkFill className="h-10 w-10"></BsFillJournalBookmarkFill>
+          <span className="ml-4 my-auto font-sans font-bold">Trade Entry</span>
+        </div>
+        <div className="flex-1 overflow-auto p-4 text-justify justify-center">
+          <div className="text-center">
+            {mutation.isLoading && <p>Submitting Trade Data...</p>}
+            {!mutation.isLoading && (
+              <div className="flex flex-col items-center">
+                <div>
+                  <AccountDropdown
+                    onAccountChange={handleAccountChange}
+                  ></AccountDropdown>
+                </div>
+                <div>
+                  <div>
+                    <form className="my-auto w-80" onSubmit={handleSubmit}>
+                      <div className="p-3">
+                        <Input
+                          id="entryPrice"
+                          name="entryPrice"
+                          type="number"
+                          step="any"
+                          placeholder="Entry Price..."
+                        ></Input>
+                      </div>
+                      <div className="p-3">
+                        <Input
+                          id="stopLoss"
+                          name="stopLoss"
+                          type="number"
+                          step="any"
+                          placeholder="Stop Loss..."
+                        ></Input>
+                      </div>
+                      <div className="p-3">
+                        <Input
+                          id="takeProfit"
+                          name="takeProfit"
+                          type="number"
+                          step="any"
+                          placeholder="Take Profit..."
+                        ></Input>
+                      </div>
+                      <div className="p-3">
+                        <Button type="submit">Submit Entry</Button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
-      {mutation.isLoading && <p>Submitting Trade Data...</p>}
-      {!mutation.isLoading && (
-        <div className="flex flex-col items-center">
-          <div>
-            <AccountDropdown
-              onAccountChange={handleAccountChange}
-            ></AccountDropdown>
-          </div>
-          <div>
-            <div>
-              <form className="my-auto w-80" onSubmit={handleSubmit}>
-                <div className="p-3">
-                  <Input
-                    id="entryPrice"
-                    name="entryPrice"
-                    type="number"
-                    step="any"
-                    placeholder="Entry Price..."
-                  ></Input>
-                </div>
-                <div className="p-3">
-                  <Input
-                    id="stopLoss"
-                    name="stopLoss"
-                    type="number"
-                    step="any"
-                    placeholder="Stop Loss..."
-                  ></Input>
-                </div>
-                <div className="p-3">
-                  <Input
-                    id="takeProfit"
-                    name="takeProfit"
-                    type="number"
-                    step="any"
-                    placeholder="Take Profit..."
-                  ></Input>
-                </div>
-                <div className="p-3">
-                  <Button type="submit">Submit Entry</Button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      )}
-    </main>
+    </div>
   );
 };
 

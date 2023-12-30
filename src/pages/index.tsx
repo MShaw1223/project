@@ -1,22 +1,30 @@
 import { NextPage } from "next";
 import Link from "next/link";
-
+import Login from "@/components/ui/LoginPage";
 const LogIn: NextPage = () => {
   //buff out and style --> also have the other pages set up
-  //test if db works with different layout 
+  //test if db works with different layout
   //I have moved index over to trade entry, and coded below as the new entry page
   //Use react-icons to style icons for home screen / index (below)
   return (
-    <div className="flex flex-col items-center">
-      <h1 className="text-center font-medium text-2xl mt-56 p-3">Login page will be here soon...</h1>
-      <div className="p-1 outline-dashed outline-1">
-        <Link href="/home"> <strong>Home Page</strong></Link>
+    <div className="flex h-screen">
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <div className="flex p-3 text-3xl">
+          <span className="my-auto font-sans font-bold">Welcome...</span>
+        </div>
+        <div className="flex-1 overflow-auto p-4 text-justify justify-center text-3xl">
+          <Login />
+          <Link href="/home">
+            <strong>Press Me:</strong> Straight to Home Page
+          </Link>
+        </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default LogIn;
+//<FaHome className="h-10 w-10"></FaHome>
 /*
 use this for on success - of logging so ie user is valid - send thru to homepage
 onSuccess: (data) => {
