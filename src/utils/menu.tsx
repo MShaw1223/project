@@ -14,9 +14,9 @@ export default function Menu() {
 
       <Link href="/home">
         <div
-          className={`flex p-8 focus:outline-none ${
+          className={`flex pl-8 py-8 focus:outline-none ${
             isLinkActive("/home")
-              ? "bg-gray-700 font-black underline underline-offset-8"
+              ? "bg-gray-700 font-black underline underline-offset-8 text-xl"
               : "font-bold"
           } hover:bg-slate-400`}
         >
@@ -27,9 +27,9 @@ export default function Menu() {
 
       <Link href="/Trade-Entry">
         <div
-          className={`flex p-8 focus:outline-none ${
+          className={`flex pl-8 py-8 focus:outline-none ${
             isLinkActive("/Trade-Entry")
-              ? "bg-gray-700 font-black underline underline-offset-8"
+              ? "bg-gray-700 font-black underline underline-offset-8 text-xl"
               : "font-bold"
           } hover:bg-slate-400`}
         >
@@ -40,9 +40,9 @@ export default function Menu() {
 
       <Link href="/entry-management">
         <div
-          className={`flex p-8 focus:outline-none ${
+          className={`flex pl-8 py-8 focus:outline-none ${
             isLinkActive("/entry-management")
-              ? "bg-gray-700 font-black underline underline-offset-8"
+              ? "bg-gray-700 font-black underline underline-offset-8 text-xl"
               : "font-bold"
           } hover:bg-slate-400`}
         >
@@ -53,9 +53,9 @@ export default function Menu() {
 
       <Link href="/account-management">
         <div
-          className={`flex p-8 focus:outline-none ${
+          className={`flex pl-8 py-8 focus:outline-none ${
             isLinkActive("/account-management")
-              ? "bg-gray-700 font-black underline underline-offset-8"
+              ? "bg-gray-700 font-black underline underline-offset-8 text-xl"
               : "font-bold"
           } hover:bg-slate-400`}
         >
@@ -66,9 +66,9 @@ export default function Menu() {
 
       <Link href="/users">
         <div
-          className={`flex p-8 focus:outline-none ${
+          className={`flex pl-8 py-8 focus:outline-none ${
             isLinkActive("/users")
-              ? "bg-gray-700 font-black underline underline-offset-8"
+              ? "bg-gray-700 font-black underline underline-offset-8 text-xl"
               : "font-bold"
           } hover:bg-slate-400`}
         >
@@ -78,7 +78,7 @@ export default function Menu() {
       </Link>
 
       <Link href="/">
-        <div className="flex p-8 focus:outline-none focus:bg-gray-700 hover:bg-slate-400">
+        <div className="flex pl-8 py-8 focus:outline-none focus:bg-gray-700 hover:bg-slate-400">
           <MdArrowBack className="w-8 h-8"></MdArrowBack>
           <span className="ml-8 font-medium">Return to login</span>
         </div>
