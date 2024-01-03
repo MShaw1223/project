@@ -9,10 +9,10 @@ const LogIn: NextPage = () => {
   return (
     <div className="flex h-screen">
       <div className="flex-1 flex flex-col overflow-hidden">
-        <div className="flex p-3 text-3xl">
-          <span className="my-auto font-sans font-bold">Welcome...</span>
+        <div className="flex ml-20 mt-20 mb-24 text-3xl">
+          <span className="my-auto font-sans font-bold ml-20">Welcome...</span>
         </div>
-        <div className="flex-1 overflow-auto p-4 text-justify justify-center text-3xl">
+        <div className="flex-1 overflow-auto p-4 text-3xl">
           <Login />
           <Link href="/home">
             <strong>Press Me:</strong> Straight to Home Page
@@ -24,7 +24,6 @@ const LogIn: NextPage = () => {
 };
 
 export default LogIn;
-//<FaHome className="h-10 w-10"></FaHome>
 /*
 use this for on success - of logging so ie user is valid - send thru to homepage
 onSuccess: (data) => {

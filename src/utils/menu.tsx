@@ -9,13 +9,15 @@ export default function Menu() {
   const router = useRouter();
   const isLinkActive = (href: string) => router.pathname === href;
   return (
-    <div className="w-80 h-screen bg-slate-500 font-extrabold">
-      <div className="text-center p-5 text-2xl">Menu</div>
+    <div className="w-80 h-screen bg-slate-500">
+      <div className="text-center p-5 text-2xl font-extrabold">Menu</div>
 
       <Link href="/home">
         <div
           className={`flex p-8 focus:outline-none ${
-            isLinkActive("/home") ? "bg-gray-700" : ""
+            isLinkActive("/home")
+              ? "bg-gray-700 font-black underline underline-offset-8"
+              : "font-bold"
           } hover:bg-slate-400`}
         >
           <FaHome className="w-8 h-8"></FaHome>
@@ -26,7 +28,9 @@ export default function Menu() {
       <Link href="/Trade-Entry">
         <div
           className={`flex p-8 focus:outline-none ${
-            isLinkActive("/Trade-Entry") ? "bg-gray-700" : ""
+            isLinkActive("/Trade-Entry")
+              ? "bg-gray-700 font-black underline underline-offset-8"
+              : "font-bold"
           } hover:bg-slate-400`}
         >
           <BsFillJournalBookmarkFill className="w-8 h-8"></BsFillJournalBookmarkFill>
@@ -37,7 +41,9 @@ export default function Menu() {
       <Link href="/entry-management">
         <div
           className={`flex p-8 focus:outline-none ${
-            isLinkActive("/entry-management") ? "bg-gray-700" : ""
+            isLinkActive("/entry-management")
+              ? "bg-gray-700 font-black underline underline-offset-8"
+              : "font-bold"
           } hover:bg-slate-400`}
         >
           <FaCalculator className="w-8 h-8"></FaCalculator>
@@ -48,7 +54,9 @@ export default function Menu() {
       <Link href="/account-management">
         <div
           className={`flex p-8 focus:outline-none ${
-            isLinkActive("/account-management") ? "bg-gray-700" : ""
+            isLinkActive("/account-management")
+              ? "bg-gray-700 font-black underline underline-offset-8"
+              : "font-bold"
           } hover:bg-slate-400`}
         >
           <MdOutlineAccountBalance className="w-8 h-8"></MdOutlineAccountBalance>
@@ -59,7 +67,9 @@ export default function Menu() {
       <Link href="/users">
         <div
           className={`flex p-8 focus:outline-none ${
-            isLinkActive("/users") ? "bg-gray-700" : ""
+            isLinkActive("/users")
+              ? "bg-gray-700 font-black underline underline-offset-8"
+              : "font-bold"
           } hover:bg-slate-400`}
         >
           <FaUserFriends className="w-8 h-8"></FaUserFriends>
@@ -70,7 +80,7 @@ export default function Menu() {
       <Link href="/">
         <div className="flex p-8 focus:outline-none focus:bg-gray-700 hover:bg-slate-400">
           <MdArrowBack className="w-8 h-8"></MdArrowBack>
-          <span className="ml-8">Return to login</span>
+          <span className="ml-8 font-medium">Return to login</span>
         </div>
       </Link>
     </div>

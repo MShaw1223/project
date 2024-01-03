@@ -20,12 +20,12 @@ const formSchema = z.object({
   password: z.string().min(8, {
     message: "Password must be at least 8 characters.",
   }),
-})
+});
 
 function onSubmit(values: z.infer<typeof formSchema>) {
   // Do something with the form values --> neon
-  // Type-safe and validated. 
-  console.log(values)
+  // Type-safe and validated.
+  console.log(values);
 }
 
 export default function ProfileCreate() {
@@ -33,58 +33,54 @@ export default function ProfileCreate() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       username: "",
-      password: ""
+      password: "",
     },
-  })
- 
+  });
+
   return (
-    <div className="my-auto mx-auto w-80">
-      <div className="flex flex-col items-centre">
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} >
-            <FormLabel className="font-bold text-lg">
+    <div className="flex items-center justify-center">
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <FormLabel className="font-bold text-lg">New User</FormLabel>
+          <div className="p-2">
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input placeholder="Username....." {...field} />
+                  </FormControl>
+                  <FormDescription>User must be min. 2 chars</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="p-2">
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input placeholder="Password....." {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    Password must be min. 8 chars
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="p-4">
+            <Button type="submit" className="w-full">
               New User
-            </FormLabel>
-            <div className="p-2">
-              <FormField
-                control={form.control}
-                name="username"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input placeholder="Username....." {...field} />
-                    </FormControl>
-                    <FormDescription>
-                      User must be min. 2 chars
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className="p-2">
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input placeholder="Password....." {...field} />
-                    </FormControl>
-                    <FormDescription>
-                      Password must be min. 8 chars
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className="p-4">
-              <Button type="submit" className="w-full">New User</Button>
-            </div>
-          </form>
-        </Form>
-      </div>
+            </Button>
+          </div>
+        </form>
+      </Form>
     </div>
-  )
+  );
 }

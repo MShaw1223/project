@@ -13,7 +13,7 @@ const Home: NextPage = () => {
           <span className="ml-4 my-auto font-sans font-bold">Home</span>
         </div>
         <div className="flex-1 overflow-auto p-4 text-justify justify-center">
-          *Content in here*
+          Table showing stats will be displayed here
         </div>
       </div>
     </div>
