@@ -1,6 +1,6 @@
 import { NextPage } from "next";
 import Link from "next/link";
-import Login from "@/components/ui/LoginPage";
+import Login from "@/utils/LoginPage";
 const LogIn: NextPage = () => {
   //buff out and style --> also have the other pages set up
   //test if db works with different layout

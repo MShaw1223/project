@@ -20,7 +20,9 @@ export default function Menu() {
               : "font-bold"
           } hover:bg-slate-400`}
         >
-          <FaHome className="w-8 h-8"></FaHome>
+          <FaHome
+            className={isLinkActive("/home") ? "w-9 h-9" : "w-6 h-6"}
+          ></FaHome>
           <span className="ml-12 my-auto">Home</span>
         </div>
       </Link>
@@ -33,7 +35,9 @@ export default function Menu() {
               : "font-bold"
           } hover:bg-slate-400`}
         >
-          <BsFillJournalBookmarkFill className="w-8 h-8"></BsFillJournalBookmarkFill>
+          <BsFillJournalBookmarkFill
+            className={isLinkActive("/Trade-Entry") ? "w-9 h-9" : "w-6 h-6"}
+          ></BsFillJournalBookmarkFill>
           <span className="ml-12 my-auto">Trade Entry</span>
         </div>
       </Link>
@@ -46,7 +50,11 @@ export default function Menu() {
               : "font-bold"
           } hover:bg-slate-400`}
         >
-          <FaCalculator className="w-8 h-8"></FaCalculator>
+          <FaCalculator
+            className={
+              isLinkActive("/entry-management") ? "w-9 h-9" : "w-6 h-6"
+            }
+          ></FaCalculator>
           <span className="ml-6">Entry Management</span>
         </div>
       </Link>
@@ -59,7 +67,11 @@ export default function Menu() {
               : "font-bold"
           } hover:bg-slate-400`}
         >
-          <MdOutlineAccountBalance className="w-8 h-8"></MdOutlineAccountBalance>
+          <MdOutlineAccountBalance
+            className={
+              isLinkActive("/account-management") ? "w-9 h-9" : "w-6 h-6"
+            }
+          ></MdOutlineAccountBalance>
           <span className="ml-4">Account Management</span>
         </div>
       </Link>
@@ -72,7 +84,9 @@ export default function Menu() {
               : "font-bold"
           } hover:bg-slate-400`}
         >
-          <FaUserFriends className="w-8 h-8"></FaUserFriends>
+          <FaUserFriends
+            className={isLinkActive("/users") ? "w-9 h-9" : "w-6 h-6"}
+          ></FaUserFriends>
           <span className="ml-16">Users</span>
         </div>
       </Link>

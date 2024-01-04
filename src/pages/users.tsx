@@ -1,15 +1,21 @@
 //user page: created, switched and deleted
-"use client";
 
-import DeleteUser from "@/components/ui/DeleteUser";
-import ProfileCreate from "@/components/ui/ProfileCreate";
+import { useState, FormEvent } from "react";
 import { NextPage } from "next";
 import { FaUserFriends } from "react-icons/fa";
-import { Separator } from "@/components/ui/separator";
-import EditUser from "@/components/ui/EditUser";
+import DropdownChoice from "@/utils/usersPageDropdown";
 import Menu from "@/utils/menu";
+import DeleteUser from "@/utils/DeleteUser";
+import ProfileCreate from "@/utils/ProfileCreate";
+import EditUser from "@/utils/EditUser";
 
 const userPage: NextPage = () => {
+  const [selectedChoice, onChoiceChange] = useState<string>("");
+
+  const handleChoiceChange = (selectedChoice: string) => {
+    onChoiceChange(selectedChoice);
+  };
+
   return (
     <div className="flex h-screen">
       <Menu />
@@ -18,27 +24,23 @@ const userPage: NextPage = () => {
           <FaUserFriends className="w-10 h-10"></FaUserFriends>
           <span className="ml-16 font-sans font-bold">Users</span>
         </div>
-        <div className="flex-1 overflow-auto justify-center">
-          <span>
-            Maybe have a dropdown that upon selection renders the utility
-            classes so theres more room to play abt w/ ?
-          </span>
-          <div className="flex flex-col items-center mt-3 mx-5">
-            <div className="border-2 border-double p-2 m-4 w-full">
-              <ProfileCreate />
-            </div>
-            <div className="flex flex-col md:flex-row md:items-start w-full">
-              <div className="border-2 border-double p-2 m-1 w-full h-full">
-                <EditUser />
-              </div>
-              <div className="border-2 border-double p-2 m-1 w-full h-full">
-                <DeleteUser />
-              </div>
-            </div>
+        <div className="flex-1 overflow-auto justify-center p-2">
+          <DropdownChoice onChoiceChange={handleChoiceChange}></DropdownChoice>
+          <div>
+            {selectedChoice === "" && (
+              <h1 className="p-3">
+                Here on the user page you select between creating a new user,
+                and editing and deleting existing users from the dropdown above!
+              </h1>
+            )}
+            {selectedChoice === "edit" && <EditUser />}
+            {selectedChoice === "delete" && <DeleteUser />}
+            {selectedChoice === "create" && <ProfileCreate />}
           </div>
         </div>
       </div>
     </div>
   );
 };
+
 export default userPage;
