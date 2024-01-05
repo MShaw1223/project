@@ -2,7 +2,7 @@ import Menu from "@/utils/menu";
 import { NextPage } from "next";
 import { FaCalculator } from "react-icons/fa";
 import { useState } from "react";
-import EntryMntDropdown from "@/utils/entryMntChoiceDropdown";
+import EntryMntDropdown from "@/utils/EntryMntChoiceDropdown";
 import DeleteEntry from "@/utils/DeleteEntry";
 import EditEntry from "@/utils/EditEntry";
 import SearchEntry from "@/utils/SearchEntry";
