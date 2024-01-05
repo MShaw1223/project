@@ -43,16 +43,18 @@ export default function TEFormInputs() {
               placeholder="Risk Ratio..."
             ></Input>
           </div>
-        <div className="w-6/12 flex flex-col">
-          <div className="p-3">
-            <textarea
-              id="tradeNotes"
-              name="tradeNotes"
-              placeholder=" Notes..."
-              className="w-full h-[180px] resize-none border border-slate-200 text-sm"
-            ></textarea>
+          <div className="w-6/12 flex flex-col">
+            <div className="p-3">
+              <textarea
+                id="tradeNotes"
+                name="tradeNotes"
+                placeholder=" Notes..."
+                className="w-full h-[180px] resize-none border border-slate-200 text-sm"
+              ></textarea>
+            </div>
           </div>
         </div>
       </div>
     </>
-    )}
+  );
+}

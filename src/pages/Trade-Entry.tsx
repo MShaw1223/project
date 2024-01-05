@@ -10,8 +10,8 @@ import TEFormInputs from "@/utils/TradeEntryFormInputs";
 import { PairDropdown } from "@/utils/selectPair";
 
 const tradeEntry: NextPage = () => {
-  const [selectedAccount, setSelectedAccount, selectedPair, setSelectedPair] =
-    useState<string>("");
+  const [selectedAccount, setSelectedAccount] = useState<string>("");
+  const [selectedPair, setSelectedPair] = useState<string>("");
 
   const mutation = useMutation({
     mutationFn: async (formData: string) => {
