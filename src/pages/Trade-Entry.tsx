@@ -1,11 +1,12 @@
 import { AccountDropdown } from "@/utils/selectAccount";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useMutation } from "react-query";
 import { useState, FormEvent } from "react";
 import { NextPage } from "next";
 import Menu from "@/utils/menu";
 import { BsFillJournalBookmarkFill } from "react-icons/bs";
+import { Separator } from "@/components/ui/separator";
+import TEFormInputs from "@/utils/TradeEntryFormInputs";
 
 const tradeEntry: NextPage = () => {
   const [selectedAccount, setSelectedAccount] = useState<string>("");
@@ -44,86 +45,72 @@ const tradeEntry: NextPage = () => {
     const stopLoss = parseFloat(data.get("stopLoss") as string);
     const takeProfit = parseFloat(data.get("takeProfit") as string);
     const selectedAccountValue = selectedAccount;
+    const riskRatio = parseFloat(data.get("riskRatio") as string);
+    const currencyPair = data.get("currencyPair") as string;
+    const tradeNotes = data.get("tradeNotes");
 
     if (
       !entryPrice ||
       !stopLoss ||
       !takeProfit ||
-      selectedAccountValue === ""
+      !riskRatio ||
+      selectedAccountValue === "" ||
+      currencyPair === "" ||
+      tradeNotes === ""
     ) {
       alert("Invalid entry");
       return;
     }
-    const requestData = JSON.stringify({
+    const dataPackage = JSON.stringify({
       entryPrice,
       stopLoss,
       takeProfit,
       selectedAccount: selectedAccountValue,
+      riskRatio,
+      currencyPair,
+      tradeNotes,
     });
 
-    mutation.mutate(requestData);
+    mutation.mutate(dataPackage);
   }
 
   return (
-    <div className="flex h-screen">
-      <Menu />
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <div className="flex p-3 text-3xl">
-          <BsFillJournalBookmarkFill className="h-10 w-10"></BsFillJournalBookmarkFill>
-          <span className="ml-4 my-auto font-sans font-bold">Trade Entry</span>
-        </div>
-        <div className="flex-1 overflow-auto p-4 text-justify justify-center">
-          <div className="text-center">
-            {mutation.isLoading && <p>Submitting Trade Data...</p>}
-            {!mutation.isLoading && (
-              <div className="flex flex-col items-center">
-                <div>
-                  <AccountDropdown
-                    onAccountChange={handleAccountChange}
-                  ></AccountDropdown>
-                </div>
-                <div>
-                  <div>
-                    <form className="my-auto w-80" onSubmit={handleSubmit}>
-                      <div className="p-3">
-                        <Input
-                          id="entryPrice"
-                          name="entryPrice"
-                          type="number"
-                          step="any"
-                          placeholder="Entry Price..."
-                        ></Input>
-                      </div>
-                      <div className="p-3">
-                        <Input
-                          id="stopLoss"
-                          name="stopLoss"
-                          type="number"
-                          step="any"
-                          placeholder="Stop Loss..."
-                        ></Input>
-                      </div>
-                      <div className="p-3">
-                        <Input
-                          id="takeProfit"
-                          name="takeProfit"
-                          type="number"
-                          step="any"
-                          placeholder="Take Profit..."
-                        ></Input>
-                      </div>
+    <>
+      <div className="flex h-screen">
+        <Menu />
+        <div className="flex-1 flex flex-col overflow-hidden">
+          <div className="flex p-3 text-3xl">
+            <BsFillJournalBookmarkFill className="h-10 w-10"></BsFillJournalBookmarkFill>
+            <span className="ml-4 my-auto font-sans font-bold">
+              Trade Entry
+            </span>
+          </div>
+          <div className="flex-1 overflow-auto p-4">
+            <div className="flex">
+              <div className="flex-1 flex flex-col">
+                <AccountDropdown
+                  onAccountChange={handleAccountChange}
+                ></AccountDropdown>
+              </div>
+              <Separator orientation="vertical" />
+              <div className="flex-1 flex flex-col text-center">
+                {mutation.isLoading && <p>Submitting Trade Data...</p>}
+                {!mutation.isLoading && (
+                  <div className="flex flex-col items-center">
+                    <form onSubmit={handleSubmit}>
+                      <TEFormInputs />
                       <div className="p-3">
                         <Button type="submit">Submit Entry</Button>
                       </div>
                     </form>
                   </div>
-                </div>
+                )}
               </div>
-            )}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

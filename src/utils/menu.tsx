@@ -10,7 +10,7 @@ export default function Menu() {
   const router = useRouter();
   const isLinkActive = (href: string) => router.pathname === href;
   return (
-    <div className="w-80 h-screen bg-slate-400">
+    <div className="w-72 h-screen bg-slate-400">
       <div className="text-center p-5 text-2xl font-extrabold">Menu</div>
       <Link href="/home">
         <div
@@ -18,8 +18,8 @@ export default function Menu() {
             isLinkActive("/home") ? "bg-slate-600 hover:bg-slate-600" : ""
           } rounded-full `}
         >
-          <FaHome className="w-8 h-8"></FaHome>
-          <span className="ml-12 my-auto">Home</span>
+          <FaHome className="w-6 h-6"></FaHome>
+          <span className="pl-3">Home</span>
         </div>
       </Link>
 
@@ -31,8 +31,8 @@ export default function Menu() {
               : ""
           } rounded-full `}
         >
-          <BsFillJournalBookmarkFill className="w-8 h-8"></BsFillJournalBookmarkFill>
-          <span className="ml-12 my-auto">Trade Entry</span>
+          <BsFillJournalBookmarkFill className="w-6 h-6"></BsFillJournalBookmarkFill>
+          <span className="pl-3">Trade Entry</span>
         </div>
       </Link>
 
@@ -44,8 +44,8 @@ export default function Menu() {
               : ""
           } rounded-full `}
         >
-          <FaCalculator className="w-8 h-8"></FaCalculator>
-          <span className="ml-6">Entry Management</span>
+          <FaCalculator className="w-6 h-6"></FaCalculator>
+          <span className="pl-3">Entry Management</span>
         </div>
       </Link>
 
@@ -57,8 +57,8 @@ export default function Menu() {
               : ""
           } rounded-full`}
         >
-          <MdOutlineAccountBalance className="w-8 h-8"></MdOutlineAccountBalance>
-          <span className="ml-4">Account Management</span>
+          <MdOutlineAccountBalance className="w-6 h-6"></MdOutlineAccountBalance>
+          <span className="pl-3">Account Management</span>
         </div>
       </Link>
 
@@ -68,17 +68,17 @@ export default function Menu() {
             isLinkActive("/users") ? "bg-slate-600 hover:bg-slate-600" : ""
           } rounded-full `}
         >
-          <FaUserFriends className="w-8 h-8"></FaUserFriends>
-          <span className="ml-16">Users</span>
+          <FaUserFriends className="w-6 h-6"></FaUserFriends>
+          <span className="pl-3">Users</span>
         </div>
       </Link>
 
       <Separator className="ml-9 my-7" />
 
       <Link href="/">
-        <div className="flex pl-5 py-4 focus:outline-none hover:bg-slate-500 rounded-full">
-          <MdArrowBack className="w-8 h-8"></MdArrowBack>
-          <span className="ml-8 font-medium ">Back to Login</span>
+        <div className="flex pl-5 py-4 focus:outline-none font-bold hover:bg-slate-500 rounded-full">
+          <MdArrowBack className="w-6 h-6"></MdArrowBack>
+          <span className="pl-3">Back to Login</span>
         </div>
       </Link>
     </div>

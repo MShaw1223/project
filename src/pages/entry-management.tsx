@@ -1,8 +1,18 @@
 import Menu from "@/utils/menu";
 import { NextPage } from "next";
 import { FaCalculator } from "react-icons/fa";
+import { useState } from "react";
+import EntryMntDropdown from "@/utils/entryMntChoiceDropdown";
+import DeleteEntry from "@/utils/DeleteEntry";
+import EditEntry from "@/utils/EditEntry";
+import SearchEntry from "@/utils/SearchEntry";
 
 const EntryManagement: NextPage = () => {
+  const [selectedChoice, onChoiceChange] = useState<string>("");
+
+  const handleChoiceChange = (selectedChoice: string) => {
+    onChoiceChange(selectedChoice);
+  };
   return (
     <div className="flex h-screen">
       <Menu />
@@ -14,7 +24,21 @@ const EntryManagement: NextPage = () => {
           </span>
         </div>
         <div className="flex-1 overflow-auto p-4 text-justify justify-center">
-          This is where there will be trades searched for, deleted & edited
+          <EntryMntDropdown
+            onChoiceChange={handleChoiceChange}
+          ></EntryMntDropdown>
+          <div>
+            {selectedChoice === "" && (
+              <h1 className="p-3">
+                Here on the Entry Management page you select between searching
+                for an entry, editing an entry and deleting an entry from the
+                dropdown above!
+              </h1>
+            )}
+            {selectedChoice === "search" && <SearchEntry />}
+            {selectedChoice === "edit" && <EditEntry />}
+            {selectedChoice === "delete" && <DeleteEntry />}
+          </div>
         </div>
       </div>
     </div>
