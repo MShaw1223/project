@@ -4,7 +4,7 @@ export default function TEFormInputs() {
   return (
     <>
       <div className="flex">
-        <div className="flex-1 flex flex-col">
+        <div className="w-3/12 flex flex-col">
           <div className="p-3">
             <Input
               id="entryPrice"
@@ -33,7 +33,7 @@ export default function TEFormInputs() {
             ></Input>
           </div>
         </div>
-        <div className="flex-1 flex flex-col">
+        <div className="w-3/12 flex flex-col">
           <div className="p-3">
             <Input
               id="riskRatio"
@@ -43,26 +43,16 @@ export default function TEFormInputs() {
               placeholder="Risk Ratio..."
             ></Input>
           </div>
-        </div>
-        <div className="flex-1 flex flex-col">
+        <div className="w-6/12 flex flex-col">
           <div className="p-3">
-            <Input
-              id="currencyPair"
-              name="currencyPair"
-              type="string"
-              placeholder="Currency Pair..."
-            ></Input>
-          </div>
-          <div className="p-3">
-            <Input
+            <textarea
               id="tradeNotes"
               name="tradeNotes"
-              type="text"
-              placeholder="Notes..."
-            ></Input>
+              placeholder=" Notes..."
+              className="w-full h-[180px] resize-none border border-slate-200 text-sm"
+            ></textarea>
           </div>
         </div>
       </div>
     </>
-  );
-}
+    )}

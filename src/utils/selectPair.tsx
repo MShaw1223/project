@@ -6,13 +6,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-interface AccountDropdownProps {
-  onAccountChange: (account: string) => void;
+interface PairDropdownProps {
+  onPairChange: (pair: string) => void;
 }
 
-export function AccountDropdown({ onAccountChange }: AccountDropdownProps) {
-  const handleValueChange = (selectedAccount: string) => {
-    onAccountChange(selectedAccount);
+export function PairDropdown({ onPairChange }: PairDropdownProps) {
+  const handleValueChange = (selectedPair: string) => {
+    onPairChange(selectedPair);
   };
   return (
     <>

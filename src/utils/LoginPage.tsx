@@ -37,11 +37,11 @@ export default function login() {
   });
 
   return (
-    <div className="my-auto mx-auto w-96 border border-dashed">
-      <div className="p-2">
+    <div className="my-auto mx-auto w-96 border border-dashed rounded-3xl">
+      <div className="p-3">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
-            <FormLabel className="font-bold text-lg">Login</FormLabel>
+            <FormLabel className="font-bold text-lg p-2">Login</FormLabel>
             <div className="p-4">
               <FormField
                 control={form.control}

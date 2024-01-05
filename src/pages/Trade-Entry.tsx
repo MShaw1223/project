@@ -7,9 +7,11 @@ import Menu from "@/utils/menu";
 import { BsFillJournalBookmarkFill } from "react-icons/bs";
 import { Separator } from "@/components/ui/separator";
 import TEFormInputs from "@/utils/TradeEntryFormInputs";
+import { PairDropdown } from "@/utils/selectPair";
 
 const tradeEntry: NextPage = () => {
-  const [selectedAccount, setSelectedAccount] = useState<string>("");
+  const [selectedAccount, setSelectedAccount, selectedPair, setSelectedPair] =
+    useState<string>("");
 
   const mutation = useMutation({
     mutationFn: async (formData: string) => {
@@ -27,6 +29,7 @@ const tradeEntry: NextPage = () => {
     onSettled: () => {
       // Reset any state related to the mutation
       setSelectedAccount("");
+      setSelectedPair("");
     },
     onError: (error) => {
       console.error("Mutation error:", error);
@@ -35,6 +38,9 @@ const tradeEntry: NextPage = () => {
 
   const handleAccountChange = (selectedAccount: string) => {
     setSelectedAccount(selectedAccount);
+  };
+  const handlePairChange = (selectedPair: string) => {
+    setSelectedPair(selectedPair);
   };
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -46,7 +52,7 @@ const tradeEntry: NextPage = () => {
     const takeProfit = parseFloat(data.get("takeProfit") as string);
     const selectedAccountValue = selectedAccount;
     const riskRatio = parseFloat(data.get("riskRatio") as string);
-    const currencyPair = data.get("currencyPair") as string;
+    const currencyPairChoice = selectedPair;
     const tradeNotes = data.get("tradeNotes");
 
     if (
@@ -54,8 +60,8 @@ const tradeEntry: NextPage = () => {
       !stopLoss ||
       !takeProfit ||
       !riskRatio ||
+      currencyPairChoice === "" ||
       selectedAccountValue === "" ||
-      currencyPair === "" ||
       tradeNotes === ""
     ) {
       alert("Invalid entry");
@@ -67,7 +73,7 @@ const tradeEntry: NextPage = () => {
       takeProfit,
       selectedAccount: selectedAccountValue,
       riskRatio,
-      currencyPair,
+      selectedPair: currencyPairChoice,
       tradeNotes,
     });
 
@@ -85,20 +91,24 @@ const tradeEntry: NextPage = () => {
               Trade Entry
             </span>
           </div>
-          <div className="flex-1 overflow-auto p-4">
+          <div className="flex-1 overflow-auto p-5 mt-8">
             <div className="flex">
-              <div className="flex-1 flex flex-col">
+              <div className="w-3/12 flex flex-col">
                 <AccountDropdown
                   onAccountChange={handleAccountChange}
                 ></AccountDropdown>
               </div>
               <Separator orientation="vertical" />
-              <div className="flex-1 flex flex-col text-center">
+              <div className="w-9/12 flex flex-col text-center">
                 {mutation.isLoading && <p>Submitting Trade Data...</p>}
                 {!mutation.isLoading && (
                   <div className="flex flex-col items-center">
                     <form onSubmit={handleSubmit}>
                       <TEFormInputs />
+
+                      <PairDropdown
+                        onPairChange={handlePairChange}
+                      ></PairDropdown>
                       <div className="p-3">
                         <Button type="submit">Submit Entry</Button>
                       </div>
