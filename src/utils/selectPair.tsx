@@ -18,12 +18,12 @@ export function PairDropdown({ onPairChange }: PairDropdownProps) {
     <>
       <Select onValueChange={handleValueChange}>
         <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="Account Select..." />
+          <SelectValue placeholder="Pair Select..." />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="accountNumberOne">Account One</SelectItem>
-          <SelectItem value="accountNumberTwo">Account Two</SelectItem>
-          <SelectItem value="accountNumberThree">Account Three</SelectItem>
+          <SelectItem value="EURGBP">EUR/GBP</SelectItem>
+          <SelectItem value="GBPUSD">GBP/USD</SelectItem>
+          <SelectItem value="XAUUSD">XAU/USD</SelectItem>
         </SelectContent>
       </Select>
     </>

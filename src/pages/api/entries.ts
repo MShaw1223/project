@@ -18,7 +18,7 @@ const schema = zod.object({
   takeProfit: number().max(9999999.9999999).min(0.0000001),
   selectedAccount: zod.string(),
   tradeNotes: zod.string().max(250),
-  currrencyPair: zod.string(),
+  currencyPair: zod.string(),
   riskRatio: number().max(9999.999).min(2.0),
 });
 
@@ -31,7 +31,7 @@ async function createPageHandler(req: NextRequest, event: NextFetchEvent) {
     takeProfit,
     selectedAccount,
     tradeNotes,
-    currrencyPair,
+    currencyPair,
     riskRatio,
   } = schema.parse(body);
 
@@ -61,22 +61,22 @@ async function createPageHandler(req: NextRequest, event: NextFetchEvent) {
     default:
       throw new Error("Invalid selected account");
   }
-  let pair;
 
-  switch (currrencyPair) {
-    case "EUR/GBP":
-      pair = "eurgbp";
+  let Pair;
+
+  switch (currencyPair) {
+    case "EURGBP":
+      Pair = "EUR/GBP";
       break;
-    case "GBP/USD":
-      pair = "gbpusd";
+    case "GBPUSD":
+      Pair = "GBP/USD";
       break;
-    case "XAU/USD":
-      pair = "xau";
+    case "XAUUSD":
+      Pair = "XAU/USD";
       break;
-    // Add more cases for additional accounts if needed
 
     default:
-      throw new Error("Invalid selected pair");
+      throw new Error("Invalid Pair Selected");
   }
 
   const SQLstatement = sqlstring.format(
@@ -89,7 +89,7 @@ async function createPageHandler(req: NextRequest, event: NextFetchEvent) {
       INSERT INTO ${accountTable} (tradeId${accountTable.toLowerCase()})
       SELECT tradeId${accountTable.toLowerCase()} FROM X;
       `,
-    [entryPrice, stopLoss, takeProfit, tradeNotes, { currrencyPair }, riskRatio]
+    [entryPrice, stopLoss, takeProfit, tradeNotes, Pair, riskRatio]
   );
 
   console.log("SQLstatement", SQLstatement);
@@ -103,7 +103,7 @@ async function createPageHandler(req: NextRequest, event: NextFetchEvent) {
     stopLoss,
     takeProfit,
     tradeNotes,
-    currrencyPair,
+    Pair,
     riskRatio,
   };
 
