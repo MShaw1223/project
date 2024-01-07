@@ -6,16 +6,10 @@ import { FaUserFriends } from "react-icons/fa";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Menu from "@/utils/menu";
 import DeleteUser from "@/utils/DeleteUser";
-import ProfileCreate from "@/utils/ProfileCreate";
+import ProfileCreate from "@/utils/createProfile";
 import EditUser from "@/utils/EditUser";
 
 const userPage: NextPage = () => {
-  const [selectedChoice, onChoiceChange] = useState<string>("");
-
-  const handleChoiceChange = (selectedChoice: string) => {
-    onChoiceChange(selectedChoice);
-  };
-
   return (
     <div className="flex h-screen">
       <Menu />
