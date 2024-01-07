@@ -81,6 +81,8 @@ const tradeEntry: NextPage = () => {
   }
 
   return (
+    //
+    //
     <>
       <div className="flex h-screen">
         <Menu />
@@ -92,17 +94,20 @@ const tradeEntry: NextPage = () => {
             </span>
           </div>
           <div className="w-full overflow-auto p-5 mt-8">
-            <div className="flex">
-              <div className="w-1/5 flex flex-col">
-                <AccountDropdown
-                  onAccountChange={handleAccountChange}
-                ></AccountDropdown>
-              </div>
-              <Separator orientation="vertical" className="m-4" />
-              <div className="w-4/5 flex flex-col items-center">
-                {mutation.isLoading && <p>Submitting Trade Data...</p>}
-                {!mutation.isLoading && (
-                  <div>
+            <div>
+              {mutation.isLoading && <p>Submitting Trade Data...</p>}
+              {!mutation.isLoading && (
+                <div className="flex">
+                  <div className="flex flex-col w-1/5">
+                    <div className="m-5">
+                      <AccountDropdown
+                        onAccountChange={handleAccountChange}
+                      ></AccountDropdown>
+                    </div>
+                  </div>
+
+                  <Separator orientation="vertical" className="m-4" />
+                  <div className="flex flex-col items-center w-4/5">
                     <form onSubmit={handleSubmit}>
                       <div className="flex">
                         <div className="flex flex-col">
@@ -156,6 +161,7 @@ const tradeEntry: NextPage = () => {
                                 name="tradeNotes"
                                 placeholder=" Notes..."
                                 className="w-full h-[180px] resize-none border border-slate-200 text-sm"
+                                maxLength={1250}
                               ></textarea>
                             </div>
                           </div>
@@ -166,8 +172,8 @@ const tradeEntry: NextPage = () => {
                       </div>
                     </form>
                   </div>
-                )}
-              </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

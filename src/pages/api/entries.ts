@@ -17,8 +17,8 @@ const schema = zod.object({
   stopLoss: number().max(9999999.9999999).min(0.0000001),
   takeProfit: number().max(9999999.9999999).min(0.0000001),
   selectedAccount: zod.string(),
-  tradeNotes: zod.string().max(250),
-  currencyPair: zod.string(),
+  tradeNotes: zod.string().max(1250),
+  selectedPair: zod.string(),
   riskRatio: number().max(9999.999).min(2.0),
 });
 
@@ -31,7 +31,7 @@ async function createPageHandler(req: NextRequest, event: NextFetchEvent) {
     takeProfit,
     selectedAccount,
     tradeNotes,
-    currencyPair,
+    selectedPair,
     riskRatio,
   } = schema.parse(body);
 
@@ -57,24 +57,23 @@ async function createPageHandler(req: NextRequest, event: NextFetchEvent) {
       accountTable = "accountc";
       break;
     // Add more cases for additional accounts if needed
-
     default:
       throw new Error("Invalid selected account");
   }
 
   let Pair;
 
-  switch (currencyPair) {
+  switch (selectedPair) {
     case "EURGBP":
-      Pair = "EUR/GBP";
+      Pair = "EURGBP";
       break;
     case "GBPUSD":
-      Pair = "GBP/USD";
+      Pair = "GBPUSD";
       break;
     case "XAUUSD":
-      Pair = "XAU/USD";
+      Pair = "XAUUSD";
       break;
-
+    //Can add more cases if more pairs needed
     default:
       throw new Error("Invalid Pair Selected");
   }
@@ -103,7 +102,7 @@ async function createPageHandler(req: NextRequest, event: NextFetchEvent) {
     stopLoss,
     takeProfit,
     tradeNotes,
-    Pair,
+    selectedPair,
     riskRatio,
   };
 
