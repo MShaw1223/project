@@ -16,7 +16,7 @@ const accountManagement: NextPage = () => {
           <span className="ml-4 font-sans font-bold">Account Management</span>
         </div>
         <div className="flex-1 overflow-auto p-4 text-justify justify-center">
-          <Tabs defaultValue="account" className="w-[800px] p-3 m-1">
+          <Tabs defaultValue="deposit" className="w-[800px] p-3 m-1">
             <TabsList className="m-2 mb-6">
               <TabsTrigger value="deposit">
                 Deposit to a trading account
