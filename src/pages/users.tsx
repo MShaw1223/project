@@ -16,7 +16,7 @@ const userPage: NextPage = () => {
       <div className="flex-1 overflow-hidden">
         <div className="flex p-3 text-3xl">
           <FaUserFriends className="w-10 h-10"></FaUserFriends>
-          <span className="ml-16 font-sans font-bold">Users</span>
+          <span className="ml-16 font-bold">Users</span>
         </div>
         <div className="flex-1 overflow-auto justify-center p-2">
           <Tabs defaultValue="create" className="w-[800px] p-3 m-1">

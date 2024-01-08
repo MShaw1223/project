@@ -13,7 +13,7 @@ const accountManagement: NextPage = () => {
       <div className="flex-1 flex flex-col overflow-hidden">
         <div className="flex p-3 text-3xl">
           <MdOutlineAccountBalance className="w-10 h-10"></MdOutlineAccountBalance>
-          <span className="ml-4 font-sans font-bold">Account Management</span>
+          <span className="ml-4  font-bold">Account Management</span>
         </div>
         <div className="flex-1 overflow-auto p-4 text-justify justify-center">
           <Tabs defaultValue="deposit" className="w-[800px] p-3 m-1">

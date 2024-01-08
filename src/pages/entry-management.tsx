@@ -14,9 +14,7 @@ const EntryManagement: NextPage = () => {
         <div className="flex-1 flex flex-col overflow-hidden">
           <div className="flex p-3 text-3xl">
             <FaCalculator className="h-10 w-10"></FaCalculator>
-            <span className="ml-4 my-auto font-sans font-bold">
-              Entry Management
-            </span>
+            <span className="ml-4 my-auto font-bold">Entry Management</span>
           </div>
           <div className="flex-1 overflow-auto p-4 text-justify justify-center">
             <Tabs defaultValue="search" className="w-[800px] p-3 m-1">

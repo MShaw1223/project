@@ -11,7 +11,9 @@ export default function Menu() {
   const isLinkActive = (href: string) => router.pathname === href;
   return (
     <div className="w-72 h-screen bg-slate-400">
-      <div className="text-center p-5 text-2xl font-extrabold">Menu</div>
+      <div className="text-center p-5 text-2xl font-sans font-semibold">
+        Menu
+      </div>
       <Link href="/home">
         <div
           className={`flex pl-5 py-4 focus:outline-none font-bold hover:bg-slate-500 ${

@@ -89,9 +89,7 @@ const tradeEntry: NextPage = () => {
         <div className="flex-1 flex flex-col overflow-hidden">
           <div className="flex p-3 text-3xl">
             <BsFillJournalBookmarkFill className="h-10 w-10"></BsFillJournalBookmarkFill>
-            <span className="ml-4 my-auto font-sans font-bold">
-              Trade Entry
-            </span>
+            <span className="ml-4 my-auto font-bold">Trade Entry</span>
           </div>
           <div className="w-full overflow-auto p-5 mt-8">
             <div>

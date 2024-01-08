@@ -10,7 +10,7 @@ const Home: NextPage = () => {
       <div className="flex-1 flex flex-col overflow-hidden">
         <div className="flex p-3 text-3xl">
           <FaHome className="h-10 w-10"></FaHome>
-          <span className="ml-4 my-auto font-sans font-bold">Home</span>
+          <span className="ml-4 my-auto font-bold">Home</span>
         </div>
         <div className="flex-1 overflow-auto p-4 text-justify justify-center">
           Table showing stats will be displayed here
