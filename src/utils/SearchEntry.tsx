@@ -1,9 +1,7 @@
 export default function SearchEntry() {
   return (
     <>
-      <div className="font-black text-3xl">
-        Use the comments api, rename it too
-      </div>
+      <div>try and use the homeSearch api? , if not copy and rename it</div>
     </>
   );
 }
