@@ -13,11 +13,11 @@ const userPage: NextPage = () => {
     <div className="flex h-screen">
       <Menu />
       <div className="flex-1 overflow-hidden">
-        <div className="flex p-3 text-3xl">
-          <FaUserFriends className="w-10 h-10"></FaUserFriends>
-          <span className="ml-16 font-bold">Users</span>
+        <div className="flex p-3 text-3xl bg-gray-700">
+          <FaUserFriends className="w-10 h-10 text-white"></FaUserFriends>
+          <span className="ml-16 font-bold text-white">Users</span>
         </div>
-        <div className="flex-1 overflow-auto justify-center p-2">
+        <div className="flex-1 overflow-auto justify-center p-2 bg-gray-700">
           <Tabs defaultValue="create" className="w-[800px] p-3 m-1">
             <TabsList className="m-2 mb-6">
               <TabsTrigger value="create">Create a User</TabsTrigger>
