@@ -1,12 +1,11 @@
 //user page: created, switched and deleted
 
-import { useState, FormEvent } from "react";
 import { NextPage } from "next";
 import { FaUserFriends } from "react-icons/fa";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Menu from "@/components/ui/menu";
 import DeleteUser from "@/utils/DeleteUser";
-import ProfileCreate from "@/utils/createProfile";
+import UserCreate from "@/utils/createUser";
 import EditUser from "@/utils/EditUser";
 
 const userPage: NextPage = () => {
@@ -26,7 +25,7 @@ const userPage: NextPage = () => {
               <TabsTrigger value="delete">Delete a User</TabsTrigger>
             </TabsList>
             <TabsContent value="create">
-              <ProfileCreate />
+              <UserCreate />
             </TabsContent>
             <TabsContent value="edit">
               <EditUser />

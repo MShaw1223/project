@@ -28,7 +28,7 @@ function onSubmit(values: z.infer<typeof formSchema>) {
   console.log(values);
 }
 
-export default function userCreate() {
+export default function UserCreate() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
