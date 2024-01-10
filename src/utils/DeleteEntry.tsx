@@ -6,52 +6,37 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-
-interface DUinterface {
-  entryID: string;
-}
-
-//interface finds user and shows a pop-up to edit
-//shadcn has a really nice pop-up for this
-const formSchema = z.object({
-  entryID: z.string().min(2, {
-    message: "ID must be at least 2 digits.",
-  }),
-});
-
-function onSubmit(values: z.infer<typeof formSchema>) {
-  // Do something with the form values --> neon
-  // Type-safe and validated.
-  console.log(values);
-}
+import {
+  delete_entry_form_schema,
+  delete_entry_onSubmit,
+} from "./entryMngmtTabs";
 
 export default function DeleteEntry() {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const delete_form = useForm<z.infer<typeof delete_entry_form_schema>>({
+    resolver: zodResolver(delete_entry_form_schema),
     defaultValues: {
-      entryID: "",
+      tradesID: "",
     },
   });
   return (
     <div className="flex items-center justify-center">
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
+      <Form {...delete_form}>
+        <form onSubmit={delete_form.handleSubmit(delete_entry_onSubmit)}>
           <FormLabel className="font-bold text-lg">Delete Entry</FormLabel>
           <div className="p-2">
             <FormField
-              control={form.control}
-              name="entryID"
+              control={delete_form.control}
+              name="tradesID"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input placeholder="EntryID....." {...field} />
+                    <Input placeholder="Trades ID....." {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

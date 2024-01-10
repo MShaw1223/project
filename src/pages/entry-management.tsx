@@ -5,11 +5,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import DeleteEntry from "@/utils/DeleteEntry";
 import EditEntry from "@/utils/EditEntry";
 import SearchEntry from "@/utils/SearchEntry";
+import NewCurrencyPage from "@/utils/NewCurrency";
 
 const EntryManagement: NextPage = () => {
   return (
     <>
-      <div className="flex h-screen">
+      <div className="flex h-screen bg-slate-100">
         <Menu />
         <div className="flex-1 flex flex-col overflow-hidden">
           <div className="flex p-3 text-3xl">
@@ -34,8 +35,7 @@ const EntryManagement: NextPage = () => {
                 <DeleteEntry />
               </TabsContent>
               <TabsContent value="addPair">
-                this is where the add currency pair tab will be <br />
-                have two pair entry input ~ validation
+                <NewCurrencyPage />
               </TabsContent>
             </Tabs>
           </div>

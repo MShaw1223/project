@@ -16,8 +16,8 @@ export default function Menu() {
       </div>
       <Link href="/home">
         <div
-          className={`flex pl-5 py-4 mx-3 focus:outline-none font-bold hover:bg-slate-500 ${
-            isLinkActive("/home") ? "bg-slate-600 hover:bg-slate-600" : ""
+          className={`flex pl-5 py-4 mx-3 focus:outline-none font-bold hover:bg-gray-500 ${
+            isLinkActive("/home") ? "bg-gray-700 hover:bg-gray-700" : ""
           } rounded-full `}
         >
           <FaHome className="w-6 h-6 text-slate-100"></FaHome>
@@ -27,10 +27,8 @@ export default function Menu() {
 
       <Link href="/Trade-Entry">
         <div
-          className={`flex pl-5 py-4 mx-3 focus:outline-none font-bold hover:bg-slate-500 ${
-            isLinkActive("/Trade-Entry")
-              ? "bg-slate-600 hover:bg-slate-600"
-              : ""
+          className={`flex pl-5 py-4 mx-3 focus:outline-none font-bold hover:bg-gray-500 ${
+            isLinkActive("/Trade-Entry") ? "bg-gray-700 hover:bg-gray-700" : ""
           } rounded-full `}
         >
           <BsFillJournalBookmarkFill className="w-6 h-6 text-slate-100"></BsFillJournalBookmarkFill>
@@ -40,9 +38,9 @@ export default function Menu() {
 
       <Link href="/entry-management">
         <div
-          className={`flex pl-5 py-4 mx-3 focus:outline-none font-bold hover:bg-slate-500 ${
+          className={`flex pl-5 py-4 mx-3 focus:outline-none font-bold hover:bg-gray-500 ${
             isLinkActive("/entry-management")
-              ? "bg-slate-600 hover:bg-slate-600"
+              ? "bg-gray-700 hover:bg-gray-700"
               : ""
           } rounded-full `}
         >
@@ -53,9 +51,9 @@ export default function Menu() {
 
       <Link href="/account-management">
         <div
-          className={`flex pl-5 py-4 mx-3 focus:outline-none font-bold hover:bg-slate-500 ${
+          className={`flex pl-5 py-4 mx-3 focus:outline-none font-bold hover:bg-gray-500 ${
             isLinkActive("/account-management")
-              ? "bg-slate-600 hover:bg-slate-600"
+              ? "bg-gray-700 hover:bg-gray-700"
               : ""
           } rounded-full`}
         >
@@ -66,7 +64,7 @@ export default function Menu() {
 
       <Link href="/users">
         <div
-          className={`flex pl-5 py-4 mx-3 focus:outline-none font-bold hover:bg-slate-500 ${
+          className={`flex pl-5 py-4 mx-3 focus:outline-none font-bold hover:bg-gray-500 ${
             isLinkActive("/users") ? "bg-gray-700 hover:bg-gray-700" : ""
           } rounded-full `}
         >
@@ -78,7 +76,7 @@ export default function Menu() {
       <Separator className="ml-9 my-7 bg-white" />
 
       <Link href="/">
-        <div className="flex pl-5 py-4 mx-3 focus:outline-none font-bold hover:bg-slate-500 rounded-full">
+        <div className="flex pl-5 py-4 mx-3 focus:outline-none font-bold hover:bg-gray-500 rounded-full">
           <MdArrowBack className="w-6 h-6 text-slate-100"></MdArrowBack>
           <span className="pl-3 text-slate-100">Back to Login</span>
         </div>

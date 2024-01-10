@@ -1,7 +1,3 @@
-import React from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -13,31 +9,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { edit_entry_form_schema, edit_entry_onSubmit } from "./entryMngmtTabs";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
 
-interface EUinterface {
-  user: string;
-}
-
-//interface finds user and shows a pop-up to edit
-//shadcn has a really nice pop-up for this
-const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-  password: z.string().min(8, {
-    message: "Password must be at least 8 characters.",
-  }),
-});
-
-function onSubmit(values: z.infer<typeof formSchema>) {
-  // Do something with the form values --> neon
-  // Type-safe and validated.
-  console.log(values);
-}
-
-export default function EditEntry() {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+export const EditEntry = () => {
+  const editEntry_form = useForm<z.infer<typeof edit_entry_form_schema>>({
+    resolver: zodResolver(edit_entry_form_schema),
     defaultValues: {
       username: "",
       password: "",
@@ -45,12 +24,12 @@ export default function EditEntry() {
   });
   return (
     <div className="flex items-center justify-center">
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
+      <Form {...editEntry_form}>
+        <form onSubmit={editEntry_form.handleSubmit(edit_entry_onSubmit)}>
           <FormLabel className="font-bold text-lg">Edit Entry</FormLabel>
           <div className="p-2">
             <FormField
-              control={form.control}
+              control={editEntry_form.control}
               name="username"
               render={({ field }) => (
                 <FormItem>
@@ -64,7 +43,7 @@ export default function EditEntry() {
           </div>
           <div className="p-2">
             <FormField
-              control={form.control}
+              control={editEntry_form.control}
               name="password"
               render={({ field }) => (
                 <FormItem>
@@ -88,4 +67,5 @@ export default function EditEntry() {
       </Form>
     </div>
   );
-}
+};
+export default EditEntry;

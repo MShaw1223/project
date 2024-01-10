@@ -38,10 +38,12 @@ const Home: NextPage = () => {
       console.error("Mutation error:", error);
     },
   });
+
+  use a button to trigger mutation manually, work out how to do it on load up
 */
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen bg-slate-200">
       <Menu />
       <div className="flex-1 flex flex-col overflow-hidden">
         <div className="flex p-3 text-3xl">

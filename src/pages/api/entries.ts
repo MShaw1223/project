@@ -20,9 +20,10 @@ const schema = zod.object({
   tradeNotes: zod.string().max(1250),
   selectedPair: zod.string(),
   riskRatio: number().max(9999.999).min(2.0),
+  selectedOutcome: zod.string(),
 });
 
-async function createPageHandler(req: NextRequest, event: NextFetchEvent) {
+async function makeEntryHandler(req: NextRequest, event: NextFetchEvent) {
   const body = await extractBody(req);
 
   const {
@@ -33,6 +34,7 @@ async function createPageHandler(req: NextRequest, event: NextFetchEvent) {
     tradeNotes,
     selectedPair,
     riskRatio,
+    selectedOutcome,
   } = schema.parse(body);
 
   console.log("body", body);
@@ -41,56 +43,35 @@ async function createPageHandler(req: NextRequest, event: NextFetchEvent) {
     connectionString: process.env.DATABASE_URL,
   });
 
-  let tradesTable, accountTable;
-
-  switch (selectedAccount) {
-    case "accountNumberOne":
-      tradesTable = "tradesaccounta";
-      accountTable = "accounta";
-      break;
-    case "accountNumberTwo":
-      tradesTable = "tradesaccountb";
-      accountTable = "accountb";
-      break;
-    case "accountNumberThree":
-      tradesTable = "tradesaccountc";
-      accountTable = "accountc";
-      break;
-    // Add more cases for additional accounts if needed
-    default:
-      throw new Error("Invalid selected account");
-  }
-
-  let Pair;
-
-  switch (selectedPair) {
-    case "EURGBP":
-      Pair = "EURGBP";
-      break;
-    case "GBPUSD":
-      Pair = "GBPUSD";
-      break;
-    case "XAUUSD":
-      Pair = "XAUUSD";
-      break;
-    //Can add more cases if more pairs needed
-    default:
-      throw new Error("Invalid Pair Selected");
-  }
+  const accountTable = "tableAccount";
 
   const SQLstatement = sqlstring.format(
     `
-      WITH X AS(
-        INSERT INTO ${tradesTable} (details)
-        VALUES (ROW(?, ?, ?, ? ,?, ?))
-        RETURNING tradeId${accountTable.toLowerCase()}
-      )
-      INSERT INTO ${accountTable} (tradeId${accountTable.toLowerCase()})
-      SELECT tradeId${accountTable.toLowerCase()} FROM X;
-      `,
-    [entryPrice, stopLoss, takeProfit, tradeNotes, Pair, riskRatio]
+        INSERT INTO tableTrades
+        VALUES ROW(?, ?, ?, ? ,?, ?, ?)
+    `,
+    [
+      entryPrice,
+      stopLoss,
+      takeProfit,
+      tradeNotes,
+      selectedPair,
+      riskRatio,
+      selectedOutcome,
+    ]
   );
-
+  /*
+tradesID 
+  accountID 
+  currencyID 
+  userID 
+  entryPrice 
+  stopLoss 
+  takeProfit 
+  tradeNotes
+  riskRatio
+  winLoss  
+  */
   console.log("SQLstatement", SQLstatement);
 
   await pool.query(SQLstatement);
@@ -113,7 +94,7 @@ async function createPageHandler(req: NextRequest, event: NextFetchEvent) {
 
 export default async function handler(req: NextRequest, event: NextFetchEvent) {
   if (req.method === "POST") {
-    return createPageHandler(req, event);
+    return makeEntryHandler(req, event);
   }
   return new Response("Invalid Method", {
     status: 405,

@@ -41,7 +41,7 @@ export default function login() {
       <div className="p-3">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
-            <FormLabel className="font-bold text-lg p-2">Login</FormLabel>
+            <FormLabel className="font-bold text-lg p-2">{}</FormLabel>
             <div className="p-4">
               <FormField
                 control={form.control}

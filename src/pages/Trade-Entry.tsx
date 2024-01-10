@@ -8,11 +8,13 @@ import { BsFillJournalBookmarkFill } from "react-icons/bs";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { PairDropdown } from "@/utils/selectPair";
+import { PairDropdown } from "@/components/ui/selectPair";
+import { OutcomeDropdown } from "@/components/ui/winLoss";
 
 const tradeEntry: NextPage = () => {
   const [selectedAccount, setSelectedAccount] = useState<string>("");
   const [selectedPair, setSelectedPair] = useState<string>("");
+  const [selectedOutcome, setSelectedOutcome] = useState<string>("");
 
   const mutation = useMutation({
     mutationFn: async (formData: string) => {
@@ -31,6 +33,7 @@ const tradeEntry: NextPage = () => {
       // Reset any state related to the mutation
       setSelectedAccount("");
       setSelectedPair("");
+      setSelectedOutcome("");
     },
     onError: (error) => {
       console.error("Mutation error:", error);
@@ -42,6 +45,9 @@ const tradeEntry: NextPage = () => {
   };
   const handlePairChange = (selectedPair: string) => {
     setSelectedPair(selectedPair);
+  };
+  const handleOutcomeChange = (selectedOutcome: string) => {
+    setSelectedOutcome(selectedOutcome);
   };
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -55,6 +61,7 @@ const tradeEntry: NextPage = () => {
     const riskRatio = parseFloat(data.get("riskRatio") as string);
     const currencyPair = selectedPair;
     const tradeNotes = data.get("tradeNotes");
+    const winOrLoss = selectedOutcome;
 
     if (
       !entryPrice ||
@@ -63,7 +70,8 @@ const tradeEntry: NextPage = () => {
       !riskRatio ||
       currencyPair === "" ||
       selectedAccountValue === "" ||
-      tradeNotes === ""
+      tradeNotes === "" ||
+      selectedOutcome === ""
     ) {
       alert("Invalid entry");
       return;
@@ -76,6 +84,7 @@ const tradeEntry: NextPage = () => {
       riskRatio,
       selectedPair: currencyPair,
       tradeNotes,
+      selectedOutcome: winOrLoss,
     });
 
     mutation.mutate(dataPackage);
@@ -108,6 +117,11 @@ const tradeEntry: NextPage = () => {
                   <Separator orientation="vertical" className="m-4" />
                   <div className="flex flex-col items-center w-4/5">
                     <form onSubmit={handleSubmit}>
+                      <div className="p-3 w-full">
+                        <OutcomeDropdown
+                          on_outcome_change={handleOutcomeChange}
+                        ></OutcomeDropdown>
+                      </div>
                       <div className="flex">
                         <div className="flex flex-col">
                           <div className="p-3">
@@ -163,7 +177,6 @@ const tradeEntry: NextPage = () => {
                                 maxLength={1250}
                               ></Textarea>
                             </div>
-                            <div className="p-3">add a win y/n dropdown</div>
                           </div>
                         </div>
                       </div>

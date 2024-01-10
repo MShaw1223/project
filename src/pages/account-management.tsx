@@ -2,9 +2,11 @@ import Menu from "@/components/ui/menu";
 import { NextPage } from "next";
 import { MdOutlineAccountBalance } from "react-icons/md";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import DepositAccount from "@/utils/makeDeposit";
-import CreateAccount from "@/utils/createAccount";
-import DeleteAccount from "@/utils/DeleteAccount";
+import {
+  DepositAccount,
+  CreateAccount,
+  DeleteAccount,
+} from "@/utils/accountTabs";
 
 const accountManagement: NextPage = () => {
   return (

@@ -11,7 +11,7 @@ create table tableTrades(
   takeProfit numeric(14,7),
   tradeNotes text,
   riskRatio numeric(7, 3)
-  winLoss char(5) /*can do like win/loss dropdown then win y/n */
+  winLoss text
 );
 
 create table tableAccount(
@@ -22,7 +22,8 @@ create table tableAccount(
 
 create table tableUsers(
   userID serial primary key,
-  username varchar(15)
+  username varchar(15),
+  passwd varchar(20)
 );
 
 create table tableCurrencies(
@@ -33,6 +34,5 @@ create table tableCurrencies(
 
 create table tablePairs(
   pairID serial primary key,
-  pairName varchar(15),
   pairAbbr varchar(4)
 );
