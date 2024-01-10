@@ -163,6 +163,7 @@ const tradeEntry: NextPage = () => {
                                 maxLength={1250}
                               ></Textarea>
                             </div>
+                            <div className="p-3">add a win y/n dropdown</div>
                           </div>
                         </div>
                       </div>

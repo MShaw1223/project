@@ -11,6 +11,7 @@ create table tableTrades(
   takeProfit numeric(14,7),
   tradeNotes text,
   riskRatio numeric(7, 3)
+  winLoss char(5) /*can do like win/loss dropdown then win y/n */
 );
 
 create table tableAccount(
