@@ -4,7 +4,7 @@ import { useState, FormEvent } from "react";
 import { NextPage } from "next";
 import { FaUserFriends } from "react-icons/fa";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import Menu from "@/utils/menu";
+import Menu from "@/components/ui/menu";
 import DeleteUser from "@/utils/DeleteUser";
 import ProfileCreate from "@/utils/createProfile";
 import EditUser from "@/utils/EditUser";

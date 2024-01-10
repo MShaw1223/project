@@ -28,7 +28,7 @@ function onSubmit(values: z.infer<typeof formSchema>) {
   console.log(values);
 }
 
-export default function ProfileCreate() {
+export default function userCreate() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -53,7 +53,7 @@ export default function ProfileCreate() {
                   </FormControl>
                   <FormDescription>User must be min. 2 chars</FormDescription>
                   <FormMessage />
-                </FormItem>
+                </FormItem> //send username to db
               )}
             />
           </div>
@@ -70,7 +70,7 @@ export default function ProfileCreate() {
                     Password must be min. 8 chars
                   </FormDescription>
                   <FormMessage />
-                </FormItem>
+                </FormItem> //send this to db?
               )}
             />
           </div>

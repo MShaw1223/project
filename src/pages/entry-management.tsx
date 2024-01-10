@@ -1,4 +1,4 @@
-import Menu from "@/utils/menu";
+import Menu from "@/components/ui/menu";
 import { NextPage } from "next";
 import { FaCalculator } from "react-icons/fa";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";

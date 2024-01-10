@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import Menu from "@/utils/menu";
+import Menu from "@/components/ui/menu";
 import { FaHome } from "react-icons/fa";
 import {
   Table,

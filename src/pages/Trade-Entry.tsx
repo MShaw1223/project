@@ -3,10 +3,11 @@ import { Button } from "@/components/ui/button";
 import { useMutation } from "react-query";
 import { useState, FormEvent } from "react";
 import { NextPage } from "next";
-import Menu from "@/utils/menu";
+import Menu from "@/components/ui/menu";
 import { BsFillJournalBookmarkFill } from "react-icons/bs";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { PairDropdown } from "@/utils/selectPair";
 
 const tradeEntry: NextPage = () => {
@@ -154,13 +155,13 @@ const tradeEntry: NextPage = () => {
                           </div>
                           <div className="flex flex-col">
                             <div className="p-3">
-                              <textarea
+                              <Textarea
                                 id="tradeNotes"
                                 name="tradeNotes"
-                                placeholder=" Notes..."
+                                placeholder="Notes..."
                                 className="w-full h-[180px] resize-none border border-slate-200 text-sm"
                                 maxLength={1250}
-                              ></textarea>
+                              ></Textarea>
                             </div>
                           </div>
                         </div>
