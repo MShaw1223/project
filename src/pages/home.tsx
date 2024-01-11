@@ -53,8 +53,8 @@ const Home: NextPage = () => {
         <div className="flex-1 overflow-auto p-4 text-justify justify-center ">
           <Table className="bg-slate-400 border-black rounded-full">
             <TableCaption>A Table of your recent Trades.</TableCaption>
-            <TableHeader className="ml-4">
-              <TableRow>
+            <TableHeader >
+              <TableRow className="ml-4">
                 <TableHead className="w-[200px] text-slate-200">Trades Taken</TableHead>
                 <TableHead className="text-slate-200">Winning Trades</TableHead>
                 <TableHead className="text-slate-200">Win %</TableHead>
