@@ -13,7 +13,7 @@ const userPage: NextPage = () => {
     <div className="flex h-screen">
       <Menu />
       <div className="flex-1 overflow-hidden">
-        <div className="flex p-3 text-3xl bg-gray-700">
+        <div className="flex p-3 text-3xl">
           <FaUserFriends className="w-10 h-10 text-white"></FaUserFriends>
           <span className="ml-16 font-bold text-white">Users</span>
         </div>
