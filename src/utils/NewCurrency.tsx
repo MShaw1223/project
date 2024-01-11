@@ -45,9 +45,11 @@ const NewCurrencyPage = () => {
         {!mutation.isLoading && (
           <div>
             <form onSubmit={handleSubmit}>
-              <h1 className="font-bold text-lg">New Currency</h1>
-              <div className="flex flex-row">
-                <div className="p-2 w-[355px]">
+              <h1 className="font-bold text-lg underline underline-offset-8">
+                New Currency
+              </h1>
+              <div className="flex flex-row w-[770px]">
+                <div className="p-2 w-full">
                   <h3>Enter the abbreviation of the currency ie GBP</h3>
 
                   <Input
@@ -56,7 +58,7 @@ const NewCurrencyPage = () => {
                     placeholder="New Currency Abbreviation....."
                   />
                 </div>
-                <div className="p-2 pl-5 w-[217px]">
+                <div className="p-2 pl-5 w-full">
                   <h3>Re-enter the abbreviation</h3>
                   <Input
                     id="reEnteredAbbreviation"

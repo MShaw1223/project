@@ -21,9 +21,9 @@ const EntryManagement: NextPage = () => {
             <Tabs defaultValue="search" className="w-[800px] p-3 m-1">
               <TabsList className="m-2 mb-6">
                 <TabsTrigger value="search">Search for an Entry</TabsTrigger>
-                <TabsTrigger value="delete">Delete an Entry</TabsTrigger>
                 <TabsTrigger value="edit">Edit an Entry</TabsTrigger>
                 <TabsTrigger value="addPair">Add a Currency Pair</TabsTrigger>
+                <TabsTrigger value="delete">Delete an Entry</TabsTrigger>
               </TabsList>
               <TabsContent value="search">
                 <SearchEntry />
@@ -31,11 +31,11 @@ const EntryManagement: NextPage = () => {
               <TabsContent value="edit">
                 <EditEntry />
               </TabsContent>
-              <TabsContent value="delete">
-                <DeleteEntry />
-              </TabsContent>
               <TabsContent value="addPair">
                 <NewCurrencyPage />
+              </TabsContent>
+              <TabsContent value="delete">
+                <DeleteEntry />
               </TabsContent>
             </Tabs>
           </div>

@@ -50,18 +50,20 @@ const Home: NextPage = () => {
           <FaHome className="h-10 w-10"></FaHome>
           <span className="ml-4 my-auto font-bold">Home</span>
         </div>
-        <div className="flex-1 overflow-auto p-4 text-justify justify-center ">
-          <Table className="bg-slate-400 border-black rounded-full">
-            <TableCaption>A Table of your recent Trades.</TableCaption>
-            <TableHeader >
-              <TableRow className="ml-4">
-                <TableHead className="w-[200px] text-slate-200">Trades Taken</TableHead>
+        <div className="flex-1 overflow-auto p-4 text-justify justify-center">
+          <Table className="bg-gray-400 rounded-2xl">
+            <TableCaption className="text-gray-500">
+              A Table of your recent Trades.
+            </TableCaption>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="text-slate-200">Trades Taken</TableHead>
                 <TableHead className="text-slate-200">Winning Trades</TableHead>
                 <TableHead className="text-slate-200">Win %</TableHead>
                 <TableHead className="text-slate-200">Best Pair</TableHead>
               </TableRow>
             </TableHeader>
-            <TableBody className="ml-4">
+            <TableBody>
               <TableRow>
                 <TableCell className="font-medium text-slate-200">10</TableCell>
                 <TableCell className="text-slate-200">7</TableCell>
