@@ -10,7 +10,7 @@ import NewCurrencyPage from "@/utils/NewCurrency";
 const EntryManagement: NextPage = () => {
   return (
     <>
-      <div className="flex h-screen bg-slate-100">
+      <div className="flex h-screen bg-slate-200">
         <Menu />
         <div className="flex-1 flex flex-col overflow-hidden">
           <div className="flex p-3 text-3xl">
