@@ -36,3 +36,10 @@ create table tablePairs(
   pairID serial primary key,
   pairAbbr varchar(4)
 );
+
+/*deposits*/
+create table tableTransactions(
+  transactionID serial primary key,
+  transactionChoice text,
+  transactionAmount numeric(7,3)
+)

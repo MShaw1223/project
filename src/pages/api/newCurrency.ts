@@ -1,6 +1,6 @@
 import type { NextFetchEvent, NextRequest } from "next/server";
 import { Pool } from "@neondatabase/serverless";
-import zod, { number } from "zod";
+import zod, { string } from "zod";
 import sqlstring from "sqlstring";
 import { extractBody } from "@/utils/extractBody";
 

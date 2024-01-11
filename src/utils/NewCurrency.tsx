@@ -1,99 +1,76 @@
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
+import { useMutation } from "react-query";
+import { FormEvent } from "react";
 
 const NewCurrencyPage = () => {
-  const new_currency_form_schema = z.object({
-    Abbreviation: z.string().min(3, {
-      message: "Abbreviation must be at least 3 characters.",
-    }),
-    reEnteredAbbreviation: z.string().min(8, {
-      message: "reEnteredAbbreviation must be at least 3 characters.",
-    }),
-  });
-  const newCurrency_form = useForm<z.infer<typeof new_currency_form_schema>>({
-    resolver: zodResolver(new_currency_form_schema),
-    defaultValues: {
-      Abbreviation: "",
-      reEnteredAbbreviation: "",
+  const mutation = useMutation({
+    mutationFn: async (Abbr: string) => {
+      const response = await fetch("/api/newCurrency", {
+        method: "POST",
+        body: Abbr,
+        cache: "no-store",
+      });
+      if (!response.ok) {
+        throw new Error("Failed to send off new currency");
+      }
+      return response.json();
+    },
+    onError: (error) => {
+      console.error("Mutation error", error);
     },
   });
 
-  function new_currency_onSubmit(
-    values: z.infer<typeof new_currency_form_schema>
-  ) {
-    if (values.Abbreviation !== values.reEnteredAbbreviation) {
-      throw new Error("Entries do not match");
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const data = new FormData(event.target as HTMLFormElement);
+    const Abbr = data.get("Abbreviation");
+    const reEntered = data.get("reEnteredAbbreviation");
+    if (Abbr !== reEntered) {
+      alert("Entries do not match");
+      return;
     }
-    if (values.Abbreviation === values.reEnteredAbbreviation) {
-      //api call newCurrency.ts
+    if (Abbr === reEntered) {
+      const dataPackage = JSON.stringify({
+        Abbr,
+      });
+      mutation.mutate(dataPackage);
     }
-    console.log(values);
   }
   return (
     <>
       <div className="flex items-center justify-center">
-        <Form {...newCurrency_form}>
-          <form onSubmit={newCurrency_form.handleSubmit(new_currency_onSubmit)}>
-            <FormLabel className="font-bold text-lg">New Currency</FormLabel>
-            <div className="flex flex-row">
-              <div className="p-2">
-                <FormField
-                  control={newCurrency_form.control}
-                  name="Abbreviation"
-                  render={({ field }) => (
-                    <FormItem className="w-[355px]">
-                      <FormDescription>
-                        Enter the abbreviation of the currency ie GBP
-                      </FormDescription>
-                      <FormControl>
-                        <Input
-                          placeholder="New Currency Abbreviation....."
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+        {mutation.isLoading && <p>Submitting New Currency</p>}
+        {!mutation.isLoading && (
+          <div>
+            <form onSubmit={handleSubmit}>
+              <h1 className="font-bold text-lg">New Currency</h1>
+              <div className="flex flex-row">
+                <div className="p-2 w-[355px]">
+                  <h3>Enter the abbreviation of the currency ie GBP</h3>
+
+                  <Input
+                    id="Abbreviation"
+                    name="Abbreviation"
+                    placeholder="New Currency Abbreviation....."
+                  />
+                </div>
+                <div className="p-2 pl-5 w-[217px]">
+                  <h3>Re-enter the abbreviation</h3>
+                  <Input
+                    id="reEnteredAbbreviation"
+                    name="reEnteredAbbreviation"
+                    placeholder="Re-enter Abbreviation..."
+                  />
+                </div>
               </div>
-              <div className="p-2 pl-5">
-                <FormField
-                  control={newCurrency_form.control}
-                  name="reEnteredAbbreviation"
-                  render={({ field }) => (
-                    <FormItem className="w-[217px]">
-                      <FormDescription>
-                        Re-enter the abbreviation
-                      </FormDescription>
-                      <FormControl>
-                        <Input
-                          placeholder="Re-enter Abbreviation..."
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+              <div className="p-3 text-center">
+                <Button type="submit">Submit New</Button>
               </div>
-            </div>
-            <div className="p-3 text-center">
-              <Button type="submit">Submit New</Button>
-            </div>
-          </form>
-        </Form>
+            </form>
+          </div>
+        )}
       </div>
     </>
   );
