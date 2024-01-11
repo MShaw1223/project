@@ -16,7 +16,7 @@ const schema = zod.object({
   entryPrice: number().max(9999999.9999999).min(0.0000001),
   stopLoss: number().max(9999999.9999999).min(0.0000001),
   takeProfit: number().max(9999999.9999999).min(0.0000001),
-  selectedAccount: zod.string(),
+  selectedAccount: number().min(0),
   tradeNotes: zod.string().max(1250),
   selectedPair: zod.string(),
   riskRatio: number().max(9999.999).min(2.0),
@@ -43,8 +43,6 @@ async function makeEntryHandler(req: NextRequest, event: NextFetchEvent) {
     connectionString: process.env.DATABASE_URL,
   });
 
-  const accountTable = "tableAccount";
-
   const SQLstatement = sqlstring.format(
     `
         INSERT INTO tableTrades
@@ -55,6 +53,7 @@ async function makeEntryHandler(req: NextRequest, event: NextFetchEvent) {
       stopLoss,
       takeProfit,
       tradeNotes,
+      selectedAccount,
       selectedPair,
       riskRatio,
       selectedOutcome,

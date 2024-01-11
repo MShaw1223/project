@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import DeleteEntry from "@/utils/DeleteEntry";
 import EditEntry from "@/utils/EditEntry";
 import SearchEntry from "@/utils/SearchEntry";
-import NewCurrencyPage from "@/utils/NewCurrency";
+import NewCurrencyPage from "@/pages/NewCurrency";
 
 const EntryManagement: NextPage = () => {
   return (

@@ -5,10 +5,10 @@ import { FormEvent } from "react";
 
 const NewCurrencyPage = () => {
   const mutation = useMutation({
-    mutationFn: async (Abbr: string) => {
+    mutationFn: async (formData: string) => {
       const response = await fetch("/api/newCurrency", {
         method: "POST",
-        body: Abbr,
+        body: formData,
         cache: "no-store",
       });
       if (!response.ok) {
@@ -25,15 +25,15 @@ const NewCurrencyPage = () => {
     event.preventDefault();
 
     const data = new FormData(event.target as HTMLFormElement);
-    const Abbr = data.get("Abbreviation");
+    const pairAbbr = data.get("Abbreviation");
     const reEntered = data.get("reEnteredAbbreviation");
-    if (Abbr !== reEntered) {
+    if (pairAbbr !== reEntered) {
       alert("Entries do not match");
       return;
     }
-    if (Abbr === reEntered) {
+    if (pairAbbr === reEntered) {
       const dataPackage = JSON.stringify({
-        Abbr,
+        pairAbbr,
       });
       mutation.mutate(dataPackage);
     }
