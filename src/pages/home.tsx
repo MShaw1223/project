@@ -51,22 +51,22 @@ const Home: NextPage = () => {
           <span className="ml-4 my-auto font-bold">Home</span>
         </div>
         <div className="flex-1 overflow-auto p-4 text-justify justify-center ">
-          <Table className="bg-slate-400">
+          <Table className="bg-slate-400 border-black rounded-full">
             <TableCaption>A Table of your recent Trades.</TableCaption>
             <TableHeader>
               <TableRow>
                 <TableHead className="w-[200px] text-slate-300">Trades Taken</TableHead>
-                <TableHead className="text-slate-400">Winning Trades</TableHead>
-                <TableHead className="text-slate-400">Win %</TableHead>
-                <TableHead className="text-slate-400">Best Pair</TableHead>
+                <TableHead className="text-slate-300">Winning Trades</TableHead>
+                <TableHead className="text-slate-300">Win %</TableHead>
+                <TableHead className="text-slate-300">Best Pair</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               <TableRow>
                 <TableCell className="font-medium text-slate-400">10</TableCell>
-                <TableCell className="text-slate-400">7</TableCell>
-                <TableCell className="text-slate-400">70%</TableCell>
-                <TableCell className="text-slate-400">EURGBP</TableCell>
+                <TableCell className="text-slate-300">7</TableCell>
+                <TableCell className="text-slate-300">70%</TableCell>
+                <TableCell className="text-slate-300">EURGBP</TableCell>
               </TableRow>
             </TableBody>
           </Table>
