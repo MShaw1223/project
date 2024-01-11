@@ -24,7 +24,6 @@ create table tableAccount(
   userID integer references tableUsers(userID)
 );
 
-/*deposits*/
 create table tableTransactions(
   transactionID serial primary key,
   transactionChoice text,
@@ -45,3 +44,5 @@ create table tableTrades(
 );
 
 INSERT INTO tableUsers (username, passwd) VALUES ('MS', 'Admin123');
+INSERT INTO tablePairs (pairAbbr) VALUES ('EUR');
+INSERT INTO tablePairs (pairAbbr) VALUES ('GBP');

@@ -25,8 +25,7 @@ async function enterNewCurrency(req: NextRequest, event: NextFetchEvent) {
 
   const SQLstatement = sqlstring.format(
     `
-        INSERT INTO tablePairs (pairAbbr)
-        VALUES (?);
+        INSERT INTO tablePairs (pairAbbr) VALUES (?);
     `,
     [pairAbbr]
   );
