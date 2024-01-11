@@ -55,7 +55,7 @@ const Home: NextPage = () => {
             <TableCaption>A Table of your recent Trades.</TableCaption>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[200px] text-slate-400">Trades Taken</TableHead>
+                <TableHead className="w-[200px] text-slate-300">Trades Taken</TableHead>
                 <TableHead className="text-slate-400">Winning Trades</TableHead>
                 <TableHead className="text-slate-400">Win %</TableHead>
                 <TableHead className="text-slate-400">Best Pair</TableHead>
