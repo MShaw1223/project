@@ -43,14 +43,14 @@ const Home: NextPage = () => {
 */
 
   return (
-    <div className="flex h-screen bg-slate-400">
+    <div className="flex h-screen bg-slate-200">
       <Menu />
       <div className="flex-1 flex flex-col overflow-hidden">
         <div className="flex p-3 text-3xl">
           <FaHome className="h-10 w-10"></FaHome>
           <span className="ml-4 my-auto font-bold">Home</span>
         </div>
-        <div className="flex-1 overflow-auto p-4 text-justify justify-center">
+        <div className="flex-1 overflow-auto p-4 text-justify justify-center bg-slate-400">
           <Table>
             <TableCaption>A Table of your recent Trades.</TableCaption>
             <TableHeader>
