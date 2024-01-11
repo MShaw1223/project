@@ -43,7 +43,7 @@ const Home: NextPage = () => {
 */
 
   return (
-    <div className="flex h-screen bg-slate-200">
+    <div className="flex h-screen bg-slate-400">
       <Menu />
       <div className="flex-1 flex flex-col overflow-hidden">
         <div className="flex p-3 text-3xl">
@@ -57,16 +57,16 @@ const Home: NextPage = () => {
               <TableRow>
                 <TableHead className="w-[200px]">Trades Taken</TableHead>
                 <TableHead>Winning Trades</TableHead>
-                <TableHead>Win ratio</TableHead>
-                <TableHead>Net PnL</TableHead>
+                <TableHead>Win %</TableHead>
+                <TableHead>Best Pair</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               <TableRow>
-                <TableCell className="font-medium">look at comments</TableCell>
-                <TableCell>"</TableCell>
-                <TableCell>"</TableCell>
-                <TableCell>"</TableCell>
+                <TableCell className="font-medium">10</TableCell>
+                <TableCell>7</TableCell>
+                <TableCell>70%</TableCell>
+                <TableCell>EURGBP</TableCell>
               </TableRow>
             </TableBody>
           </Table>
