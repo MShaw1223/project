@@ -50,8 +50,8 @@ const Home: NextPage = () => {
           <FaHome className="h-10 w-10"></FaHome>
           <span className="ml-4 my-auto font-bold">Home</span>
         </div>
-        <div className="flex-1 overflow-auto p-4 text-justify justify-center bg-slate-400">
-          <Table>
+        <div className="flex-1 overflow-auto p-4 text-justify justify-center ">
+          <Table className="bg-slate-400">
             <TableCaption>A Table of your recent Trades.</TableCaption>
             <TableHeader>
               <TableRow>
