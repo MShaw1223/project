@@ -1,5 +1,6 @@
 import sqlstring from "sqlstring";
 import { Pool } from "@neondatabase/serverless";
+import { NextApiRequest, NextApiResponse } from "next";
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -7,22 +8,21 @@ const pool = new Pool({
 
 const queryAvailablePairs = sqlstring.format(
   `
-    SELECT
-      *
-    FROM
-      tablePairs
+    SELECT pairAbbr FROM tablePairs ORDER BY pairAbbr
   `
 );
 
-const findAvailablePairs = async () => {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   try {
     const result = await pool.query(queryAvailablePairs);
-    return { result }; // return the pairs
+    console.log("Query result:", result);
+    res.status(200).json(result); // return the pairs
   } catch (error) {
     console.error("Error executing query:", queryAvailablePairs);
     console.error("Error details:", error);
-    throw error;
+    res.status(400);
   }
-};
-
-export default findAvailablePairs;
+}

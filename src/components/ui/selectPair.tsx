@@ -13,6 +13,9 @@ interface BaseDropdownProps {
 interface QuoteDropdownProps {
   onQuotePairChange: (pair: string) => void;
 }
+interface PairRow {
+  pairAbbr: string;
+}
 
 function BasePairDropdown({ onBasePairChange }: BaseDropdownProps) {
   const [availablePairs, setAvailablePairs] = useState<string[]>([]);
@@ -91,9 +94,20 @@ function QuotePairDropdown({ onQuotePairChange }: QuoteDropdownProps) {
 }
 
 // Call API - return array of available pairs
-const findAvailablePairs = async () => {
-  const response = await ApiCall();
-  return response;
+const findAvailablePairs = async (): Promise<string[]> => {
+  try {
+    const response = await ApiCall();
+
+    if (response && response.rows) {
+      const pairs: string[] = response.rows.map((row: PairRow) => row.pairAbbr);
+      return pairs;
+    } else {
+      throw new Error("Invalid API response format");
+    }
+  } catch (error) {
+    console.error("Error in API call:", error);
+    throw error;
+  }
 };
 
 const ApiCall = async () => {
