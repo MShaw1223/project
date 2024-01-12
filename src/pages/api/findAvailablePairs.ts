@@ -8,24 +8,16 @@ const pool = new Pool({
 const queryAvailablePairs = sqlstring.format(
   `
     SELECT
-      tc.*,
-      CONCAT(qp.pairAbbr, bp.pairAbbr) AS currencyPair
+      *
     FROM
-      tableCurrencies tc
-    JOIN
-      tablePairs qp ON tc.quotepairID = qp.pairID
-    JOIN
-      tablePairs bp ON tc.basepairID = bp.pairID;
+      tablePairs
   `
 );
 
 const findAvailablePairs = async () => {
   try {
     const result = await pool.query(queryAvailablePairs);
-    return result.rows.map((row) => ({
-      ...row,
-      currencyPair: row.currencyPair, // concatenated pair abbreviations
-    }));
+    return { result }; // return the pairs
   } catch (error) {
     console.error("Error executing query:", queryAvailablePairs);
     console.error("Error details:", error);

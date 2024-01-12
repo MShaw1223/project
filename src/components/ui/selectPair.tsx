@@ -7,13 +7,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-interface PairDropdownProps {
-  onPairChange: (pair: string) => void;
+interface BaseDropdownProps {
+  onBasePairChange: (pair: string) => void;
+}
+interface QuoteDropdownProps {
+  onQuotePairChange: (pair: string) => void;
 }
 
-export function PairDropdown({ onPairChange }: PairDropdownProps) {
+function BasePairDropdown({ onBasePairChange }: BaseDropdownProps) {
   const [availablePairs, setAvailablePairs] = useState<string[]>([]);
-
   useEffect(() => {
     const fetchAvailablePairs = async () => {
       try {
@@ -29,14 +31,52 @@ export function PairDropdown({ onPairChange }: PairDropdownProps) {
   }, []);
 
   const handleValueChange = (selectedPair: string) => {
-    onPairChange(selectedPair);
+    onBasePairChange(selectedPair);
   };
 
   return (
     <>
       <Select onValueChange={handleValueChange}>
-        <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="Pair Select..." />
+        <SelectTrigger className="w-[90px]">
+          <SelectValue placeholder="Base" />
+        </SelectTrigger>
+        <SelectContent>
+          {availablePairs.map((pair, index) => (
+            <SelectItem key={index} value={pair}>
+              {pair}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </>
+  );
+}
+
+function QuotePairDropdown({ onQuotePairChange }: QuoteDropdownProps) {
+  const [availablePairs, setAvailablePairs] = useState<string[]>([]);
+  useEffect(() => {
+    const fetchAvailablePairs = async () => {
+      try {
+        //API function to get available pairs
+        const pairs = await findAvailablePairs();
+        setAvailablePairs(pairs);
+      } catch (error) {
+        console.error("Error fetching available pairs:", error);
+      }
+    };
+
+    fetchAvailablePairs();
+  }, []);
+
+  const handleValueChange = (selectedPair: string) => {
+    onQuotePairChange(selectedPair);
+  };
+
+  return (
+    <>
+      <Select onValueChange={handleValueChange}>
+        <SelectTrigger className="w-[90px]">
+          <SelectValue placeholder="Quote" />
         </SelectTrigger>
         <SelectContent>
           {availablePairs.map((pair, index) => (
@@ -73,3 +113,4 @@ const ApiCall = async () => {
     throw error;
   }
 };
+export { BasePairDropdown, QuotePairDropdown };

@@ -8,7 +8,10 @@ import { BsFillJournalBookmarkFill } from "react-icons/bs";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { PairDropdown } from "@/components/ui/selectPair";
+import {
+  BasePairDropdown,
+  QuotePairDropdown,
+} from "@/components/ui/selectPair";
 import { OutcomeDropdown } from "@/components/ui/winLoss";
 
 const tradeEntry: NextPage = () => {
@@ -151,10 +154,17 @@ const tradeEntry: NextPage = () => {
                               placeholder="Take Profit..."
                             ></Input>
                           </div>
-                          <div className="p-3">
-                            <PairDropdown
-                              onPairChange={handlePairChange}
-                            ></PairDropdown>
+                          <div className="p-3 flex flex-row">
+                            <div className="p-1">
+                              <BasePairDropdown
+                                onBasePairChange={handlePairChange}
+                              ></BasePairDropdown>
+                            </div>
+                            <div className="p-1">
+                              <QuotePairDropdown
+                                onQuotePairChange={handlePairChange}
+                              ></QuotePairDropdown>
+                            </div>
                           </div>
                         </div>
                         <div className="flex flex-col">
