@@ -105,19 +105,21 @@ const tradeEntry: NextPage = () => {
             <span className="ml-4 my-auto font-bold">Trade Entry</span>
           </div>
           <div className="w-full overflow-auto p-5 mt-8">
+            <div>
               {mutation.isLoading && <p>Submitting Trade Data...</p>}
               {!mutation.isLoading && (
                 <div className="flex">
-                  <div className="flex flex-col w-3/10">
+                  <div className="flex flex-col w-1/5">
                     <div className="m-5">
                       <AccountDropdown
                         onAccountChange={handleAccountChange}
                       ></AccountDropdown>
+                    </div>
                   </div>
-                  <div className="flex flex-col m-2 bg-black w-1/10">
+                  <div className="flex flex-col m-2 bg-black">
                     <Separator orientation="vertical" />
                   </div>
-                  <div className="flex flex-col items-center w-6/5">
+                  <div className="flex flex-col items-center w-4/5">
                     <form onSubmit={handleSubmit}>
                       <div className="p-3 w-full">
                         <OutcomeDropdown
@@ -195,8 +197,8 @@ const tradeEntry: NextPage = () => {
                     </form>
                   </div>
                 </div>
-            </div>
               )}
+            </div>
           </div>
         </div>
       </div>
