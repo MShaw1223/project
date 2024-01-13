@@ -12,37 +12,21 @@ create table tableUsers(
   passwd varchar(20)
 );
 
-create table tableCurrencies(
-  currencyID serial primary key,
-  quotepairID integer references tablePairs(pairID),
-  basepairID integer references tablePairs(pairID)
-);
-
 create table tableAccount(
   accountID serial primary key,
   accountName char(15),
   userID integer references tableUsers(userID)
 );
 
-create table tableTransactions(
-  transactionID serial primary key,
-  transactionChoice text,
-  transactionAmount numeric(7,3)
-);
-
 create table tableTrades(
   tradesID serial primary key,
   accountID integer references tableAccount(accountID),
-  currencyID integer references tableCurrencies(currencyID),
   userID integer references tableUsers(userID),
   entryPrice numeric(14,7),
   stopLoss numeric(14,7),
   takeProfit numeric(14,7),
   tradeNotes text,
   riskRatio numeric(7, 3),
-  winLoss text
+  winLoss text,
+  currencyPair text
 );
-
-INSERT INTO tableUsers (username, passwd) VALUES ('MS', 'Admin123');
-INSERT INTO tablePairs (pairAbbr) VALUES ('EUR');
-INSERT INTO tablePairs (pairAbbr) VALUES ('GBP');

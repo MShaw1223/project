@@ -20,17 +20,11 @@ const accountManagement: NextPage = () => {
         <div className="flex-1 overflow-auto p-4 text-justify justify-center">
           <Tabs defaultValue="deposit" className="w-[800px] p-3 m-1">
             <TabsList className="m-2 mb-6">
-              <TabsTrigger value="deposit">
-                Deposit to a trading account
-              </TabsTrigger>
               <TabsTrigger value="create">
                 Create a new trading account
               </TabsTrigger>
               <TabsTrigger value="delete">Delete a trading Account</TabsTrigger>
             </TabsList>
-            <TabsContent value="deposit">
-              <DepositAccount />
-            </TabsContent>
             <TabsContent value="create">
               <CreateAccount />
             </TabsContent>

@@ -25,15 +25,15 @@ const NewCurrencyPage = () => {
     event.preventDefault();
 
     const data = new FormData(event.target as HTMLFormElement);
-    const pairAbbr = data.get("Abbreviation");
+    const pairabbr = data.get("Abbreviation");
     const reEntered = data.get("reEnteredAbbreviation");
-    if (pairAbbr !== reEntered) {
+    if (pairabbr !== reEntered) {
       alert("Entries do not match");
       return;
     }
-    if (pairAbbr === reEntered) {
+    if (pairabbr === reEntered) {
       const dataPackage = JSON.stringify({
-        pairAbbr,
+        pairabbr,
       });
       mutation.mutate(dataPackage);
     }

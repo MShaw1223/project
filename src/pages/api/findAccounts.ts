@@ -7,7 +7,7 @@ const pool = new Pool({
 
 const queryAvailableAccs = sqlstring.format(
   `
-    select * from tableAccount
+    select accountName from tableAccount ORDER BY accountName
   `
   /* where userID = ${loggedIn} */
 );
@@ -29,9 +29,6 @@ const findAvailableAccs = async () => {
 export default findAvailableAccs;
 
 /*
-
-
-
 const queryAvailableAccs = sqlstring.format(
   `
     SELECT

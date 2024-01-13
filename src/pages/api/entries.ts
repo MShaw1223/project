@@ -21,6 +21,8 @@ const schema = zod.object({
   selectedPair: zod.string(),
   riskRatio: number().max(9999.999).min(2.0),
   selectedOutcome: zod.string(),
+  userID: zod.number(),
+  accountID: zod.number(),
 });
 
 async function makeEntryHandler(req: NextRequest, event: NextFetchEvent) {
@@ -30,11 +32,13 @@ async function makeEntryHandler(req: NextRequest, event: NextFetchEvent) {
     entryPrice,
     stopLoss,
     takeProfit,
-    selectedAccount,
+    selectedAccount: selectedAccountValue,
     tradeNotes,
-    selectedPair,
+    selectedPair: currencyPair,
     riskRatio,
-    selectedOutcome,
+    selectedOutcome: winOrLoss,
+    userID,
+    accountID,
   } = schema.parse(body);
 
   console.log("body", body);
@@ -46,31 +50,20 @@ async function makeEntryHandler(req: NextRequest, event: NextFetchEvent) {
   const SQLstatement = sqlstring.format(
     `
         INSERT INTO tableTrades
-        VALUES ROW(?, ?, ?, ? ,?, ?, ?)
+        VALUES ROW(?, ?, ?, ? ,?, ?, ?,?,?)
     `,
     [
       entryPrice,
       stopLoss,
       takeProfit,
       tradeNotes,
-      selectedAccount,
-      selectedPair,
       riskRatio,
-      selectedOutcome,
+      winOrLoss,
+      currencyPair,
+      userID,
+      selectedAccountValue,
     ]
   );
-  /*
-tradesID 
-  accountID 
-  currencyID 
-  userID 
-  entryPrice 
-  stopLoss 
-  takeProfit 
-  tradeNotes
-  riskRatio
-  winLoss  
-  */
   console.log("SQLstatement", SQLstatement);
 
   await pool.query(SQLstatement);
@@ -82,8 +75,11 @@ tradesID
     stopLoss,
     takeProfit,
     tradeNotes,
-    selectedPair,
     riskRatio,
+    winOrLoss,
+    currencyPair,
+    userID,
+    accountID,
   };
 
   return new Response(JSON.stringify({ responsePayload }), {

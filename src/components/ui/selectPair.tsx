@@ -14,7 +14,7 @@ interface QuoteDropdownProps {
   onQuotePairChange: (pair: string) => void;
 }
 interface PairRow {
-  pairAbbr: string;
+  pairabbr: string;
 }
 
 function BasePairDropdown({ onBasePairChange }: BaseDropdownProps) {
@@ -29,14 +29,12 @@ function BasePairDropdown({ onBasePairChange }: BaseDropdownProps) {
         console.error("Error fetching available pairs:", error);
       }
     };
-
     fetchAvailablePairs();
   }, []);
 
   const handleValueChange = (selectedPair: string) => {
     onBasePairChange(selectedPair);
   };
-
   return (
     <>
       <Select onValueChange={handleValueChange}>
@@ -97,10 +95,10 @@ function QuotePairDropdown({ onQuotePairChange }: QuoteDropdownProps) {
 const findAvailablePairs = async (): Promise<string[]> => {
   try {
     const response = await ApiCall();
-
-    if (response && response.rows) {
-      const pairs: string[] = response.rows.map((row: PairRow) => row.pairAbbr);
-      return pairs;
+    console.log("API RESPONSE: ", response);
+    if (Array.isArray(response)) {
+      console.log(response);
+      return response;
     } else {
       throw new Error("Invalid API response format");
     }
@@ -109,7 +107,6 @@ const findAvailablePairs = async (): Promise<string[]> => {
     throw error;
   }
 };
-
 const ApiCall = async () => {
   try {
     const response = await fetch("/api/findAvailablePairs", {
@@ -120,8 +117,9 @@ const ApiCall = async () => {
     if (!response.ok) {
       throw new Error("Failed to fetch available pairs");
     }
-
-    return response.json();
+    const data = await response.json();
+    console.log(data);
+    return data;
   } catch (error) {
     console.error("Error in API call:", error);
     throw error;

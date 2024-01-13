@@ -10,38 +10,29 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useEffect, useState } from "react";
 
-//const datainthetable1 = sql statement
-//const datainthetable2 = sql statement
-//const datainthetable3 = sql statement
-//etc etc add manipulation where needed
+type TradeData = {
+  totalTrades: number;
+  totalWins: number;
+  winPercentage: number;
+  bestPair: string;
+  worstPair: string;
+};
 
 const Home: NextPage = () => {
-  /*
-  have this as a const and then you can do mutations in each div within the table cells?
+  const [data, setData] = useState<TradeData | null>(null);
 
-  const mutation = useMutation({
-    mutationFn: async (formData: string) => {
-      const response = await fetch("/api/homeSearch", {
-        #stuff needed here#
-      });
-      if (!response.ok) {
-        throw new Error("Failed to find trade data");
-      }
+  // Fetch data from the database
+  useEffect(() => {
+    async function fetchData() {
+      const response = await fetch("/api/tradeData");
+      const tradeData: TradeData = await response.json();
+      setData(tradeData);
+    }
 
-      return response.json();
-    },
-    onSettled: () => {
-      // Reset any state related to the mutation
-    },
-    onError: (error) => {
-      console.error("Mutation error:", error);
-    },
-  });
-
-  use a button to trigger mutation manually, work out how to do it on load up
-*/
-
+    fetchData();
+  }, []);
   return (
     <div className="flex h-screen bg-slate-200">
       <Menu />
@@ -64,12 +55,15 @@ const Home: NextPage = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              <TableRow>
-                <TableCell className="font-medium text-slate-200">10</TableCell>
-                <TableCell className="text-slate-200">7</TableCell>
-                <TableCell className="text-slate-200">70%</TableCell>
-                <TableCell className="text-slate-200">EURGBP</TableCell>
-              </TableRow>
+              {data && (
+                <TableRow>
+                  <TableCell>{data.totalTrades}</TableCell>
+                  <TableCell>{data.totalWins}</TableCell>
+                  <TableCell>{`${data.winPercentage}%`}</TableCell>
+                  <TableCell>{data.bestPair}</TableCell>
+                  <TableCell>{data.worstPair}</TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </div>

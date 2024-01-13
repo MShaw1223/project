@@ -8,7 +8,7 @@ const pool = new Pool({
 
 const queryAvailablePairs = sqlstring.format(
   `
-    SELECT pairAbbr FROM tablePairs ORDER BY pairAbbr
+    SELECT pairabbr FROM tablePairs ORDER BY pairabbr
   `
 );
 
@@ -18,11 +18,13 @@ export default async function handler(
 ) {
   try {
     const result = await pool.query(queryAvailablePairs);
-    console.log("Query result:", result);
-    res.status(200).json(result); // return the pairs
+    console.log("First row:", result.rows[0]); // Log the first row
+    const pairabbrs = result.rows.map((row) => row.pairabbr); // Access pairabbr directly
+    console.log("Pairs:", pairabbrs);
+    res.status(200).json(pairabbrs); // return the pairs
   } catch (error) {
     console.error("Error executing query:", queryAvailablePairs);
     console.error("Error details:", error);
-    res.status(400);
+    res.status(400).end();
   }
 }

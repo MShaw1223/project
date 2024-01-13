@@ -16,7 +16,8 @@ import { OutcomeDropdown } from "@/components/ui/winLoss";
 
 const tradeEntry: NextPage = () => {
   const [selectedAccount, setSelectedAccount] = useState<string>("");
-  const [selectedPair, setSelectedPair] = useState<string>("");
+  const [selectedBasePair, setSelectedBasePair] = useState<string>("");
+  const [selectedQuotePair, setSelectedQuotePair] = useState<string>("");
   const [selectedOutcome, setSelectedOutcome] = useState<string>("");
 
   const mutation = useMutation({
@@ -35,7 +36,8 @@ const tradeEntry: NextPage = () => {
     onSettled: () => {
       // Reset any state related to the mutation
       setSelectedAccount("");
-      setSelectedPair("");
+      setSelectedBasePair("");
+      setSelectedQuotePair("");
       setSelectedOutcome("");
     },
     onError: (error) => {
@@ -46,8 +48,11 @@ const tradeEntry: NextPage = () => {
   const handleAccountChange = (selectedAccount: string) => {
     setSelectedAccount(selectedAccount);
   };
-  const handlePairChange = (selectedPair: string) => {
-    setSelectedPair(selectedPair);
+  const handleBasePairChange = (selectedPair: string) => {
+    setSelectedBasePair(selectedBasePair);
+  };
+  const handleQuotePairChange = (selectedPair: string) => {
+    setSelectedQuotePair(selectedQuotePair);
   };
   const handleOutcomeChange = (selectedOutcome: string) => {
     setSelectedOutcome(selectedOutcome);
@@ -62,7 +67,7 @@ const tradeEntry: NextPage = () => {
     const takeProfit = parseFloat(data.get("takeProfit") as string);
     const selectedAccountValue = selectedAccount;
     const riskRatio = parseFloat(data.get("riskRatio") as string);
-    const currencyPair = selectedPair;
+    const currencyPair = selectedBasePair + selectedQuotePair;
     const tradeNotes = data.get("tradeNotes");
     const winOrLoss = selectedOutcome;
 
@@ -74,7 +79,8 @@ const tradeEntry: NextPage = () => {
       currencyPair === "" ||
       selectedAccountValue === "" ||
       tradeNotes === "" ||
-      selectedOutcome === ""
+      selectedOutcome === "" ||
+      selectedBasePair === selectedQuotePair
     ) {
       alert("Invalid entry");
       return;
@@ -109,88 +115,91 @@ const tradeEntry: NextPage = () => {
               {mutation.isLoading && <p>Submitting Trade Data...</p>}
               {!mutation.isLoading && (
                 <div className="flex">
-                  <div className="flex flex-col w-1/5">
-                    <div className="m-5">
-                      <AccountDropdown
-                        onAccountChange={handleAccountChange}
-                      ></AccountDropdown>
-                    </div>
-                  </div>
-                    <Separator orientation="vertical" />
                   <div className="flex flex-col items-center w-4/5">
                     <form onSubmit={handleSubmit}>
-                      <div className="p-3 w-full">
-                        <OutcomeDropdown
-                          on_outcome_change={handleOutcomeChange}
-                        ></OutcomeDropdown>
-                      </div>
                       <div className="flex">
                         <div className="flex flex-col">
                           <div className="p-3">
-                            <Input
-                              id="entryPrice"
-                              name="entryPrice"
-                              type="number"
-                              step="any"
-                              placeholder="Entry Price..."
-                            ></Input>
-                          </div>
-                          <div className="p-3">
-                            <Input
-                              id="stopLoss"
-                              name="stopLoss"
-                              type="number"
-                              step="any"
-                              placeholder="Stop Loss..."
-                            ></Input>
-                          </div>
-                          <div className="p-3">
-                            <Input
-                              id="takeProfit"
-                              name="takeProfit"
-                              type="number"
-                              step="any"
-                              placeholder="Take Profit..."
-                            ></Input>
-                          </div>
-                          <div className="p-3 flex flex-row">
-                            <div className="p-1">
-                              <BasePairDropdown
-                                onBasePairChange={handlePairChange}
-                              ></BasePairDropdown>
-                            </div>
-                            <div className="p-1">
-                              <QuotePairDropdown
-                                onQuotePairChange={handlePairChange}
-                              ></QuotePairDropdown>
-                            </div>
+                            <AccountDropdown
+                              onAccountChange={handleAccountChange}
+                            ></AccountDropdown>
                           </div>
                         </div>
                         <div className="flex flex-col">
-                          <div className="p-3">
-                            <Input
-                              id="riskRatio"
-                              name="riskRatio"
-                              type="number"
-                              step="any"
-                              placeholder="Risk Ratio..."
-                            ></Input>
+                          <div className="p-3 w-full">
+                            <OutcomeDropdown
+                              on_outcome_change={handleOutcomeChange}
+                            ></OutcomeDropdown>
                           </div>
-                          <div className="flex flex-col">
-                            <div className="p-3">
-                              <Textarea
-                                id="tradeNotes"
-                                name="tradeNotes"
-                                placeholder="Notes..."
-                                className="w-full h-[180px] resize-none border border-slate-200 text-sm"
-                                maxLength={1250}
-                              ></Textarea>
+                          <div className="flex">
+                            <div className="flex flex-col">
+                              <div className="p-3">
+                                <Input
+                                  id="entryPrice"
+                                  name="entryPrice"
+                                  type="number"
+                                  step="any"
+                                  placeholder="Entry Price..."
+                                ></Input>
+                              </div>
+                              <div className="p-3">
+                                <Input
+                                  id="stopLoss"
+                                  name="stopLoss"
+                                  type="number"
+                                  step="any"
+                                  placeholder="Stop Loss..."
+                                ></Input>
+                              </div>
+                              <div className="p-3">
+                                <Input
+                                  id="takeProfit"
+                                  name="takeProfit"
+                                  type="number"
+                                  step="any"
+                                  placeholder="Take Profit..."
+                                ></Input>
+                              </div>
+                              <div className="p-3 flex flex-row">
+                                <div className="p-1">
+                                  <BasePairDropdown
+                                    onBasePairChange={handleBasePairChange}
+                                  ></BasePairDropdown>
+                                </div>
+                                <div className="p-1">
+                                  <QuotePairDropdown
+                                    onQuotePairChange={handleQuotePairChange}
+                                  ></QuotePairDropdown>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="flex flex-col">
+                              <div className="p-3">
+                                <Input
+                                  id="riskRatio"
+                                  name="riskRatio"
+                                  type="number"
+                                  step="any"
+                                  placeholder="Risk Ratio..."
+                                ></Input>
+                              </div>
+                              <div className="flex flex-col">
+                                <div className="p-3">
+                                  <Textarea
+                                    id="tradeNotes"
+                                    name="tradeNotes"
+                                    placeholder="Notes..."
+                                    className="w-full h-[180px] resize-none border border-slate-200 text-sm"
+                                    maxLength={1250}
+                                  ></Textarea>
+                                </div>
+                              </div>
                             </div>
                           </div>
+                          <div className="p-3 text-center">
+                            <Button type="submit">Submit Entry</Button>
+                          </div>
                         </div>
-                      </div>
-                      <div className="p-3 text-center">
-                        <Button type="submit">Submit Entry</Button>
                       </div>
                     </form>
                   </div>

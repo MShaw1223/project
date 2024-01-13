@@ -9,13 +9,13 @@ export const config = {
 };
 
 const schema = zod.object({
-  pairAbbr: zod.string().max(5),
+  pairabbr: zod.string().max(5),
 });
 
 async function enterNewCurrency(req: NextRequest, event: NextFetchEvent) {
   const body = await extractBody(req);
 
-  const pairAbbr = schema.parse(body);
+  const pairabbr = schema.parse(body);
 
   console.log("body", body);
 
@@ -25,9 +25,9 @@ async function enterNewCurrency(req: NextRequest, event: NextFetchEvent) {
 
   const SQLstatement = sqlstring.format(
     `
-        INSERT INTO tablePairs (pairAbbr) VALUES (?);
+        INSERT INTO tablePairs (pairabbr) VALUES (?);
     `,
-    [pairAbbr]
+    [pairabbr.pairabbr]
   );
 
   console.log("SQLstatement", SQLstatement);
@@ -36,9 +36,7 @@ async function enterNewCurrency(req: NextRequest, event: NextFetchEvent) {
 
   event.waitUntil(pool.end());
 
-  const responsePayload = pairAbbr ;
-
-  return new Response(JSON.stringify({ responsePayload }), {
+  return new Response(JSON.stringify({ pairabbr }), {
     status: 200,
   });
 }

@@ -1,50 +1,33 @@
-import { extractBody } from "@/utils/extractBody";
-import { NextFetchEvent, NextRequest } from "next/server";
-import { v4 as uuidv4 } from "uuid";
-import sqlstring from "sqlstring";
+import type { NextApiRequest, NextApiResponse } from "next";
 import { Pool } from "@neondatabase/serverless";
 
-//this would be for SELECT and insert
-// change the insert to delete
-
-export const config = {
-  runtime: "edge",
-};
-
-async function readCommentHandler(req: NextRequest, event: NextFetchEvent) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
   });
 
-  const getInfo = sqlstring.format(
-    `
-    SELECT id, comment, created_at
-    FROM comment
-    WHERE page = 
-    ORDER BY created_at DESC;
-    `
-  ); //edit this sql statement to search the current user, through all accounts and find any data needed in the table
+  // Execute SQL queries to get the trade data
+  const totalTrades = await pool.query("SELECT COUNT(*) FROM tableTrades");
+  const totalWins = await pool.query(
+    "SELECT COUNT(*) FROM tableTrades WHERE winLoss = 'win'"
+  );
+  const bestPair = await pool.query(
+    "SELECT currencyPair, COUNT(*) as count FROM tableTrades GROUP BY currencyPair ORDER BY count DESC LIMIT 1"
+  );
+  const worstPair = await pool.query(
+    "SELECT currencyPair, COUNT(*) as count FROM tableTrades GROUP BY currencyPair ORDER BY count ASC LIMIT 1"
+  );
 
-  try {
-    const { rows: commentRows } = await pool.query(getInfo);
-    return new Response(JSON.stringify(commentRows));
-  } catch (e) {
-    console.error(e);
-    return new Response("Page not found", {
-      status: 404,
-    });
-  } finally {
-    event.waitUntil(pool.end());
-  } //this could work v/ v/ nice?
+  const tradeData = {
+    totalTrades: totalTrades.rows[0].count,
+    totalWins: totalWins.rows[0].count,
+    winPercentage: (totalWins.rows[0].count / totalTrades.rows[0].count) * 100,
+    bestPair: bestPair.rows[0].currencyPair,
+    worstPair: worstPair.rows[0].currencyPair,
+  };
+
+  res.status(200).json(tradeData);
 }
-
-async function handler(req: NextRequest, event: NextFetchEvent) {
-  if (req.method === "GET") {
-    return readCommentHandler(req, event);
-  }
-  return new Response("Invalid method", {
-    status: 405,
-  });
-}
-
-export default handler;
