@@ -107,7 +107,7 @@ const tradeEntry: NextPage = () => {
           <div className="w-full overflow-auto p-5 mt-8">
               {mutation.isLoading && <p>Submitting Trade Data...</p>}
               {!mutation.isLoading && (
-                <div className="flex">
+                <div className="flex flex-1">
                   <div className="flex flex-col w-3/10 m-5">
                       <AccountDropdown
                         onAccountChange={handleAccountChange}
