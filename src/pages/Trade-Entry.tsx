@@ -115,7 +115,7 @@ const tradeEntry: NextPage = () => {
                   <div className="flex flex-col m-2 bg-black w-1/10">
                     <Separator orientation="vertical" />
                   </div>
-                  <div className="flex flex-col items-center w-6/10">
+                  <div className="flex flex-col items-center w-3/5">
                     <form onSubmit={handleSubmit}>
                       <div className="p-3 w-full">
                         <OutcomeDropdown
