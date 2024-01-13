@@ -108,12 +108,10 @@ const tradeEntry: NextPage = () => {
               {mutation.isLoading && <p>Submitting Trade Data...</p>}
               {!mutation.isLoading && (
                 <div className="flex">
-                  <div className="flex flex-col w-3/10">
-                    <div className="m-5">
+                  <div className="flex flex-col w-3/10 m-5">
                       <AccountDropdown
                         onAccountChange={handleAccountChange}
                       ></AccountDropdown>
-                  </div>
                   <div className="flex flex-col m-2 bg-black w-1/10">
                     <Separator orientation="vertical" />
                   </div>
