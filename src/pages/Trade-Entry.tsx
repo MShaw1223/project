@@ -122,7 +122,7 @@ const tradeEntry: NextPage = () => {
                           on_outcome_change={handleOutcomeChange}
                         ></OutcomeDropdown>
                       </div>
-                      <div className="flex">
+                 
                         <div className="flex flex-col">
                           <div className="p-3">
                             <Input
@@ -186,7 +186,7 @@ const tradeEntry: NextPage = () => {
                             </div>
                           </div>
                         </div>
-                      </div>
+                      
                       <div className="p-3 text-center">
                         <Button type="submit">Submit Entry</Button>
                       </div>
