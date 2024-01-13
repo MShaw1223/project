@@ -114,10 +114,10 @@ const tradeEntry: NextPage = () => {
                         onAccountChange={handleAccountChange}
                       ></AccountDropdown>
                   </div>
-                  <div className="flex flex-col m-2 bg-black">
+                  <div className="flex flex-col m-2 bg-black w-1/5">
                     <Separator orientation="vertical" />
                   </div>
-                  <div className="flex flex-col items-center w-4/5">
+                  <div className="flex flex-col items-center w-3/5">
                     <form onSubmit={handleSubmit}>
                       <div className="p-3 w-full">
                         <OutcomeDropdown
