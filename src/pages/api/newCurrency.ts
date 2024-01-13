@@ -36,7 +36,7 @@ async function enterNewCurrency(req: NextRequest, event: NextFetchEvent) {
 
   event.waitUntil(pool.end());
 
-  const responsePayload = { pairAbbr };
+  const responsePayload = pairAbbr ;
 
   return new Response(JSON.stringify({ responsePayload }), {
     status: 200,
