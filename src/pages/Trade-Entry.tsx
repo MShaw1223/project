@@ -116,7 +116,7 @@ const tradeEntry: NextPage = () => {
                       ></AccountDropdown>
                     </div>
                   </div>
-                  <div className="flex flex-col m-4">=
+                  <div className="flex flex-col m-4">
                     <Separator orientation="vertical" />
                   </div>
                   <div className="flex flex-col items-center w-4/5">
