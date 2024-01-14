@@ -28,6 +28,6 @@ export default async function handler(
     bestPair: bestPair.rows[0].currencyPair,
     worstPair: worstPair.rows[0].currencyPair,
   };
-
+  console.log("Trade data:", tradeData); // Add this line
   res.status(200).json(tradeData);
 }

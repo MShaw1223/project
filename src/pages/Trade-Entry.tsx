@@ -5,7 +5,6 @@ import { useState, FormEvent } from "react";
 import { NextPage } from "next";
 import Menu from "@/components/ui/menu";
 import { BsFillJournalBookmarkFill } from "react-icons/bs";
-import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -48,10 +47,10 @@ const tradeEntry: NextPage = () => {
   const handleAccountChange = (selectedAccount: string) => {
     setSelectedAccount(selectedAccount);
   };
-  const handleBasePairChange = (selectedPair: string) => {
+  const handleBasePairChange = (selectedBasePair: string) => {
     setSelectedBasePair(selectedBasePair);
   };
-  const handleQuotePairChange = (selectedPair: string) => {
+  const handleQuotePairChange = (selectedQuotePair: string) => {
     setSelectedQuotePair(selectedQuotePair);
   };
   const handleOutcomeChange = (selectedOutcome: string) => {

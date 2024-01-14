@@ -1,4 +1,4 @@
-import type { NextFetchEvent, NextRequest } from "next/server";
+import { NextRequest, NextFetchEvent } from "next/server";
 import { Pool } from "@neondatabase/serverless";
 import zod from "zod";
 import sqlstring from "sqlstring";
@@ -9,13 +9,13 @@ export const config = {
 };
 
 const schema = zod.object({
-  pairabbr: zod.string().max(5),
+  accountname: zod.string(),
 });
 
-async function enterNewCurrency(req: NextRequest, event: NextFetchEvent) {
+async function createNewAccount(req: NextRequest, event: NextFetchEvent) {
   const body = await extractBody(req);
 
-  const pairabbr = schema.parse(body);
+  const accountname = schema.parse(body);
 
   console.log("body", body);
 
@@ -25,9 +25,9 @@ async function enterNewCurrency(req: NextRequest, event: NextFetchEvent) {
 
   const SQLstatement = sqlstring.format(
     `
-        INSERT INTO tablePairs (pairabbr) VALUES (?);
+      INSERT INTO tableAccount (accountname) VALUES (?);
     `,
-    [pairabbr.pairabbr]
+    [accountname.accountname]
   );
 
   console.log("SQLstatement", SQLstatement);
@@ -36,16 +36,16 @@ async function enterNewCurrency(req: NextRequest, event: NextFetchEvent) {
 
   event.waitUntil(pool.end());
 
-  return new Response(JSON.stringify({ pairabbr }), {
+  return new Response(JSON.stringify({ accountname }), {
     status: 200,
   });
 }
 
 export default async function handler(req: NextRequest, event: NextFetchEvent) {
   if (req.method === "POST") {
-    return enterNewCurrency(req, event);
+    return createNewAccount(req, event);
   }
-  return new Response("Invalid Method", {
+  return new Response("Method not allowed", {
     status: 405,
   });
 }

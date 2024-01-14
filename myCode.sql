@@ -6,10 +6,10 @@ create table tablePairs(
   pairAbbr varchar(4)
 );
 
-create table tableUsers(
+create table tableUsers (
   userID serial primary key,
   username varchar(15),
-  passwd varchar(20)
+  passwd varchar(60)
 );
 
 create table tableAccount(

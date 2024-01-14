@@ -2,7 +2,8 @@ import Menu from "@/components/ui/menu";
 import { NextPage } from "next";
 import { MdOutlineAccountBalance } from "react-icons/md";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CreateAccount, DeleteAccount } from "@/utils/accountTabs";
+import CreateAccount from "@/utils/CreateAccount";
+import DeleteAccount from "@/utils/DeleteAccount";
 
 const accountManagement: NextPage = () => {
   return (
@@ -19,7 +20,9 @@ const accountManagement: NextPage = () => {
               <TabsTrigger value="create">
                 Create a new trading account
               </TabsTrigger>
-              <TabsTrigger value="delete">Delete a trading Account</TabsTrigger>
+              <TabsTrigger value="delete">
+                Delete an existing trading Account
+              </TabsTrigger>
             </TabsList>
             <TabsContent value="create">
               <CreateAccount />

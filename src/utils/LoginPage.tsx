@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/router";
 import { Input } from "@/components/ui/input";
 import { useMutation } from "react-query";
 import { FormEvent, useState } from "react";
@@ -7,6 +8,9 @@ import { BiSolidHide, BiSolidShow } from "react-icons/bi";
 
 const login: NextPage = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const router = useRouter();
 
   const mutation = useMutation({
     mutationFn: async (formData: string) => {
@@ -16,9 +20,14 @@ const login: NextPage = () => {
         cache: "no-store",
       });
       if (!response.ok) {
-        throw new Error("Failed to submit trade data");
+        throw new Error("Failed to submit data");
       }
-      return response.json();
+      const data = await response.json();
+      if (data.error) {
+        setErrorMessage("Invalid username or password");
+      } else {
+        router.push("/home");
+      }
     },
     onError: (error) => {
       console.error("Mutation error:", error);
@@ -43,14 +52,16 @@ const login: NextPage = () => {
 
     mutation.mutate(dataPackage);
   }
+
   return (
     <>
-      <div className="my-auto mx-auto w-[420px] border rounded-3xl">
+      <div className="my-auto mx-auto w-[420px] border rounded-3xl bg-slate-400">
         {mutation.isLoading && <p className="p-5">Loading...</p>}
         {!mutation.isLoading && (
           <div className="p-3 flex w-full">
             <form onSubmit={handleSubmit} className="flex flex-col w-full">
               <h1 className="font-bold text-lg p-2">Login</h1>
+              {errorMessage && <p className="text-red-500">{errorMessage}</p>}
               <div className="p-4 flex flex-row">
                 <Input
                   id="username"
@@ -77,6 +88,11 @@ const login: NextPage = () => {
                 <Button type="submit" className="w-full">
                   Go !
                 </Button>
+              </div>
+              <div>
+                <p className="text-center text-sm">
+                  <a href="/signUp">No account? Sign Up here</a>
+                </p>
               </div>
             </form>
           </div>
