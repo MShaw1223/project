@@ -39,7 +39,7 @@ const signUp: NextPage = () => {
 
     const data = new FormData(event.target as HTMLFormElement);
     const username = data.get("username");
-    const passwd = data.get("password");
+    const passwd = data.get("passwd");
     const confirmPasswd = data.get("confirmPassword");
 
     if (!username || !passwd) {
@@ -88,9 +88,9 @@ const signUp: NextPage = () => {
                     </div>
                     <div className="p-4 flex flex-row">
                       <Input
-                        id="password"
+                        id="passwd"
                         type={showPassword ? "text" : "password"}
-                        name="password"
+                        name="passwd"
                         placeholder="Password....."
                       />
                     </div>

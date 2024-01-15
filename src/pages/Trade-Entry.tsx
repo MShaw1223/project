@@ -1,4 +1,4 @@
-import { AccountDropdown } from "@/utils/selectAccount";
+import AccountDropdown from "@/utils/selectAccount";
 import { Button } from "@/components/ui/button";
 import { useMutation } from "react-query";
 import { useState, FormEvent } from "react";
@@ -24,7 +24,7 @@ const tradeEntry: NextPage = () => {
       const response = await fetch("/api/entries", {
         method: "POST",
         body: formData,
-        cache: "no-store",
+        cache: "no-cache",
       });
       if (!response.ok) {
         throw new Error("Failed to submit trade data");

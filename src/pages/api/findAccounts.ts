@@ -1,5 +1,6 @@
 import sqlstring from "sqlstring";
 import { Pool } from "@neondatabase/serverless";
+import { NextApiRequest, NextApiResponse } from "next";
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -7,26 +8,26 @@ const pool = new Pool({
 
 const queryAvailableAccs = sqlstring.format(
   `
-    select accountName from tableAccount ORDER BY accountName
+    select accountname from tableAccount ORDER BY accountname
   `
-  /* where userID = ${loggedIn} */
 );
+/* where userID = ${loggedIn} */
 
-const findAvailableAccs = async () => {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   try {
     const result = await pool.query(queryAvailableAccs);
-    return result.rows.map((row) => ({
-      ...row,
-      currencyPair: row.currencyPair, // concatenated pair abbreviations
-    }));
+    const accnames = result.rows.map((row) => row.accountname);
+    console.log("Accounts:", accnames);
+    res.status(200).json(accnames); // return the accounts
   } catch (error) {
     console.error("Error executing query:", queryAvailableAccs);
     console.error("Error details:", error);
-    throw error;
+    res.status(400).end();
   }
-};
-
-export default findAvailableAccs;
+}
 
 /*
 const queryAvailableAccs = sqlstring.format(

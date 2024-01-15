@@ -14,7 +14,7 @@ const login: NextPage = () => {
 
   const mutation = useMutation({
     mutationFn: async (formData: string) => {
-      const response = await fetch("api/userPwd", {
+      const response = await fetch("api/loginApi", {
         method: "POST",
         body: formData,
         cache: "no-store",

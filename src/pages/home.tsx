@@ -27,7 +27,7 @@ const Home: NextPage = () => {
   useEffect(() => {
     async function fetchData() {
       const response = await fetch("/api/homeSearch");
-      const tradeData: TradeData = await response.json();
+      const tradeData = await response.json();
       console.log("Fetched data:", tradeData);
       setData(tradeData);
     }

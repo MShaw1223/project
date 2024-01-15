@@ -1,33 +1,50 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { Pool } from "@neondatabase/serverless";
+import sqlstring from "sqlstring";
 
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+});
+const totalTradesQuery = sqlstring.format("select count(*) from tableTrades");
+const totalWinsQuery = sqlstring.format(
+  "select count(*) from tableTrades where winLoss = 'win'"
+);
+const bestPairQuery = sqlstring.format(
+  "select currencypair, count(*) as count from tabletrades group by currencypair order by count desc limit 1"
+);
+const worstPairQuery = sqlstring.format(
+  "select currencypair, count(*) as count from tabletrades group by currencypair order by count asc limit 1"
+);
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-  });
+  try {
+    const totalTradesResult = await pool.query(totalTradesQuery);
+    const totalWinsResult = await pool.query(totalWinsQuery);
+    const bestPairResult = await pool.query(bestPairQuery);
+    const worstPairResult = await pool.query(worstPairQuery);
 
-  // Execute SQL queries to get the trade data
-  const totalTrades = await pool.query("SELECT COUNT(*) FROM tableTrades");
-  const totalWins = await pool.query(
-    "SELECT COUNT(*) FROM tableTrades WHERE winLoss = 'win'"
-  );
-  const bestPair = await pool.query(
-    "SELECT currencyPair, COUNT(*) as count FROM tableTrades GROUP BY currencyPair ORDER BY count DESC LIMIT 1"
-  );
-  const worstPair = await pool.query(
-    "SELECT currencyPair, COUNT(*) as count FROM tableTrades GROUP BY currencyPair ORDER BY count ASC LIMIT 1"
-  );
-
-  const tradeData = {
-    totalTrades: totalTrades.rows[0].count,
-    totalWins: totalWins.rows[0].count,
-    winPercentage: (totalWins.rows[0].count / totalTrades.rows[0].count) * 100,
-    bestPair: bestPair.rows[0].currencyPair,
-    worstPair: worstPair.rows[0].currencyPair,
-  };
-  console.log("Trade data:", tradeData); // Add this line
-  res.status(200).json(tradeData);
+    const totalTrades = totalTradesResult.rows[0].count;
+    const totalWins = totalWinsResult.rows[0].count;
+    const bestPair = bestPairResult.rows[0].currencypair;
+    const worstPair = worstPairResult.rows[0].currencypair;
+    const winPercentage =
+      (totalWinsResult.rows[0].count / totalTradesResult.rows[0].count) * 100;
+    const tradeData = {
+      totalTrades,
+      totalWins,
+      winPercentage,
+      bestPair,
+      worstPair,
+    };
+    console.log("Trade data:", tradeData);
+    res.status(200).json(tradeData);
+  } catch {
+    console.error("Error executing query:", totalTradesQuery);
+    console.error("Error executing query:", totalWinsQuery);
+    console.error("Error executing query:", bestPairQuery);
+    console.error("Error executing query:", worstPairQuery);
+    res.status(400).end();
+  }
 }

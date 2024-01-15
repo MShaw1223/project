@@ -13,9 +13,6 @@ interface BaseDropdownProps {
 interface QuoteDropdownProps {
   onQuotePairChange: (pair: string) => void;
 }
-interface PairRow {
-  pairabbr: string;
-}
 
 function BasePairDropdown({ onBasePairChange }: BaseDropdownProps) {
   const [availablePairs, setAvailablePairs] = useState<string[]>([]);

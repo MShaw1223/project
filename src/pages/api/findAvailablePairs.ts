@@ -18,8 +18,7 @@ export default async function handler(
 ) {
   try {
     const result = await pool.query(queryAvailablePairs);
-    console.log("First row:", result.rows[0]); // Log the first row
-    const pairabbrs = result.rows.map((row) => row.pairabbr); // Access pairabbr directly
+    const pairabbrs = result.rows.map((row) => row.pairabbr);
     console.log("Pairs:", pairabbrs);
     res.status(200).json(pairabbrs); // return the pairs
   } catch (error) {
