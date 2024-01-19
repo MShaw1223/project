@@ -5,11 +5,10 @@ export async function extractBody(req: NextRequest | Response) {
     return null;
   }
 
+  let body = "";
   const decoder = new TextDecoder();
 
   const reader = req.body.getReader();
-
-  let body = "";
 
   while (true) {
     const { done, value } = await reader.read();

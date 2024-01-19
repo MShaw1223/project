@@ -1,4 +1,4 @@
-import AccountDropdown from "@/utils/selectAccount";
+import AccountDropdown from "@/utils/tradeEntry/selectAccount";
 import { NextPage } from "next";
 import { FormEvent, useState } from "react";
 import { useMutation } from "react-query";
@@ -55,7 +55,9 @@ const DeleteAccount: NextPage = () => {
                   ></AccountDropdown>
                 </div>
                 <div className="p-3 text-center">
-                  <Button type="submit">Delete</Button>
+                  <Button type="submit" variant="destructive">
+                    Delete Account
+                  </Button>
                 </div>
               </div>
             </form>

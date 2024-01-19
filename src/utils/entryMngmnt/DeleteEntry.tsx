@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input";
 import {
   delete_entry_form_schema,
   delete_entry_onSubmit,
-} from "./entryMngmtTabs";
+} from "../entryMngmtTabs";
 
 export default function DeleteEntry() {
   const delete_form = useForm<z.infer<typeof delete_entry_form_schema>>({
@@ -44,8 +44,8 @@ export default function DeleteEntry() {
             />
           </div>
           <div className="p-4">
-            <Button type="submit" className="w-full">
-              Delete
+            <Button type="submit" className="w-full" variant="destructive">
+              Delete Entry
             </Button>
           </div>
         </form>

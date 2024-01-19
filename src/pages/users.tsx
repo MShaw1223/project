@@ -4,9 +4,9 @@ import { NextPage } from "next";
 import { FaUserFriends } from "react-icons/fa";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Menu from "@/components/ui/menu";
-import DeleteUser from "@/utils/DeleteUser";
-import UserCreate from "@/utils/createUser";
-import EditUser from "@/utils/EditUser";
+import DeleteUser from "@/utils/users/DeleteUser";
+import UserCreate from "@/utils/users/createUser";
+import EditUser from "@/utils/users/EditUser";
 
 const userPage: NextPage = () => {
   return (

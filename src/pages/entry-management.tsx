@@ -2,10 +2,10 @@ import Menu from "@/components/ui/menu";
 import { NextPage } from "next";
 import { FaCalculator } from "react-icons/fa";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import DeleteEntry from "@/utils/DeleteEntry";
-import EditEntry from "@/utils/EditEntry";
-import SearchEntry from "@/utils/SearchEntry";
-import NewCurrencyPage from "@/utils/NewCurrency";
+import DeleteEntry from "@/utils/entryMngmnt/DeleteEntry";
+import EditEntry from "@/utils/entryMngmnt/EditEntry";
+import SearchEntry from "@/utils/entryMngmnt/SearchEntry";
+import NewCurrencyPage from "@/utils/entryMngmnt/NewCurrency";
 
 const EntryManagement: NextPage = () => {
   return (

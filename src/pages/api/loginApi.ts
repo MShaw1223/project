@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt";
+import bcryptjs from "bcryptjs";
 import zod from "zod";
 import sqlstring from "sqlstring";
 import { Pool } from "@neondatabase/serverless";
@@ -28,7 +28,7 @@ async function loginUser(req: NextRequest, event: NextFetchEvent) {
   const user = result.rows[0];
 
   if (user) {
-    const passwordMatch = await bcrypt.compare(passwd, user.passwd);
+    const passwordMatch = await bcryptjs.compare(passwd, user.passwd);
     if (passwordMatch) {
       return new Response(JSON.stringify({ username, passwd }), {
         status: 200,

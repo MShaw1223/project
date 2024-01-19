@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/router";
 import { useMutation } from "react-query";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import { NextPage } from "next";
 import { BiSolidHide, BiSolidShow } from "react-icons/bi";
 
@@ -11,6 +11,14 @@ const signUp: NextPage = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const router = useRouter();
+
+  const cancelFetch = useRef(false);
+
+  useEffect(() => {
+    return () => {
+      cancelFetch.current = true;
+    };
+  }, []);
 
   const mutation = useMutation({
     mutationFn: async (formData: string) => {
@@ -23,14 +31,17 @@ const signUp: NextPage = () => {
         throw new Error("Failed to submit data");
       }
       const data = await response.json();
+      return data;
+    },
+    onError: (error) => {
+      console.error("Mutation error:", error);
+    },
+    onSuccess: (data) => {
       if (data.error) {
         setErrorMessage("Invalid username or password");
       } else {
         router.push("/home");
       }
-    },
-    onError: (error) => {
-      console.error("Mutation error:", error);
     },
   });
 
@@ -39,21 +50,21 @@ const signUp: NextPage = () => {
 
     const data = new FormData(event.target as HTMLFormElement);
     const username = data.get("username");
-    const passwd = data.get("passwd");
+    const unhashed_passwd = data.get("passwd");
     const confirmPasswd = data.get("confirmPassword");
 
-    if (!username || !passwd) {
+    if (!username || !unhashed_passwd) {
       alert("Invalid username and password");
       return;
     }
-    if (passwd !== confirmPasswd) {
+    if (unhashed_passwd !== confirmPasswd) {
       alert("Passwords do not match");
       return;
     }
 
     const dataPackage = JSON.stringify({
       username,
-      passwd,
+      unhashed_passwd,
     });
 
     mutation.mutate(dataPackage);
