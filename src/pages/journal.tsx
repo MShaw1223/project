@@ -1,6 +1,6 @@
 import { NextPage } from "next";
 import Menu from "@/components/ui/menu";
-import {TfiAgenda}  from "react-icons/tfi";
+import { TfiAgenda }  from "react-icons/tfi";
 
 const journal: NextPage = () => {
   return (

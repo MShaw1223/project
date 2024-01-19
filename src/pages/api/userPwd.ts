@@ -3,12 +3,16 @@ import sqlstring from "sqlstring";
 import { Pool } from "@neondatabase/serverless";
 import { extractBody } from "@/utils/extractBody";
 import { NextFetchEvent, NextRequest } from "next/server";
-import { scrypt } from 'scrypt-js';
-import * as crypto from 'crypto';
+import { randomBytes, scrypt } from "crypto";
 
 export const config = {
   runtime: "edge",
 };
+
+const schema = zod.object({
+  username: zod.string().max(15),
+  unhashed_passwd: zod.string().max(60),
+});
 
 export default async function handler(req: NextRequest, event: NextFetchEvent) {
   if (req.method === "POST") {
@@ -19,16 +23,60 @@ export default async function handler(req: NextRequest, event: NextFetchEvent) {
   });
 }
 
-const schema = zod.object({
-  username: zod.string().max(15),
-  unhashed_passwd: zod.string().max(60),
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
 });
 
-
 async function userPwd(req: NextRequest, event: NextFetchEvent) {
-  let body, username, unhashed_passwd, passwd, pool, SQLstatement;
+  console.log("Connected to database");
+  const { username, unhashed_passwd } = await bodyFunc(req);
+  const hashed_passwd = await passwordHash(unhashed_passwd);
+  const passwd = hashed_passwd;
+  const SQLstatement = sqlstring.format(
+    `
+    INSERT INTO tableUsers (username, passwd) VALUES (?, ?);
+    `,
+    [username, hashed_passwd]
+  );
+  console.log("SQLstatement", SQLstatement);
   try {
-    body = await extractBody(req);
+    await pool.query(SQLstatement);
+    event.waitUntil(pool.end());
+    return new Response(JSON.stringify({ username, passwd }), {
+      status: 200,
+    });
+  } catch (error) {
+    console.error("Error inserting user into database:", error);
+    return new Response("Internal Server Error", { status: 500 });
+  }
+}
+
+const passwordHash = async (unhashed_passwd: string) => {
+  return new Promise<string>((resolve, reject) => {
+    const passwordHash = (buffer: Buffer) => {
+      return new Promise<string>((resolve, reject) => {
+        scrypt(
+          buffer,
+          randomBytes(32),
+          64,
+          { N: 16384, r: 8, p: 1 },
+          (err: Error | null, derivedKey: Buffer) => {
+            if (err) {
+              console.error("Error hashing password:", err);
+              reject(new Response("Internal Server Error", { status: 500 }));
+            }
+            const hashed_passwd = derivedKey.toString("hex");
+            resolve(hashed_passwd);
+          }
+        );
+      });
+    };
+  });
+};
+
+const bodyFunc = async (req: NextRequest) => {
+  try {
+    const body = await extractBody(req);
     let parsedBody;
     if (typeof body === "string") {
       parsedBody = JSON.parse(body);
@@ -37,47 +85,11 @@ async function userPwd(req: NextRequest, event: NextFetchEvent) {
     }
     console.log("parsedBody", parsedBody);
     const validatedBody = schema.parse(parsedBody);
-    username = validatedBody.username;
-    unhashed_passwd = validatedBody.unhashed_passwd;
+    const username = validatedBody.username;
+    const unhashed_passwd = validatedBody.unhashed_passwd;
+    return { username, unhashed_passwd };
   } catch (error) {
     console.error("Error extracting body or parsing schema:", error);
-    return new Response("Internal Server Error", { status: 500 });
+    throw new Response("Internal Server Error", { status: 500 });
   }
-  try {
-    const salt = crypto.randomBytes(16).toString('hex'); // salt
-    const unhashed_passwdBuffer = Buffer.from(unhashed_passwd, 'utf-8'); // password buffer
-    const passwd = await new Promise<string>((resolve, reject) => {
-      scrypt(unhashed_passwdBuffer, Buffer.from(salt, 'hex'), 64, (err, derivedKey) => {
-        if (err) reject(err);
-        resolve(derivedKey.toString('hex'));
-      });
-    });
-  } catch (error) {
-    const key = await scrypt(unhashed_passwdBuffer, salt, 16384, 8, 1, 32); // generate hash
-    const passwd = key.toString('hex');
-  } catch (error) {
-    console.error("Error hashing password:", error);
-    return new Response("Internal Server Error", { status: 500 });
-  }
-  try {
-    pool = new Pool({
-      connectionString: process.env.DATABASE_URL,
-    });
-    console.log("Connected to database");
-    SQLstatement = sqlstring.format(
-      `
-        INSERT INTO tableUsers (username, passwd) VALUES (?, ?);
-      `,
-      [username, passwd]
-    );
-    console.log("SQLstatement", SQLstatement);
-    await pool.query(SQLstatement);
-    event.waitUntil(pool.end());
-  } catch (error) {
-    console.error("Error inserting user into database:", error);
-    return new Response("Internal Server Error", { status: 500 });
-  }
-  return new Response(JSON.stringify({ username, passwd }), {
-    status: 200,
-  });
-}
+};
