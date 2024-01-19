@@ -53,6 +53,9 @@ async function userPwd(req: NextRequest, event: NextFetchEvent) {
       });
     });
   } catch (error) {
+    const key = await scrypt(unhashed_passwdBuffer, salt, 16384, 8, 1, 32); // generate hash
+    const passwd = key.toString('hex');
+  } catch (error) {
     console.error("Error hashing password:", error);
     return new Response("Internal Server Error", { status: 500 });
   }
