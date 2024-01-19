@@ -4,7 +4,7 @@ import { useMutation } from "react-query";
 import { useState, FormEvent } from "react";
 import { NextPage } from "next";
 import Menu from "@/components/ui/menu";
-import { BsFillJournalBookmarkFill } from "react-icons/bs";
+import { FaPencilAlt } from "react-icons/fa";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -106,7 +106,7 @@ const tradeEntry: NextPage = () => {
         <Menu />
         <div className="flex-1 flex flex-col overflow-hidden">
           <div className="flex p-3 text-3xl">
-            <BsFillJournalBookmarkFill className="h-10 w-10"></BsFillJournalBookmarkFill>
+            <FaPencilAlt className="h-10 w-10"></FaPencilAlt>
             <span className="ml-4 my-auto font-bold">Trade Entry</span>
           </div>
           <div className="w-full overflow-auto p-5 mt-8">

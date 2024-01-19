@@ -1,5 +1,10 @@
 import Link from "next/link";
-import { FaCalculator, FaHome, FaUserFriends } from "react-icons/fa";
+import {
+  FaCalculator,
+  FaHome,
+  FaUserFriends,
+  FaPencilAlt,
+} from "react-icons/fa";
 import { MdOutlineAccountBalance, MdOutlineManageSearch } from "react-icons/md";
 import { BsFillJournalBookmarkFill } from "react-icons/bs";
 import { MdArrowBack } from "react-icons/md";
@@ -31,7 +36,7 @@ export default function Menu() {
             isLinkActive("/Trade-Entry") ? "bg-gray-700 hover:bg-gray-700" : ""
           } rounded-full `}
         >
-          <BsFillJournalBookmarkFill className="w-6 h-6 text-slate-100"></BsFillJournalBookmarkFill>
+          <FaPencilAlt className="w-6 h-6 text-slate-100"></FaPencilAlt>
           <span className="pl-3 text-slate-100">Trade Entry</span>
         </div>
       </Link>
@@ -70,6 +75,17 @@ export default function Menu() {
         >
           <FaUserFriends className="w-6 h-6 text-slate-100"></FaUserFriends>
           <span className="pl-3 text-slate-100">Users</span>
+        </div>
+      </Link>
+
+      <Link href="/journal">
+        <div
+          className={`flex pl-5 py-4 mx-3 focus:outline-none font-bold hover:bg-gray-500 ${
+            isLinkActive("/users") ? "bg-gray-700 hover:bg-gray-700" : ""
+          } rounded-full `}
+        >
+          <BsFillJournalBookmarkFill className="w-6 h-6 text-slate-100"></BsFillJournalBookmarkFill>
+          <span className="pl-3 text-slate-100">Journal</span>
         </div>
       </Link>
 
