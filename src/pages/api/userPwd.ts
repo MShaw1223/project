@@ -3,11 +3,11 @@ import sqlstring from "sqlstring";
 import { Pool } from "@neondatabase/serverless";
 import { extractBody } from "@/utils/extractBody";
 import { NextFetchEvent, NextRequest } from "next/server";
-import { randomBytes, scrypt } from "crypto";
+import bcrypt from "bcryptjs";
 
-export const config = {
-  runtime: "edge",
-};
+// export const config = {
+//   runtime: "edge",
+// };
 
 const schema = zod.object({
   username: zod.string().max(15),
@@ -36,7 +36,7 @@ async function userPwd(req: NextRequest, event: NextFetchEvent) {
     `
     INSERT INTO tableUsers (username, passwd) VALUES (?, ?);
     `,
-    [username, hashed_passwd]
+    [username, passwd]
   );
   console.log("SQLstatement", SQLstatement);
   try {
@@ -51,40 +51,17 @@ async function userPwd(req: NextRequest, event: NextFetchEvent) {
   }
 }
 
-const passwordHash = async (unhashed_passwd: string) => {
-  return new Promise<string>((resolve, reject) => {
-    const passwordHash = (buffer: Buffer) => {
-      return new Promise<string>((resolve, reject) => {
-        scrypt(
-          buffer,
-          randomBytes(32),
-          64,
-          { N: 16384, r: 8, p: 1 },
-          (err: Error | null, derivedKey: Buffer) => {
-            if (err) {
-              console.error("Error hashing password:", err);
-              reject(new Response("Internal Server Error", { status: 500 }));
-            }
-            const hashed_passwd = derivedKey.toString("hex");
-            resolve(hashed_passwd);
-          }
-        );
-      });
-    };
-  });
-};
+async function passwordHash(password: string) {
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
+  return hashedPassword;
+}
 
 const bodyFunc = async (req: NextRequest) => {
   try {
     const body = await extractBody(req);
-    let parsedBody;
-    if (typeof body === "string") {
-      parsedBody = JSON.parse(body);
-    } else {
-      parsedBody = body;
-    }
-    console.log("parsedBody", parsedBody);
-    const validatedBody = schema.parse(parsedBody);
+    console.log("body", body);
+    const validatedBody = schema.parse(body);
     const username = validatedBody.username;
     const unhashed_passwd = validatedBody.unhashed_passwd;
     return { username, unhashed_passwd };
