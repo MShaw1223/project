@@ -11,6 +11,40 @@ interface AccountDropdownProps {
   onAccountChange: (account: string) => void;
 }
 
+const findAvailableAccounts = async (): Promise<string[]> => {
+  try {
+    const response = await ApiCall();
+    console.log("API RESPONSE: ", response);
+    if (Array.isArray(response)) {
+      console.log(response);
+      return response;
+    } else {
+      throw new Error("Invalid API response format");
+    }
+  } catch (error) {
+    console.error("Error in API call:", error);
+    throw error;
+  }
+};
+const ApiCall = async () => {
+  try {
+    const response = await fetch("/api/findAccounts", {
+      method: "GET",
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch available accounts");
+    }
+    const data = await response.json();
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.error("Error in API call:", error);
+    throw error;
+  }
+};
+
 function AccountDropdown({ onAccountChange }: AccountDropdownProps) {
   const [availableAccounts, setAvailableAccounts] = useState<string[]>([]);
   useEffect(() => {
@@ -46,37 +80,4 @@ function AccountDropdown({ onAccountChange }: AccountDropdownProps) {
     </>
   );
 }
-const findAvailableAccounts = async (): Promise<string[]> => {
-  try {
-    const response = await ApiCall();
-    console.log("API RESPONSE: ", response);
-    if (Array.isArray(response)) {
-      console.log(response);
-      return response;
-    } else {
-      throw new Error("Invalid API response format");
-    }
-  } catch (error) {
-    console.error("Error in API call:", error);
-    throw error;
-  }
-};
-const ApiCall = async () => {
-  try {
-    const response = await fetch("/api/findAccounts", {
-      method: "GET",
-      cache: "no-store",
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to fetch available accounts");
-    }
-    const data = await response.json();
-    console.log(data);
-    return data;
-  } catch (error) {
-    console.error("Error in API call:", error);
-    throw error;
-  }
-};
 export default AccountDropdown;

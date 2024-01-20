@@ -21,8 +21,10 @@ export function OutcomeDropdown({ on_outcome_change }: winLossProps) {
           <SelectValue placeholder="Outcome Select..." />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="w">WIN</SelectItem>
-          <SelectItem value="l">LOSS</SelectItem>
+          <SelectItem value="w">Win</SelectItem>
+          <SelectItem value="l">Loss</SelectItem>
+          <SelectItem value="be">Break Even</SelectItem>
+          <SelectItem value="ne">No Entry</SelectItem>
         </SelectContent>
       </Select>
     </>

@@ -11,7 +11,7 @@ import {
   BasePairDropdown,
   QuotePairDropdown,
 } from "@/components/ui/selectPair";
-import { OutcomeDropdown } from "@/components/ui/winLoss";
+import { OutcomeDropdown } from "@/components/ui/outcome";
 
 const tradeEntry: NextPage = () => {
   const [menuOpen, setMenuOpen] = useState(false);

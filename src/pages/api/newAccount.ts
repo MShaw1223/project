@@ -25,11 +25,14 @@ async function createNewAccount(req: NextRequest, event: NextFetchEvent) {
 
   const SQLstatement = sqlstring.format(
     `
-      INSERT INTO tableAccount (accountname) VALUES (?);
+      INSERT INTO tableAccount (accountname, userid) VALUES (?, ?);
     `,
-    [accountname.accountname]
+    [accountname.accountname, 1]
   );
 
+  /*
+  Hardcoded userid for now
+   */
   console.log("SQLstatement", SQLstatement);
 
   await pool.query(SQLstatement);

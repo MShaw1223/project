@@ -2,7 +2,7 @@
 
 //this page for main db table?
 
-import type { NextFetchEvent, NextRequest } from "next/server";
+import { NextFetchEvent, NextRequest } from "next/server";
 import { Pool } from "@neondatabase/serverless";
 import zod, { number } from "zod";
 import sqlstring from "sqlstring";
@@ -11,7 +11,6 @@ import { extractBody } from "@/utils/extractBody";
 export const config = {
   runtime: "edge",
 };
-
 const schema = zod.object({
   entryPrice: number().max(9999999.9999999).min(0.0000001),
   stopLoss: number().max(9999999.9999999).min(0.0000001),
@@ -81,7 +80,6 @@ async function makeEntryHandler(req: NextRequest, event: NextFetchEvent) {
     userID,
     accountID,
   };
-
   return new Response(JSON.stringify({ responsePayload }), {
     status: 200,
   });
