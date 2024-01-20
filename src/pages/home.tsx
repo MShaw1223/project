@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import Menu from "@/components/ui/menu";
+import Menu from "@/utils/menu";
 import { FaHome } from "react-icons/fa";
 import {
   Table,
@@ -22,7 +22,7 @@ type TradeData = {
 
 const Home: NextPage = () => {
   const [data, setData] = useState<TradeData | null>(null);
-
+  const [menuOpen, setMenuOpen] = useState(false);
   // Fetch data from the database
   useEffect(() => {
     async function fetchData() {
@@ -36,8 +36,12 @@ const Home: NextPage = () => {
   }, []);
   return (
     <div className="flex h-screen bg-slate-200">
-      <Menu />
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <Menu isOpen={menuOpen} setIsOpen={setMenuOpen} />
+      <div
+        className={`flex-1 flex flex-col overflow-hidden ${
+          menuOpen ? "" : "ml-[20px]"
+        }`}
+      >
         <div className="flex p-3 text-3xl">
           <FaHome className="h-10 w-10"></FaHome>
           <span className="ml-4 my-auto font-bold">Home</span>

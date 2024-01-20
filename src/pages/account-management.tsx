@@ -1,16 +1,22 @@
-import Menu from "@/components/ui/menu";
+import Menu from "@/utils/menu";
 import { NextPage } from "next";
 import { MdOutlineAccountBalance } from "react-icons/md";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import CreateAccount from "@/utils/accountMngmnt/CreateAccount";
 import DeleteAccount from "@/utils/accountMngmnt/DeleteAccount";
+import { useState } from "react";
 
 const accountManagement: NextPage = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
   return (
     <>
       <div className="flex h-screen bg-slate-200">
-        <Menu />
-        <div className="flex-1 flex flex-col overflow-hidden">
+        <Menu isOpen={menuOpen} setIsOpen={setMenuOpen} />
+        <div
+          className={`flex-1 flex flex-col overflow-hidden ${
+            menuOpen ? "" : "ml-[20px]"
+          }`}
+        >
           <div className="flex p-3 text-3xl">
             <MdOutlineAccountBalance className="w-10 h-10"></MdOutlineAccountBalance>
             <span className="ml-4  font-bold">Account Management</span>

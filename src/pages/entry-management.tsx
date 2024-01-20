@@ -1,4 +1,4 @@
-import Menu from "@/components/ui/menu";
+import Menu from "@/utils/menu";
 import { NextPage } from "next";
 import { FaCalculator } from "react-icons/fa";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -6,13 +6,19 @@ import DeleteEntry from "@/utils/entryMngmnt/DeleteEntry";
 import EditEntry from "@/utils/entryMngmnt/EditEntry";
 import SearchEntry from "@/utils/entryMngmnt/SearchEntry";
 import NewCurrencyPage from "@/utils/entryMngmnt/NewCurrency";
+import { useState } from "react";
 
 const EntryManagement: NextPage = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
   return (
     <>
       <div className="flex h-screen bg-slate-200">
-        <Menu />
-        <div className="flex-1 flex flex-col overflow-hidden">
+        <Menu isOpen={menuOpen} setIsOpen={setMenuOpen} />
+        <div
+          className={`flex-1 flex flex-col overflow-hidden ${
+            menuOpen ? "" : "ml-[20px]"
+          }`}
+        >
           <div className="flex p-3 text-3xl">
             <FaCalculator className="h-10 w-10"></FaCalculator>
             <span className="ml-4 my-auto font-bold">Entry Management</span>

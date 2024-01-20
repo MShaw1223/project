@@ -1,13 +1,19 @@
 import { NextPage } from "next";
-import Menu from "@/components/ui/menu";
+import Menu from "@/utils/menu";
 import { BsFillJournalBookmarkFill } from "react-icons/bs";
+import { useState } from "react";
 
 const journal: NextPage = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
   return (
     <>
       <div className="flex h-screen bg-slate-200">
-        <Menu />
-        <div className="flex-1 flex flex-col overflow-hidden">
+        <Menu isOpen={menuOpen} setIsOpen={setMenuOpen} />
+        <div
+          className={`flex-1 flex flex-col overflow-hidden ${
+            menuOpen ? "" : "ml-[20px]"
+          }`}
+        >
           <div className="flex p-3 text-3xl">
             {/* <XYZ classname="w-10 h-10"> */}
             <BsFillJournalBookmarkFill />
