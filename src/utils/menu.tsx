@@ -14,7 +14,6 @@ import {
 import { MdArrowBack } from "react-icons/md";
 import { useRouter } from "next/router";
 import { Separator } from "@/components/ui/separator";
-import { useState } from "react";
 
 interface MenuProps {
   isOpen: boolean;
@@ -128,7 +127,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
             </Link>
           </div>
         ) : (
-          <div className="top-0 left-0 h-screen flex flex-col items-center justify-between bg-black p-5">
+          <div className="top-0 left-0 h-screen flex flex-col items-center justify-center bg-black p-5">
             <div
               onClick={() => setIsOpen(!isOpen)}
               className="focus:outline-none hover:bg-gray-500 rounded-lg p-2"
@@ -139,7 +138,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
                 <BsChevronBarRight className="text-white text-2xl" />
               )}
             </div>
-            <div className="mb-[140px] flex flex-col items-center justify-center space-y-7">
+            <div className="h-screen flex flex-col items-center justify-center space-y-7">
               <Link href="/home">
                 <div
                   className={`flex p-2 focus:outline-none font-bold hover:bg-gray-500 ${
