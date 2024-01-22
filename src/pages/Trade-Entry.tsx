@@ -12,6 +12,7 @@ import {
   QuotePairDropdown,
 } from "@/components/ui/selectPair";
 import { OutcomeDropdown } from "@/components/ui/outcome";
+import { X } from "lucide-react";
 
 const tradeEntry: NextPage = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -67,6 +68,8 @@ const tradeEntry: NextPage = () => {
     const takeProfit = parseFloat(data.get("takeProfit") as string);
     const selectedAccountValue = selectedAccount;
     const riskRatio = parseFloat(data.get("riskRatio") as string);
+    const selectedBasePair = data.get("selectedBasePair") as string;
+    const selectedQuotePair = data.get("selectedQuotePair") as string;
     const currencyPair = selectedBasePair + selectedQuotePair;
     const tradeNotes = data.get("tradeNotes");
     const winOrLoss = selectedOutcome;

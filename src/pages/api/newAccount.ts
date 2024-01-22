@@ -9,7 +9,7 @@ export const config = {
 };
 
 const schema = zod.object({
-  accountname: zod.string(),
+  accountname: zod.string().max(15),
 });
 
 async function createNewAccount(req: NextRequest, event: NextFetchEvent) {

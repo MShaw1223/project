@@ -26,7 +26,7 @@ const schema = zod.object({
 
 async function makeEntryHandler(req: NextRequest, event: NextFetchEvent) {
   const body = await extractBody(req);
-
+  console.log(body);
   const {
     entryPrice,
     stopLoss,
