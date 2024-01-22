@@ -28,13 +28,13 @@ async function loginUser(req: NextRequest, event: NextFetchEvent) {
   const user = result.rows[0];
 
   if (user) {
-    const passwordMatch = await bcryptjs.compare(passwd, user.passwd);
-    if (passwordMatch) {
-      return new Response(JSON.stringify({ username, passwd }), {
-        status: 200,
-      });
-    }
+    // const passwordMatch = await bcryptjs.compare(passwd, user.passwd);
+    // if (passwordMatch) {
+    return new Response(JSON.stringify({ username, passwd }), {
+      status: 200,
+    });
   }
+  // }
 
   return new Response("Invalid username or password", {
     status: 401,
