@@ -1,55 +1,79 @@
 import React from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  delete_entry_form_schema,
-  delete_entry_onSubmit,
-} from "../entryMngmtTabs";
+import { NextPage } from "next";
+import { FormEvent } from "react";
+import { useMutation } from "react-query";
 
-export default function DeleteEntry() {
-  const delete_form = useForm<z.infer<typeof delete_entry_form_schema>>({
-    resolver: zodResolver(delete_entry_form_schema),
-    defaultValues: {
-      tradesID: "",
+const DeleteEntry: NextPage = () => {
+  const mutation = useMutation({
+    mutationFn: async (formData: string) => {
+      const response = await fetch("/api/deleteEntry", {
+        method: "DELETE",
+        body: formData,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        cache: "no-cache",
+      });
+      if (!response.ok) {
+        throw new Error("Failed to submit trade data");
+      }
+
+      return response.json();
+    },
+    onSettled: () => {
+      console.log("Trade Deleted");
+      const inputElement = document.getElementById(
+        "tradeID"
+      ) as HTMLInputElement;
+      inputElement.value = "";
+    },
+    onError: (error) => {
+      console.error("Mutation error:", error);
     },
   });
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const data = new FormData(event.target as HTMLFormElement);
+    const tradesid = Number(data.get("tradeID"));
+    const dataPackage = JSON.stringify({ tradesid });
+    console.log(dataPackage);
+    mutation.mutate(dataPackage);
+  }
   return (
-    <div className="flex items-center justify-center">
-      <Form {...delete_form}>
-        <form onSubmit={delete_form.handleSubmit(delete_entry_onSubmit)}>
-          <FormLabel className="font-bold text-lg">Delete Entry</FormLabel>
-          <div className="p-2">
-            <FormField
-              control={delete_form.control}
-              name="tradesID"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input placeholder="Trades ID....." {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+    <>
+      <div className="flex items-center justify-center">
+        {mutation.isLoading && <div>Deleting Trade...</div>}
+        {!mutation.isLoading && (
+          <div>
+            <form onSubmit={handleSubmit}>
+              <h1 className="font-bold text-lg underline underline-offset-8">
+                Delete Trade
+              </h1>
+              <div className="flex flex-row w-[450px]">
+                <div className="p-2 w-full">
+                  <Input
+                    id="tradeID"
+                    name="tradeID"
+                    type="number"
+                    placeholder="Trade ID....."
+                  />
+                </div>
+                <div className="p-3 text-center">
+                  <Button type="submit" variant="destructive">
+                    Delete Trade
+                  </Button>
+                </div>
+              </div>
+            </form>
           </div>
-          <div className="p-4">
-            <Button type="submit" className="w-full" variant="destructive">
-              Delete Entry
-            </Button>
-          </div>
-        </form>
-      </Form>
-    </div>
+        )}
+      </div>
+    </>
   );
-}
+};
+
+export default DeleteEntry;

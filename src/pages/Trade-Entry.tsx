@@ -12,7 +12,6 @@ import {
   QuotePairDropdown,
 } from "@/components/ui/selectPair";
 import { OutcomeDropdown } from "@/components/ui/outcome";
-import { X } from "lucide-react";
 
 const tradeEntry: NextPage = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -26,6 +25,9 @@ const tradeEntry: NextPage = () => {
       const response = await fetch("/api/entries", {
         method: "POST",
         body: formData,
+        headers: {
+          "Content-Type": "application/json",
+        },
         cache: "no-store",
       });
       if (!response.ok) {

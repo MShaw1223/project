@@ -35,9 +35,9 @@ async function createNewAccount(req: NextRequest, event: NextFetchEvent) {
   - need to change it so there is no way of accessing
     - could do index and then it renders a new logged in index of the homepage? 
       or renders /loggedin/home
-  - could have logged in as a variable that is set by userid 
-  - could have just @/loggedin/... as a placeholder
-      e.g. /millershaw/home
+    - could have logged in as a variable that is set by userid 
+    - could have just @/loggedin/... as a placeholder
+        e.g. /millershaw/home
    */
   console.log("SQLstatement", SQLstatement);
 

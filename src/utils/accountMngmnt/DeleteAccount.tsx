@@ -12,6 +12,9 @@ const DeleteAccount: NextPage = () => {
       const response = await fetch("/api/deleteAccount", {
         method: "DELETE",
         body: formData,
+        headers: {
+          "Content-Type": "application/json",
+        },
         cache: "no-cache",
       });
       if (!response.ok) {
@@ -35,7 +38,8 @@ const DeleteAccount: NextPage = () => {
     event.preventDefault();
 
     const selectedAccountValue = selectedAccount;
-    const dataPackage = JSON.stringify(selectedAccountValue);
+    const dataPackage = JSON.stringify({ accountname: selectedAccountValue });
+    console.log(dataPackage);
     mutation.mutate(dataPackage);
   }
   return (

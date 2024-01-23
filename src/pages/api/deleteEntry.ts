@@ -9,44 +9,44 @@ export const config = {
 };
 
 const schema = zod.object({
-  accountname: zod.string().max(15, {
-    message: "Account name must be less than 15 characters",
+  tradesid: zod.number().min(1, {
+    message: "ID must be at least 1 digits.",
   }),
 });
 
-async function deleteAccountHandler(req: NextRequest, event: NextFetchEvent) {
+async function deleteEntryHandler(req: NextRequest, event: NextFetchEvent) {
   const body = await extractBody(req);
-  const { accountname } = schema.parse(body);
+  const { tradesid } = schema.parse(body);
   console.log("body", body);
-  console.log("accountname", accountname);
+  console.log("tradesID", tradesid);
 
   const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
   });
 
-  const deleteAccountQuery = sqlstring.format(
+  const deleteEntryQuery = sqlstring.format(
     `
-      DELETE FROM tableAccount WHERE accountname = (?)
-    `,
-    [accountname]
+        DELETE FROM tableTrades WHERE tradesid = (?)
+      `,
+    [tradesid]
   );
 
-  console.log("sql", deleteAccountQuery);
+  console.log("sql", deleteEntryQuery);
 
-  await pool.query(deleteAccountQuery);
+  await pool.query(deleteEntryQuery);
 
   event.waitUntil(pool.end());
 
-  console.log("Account deleted:", accountname);
+  console.log("Entry deleted:", tradesid);
 
-  return new Response(JSON.stringify({ accountname }), {
+  return new Response(JSON.stringify({ tradesid }), {
     status: 200,
   });
 }
 
 export default async function handler(req: NextRequest, event: NextFetchEvent) {
   if (req.method === "DELETE") {
-    return deleteAccountHandler(req, event);
+    return deleteEntryHandler(req, event);
   }
   return new Response("Method not allowed", {
     status: 405,

@@ -12,12 +12,38 @@ export const config = {
   runtime: "edge",
 };
 const schema = zod.object({
-  entryPrice: number().max(9999999.9999999).min(0.0000001),
-  stopLoss: number().max(9999999.9999999).min(0.0000001),
-  takeProfit: number().max(9999999.9999999).min(0.0000001),
-  tradeNotes: zod.string().max(1250),
+  entryPrice: number()
+    .max(9999999.9999999, {
+      message: "Entry price must be less than 9999999.9999999",
+    })
+    .min(0.0000001, {
+      message: "Entry price must be greater than 0.0000001",
+    }),
+  stopLoss: number()
+    .max(9999999.9999999, {
+      message: "Stop loss must be less than 9999999.9999999",
+    })
+    .min(0.0000001, {
+      message: "Stop loss must be greater than 0.0000001",
+    }),
+  takeProfit: number()
+    .max(9999999.9999999, {
+      message: "Take profit must be less than 9999999.9999999",
+    })
+    .min(0.0000001, {
+      message: "Take profit must be greater than 0.0000001",
+    }),
+  tradeNotes: zod.string().max(1250, {
+    message: "Trade notes must be less than 1250 characters",
+  }),
   selectedPair: zod.string(),
-  riskRatio: number().max(9999.999).min(2.0),
+  riskRatio: number()
+    .max(9999.999, {
+      message: "Risk ratio must be less than 9999.999",
+    })
+    .min(2.0, {
+      message: "Risk ratio must be greater than 0.001",
+    }),
   selectedOutcome: zod.string(),
   userID: zod.number(),
   accountID: zod.number(),
@@ -25,7 +51,6 @@ const schema = zod.object({
 
 async function makeEntryHandler(req: NextRequest, event: NextFetchEvent) {
   const body = await extractBody(req);
-  console.log(body);
   const {
     accountID,
     selectedPair: currencyPair,
@@ -35,7 +60,7 @@ async function makeEntryHandler(req: NextRequest, event: NextFetchEvent) {
     takeProfit,
     tradeNotes,
     userID,
-    selectedOutcome: winOrLoss,
+    selectedOutcome: winLoss,
   } = schema.parse(body);
 
   console.log("body", body);
@@ -46,8 +71,8 @@ async function makeEntryHandler(req: NextRequest, event: NextFetchEvent) {
 
   const SQLstatement = sqlstring.format(
     `
-        INSERT INTO tableTrades (accountid, currencypair, entryprice, riskratio, stoploss, takeprofit, tradenotes, userid, winorloss)
-        VALUES ROW(?, ?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO tableTrades (accountid, currencypair, entryprice, riskratio, stoploss, takeprofit, tradenotes, userid, winloss)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     `,
     [
       accountID,
@@ -58,7 +83,7 @@ async function makeEntryHandler(req: NextRequest, event: NextFetchEvent) {
       takeProfit,
       tradeNotes,
       userID,
-      winOrLoss,
+      winLoss,
     ]
   );
   console.log("SQLstatement", SQLstatement);
@@ -73,7 +98,7 @@ async function makeEntryHandler(req: NextRequest, event: NextFetchEvent) {
     takeProfit,
     tradeNotes,
     riskRatio,
-    winOrLoss,
+    winLoss,
     currencyPair,
     userID,
     accountID,
