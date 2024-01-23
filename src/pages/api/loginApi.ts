@@ -1,9 +1,10 @@
-import bcryptjs from "bcryptjs";
+//import bcryptjs from "bcryptjs";
 import zod from "zod";
 import sqlstring from "sqlstring";
 import { Pool } from "@neondatabase/serverless";
 import { extractBody } from "@/utils/extractBody";
 import { NextFetchEvent, NextRequest } from "next/server";
+import { useRouter } from "next/router";
 
 const schema = zod.object({
   username: zod.string().max(15),
@@ -28,8 +29,10 @@ async function loginUser(req: NextRequest, event: NextFetchEvent) {
   const user = result.rows[0];
 
   if (user) {
+    const router = useRouter()
     // const passwordMatch = await bcryptjs.compare(passwd, user.passwd);
     // if (passwordMatch) {
+      router.push('/home');
     return new Response(JSON.stringify({ username, passwd }), {
       status: 200,
     });
