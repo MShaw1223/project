@@ -29,15 +29,16 @@ async function loginUser(req: NextRequest, event: NextFetchEvent) {
   const user = result.rows[0];
 
   if (user) {
-    const router = useRouter()
+    const router = useRouter();
     // const passwordMatch = await bcryptjs.compare(passwd, user.passwd);
-    // if (passwordMatch) {
-      router.push('/home');
-    return new Response(JSON.stringify({ username, passwd }), {
-      status: 200,
-    });
+    const passwordMatch = passwd === user.passwd;
+    if (passwordMatch) {
+      router.push("/home");
+      return new Response(JSON.stringify({ username, passwd }), {
+        status: 200,
+      });
+    }
   }
-  // }
 
   return new Response("Invalid username or password", {
     status: 401,
