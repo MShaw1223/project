@@ -15,7 +15,6 @@ const schema = zod.object({
   entryPrice: number().max(9999999.9999999).min(0.0000001),
   stopLoss: number().max(9999999.9999999).min(0.0000001),
   takeProfit: number().max(9999999.9999999).min(0.0000001),
-  selectedAccount: number().min(0),
   tradeNotes: zod.string().max(1250),
   selectedPair: zod.string(),
   riskRatio: number().max(9999.999).min(2.0),
@@ -28,16 +27,15 @@ async function makeEntryHandler(req: NextRequest, event: NextFetchEvent) {
   const body = await extractBody(req);
   console.log(body);
   const {
+    accountID,
+    selectedPair: currencyPair,
     entryPrice,
+    riskRatio,
     stopLoss,
     takeProfit,
-    selectedAccount: selectedAccountValue,
     tradeNotes,
-    selectedPair: currencyPair,
-    riskRatio,
-    selectedOutcome: winOrLoss,
     userID,
-    accountID,
+    selectedOutcome: winOrLoss,
   } = schema.parse(body);
 
   console.log("body", body);
@@ -48,19 +46,19 @@ async function makeEntryHandler(req: NextRequest, event: NextFetchEvent) {
 
   const SQLstatement = sqlstring.format(
     `
-        INSERT INTO tableTrades
-        VALUES ROW(?, ?, ?, ? ,?, ?, ?,?,?)
+        INSERT INTO tableTrades (accountid, currencypair, entryprice, riskratio, stoploss, takeprofit, tradenotes, userid, winorloss)
+        VALUES ROW(?, ?, ?, ?, ?, ?, ?, ?, ?)
     `,
     [
+      accountID,
+      currencyPair,
       entryPrice,
+      riskRatio,
       stopLoss,
       takeProfit,
       tradeNotes,
-      riskRatio,
-      winOrLoss,
-      currencyPair,
       userID,
-      selectedAccountValue,
+      winOrLoss,
     ]
   );
   console.log("SQLstatement", SQLstatement);

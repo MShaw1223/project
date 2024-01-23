@@ -73,15 +73,18 @@ const tradeEntry: NextPage = () => {
     const currencyPair = BasePair + QuotePair;
     const tradeNotes = data.get("tradeNotes");
     const winOrLoss = selectedOutcome;
+    const userID = 1;
+    const accountID = 6;
     try {
       const dataPackage = JSON.stringify({
+        accountID,
+        selectedPair: currencyPair,
         entryPrice,
+        riskRatio,
         stopLoss,
         takeProfit,
-        selectedAccount: selectedAccountValue,
-        riskRatio,
-        selectedPair: currencyPair,
         tradeNotes,
+        userID,
         selectedOutcome: winOrLoss,
       });
       mutation.mutate(dataPackage);
