@@ -20,7 +20,7 @@ async function loginUser(req: NextRequest, event: NextFetchEvent) {
 
   const SQLstatement = sqlstring.format(
     `
-            SELECT * FROM tableUsers WHERE username = ?;
+            SELECT * FROM tableusers WHERE username = ?;
         `,
     [username]
   );
