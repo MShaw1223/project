@@ -5,7 +5,9 @@ import sqlstring from "sqlstring";
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 });
-const totalTradesQuery = sqlstring.format("select count(*) from tableTrades");
+const totalTradesQuery = sqlstring.format(
+  "select count(*) from tableTrades where winLoss != ne"
+);
 const totalWinsQuery = sqlstring.format(
   "select count(*) from tableTrades where winLoss = 'w'"
 );

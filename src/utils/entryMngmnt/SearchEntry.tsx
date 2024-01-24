@@ -37,14 +37,13 @@ const searchEntry: NextPage = () => {
           <TableHeader>
             <TableRow>
               <TableHead className="text-slate-200">Trade ID</TableHead>
-              <TableHead className="text-slate-200">Other field...</TableHead>
-              <TableHead className="text-slate-200">Other field...</TableHead>
-              <TableHead className="text-slate-200">Other field...</TableHead>
-              <TableHead className="text-slate-200">Other field...</TableHead>
-              <TableHead className="text-slate-200">Other field...</TableHead>
-              <TableHead className="text-slate-200">Other field...</TableHead>
-              <TableHead className="text-slate-200">Other field...</TableHead>
-              <TableHead className="text-slate-200">Other field...</TableHead>
+              <TableHead className="text-slate-200">entryprice</TableHead>
+              <TableHead className="text-slate-200">stoploss</TableHead>
+              <TableHead className="text-slate-200">takeprofit</TableHead>
+              <TableHead className="text-slate-200">tradenotes</TableHead>
+              <TableHead className="text-slate-200">riskratio</TableHead>
+              <TableHead className="text-slate-200">winloss</TableHead>
+              <TableHead className="text-slate-200">currencypair</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -57,7 +56,6 @@ const searchEntry: NextPage = () => {
               <TableCell>f</TableCell>
               <TableCell>g</TableCell>
               <TableCell>h</TableCell>
-              <TableCell>i</TableCell>
             </TableRow>
           </TableBody>
         </Table>
