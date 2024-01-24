@@ -17,7 +17,7 @@ const DeleteEntry: NextPage = () => {
         cache: "no-cache",
       });
       if (!response.ok) {
-        throw new Error("Failed to submit trade data");
+        throw new Error("Failed to submit data");
       }
 
       return response.json();

@@ -7,7 +7,7 @@ const pool = new Pool({
 });
 const totalTradesQuery = sqlstring.format("select count(*) from tableTrades");
 const totalWinsQuery = sqlstring.format(
-  "select count(*) from tableTrades where winLoss = 'win'"
+  "select count(*) from tableTrades where winLoss = 'w'"
 );
 const bestPairQuery = sqlstring.format(
   "select currencypair, count(*) as count from tabletrades group by currencypair order by count desc limit 1"
@@ -29,8 +29,7 @@ export default async function handler(
     const totalWins = totalWinsResult.rows[0].count;
     const bestPair = bestPairResult.rows[0].currencypair;
     const worstPair = worstPairResult.rows[0].currencypair;
-    const winPercentage =
-      (totalWinsResult.rows[0].count / totalTradesResult.rows[0].count) * 100;
+    const winPercentage = (totalWins / totalTrades) * 100;
     const tradeData = {
       totalTrades,
       totalWins,

@@ -7,11 +7,8 @@ import Menu from "@/utils/menu";
 import { FaPencilAlt } from "react-icons/fa";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  BasePairDropdown,
-  QuotePairDropdown,
-} from "@/components/ui/selectPair";
-import { OutcomeDropdown } from "@/components/ui/outcome";
+import { BasePairDropdown, QuotePairDropdown } from "@/utils/selectPair";
+import { OutcomeDropdown } from "@/utils/tradeEntry/outcome";
 
 const tradeEntry: NextPage = () => {
   const [menuOpen, setMenuOpen] = useState(false);

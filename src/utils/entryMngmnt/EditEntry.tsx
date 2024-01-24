@@ -1,70 +1,84 @@
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { edit_entry_form_schema, edit_entry_onSubmit } from "../entryMngmtTabs";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
+import { NextPage } from "next";
+import { useMutation } from "react-query";
+import { FormEvent } from "react";
+import EditDropdown from "./editEntrydropdn";
+import { useState } from "react";
 
-export const EditEntry = () => {
-  const editEntry_form = useForm<z.infer<typeof edit_entry_form_schema>>({
-    resolver: zodResolver(edit_entry_form_schema),
-    defaultValues: {
-      username: "",
-      password: "",
+const EditEntry: NextPage = () => {
+  const [selectedEdit, setSelectedEdit] = useState<string>("");
+  const mutation = useMutation({
+    mutationFn: async (formData: string) => {
+      const response = await fetch("/api/editEntry", {
+        method: "POST",
+        body: formData,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        cache: "no-cache",
+      });
+      if (!response.ok) {
+        throw new Error("Failed to submit data");
+      }
+
+      return response.json();
+    },
+    onSettled: () => {
+      console.log("Trade Edited");
+      const inputElement = document.getElementById(
+        "tradeID"
+      ) as HTMLInputElement;
+      inputElement.value = "";
+    },
+    onError: (error) => {
+      console.error("Mutation error:", error);
     },
   });
+
+  const handleValueChange = (element: string) => {
+    setSelectedEdit(selectedEdit);
+  };
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const data = new FormData(event.target as HTMLFormElement);
+    const tradesid = Number(data.get("tradeID"));
+    const dataPackage = JSON.stringify({ tradesid });
+    console.log(dataPackage);
+    mutation.mutate(dataPackage);
+  }
   return (
     <div className="flex items-center justify-center">
-      <Form {...editEntry_form}>
-        <form onSubmit={editEntry_form.handleSubmit(edit_entry_onSubmit)}>
-          <FormLabel className="font-bold text-lg">Edit Entry</FormLabel>
+      <form onSubmit={handleSubmit}>
+        <h1 className="font-bold text-lg">Edit Entry</h1>
+        <div className="flex flex-row">
           <div className="p-2">
-            <FormField
-              control={editEntry_form.control}
-              name="username"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input placeholder="Username....." {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+            <Input
+              id="tradeID"
+              name="tradeID"
+              type="number"
+              placeholder="Trade ID....."
             />
           </div>
           <div className="p-2">
-            <FormField
-              control={editEntry_form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input placeholder="Password....." {...field} />
-                  </FormControl>
-                  <FormDescription>
-                    Enter Password to make changes
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <EditDropdown onElementChange={handleValueChange} />
           </div>
-          <div className="p-4">
-            <Button type="submit" className="w-full">
-              Submit Change
-            </Button>
-          </div>
-        </form>
-      </Form>
+        </div>
+        <div className="flex flex-row p-2">
+          {/* 
+          add a value to this to make the input typesafe 
+          could do a text area just incase notes is changed?
+          */}
+          <Input placeholder="Edited data" />
+        </div>
+        <div className="p-4">
+          <Button type="submit" className="w-full">
+            Submit Change
+          </Button>
+        </div>
+      </form>
     </div>
   );
 };
