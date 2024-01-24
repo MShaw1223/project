@@ -45,7 +45,11 @@ const EditEntry: NextPage = () => {
 
     const data = new FormData(event.target as HTMLFormElement);
     const tradesid = Number(data.get("tradeID"));
-    const dataPackage = JSON.stringify({ tradesid });
+    const editedData = data.get("editedData");
+    const dataPackage = JSON.stringify({
+      tradesid,
+      editedData,
+    });
     console.log(dataPackage);
     mutation.mutate(dataPackage);
   }
@@ -71,7 +75,7 @@ const EditEntry: NextPage = () => {
           add a value to this to make the input typesafe 
           could do a text area just incase notes is changed?
           */}
-          <Input placeholder="Edited data" />
+          <Input id="editeddata" name="editeddata" placeholder="Edited data" />
         </div>
         <div className="p-4">
           <Button type="submit" className="w-full">

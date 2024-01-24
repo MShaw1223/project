@@ -26,7 +26,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
 
   return (
     <>
-      <div className="relative">
+      <div className="relative z-10">
         {isOpen ? (
           <div
             className={`fixed h-screen bg-black transition-width duration-500 ease-in-out ${
