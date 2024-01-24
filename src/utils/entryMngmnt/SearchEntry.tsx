@@ -11,16 +11,23 @@ import {
 import { useEffect, useState } from "react";
 
 type TradeData = {
-  tradedata: string;
+  tradesid: string;
+  entryprice: number;
+  stoploss: number;
+  takeprofit: number;
+  tradenotes: string;
+  riskratio: number;
+  winloss: string;
+  currencypair: string;
 };
 
 const searchEntry: NextPage = () => {
-  const [data, setData] = useState<TradeData | null>(null);
+  const [data, setData] = useState<TradeData[]>([]);
 
   useEffect(() => {
     async function fetchData() {
       const response = await fetch("/api/searchEntries");
-      const tradeData = await response.json();
+      const tradeData: TradeData[] = await response.json();
       console.log("Fetched data:", tradeData);
       setData(tradeData);
     }
@@ -29,7 +36,10 @@ const searchEntry: NextPage = () => {
 
   return (
     <>
-      <div className="flex-1 overflow-auto p-4 text-justify justify-center">
+      <div className="flex-1 overflow-auto p-4 text-justify justify-center w-full">
+        <h1 className="p-2 font-bold text-lg underline underline-offset-8">
+          Search Entries
+        </h1>
         <Table className="bg-gray-400 rounded-2xl">
           <TableCaption className="text-gray-500">
             A Table of trades taken.
@@ -42,21 +52,23 @@ const searchEntry: NextPage = () => {
               <TableHead className="text-slate-200">takeprofit</TableHead>
               <TableHead className="text-slate-200">tradenotes</TableHead>
               <TableHead className="text-slate-200">riskratio</TableHead>
-              <TableHead className="text-slate-200">winloss</TableHead>
+              <TableHead className="text-slate-200">outcome</TableHead>
               <TableHead className="text-slate-200">currencypair</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow>
-              <TableCell>a</TableCell>
-              <TableCell>b</TableCell>
-              <TableCell>c</TableCell>
-              <TableCell>d</TableCell>
-              <TableCell>e</TableCell>
-              <TableCell>f</TableCell>
-              <TableCell>g</TableCell>
-              <TableCell>h</TableCell>
-            </TableRow>
+            {data.map((trade) => (
+              <TableRow key={trade.tradesid}>
+                <TableCell>{trade.tradesid}</TableCell>
+                <TableCell>{trade.entryprice}</TableCell>
+                <TableCell>{trade.stoploss}</TableCell>
+                <TableCell>{trade.takeprofit}</TableCell>
+                <TableCell>{trade.tradenotes}</TableCell>
+                <TableCell>{trade.riskratio}</TableCell>
+                <TableCell>{trade.winloss}</TableCell>
+                <TableCell>{trade.currencypair}</TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </div>

@@ -7,6 +7,9 @@ const pool = new Pool({
 });
 
 const sqlquery = sqlstring.format("select * from tableTrades");
+// const sqlquery = sqlstring.format(
+//   "SELECT * FROM tableTrades ORDER BY tradeid DESC;"
+// );
 
 export default async function handler(
   req: NextApiRequest,
@@ -14,7 +17,8 @@ export default async function handler(
 ) {
   try {
     const result = await pool.query(sqlquery);
-    console.log("Result:", result);
+    const rows = result.rows;
+    console.log("Result searchEntries.ts:", rows);
     res.status(200).json(result.rows);
   } catch {
     console.error("Error executing query:", sqlquery);

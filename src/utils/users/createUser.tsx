@@ -1,78 +1,85 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
+import { FormEvent } from "react";
+import { useMutation } from "react-query";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-  password: z.string().min(8, {
-    message: "Password must be at least 8 characters.",
-  }),
-});
+export const config = {
+  runtime: "edge",
+};
 
-function onSubmit(values: z.infer<typeof formSchema>) {
-  // Do something with the form values --> neon
-  // Type-safe and validated.
-  console.log(values);
-}
-
-export default function UserCreate() {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      username: "",
-      password: "",
+const UserCreate = () => {
+  const mutation = useMutation({
+    mutationFn: async (formData: string) => {
+      const response = await fetch("/api/userPwd", {
+        method: "POST",
+        body: formData,
+        cache: "no-store",
+      });
+      if (!response.ok) {
+        throw new Error("Failed to send off new user");
+      }
+      return response.json();
+    },
+    onError: (error) => {
+      console.error("Mutation error", error);
     },
   });
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const data = new FormData(event.target as HTMLFormElement);
+    const username = data.get("username");
+    const unhashed_passwd = data.get("passwd");
+    const dataPackage = JSON.stringify({
+      username,
+      unhashed_passwd,
+    });
+    mutation.mutate(dataPackage);
+  }
 
   return (
     <div className="flex items-center justify-center">
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-          <FormLabel className="font-bold text-lg">New User</FormLabel>
-          <div className="p-2">
-            <FormField
-              control={form.control}
-              name="username"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input placeholder="Username....." {...field} />
-                  </FormControl>
-                  <FormDescription>User must be min. 2 chars</FormDescription>
-                  <FormMessage />
-                </FormItem> //send username to db
-              )}
-            />
+      {mutation.isLoading && <p>Creating new user...</p>}
+      {!mutation.isLoading && (
+        <form onSubmit={handleSubmit}>
+          <h1 className="font-bold text-lg underline underline-offset-8">
+            New User
+          </h1>
+          <div className="flex flex-row">
+            <div className="p-2">
+              <Input
+                id="username"
+                name="username"
+                type="text"
+                placeholder="Username....."
+              />
+            </div>
+            <div className="p-2">
+              <Input
+                id="passwd"
+                name="passwd"
+                type="text"
+                placeholder="Password....."
+              />
+            </div>
           </div>
-          <div className="p-2">
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input placeholder="Password....." {...field} />
-                  </FormControl>
-                  <FormDescription>
-                    Password must be min. 8 chars
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem> //send this to db?
-              )}
-            />
+          <div className="flex flex-row">
+            <div className="p-2">
+              <Input
+                id="confusername"
+                name="confusername"
+                type="text"
+                placeholder="Confirm Username....."
+              />
+            </div>
+            <div className="p-2">
+              <Input
+                id="confpasswd"
+                name="confpasswd"
+                type="text"
+                placeholder="Confirm Password....."
+              />
+            </div>
           </div>
           <div className="p-4">
             <Button type="submit" className="w-full">
@@ -80,7 +87,8 @@ export default function UserCreate() {
             </Button>
           </div>
         </form>
-      </Form>
+      )}
     </div>
   );
-}
+};
+export default UserCreate;

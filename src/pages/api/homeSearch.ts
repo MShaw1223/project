@@ -6,10 +6,10 @@ const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 });
 const totalTradesQuery = sqlstring.format(
-  "select count(*) from tableTrades where winLoss != 'ne'"
+  "select count(*) from tableTrades where winLoss != 'no-entry'"
 );
 const totalWinsQuery = sqlstring.format(
-  "select count(*) from tableTrades where winLoss = 'w'"
+  "select count(*) from tableTrades where winLoss = 'win'"
 );
 const bestPairQuery = sqlstring.format(
   "select currencypair, count(*) as count from tabletrades group by currencypair order by count desc limit 1"

@@ -11,7 +11,7 @@ const journal: NextPage = () => {
         <Menu isOpen={isOpen} setIsOpen={setIsOpen} />
         <div
           className={`flex-1 flex flex-col overflow-hidden ${
-            isOpen ? "" : "ml-[20px]"
+            isOpen ? "ml-20" : ""
           }`}
         >
           <div className="flex p-3 text-3xl">

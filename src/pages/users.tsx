@@ -16,7 +16,7 @@ const userPage: NextPage = () => {
       <Menu isOpen={menuOpen} setIsOpen={setMenuOpen} />
       <div
         className={`flex-1 flex flex-col overflow-hidden ${
-          menuOpen ? "" : "ml-[20px]"
+          menuOpen ? "ml-20" : ""
         }`}
       >
         <div className="flex p-3 text-3xl">
@@ -24,7 +24,7 @@ const userPage: NextPage = () => {
           <span className="ml-16 font-bold">Users</span>
         </div>
         <div className="flex-1 overflow-auto justify-center p-2">
-          <Tabs defaultValue="create" className="w-[800px] p-3 m-1">
+          <Tabs defaultValue="create" className="p-3 m-1">
             <TabsList className="m-2 mb-6">
               <TabsTrigger value="create">Create a User</TabsTrigger>
               <TabsTrigger value="edit">Edit a User</TabsTrigger>

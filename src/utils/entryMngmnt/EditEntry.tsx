@@ -56,7 +56,9 @@ const EditEntry: NextPage = () => {
   return (
     <div className="flex items-center justify-center">
       <form onSubmit={handleSubmit}>
-        <h1 className="font-bold text-lg">Edit Entry</h1>
+        <h1 className="font-bold text-lg underline underline-offset-8">
+          Edit Entry
+        </h1>
         <div className="flex flex-row">
           <div className="p-2">
             <Input

@@ -14,7 +14,7 @@ const accountManagement: NextPage = () => {
         <Menu isOpen={menuOpen} setIsOpen={setMenuOpen} />
         <div
           className={`flex-1 flex flex-col overflow-hidden ${
-            menuOpen ? "" : "ml-[20px]"
+            menuOpen ? "ml-20" : ""
           }`}
         >
           <div className="flex p-3 text-3xl">
@@ -22,7 +22,7 @@ const accountManagement: NextPage = () => {
             <span className="ml-4  font-bold">Account Management</span>
           </div>
           <div className="flex-1 overflow-auto p-4 text-justify justify-center">
-            <Tabs defaultValue="create" className="w-[800px] p-3 m-1">
+            <Tabs defaultValue="create" className="p-3 m-1">
               <TabsList className="m-2 mb-6">
                 <TabsTrigger value="create">
                   Create a new trading account

@@ -109,7 +109,9 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
             <Link href="/journal">
               <div
                 className={`flex pl-5 py-4 mx-3 focus:outline-none font-bold hover:bg-gray-500 ${
-                  isLinkActive("/users") ? "bg-gray-700 hover:bg-gray-700" : ""
+                  isLinkActive("/journal")
+                    ? "bg-gray-700 hover:bg-gray-700"
+                    : ""
                 } rounded-full `}
               >
                 <BsFillJournalBookmarkFill className="w-6 h-6 text-slate-100"></BsFillJournalBookmarkFill>
@@ -200,7 +202,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
               <Link href="/journal">
                 <div
                   className={`flex p-2 focus:outline-none font-bold hover:bg-gray-500 ${
-                    isLinkActive("/users")
+                    isLinkActive("/journal")
                       ? "bg-gray-700 hover:bg-gray-700"
                       : ""
                   } rounded-lg `}
