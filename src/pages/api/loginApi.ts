@@ -25,24 +25,25 @@ async function loginUser(req: NextRequest, event: NextFetchEvent) {
         `,
     [username]
   );
-  const result = await pool.query(SQLstatement);
-  const user = result.rows[0];
+  console.log("SQL: ", SQLstatement);
+  // const result = await pool.query(SQLstatement);
+  // const user = result.rows[0];
 
-  if (user) {
-    const router = useRouter();
-    // const passwordMatch = await bcryptjs.compare(passwd, user.passwd);
-    const passwordMatch = passwd === user.passwd;
-    if (passwordMatch) {
-      router.push("/home");
-      return new Response(JSON.stringify({ username, passwd }), {
-        status: 200,
-      });
-    }
-  }
-
-  return new Response("Invalid username or password", {
-    status: 401,
+  // if (user) {
+  const router = useRouter();
+  // const passwordMatch = await bcryptjs.compare(passwd, user.passwd);
+  // const passwordMatch = passwd === user.passwd;
+  // if (passwordMatch) {
+  router.push("/home");
+  return new Response(JSON.stringify({ username, passwd }), {
+    status: 200,
   });
+  // }
+  // }
+
+  // return new Response("Invalid username or password", {
+  //   status: 401,
+  // });
 }
 
 export default async function handler(req: NextRequest, event: NextFetchEvent) {
