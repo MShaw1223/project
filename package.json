@@ -31,7 +31,7 @@
     "react-query": "^3.39.3",
     "scrypt-js": "^3.0.1",
     "sqlstring": "^2.3.3",
-    "tailwind-merge": "^2.1.0",
+    "tailwind-merge": "^2.2.0",
     "tailwindcss-animate": "^1.0.7",
     "uuid": "^9.0.1",
     "zod": "^3.22.4"
