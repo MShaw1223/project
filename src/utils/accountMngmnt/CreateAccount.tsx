@@ -40,10 +40,10 @@ const CreateAccountPage = () => {
   }
   return (
     <>
-      <div className="flex items-center justify-center">
+      <div className="flex">
         {mutation.isLoading && <p>Submitting New Account</p>}
         {!mutation.isLoading && (
-          <div>
+          <div className="flex items-center justify-center">
             <form onSubmit={handleSubmit}>
               <h1 className="font-bold text-lg underline underline-offset-8">
                 New Account

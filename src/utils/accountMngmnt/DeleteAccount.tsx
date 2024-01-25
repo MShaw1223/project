@@ -44,10 +44,10 @@ const DeleteAccount: NextPage = () => {
   }
   return (
     <>
-      <div className="flex items-center justify-center">
+      <div className="flex">
         {mutation.isLoading && <div>Deleting Account...</div>}
         {!mutation.isLoading && (
-          <div>
+          <div className="flex items-center justify-center">
             <form onSubmit={handleSubmit}>
               <h1 className="font-bold text-lg underline underline-offset-8">
                 Delete Account

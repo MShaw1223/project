@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { NextPage } from "next";
 import { useMutation } from "react-query";
 import { FormEvent } from "react";
@@ -54,38 +55,51 @@ const EditEntry: NextPage = () => {
     mutation.mutate(dataPackage);
   }
   return (
-    <div className="flex items-center justify-center">
-      <form onSubmit={handleSubmit}>
-        <h1 className="font-bold text-lg underline underline-offset-8">
-          Edit Entry
-        </h1>
-        <div className="flex flex-row">
-          <div className="p-2">
-            <Input
-              id="tradeID"
-              name="tradeID"
-              type="number"
-              placeholder="Trade ID....."
-            />
-          </div>
-          <div className="p-2">
-            <EditDropdown onElementChange={handleValueChange} />
-          </div>
-        </div>
-        <div className="flex flex-row p-2">
-          {/* 
+    <>
+      <div className="flex">
+        {mutation.isLoading && <p>Submitting New Edit</p>}
+        {!mutation.isLoading && (
+          <div className="flex items-center justify-center">
+            <form onSubmit={handleSubmit}>
+              <h1 className="font-bold text-lg underline underline-offset-8">
+                Edit Entry
+              </h1>
+              <div className="flex flex-row">
+                <div className="p-2">
+                  <Input
+                    id="tradeID"
+                    name="tradeID"
+                    type="number"
+                    placeholder="Trade ID....."
+                  />
+                </div>
+                <div className="p-2">
+                  <EditDropdown onElementChange={handleValueChange} />
+                </div>
+              </div>
+              <div className="flex flex-row p-2">
+                {/* 
           add a value to this to make the input typesafe 
           could do a text area just incase notes is changed?
           */}
-          <Input id="editeddata" name="editeddata" placeholder="Edited data" />
-        </div>
-        <div className="p-4">
-          <Button type="submit" className="w-full">
-            Submit Change
-          </Button>
-        </div>
-      </form>
-    </div>
+                <Textarea
+                  id="editeddata"
+                  name="editeddata"
+                  placeholder="Enter edits here..."
+                  className="w-full h-[180px] resize-none border text-sm"
+                  maxLength={1250}
+                />
+              </div>
+              <div className="p-4">
+                <Button type="submit" className="w-full">
+                  Submit Change
+                </Button>
+              </div>
+            </form>
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 export default EditEntry;

@@ -159,100 +159,96 @@ const tradeEntry: NextPage = () => {
             <FaPencilAlt className="h-10 w-10"></FaPencilAlt>
             <span className="ml-4 my-auto font-bold">Trade Entry</span>
           </div>
-          <div className="w-full overflow-auto p-5 mt-8">
-            <div>
-              {mutation.isLoading && <p>Submitting Trade Data...</p>}
-              {!mutation.isLoading && (
-                <div className="flex justify-center">
-                  <form onSubmit={handleSubmit}>
-                    <div className="flex">
-                      <div className="flex flex-col">
-                        <div className="p-3">
-                          <AccountDropdown
-                            onAccountChange={handleAccountChange}
-                          ></AccountDropdown>
+          <div className="flex w-full overflow-auto p-5 mx-auto justify-center items-center">
+            {mutation.isLoading && <p>Submitting Trade Data...</p>}
+            {!mutation.isLoading && (
+              <div className="flex ">
+                <form onSubmit={handleSubmit}>
+                  <div className="flex flex-col">
+                    <div className="flex flex-row">
+                      <div className="p-3">
+                        <AccountDropdown
+                          onAccountChange={handleAccountChange}
+                        ></AccountDropdown>
+                      </div>
+                      <div className="p-3">
+                        <OutcomeDropdown
+                          on_outcome_change={handleOutcomeChange}
+                        ></OutcomeDropdown>
+                      </div>
+                    </div>
+                    <div className="flex flex-row">
+                      <div className="flex flex-col p-3">
+                        <div className="pb-3">
+                          <Input
+                            id="entryPrice"
+                            name="entryPrice"
+                            type="number"
+                            step="any"
+                            placeholder="Entry Price..."
+                          ></Input>
+                        </div>
+                        <div className="py-3">
+                          <Input
+                            id="stopLoss"
+                            name="stopLoss"
+                            type="number"
+                            step="any"
+                            placeholder="Stop Loss..."
+                          ></Input>
+                        </div>
+                        <div className="py-3">
+                          <Input
+                            id="takeProfit"
+                            name="takeProfit"
+                            type="number"
+                            step="any"
+                            placeholder="Take Profit..."
+                          ></Input>
+                        </div>
+                        <div className="flex flex-row">
+                          <div className="p-1">
+                            <BasePairDropdown
+                              onBasePairChange={handleBasePairChange}
+                            ></BasePairDropdown>
+                          </div>
+                          <div className="p-1">
+                            <QuotePairDropdown
+                              onQuotePairChange={handleQuotePairChange}
+                            ></QuotePairDropdown>
+                          </div>
                         </div>
                       </div>
                       <div className="flex flex-col">
-                        <div className="p-3 w-full">
-                          <OutcomeDropdown
-                            on_outcome_change={handleOutcomeChange}
-                          ></OutcomeDropdown>
+                        <div className="p-3">
+                          <Input
+                            id="riskRatio"
+                            name="riskRatio"
+                            type="number"
+                            step="any"
+                            placeholder="Risk Ratio..."
+                          ></Input>
                         </div>
-                        <div className="flex">
-                          <div className="flex flex-col">
-                            <div className="p-3">
-                              <Input
-                                id="entryPrice"
-                                name="entryPrice"
-                                type="number"
-                                step="any"
-                                placeholder="Entry Price..."
-                              ></Input>
-                            </div>
-                            <div className="p-3">
-                              <Input
-                                id="stopLoss"
-                                name="stopLoss"
-                                type="number"
-                                step="any"
-                                placeholder="Stop Loss..."
-                              ></Input>
-                            </div>
-                            <div className="p-3">
-                              <Input
-                                id="takeProfit"
-                                name="takeProfit"
-                                type="number"
-                                step="any"
-                                placeholder="Take Profit..."
-                              ></Input>
-                            </div>
-                            <div className="p-3 flex flex-row">
-                              <div className="p-1">
-                                <BasePairDropdown
-                                  onBasePairChange={handleBasePairChange}
-                                ></BasePairDropdown>
-                              </div>
-                              <div className="p-1">
-                                <QuotePairDropdown
-                                  onQuotePairChange={handleQuotePairChange}
-                                ></QuotePairDropdown>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="flex flex-col">
-                            <div className="p-3">
-                              <Input
-                                id="riskRatio"
-                                name="riskRatio"
-                                type="number"
-                                step="any"
-                                placeholder="Risk Ratio..."
-                              ></Input>
-                            </div>
-                            <div className="flex flex-col">
-                              <div className="p-3">
-                                <Textarea
-                                  id="tradeNotes"
-                                  name="tradeNotes"
-                                  placeholder="Notes..."
-                                  className="w-full h-[180px] resize-none border border-slate-200 text-sm"
-                                  maxLength={1250}
-                                ></Textarea>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="p-3 text-center">
-                          <Button type="submit">Submit Entry</Button>
+
+                        <div className="p-3">
+                          <Textarea
+                            id="tradeNotes"
+                            name="tradeNotes"
+                            placeholder="Notes..."
+                            className="w-full h-[180px] resize-none border text-sm"
+                            maxLength={1250}
+                          ></Textarea>
                         </div>
                       </div>
                     </div>
-                  </form>
-                </div>
-              )}
-            </div>
+
+                    <div className="p-3 text-center">
+                      <Button type="submit">Submit Entry</Button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            )}
           </div>
         </div>
       </div>

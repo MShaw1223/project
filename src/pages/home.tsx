@@ -49,27 +49,28 @@ const Home: NextPage = () => {
           </div>
           <div className="p-2 mt-5 mx-5">
             <h1 className="text-3xl font-extrabold">Welcome User</h1>
+            {/* make this dynamic */}
           </div>
-          <div className="flex flex-1 overflow-auto p-4 text-justify justify-center items-center">
+          <div className="flex flex-1 overflow-auto p-4">
             <Table className="bg-gray-400 rounded-2xl">
               <TableCaption className="text-gray-500">
                 A Table of your recent Trades.
               </TableCaption>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="text-slate-200 p-7 text-lg">
+                  <TableHead className="text-slate-200 p-5 text-lg">
                     Trades Taken
                   </TableHead>
-                  <TableHead className="text-slate-200 p-7 text-lg">
+                  <TableHead className="text-slate-200 p-5 text-lg">
                     Winning Trades
                   </TableHead>
-                  <TableHead className="text-slate-200 p-7 text-lg">
+                  <TableHead className="text-slate-200 p-5 text-lg">
                     Win %
                   </TableHead>
-                  <TableHead className="text-slate-200 p-7 text-lg">
+                  <TableHead className="text-slate-200 p-5 text-lg">
                     Best Pair
                   </TableHead>
-                  <TableHead className="text-slate-200 p-7 text-lg">
+                  <TableHead className="text-slate-200 p-5 text-lg">
                     Worst Pair
                   </TableHead>
                 </TableRow>
@@ -77,17 +78,17 @@ const Home: NextPage = () => {
               <TableBody>
                 {data && (
                   <TableRow>
-                    <TableCell className="p-7 text-lg">
+                    <TableCell className="p-5 text-lg">
                       {data.totalTrades}
                     </TableCell>
-                    <TableCell className="p-7 text-lg">
+                    <TableCell className="p-5 text-lg">
                       {data.totalWins}
                     </TableCell>
-                    <TableCell className="p-7 text-lg">{`${data.winPercentage}%`}</TableCell>
-                    <TableCell className="p-7 text-lg">
+                    <TableCell className="p-5 text-lg">{`${data.winPercentage}%`}</TableCell>
+                    <TableCell className="p-5 text-lg">
                       {data.bestPair}
                     </TableCell>
-                    <TableCell className="p-7 text-lg">
+                    <TableCell className="p-5 text-lg">
                       {data.worstPair}
                     </TableCell>
                   </TableRow>
