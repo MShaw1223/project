@@ -56,11 +56,11 @@ const login: NextPage = () => {
   return (
     <>
       <div className="my-auto mx-auto w-[420px] border rounded-3xl bg-slate-300">
+        <h1 className="font-bold text-lg p-2">Login</h1>
         {mutation.isLoading && <p className="p-5">Loading...</p>}
         {!mutation.isLoading && (
           <div className="p-3 flex w-full">
             <form onSubmit={handleSubmit} className="flex flex-col w-full">
-              <h1 className="font-bold text-lg p-2">Login</h1>
               {errorMessage && <p className="text-red-500">{errorMessage}</p>}
               <div className="p-4 flex flex-row">
                 <Input
