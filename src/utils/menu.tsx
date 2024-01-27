@@ -30,7 +30,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
         {isOpen ? (
           <div
             className={`fixed h-screen bg-black transition-width duration-500 ease-in-out ${
-              isOpen ? "sm:w-[275px] lg:w-1/8" : "w-20"
+              isOpen ? "sm:w-[290px] lg:w-1/8" : "w-20"
             }`}
           >
             <div className="flex justify-between items-center p-5 text-2xl font-sans font-semibold text-slate-100">
@@ -84,7 +84,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
 
             <Link href="/account-management">
               <div
-                className={`flex px-5 py-4 mx-3 focus:outline-none font-bold hover:bg-gray-500 ${
+                className={`flex pl-5 py-4 ml-3 focus:outline-none font-bold hover:bg-gray-500 ${
                   isLinkActive("/account-management")
                     ? "bg-gray-700 hover:bg-gray-700"
                     : ""
