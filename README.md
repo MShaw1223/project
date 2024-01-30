@@ -10,3 +10,9 @@ A trading journal app tailored to a private client for my computer science progr
   - see what areas you perform well on
   - reflect on areas you may be performing weaker on
 
+## How do I use FXTrax ?
+  - Go to the link [here](https://project-rho-hazel.vercel.app/)
+  - Press sign up and enter a password and username from here you will be sent to the homepage
+  - OR use these login credentials
+    - username: test
+    - password: 
