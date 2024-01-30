@@ -5,15 +5,16 @@ import { Pool } from "@neondatabase/serverless";
 import { extractBody } from "@/utils/extractBody";
 import { NextFetchEvent, NextRequest } from "next/server";
 import { useRouter } from "next/router";
+import bcryptjs from "bcryptjs";
 
 const schema = zod.object({
-  username: zod.string().max(15),
   passwd: zod.string().max(60),
+  username: zod.string().max(15),
 });
 
 async function loginUser(req: NextRequest, event: NextFetchEvent) {
   const body = await extractBody(req);
-  const { username, passwd } = schema.parse(body);
+  const { passwd, username } = schema.parse(body);
 
   const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
@@ -26,24 +27,17 @@ async function loginUser(req: NextRequest, event: NextFetchEvent) {
     [username]
   );
   console.log("SQL: ", SQLstatement);
-  // const result = await pool.query(SQLstatement);
-  // const user = result.rows[0];
-
-  // if (user) {
-  const router = useRouter();
-  // const passwordMatch = await bcryptjs.compare(passwd, user.passwd);
-  // const passwordMatch = passwd === user.passwd;
-  // if (passwordMatch) {
-  router.push("/home");
-  return new Response(JSON.stringify({ username, passwd }), {
-    status: 200,
+  const result = await pool.query(SQLstatement);
+  console.log("result: ", result);
+  event.waitUntil(pool.end());
+  if (passwd) {
+    return new Response(JSON.stringify({ result }), {
+      status: 200,
+    });
+  }
+  return new Response("Invalid username or password", {
+    status: 401,
   });
-  // }
-  // }
-
-  // return new Response("Invalid username or password", {
-  //   status: 401,
-  // });
 }
 
 export default async function handler(req: NextRequest, event: NextFetchEvent) {

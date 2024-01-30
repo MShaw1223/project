@@ -3,42 +3,32 @@ import sqlstring from "sqlstring";
 import { Pool } from "@neondatabase/serverless";
 import { extractBody } from "@/utils/extractBody";
 import { NextFetchEvent, NextRequest } from "next/server";
-import bcrypt from "bcryptjs";
 
-// export const config = {
-//   runtime: "edge",
-// };
+export const config = {
+  runtime: "edge",
+};
 
 const schema = zod.object({
   username: zod.string().max(15),
-  unhashed_passwd: zod.string().max(60),
+  passwd: zod.string().max(60),
 });
 
-export default async function handler(req: NextRequest, event: NextFetchEvent) {
-  if (req.method === "POST") {
-    return userPwd(req, event);
-  }
-  return new Response("Invalid Method", {
-    status: 405,
-  });
-}
-
-async function userPwd(req: NextRequest, event: NextFetchEvent) {
+async function handleUserPwd(req: NextRequest, event: NextFetchEvent) {
   const body = await extractBody(req);
-  const { username, unhashed_passwd } = schema.parse(body);
-  console.log("username", username);
-  console.log("unhpwd", unhashed_passwd);
-  const hashed_passwd = await passwordHash(unhashed_passwd);
+  console.log("body", body);
+  const { passwd, username } = schema.parse(body);
 
   const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
   });
+  const checkUser = sqlstring.format("SELECT * FROM tableUsers");
+  console.log("checkUser", checkUser);
 
   const SQLstatement = sqlstring.format(
     `
-    INSERT INTO tableUsers (username, passwd) VALUES (?, ?)
+    INSERT INTO tableUsers (passwd, username) VALUES (?, ?)
     `,
-    [username, hashed_passwd]
+    [passwd, username]
   );
   console.log("SQLstatement", SQLstatement);
 
@@ -47,8 +37,8 @@ async function userPwd(req: NextRequest, event: NextFetchEvent) {
   event.waitUntil(pool.end());
 
   const responsePayload = {
+    passwd,
     username,
-    hashed_passwd,
   };
 
   return new Response(JSON.stringify({ responsePayload }), {
@@ -56,8 +46,11 @@ async function userPwd(req: NextRequest, event: NextFetchEvent) {
   });
 }
 
-async function passwordHash(unhashed_passwd: string) {
-  const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(unhashed_passwd, salt);
-  return hashedPassword;
+export default async function handler(req: NextRequest, event: NextFetchEvent) {
+  if (req.method === "POST") {
+    return handleUserPwd(req, event);
+  }
+  return new Response("Invalid Method", {
+    status: 405,
+  });
 }

@@ -41,8 +41,8 @@ const schema = zod.object({
     .max(9999.999, {
       message: "Risk ratio must be less than 9999.999",
     })
-    .min(2.0, {
-      message: "Risk ratio must be greater than 0.001",
+    .min(0, {
+      message: "Risk ratio must be greater than 0",
     }),
   selectedOutcome: zod.string(),
   userID: zod.number(),

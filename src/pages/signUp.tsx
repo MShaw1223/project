@@ -2,57 +2,46 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/router";
 import { useMutation } from "react-query";
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { FormEvent, useState } from "react";
 import { NextPage } from "next";
 import { BiSolidHide, BiSolidShow } from "react-icons/bi";
+import bcrypt from "bcryptjs";
 
 const signUp: NextPage = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
 
   const router = useRouter();
 
-  const cancelFetch = useRef(false);
-
-  useEffect(() => {
-    return () => {
-      cancelFetch.current = true;
-    };
-  }, []);
-
   const mutation = useMutation({
     mutationFn: async (formData: string) => {
-      const response = await fetch("api/userPwd", {
+      const response = await fetch("/api/userPwd", {
         method: "POST",
         body: formData,
+        headers: {
+          "Content-Type": "application/json",
+        },
         cache: "no-store",
       });
       if (!response.ok) {
         throw new Error("Failed to submit data");
       }
-      const data = await response.json();
-      return data;
+      return response.json();
     },
     onError: (error) => {
       console.error("Mutation error:", error);
     },
-    onSuccess: (data) => {
-      if (data.error) {
-        setErrorMessage("Invalid username or password");
-      } else {
-        router.push("/home");
-      }
+    onSuccess: () => {
+      router.push("/home");
     },
   });
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     const data = new FormData(event.target as HTMLFormElement);
-    const username = data.get("username");
-    const unhashed_passwd = data.get("passwd");
-    const confirmPasswd = data.get("confirmPassword");
-
+    const username = data.get("username") as string;
+    const unhashed_passwd = data.get("unhpasswd") as string;
+    const confirmPasswd = data.get("confirmPassword") as string;
     if (!username || !unhashed_passwd) {
       alert("Invalid username and password");
       return;
@@ -61,14 +50,23 @@ const signUp: NextPage = () => {
       alert("Passwords do not match");
       return;
     }
-    if (username && unhashed_passwd === confirmPasswd) {
+    try {
+      const passwd = await passwordHash(unhashed_passwd);
       const dataPackage = JSON.stringify({
+        passwd,
         username,
-        unhashed_passwd,
       });
-
+      console.log("Not submitted to db yet: ", dataPackage);
       mutation.mutate(dataPackage);
+    } catch (error) {
+      console.error("Error:", error);
     }
+  }
+  async function passwordHash(unhashed_passwd: string) {
+    console.log("Salting password");
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(unhashed_passwd, salt);
+    return hashedPassword;
   }
 
   return (
@@ -90,9 +88,6 @@ const signUp: NextPage = () => {
                     className="flex flex-col w-full"
                   >
                     <h1 className="font-bold text-lg p-2">Sign Up</h1>
-                    {errorMessage && (
-                      <p className="text-red-500">{errorMessage}</p>
-                    )}
                     <div className="p-4 flex flex-row">
                       <Input
                         id="username"
@@ -102,9 +97,9 @@ const signUp: NextPage = () => {
                     </div>
                     <div className="p-4 flex flex-row">
                       <Input
-                        id="passwd"
+                        id="unhpasswd"
                         type={showPassword ? "text" : "password"}
-                        name="passwd"
+                        name="unhpasswd"
                         placeholder="Password....."
                       />
                     </div>
