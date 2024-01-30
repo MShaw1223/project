@@ -61,13 +61,14 @@ const signUp: NextPage = () => {
       alert("Passwords do not match");
       return;
     }
+    if (username && unhashed_passwd === confirmPasswd) {
+      const dataPackage = JSON.stringify({
+        username,
+        unhashed_passwd,
+      });
 
-    const dataPackage = JSON.stringify({
-      username,
-      unhashed_passwd,
-    });
-
-    mutation.mutate(dataPackage);
+      mutation.mutate(dataPackage);
+    }
   }
 
   return (

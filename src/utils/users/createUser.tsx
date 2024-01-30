@@ -30,11 +30,17 @@ const UserCreate = () => {
     const data = new FormData(event.target as HTMLFormElement);
     const username = data.get("username");
     const unhashed_passwd = data.get("passwd");
-    const dataPackage = JSON.stringify({
-      username,
-      unhashed_passwd,
-    });
-    mutation.mutate(dataPackage);
+    const confpasswd = data.get("confpasswd");
+    if (confpasswd !== unhashed_passwd) {
+      alert("Passwords do not match");
+      return;
+    } else {
+      const dataPackage = JSON.stringify({
+        username,
+        unhashed_passwd,
+      });
+      mutation.mutate(dataPackage);
+    }
   }
 
   return (

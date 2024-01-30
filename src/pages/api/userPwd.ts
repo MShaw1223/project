@@ -26,8 +26,9 @@ export default async function handler(req: NextRequest, event: NextFetchEvent) {
 async function userPwd(req: NextRequest, event: NextFetchEvent) {
   const body = await extractBody(req);
   const { username, unhashed_passwd } = schema.parse(body);
+  console.log("username", username);
+  console.log("unhpwd", unhashed_passwd);
   const hashed_passwd = await passwordHash(unhashed_passwd);
-  const passwd = hashed_passwd;
 
   const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
@@ -37,7 +38,7 @@ async function userPwd(req: NextRequest, event: NextFetchEvent) {
     `
     INSERT INTO tableUsers (username, passwd) VALUES (?, ?)
     `,
-    [username, passwd]
+    [username, hashed_passwd]
   );
   console.log("SQLstatement", SQLstatement);
 
@@ -47,7 +48,7 @@ async function userPwd(req: NextRequest, event: NextFetchEvent) {
 
   const responsePayload = {
     username,
-    passwd,
+    hashed_passwd,
   };
 
   return new Response(JSON.stringify({ responsePayload }), {
