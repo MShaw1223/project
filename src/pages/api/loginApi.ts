@@ -1,18 +1,21 @@
-//import bcryptjs from "bcryptjs";
 import zod from "zod";
+import dotenv from "dotenv";
+dotenv.config();
 import sqlstring from "sqlstring";
 import { Pool } from "@neondatabase/serverless";
 import { extractBody } from "@/utils/extractBody";
 import { NextFetchEvent, NextRequest } from "next/server";
-import { useRouter } from "next/router";
-import bcryptjs from "bcryptjs";
-
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 const schema = zod.object({
   passwd: zod.string().max(60),
   username: zod.string().max(15),
 });
 
 async function loginUser(req: NextRequest, event: NextFetchEvent) {
+  if (!process.env.JWT_SECRET || !process.env.DATABASE_URL) {
+    throw new Error("Database or web token undefined");
+  }
   const body = await extractBody(req);
   const { passwd, username } = schema.parse(body);
 
@@ -22,18 +25,28 @@ async function loginUser(req: NextRequest, event: NextFetchEvent) {
 
   const SQLstatement = sqlstring.format(
     `
-            SELECT * FROM tableusers WHERE username = (?);
-        `,
+    SELECT passwd FROM tableusers WHERE username = (?);
+    `,
     [username]
   );
   console.log("SQL: ", SQLstatement);
   const result = await pool.query(SQLstatement);
   console.log("result: ", result);
+
   event.waitUntil(pool.end());
-  if (passwd) {
-    return new Response(JSON.stringify({ result }), {
-      status: 200,
-    });
+  if (passwd !== "") {
+    const hashedPasswordFromDb = result.rows[0].passwd;
+    const isMatch = await bcrypt.compare(passwd, hashedPasswordFromDb);
+
+    if (isMatch) {
+      const token = jwt.sign({ username }, process.env.JWT_SECRET, {
+        expiresIn: "3d",
+      });
+
+      return new Response(JSON.stringify({ token }), {
+        status: 200,
+      });
+    }
   }
   return new Response("Invalid username or password", {
     status: 401,

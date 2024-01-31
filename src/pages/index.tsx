@@ -5,30 +5,24 @@ import { useMutation } from "react-query";
 import { FormEvent, useState } from "react";
 import { NextPage } from "next";
 import { BiSolidHide, BiSolidShow } from "react-icons/bi";
-import bcrypt from "bcryptjs";
 
 const login: NextPage = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
 
   const router = useRouter();
 
   const mutation = useMutation({
     mutationFn: async (formData: string) => {
-      const response = await fetch("/pages/api/loginApi", {
+      const response = await fetch("/api/loginApi", {
         method: "POST",
         body: formData,
+
         cache: "no-store",
       });
       if (!response.ok) {
         throw new Error("Failed to submit data");
       }
-      const data = await response.json();
-      if (data.error) {
-        setErrorMessage("Invalid username or password");
-      } else {
-        router.push("/home");
-      }
+      return response.json();
     },
     onError: (error) => {
       console.error("Mutation error:", error);
@@ -47,24 +41,24 @@ const login: NextPage = () => {
       return;
     }
     try {
-      const passwd = await passwordHash(unhpasswd);
+      const passwd = unhpasswd;
       const dataPackage = JSON.stringify({
         passwd,
         username,
       });
       console.log("Not compared yet: ", dataPackage);
-      mutation.mutate(dataPackage);
+      mutation.mutate(dataPackage, {
+        onSuccess: (data) => {
+          if (data.token) {
+            router.push("/home");
+          }
+        },
+      });
     } catch (error) {
       console.error("Error:", error);
     }
   }
 
-  async function passwordHash(unhashed_passwd: string) {
-    console.log("Salting password");
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(unhashed_passwd, salt);
-    return hashedPassword;
-  }
   return (
     <>
       <div className="flex bg-black h-screen">
@@ -84,9 +78,6 @@ const login: NextPage = () => {
                     className="flex flex-col w-full"
                   >
                     <h1 className="font-bold text-lg p-2">Login</h1>
-                    {errorMessage && (
-                      <p className="text-red-500">{errorMessage}</p>
-                    )}
                     <div className="p-4 flex flex-row">
                       <Input
                         id="username"
