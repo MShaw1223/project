@@ -11,7 +11,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useEffect, useState } from "react";
-
+import withAuth from "@/utils/authorise";
 type TradeData = {
   totalTrades: number;
   totalWins: number;
@@ -101,4 +101,4 @@ const Home: NextPage = () => {
     </>
   );
 };
-export default Home;
+export default withAuth(Home);

@@ -34,12 +34,18 @@ async function loginUser(req: NextRequest, event: NextFetchEvent) {
   console.log("result: ", result);
 
   event.waitUntil(pool.end());
+
+  const responsePayload = {
+    passwd,
+    username,
+  };
+
   if (passwd !== "") {
     const hashedPasswordFromDb = result.rows[0].passwd;
     const isMatch = await bcrypt.compare(passwd, hashedPasswordFromDb);
 
     if (isMatch) {
-      const token = jwt.sign({ username }, process.env.JWT_SECRET, {
+      const token = jwt.sign({ responsePayload }, process.env.JWT_SECRET, {
         expiresIn: "3d",
       });
 
