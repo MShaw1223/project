@@ -53,8 +53,8 @@ const signUp: NextPage = () => {
       try {
         const passwd = await passwordHash(unhashed_passwd);
         const dataPackage = JSON.stringify({
-          passwd,
           username,
+          passwd,
         });
         console.log("Not submitted to db yet: ", dataPackage);
         mutation.mutate(dataPackage);
