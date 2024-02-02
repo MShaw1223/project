@@ -8,7 +8,7 @@ const pool = new Pool({
 
 const sqlquery = sqlstring.format("select * from tableTrades");
 // const sqlquery = sqlstring.format(
-//   "SELECT * FROM tableTrades ORDER BY tradeid DESC;"
+//   "SELECT * FROM tableTrades WHERE tradeid = {loggedinUser};"
 // );
 
 export default async function handler(
