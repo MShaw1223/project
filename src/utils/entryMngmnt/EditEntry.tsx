@@ -78,10 +78,6 @@ const EditEntry: NextPage = () => {
                 </div>
               </div>
               <div className="flex flex-row p-2">
-                {/* 
-          add a value to this to make the input typesafe 
-          could do a text area just incase notes is changed?
-          */}
                 <Textarea
                   id="editeddata"
                   name="editeddata"
@@ -90,7 +86,11 @@ const EditEntry: NextPage = () => {
                   maxLength={1250}
                 />
               </div>
-              <div className="p-4">
+              {/* 
+              this was p-4 
+              however theres a chance the submit button can be pressed accidentally 
+              */}
+              <div className="p-7">
                 <Button type="submit" className="w-full">
                   Submit Change
                 </Button>

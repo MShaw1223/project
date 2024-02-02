@@ -5,6 +5,7 @@ import { useMutation } from "react-query";
 import { FormEvent, useState } from "react";
 import { NextPage } from "next";
 import { BiSolidHide, BiSolidShow } from "react-icons/bi";
+import withAuth from "@/utils/authorise";
 
 const login: NextPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -16,7 +17,9 @@ const login: NextPage = () => {
       const response = await fetch("/api/loginApi", {
         method: "POST",
         body: formData,
-
+        headers: {
+          "Content-Type": "application/json",
+        },
         cache: "no-store",
       });
       if (!response.ok) {
@@ -26,6 +29,9 @@ const login: NextPage = () => {
     },
     onError: (error) => {
       console.error("Mutation error:", error);
+    },
+    onSuccess: () => {
+      router.push("/home");
     },
   });
 
@@ -121,4 +127,4 @@ const login: NextPage = () => {
   );
 };
 
-export default login;
+export default withAuth(login);
