@@ -19,6 +19,7 @@ const signUp: NextPage = () => {
         body: formData,
         headers: {
           "Content-Type": "application/json",
+          // "Authorization": `Bearer ${token}`,
         },
         cache: "no-store",
       });
@@ -45,22 +46,21 @@ const signUp: NextPage = () => {
     if (!username || !unhashed_passwd) {
       alert("Invalid username and password");
       return;
-    }
-    if (unhashed_passwd !== confirmPasswd) {
+    } else if (unhashed_passwd !== confirmPasswd) {
       alert("Passwords do not match");
       return;
-    }
-    try {
-      const passwd = await passwordHash(unhashed_passwd);
-      const dataPackage = JSON.stringify({
-        passwd,
-        username,
-      });
-      console.log("Not submitted to db yet: ", dataPackage);
-      mutation.mutate(dataPackage);
-    } catch (error) {
-      console.error("Error:", error);
-    }
+    } else
+      try {
+        const passwd = await passwordHash(unhashed_passwd);
+        const dataPackage = JSON.stringify({
+          passwd,
+          username,
+        });
+        console.log("Not submitted to db yet: ", dataPackage);
+        mutation.mutate(dataPackage);
+      } catch (error) {
+        console.error("Error:", error);
+      }
   }
   async function passwordHash(unhashed_passwd: string) {
     console.log("Salting password");

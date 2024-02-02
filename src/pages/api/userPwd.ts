@@ -1,15 +1,11 @@
+import zod from "zod";
 import dotenv from "dotenv";
 dotenv.config();
-import zod from "zod";
 import sqlstring from "sqlstring";
 import { Pool } from "@neondatabase/serverless";
 import { extractBody } from "@/utils/extractBody";
 import { NextFetchEvent, NextRequest } from "next/server";
 import jwt from "jsonwebtoken";
-
-export const config = {
-  runtime: "edge",
-};
 
 const schema = zod.object({
   username: zod.string().max(15),
@@ -21,8 +17,8 @@ async function handleUserPwd(req: NextRequest, event: NextFetchEvent) {
     throw new Error("Database or web token undefined");
   }
   const body = await extractBody(req);
-  console.log("body", body);
   const { passwd, username } = schema.parse(body);
+  console.log("body", body);
 
   const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
