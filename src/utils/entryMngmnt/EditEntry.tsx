@@ -88,9 +88,10 @@ const EditEntry: NextPage = () => {
               </div>
               {/* 
               this was p-4 
-              however theres a chance the submit button can be pressed accidentally 
+              however theres a chance the submit button can be pressed accidentally trying p-7
+              trying m-2
               */}
-              <div className="p-7">
+              <div className="p-8 m-2">
                 <Button type="submit" className="w-full">
                   Submit Change
                 </Button>
