@@ -11,7 +11,7 @@ const signUp: NextPage = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const router = useRouter();
-
+  const token = process.env.JWT_SECRET
   const mutation = useMutation({
     mutationFn: async (formData: string) => {
       const response = await fetch("/api/userPwd", {
@@ -19,7 +19,7 @@ const signUp: NextPage = () => {
         body: formData,
         headers: {
           "Content-Type": "application/json",
-          // "Authorization": `Bearer ${token}`,
+          "Authorization": `Bearer ${token}`,
         },
         cache: "no-store",
       });
