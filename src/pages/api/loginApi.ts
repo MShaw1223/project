@@ -8,8 +8,8 @@ import { NextFetchEvent, NextRequest } from "next/server";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 const schema = zod.object({
-  passwd: zod.string().max(60),
   username: zod.string().max(15),
+  passwd: zod.string().max(60),
 });
 
 async function loginUser(req: NextRequest, event: NextFetchEvent) {
