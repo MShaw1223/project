@@ -53,13 +53,7 @@ const login: NextPage = () => {
         username,
       });
       console.log("Not compared yet: ", dataPackage);
-      mutation.mutate(dataPackage, {
-        onSuccess: (data) => {
-          if (data.token) {
-            router.push("/home");
-          }
-        },
-      });
+      mutation.mutate(dataPackage);
     } catch (error) {
       console.error("Error:", error);
     }
