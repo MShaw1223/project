@@ -21,17 +21,17 @@ const login: NextPage = () => {
           "Content-Type": "application/json",
         },
         cache: "no-store",
-      });
+      }).then((t) => t.json());
+
+      const token = response.token;
+      if (token) {
+        router.push("/home");
+      }
+
       if (!response.ok) {
         throw new Error("Failed to submit data");
       }
       return response.json();
-    },
-    onError: (error) => {
-      console.error("Mutation error:", error);
-    },
-    onSuccess: () => {
-      router.push("/home");
     },
   });
 
@@ -40,19 +40,18 @@ const login: NextPage = () => {
 
     const data = new FormData(event.target as HTMLFormElement);
     const username = data.get("username") as string;
-    const unhpasswd = data.get("password") as string;
+    const password = data.get("password") as string;
 
-    if (!username || !unhpasswd) {
+    if (!username || !password) {
       alert("Invalid username and password");
       return;
     }
     try {
-      const passwd = unhpasswd;
       const dataPackage = JSON.stringify({
-        passwd,
+        passwd: password,
         username,
       });
-      console.log("Not compared yet: ", dataPackage);
+      console.log("Not sent yet: ", dataPackage);
       mutation.mutate(dataPackage);
     } catch (error) {
       console.error("Error:", error);

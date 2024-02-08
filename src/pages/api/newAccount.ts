@@ -3,19 +3,16 @@ import { Pool } from "@neondatabase/serverless";
 import zod from "zod";
 import sqlstring from "sqlstring";
 import { extractBody } from "@/utils/extractBody";
+import { newAccountSchema } from "@/utils/schema";
 
 export const config = {
   runtime: "edge",
 };
 
-const schema = zod.object({
-  accountname: zod.string().max(15),
-});
-
 async function createNewAccount(req: NextRequest, event: NextFetchEvent) {
   const body = await extractBody(req);
 
-  const accountname = schema.parse(body);
+  const accountname = newAccountSchema.parse(body);
 
   console.log("body", body);
 

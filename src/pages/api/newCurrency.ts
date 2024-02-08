@@ -1,21 +1,17 @@
 import type { NextFetchEvent, NextRequest } from "next/server";
 import { Pool } from "@neondatabase/serverless";
-import zod from "zod";
 import sqlstring from "sqlstring";
 import { extractBody } from "@/utils/extractBody";
+import { newCurrencySchema } from "@/utils/schema";
 
 export const config = {
   runtime: "edge",
 };
 
-const schema = zod.object({
-  pairabbr: zod.string().max(5),
-});
-
 async function enterNewCurrency(req: NextRequest, event: NextFetchEvent) {
   const body = await extractBody(req);
 
-  const pairabbr = schema.parse(body);
+  const pairabbr = newCurrencySchema.parse(body);
 
   console.log("body", body);
 

@@ -3,20 +3,15 @@ import sqlstring from "sqlstring";
 import { Pool } from "@neondatabase/serverless";
 import { extractBody } from "@/utils/extractBody";
 import zod from "zod";
+import { deleteEntrySchema } from "@/utils/schema";
 
 export const config = {
   runtime: "edge",
 };
 
-const schema = zod.object({
-  tradesid: zod.number().min(1, {
-    message: "ID must be at least 1 digits.",
-  }),
-});
-
 async function deleteEntryHandler(req: NextRequest, event: NextFetchEvent) {
   const body = await extractBody(req);
-  const { tradesid } = schema.parse(body);
+  const { tradesid } = deleteEntrySchema.parse(body);
   console.log("body", body);
   console.log("tradesID", tradesid);
 

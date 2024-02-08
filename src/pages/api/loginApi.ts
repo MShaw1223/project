@@ -1,24 +1,22 @@
-import dotenv from "dotenv";
-dotenv.config();
-import zod from "zod";
 import sqlstring from "sqlstring";
 import { Pool } from "@neondatabase/serverless";
-import { extractBody } from "@/utils/extractBody";
 import { NextFetchEvent, NextRequest } from "next/server";
-import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-const schema = zod.object({
-  username: zod.string().max(15),
-  passwd: zod.string().max(60),
-});
+import { usernameAndPassword } from "@/utils/schema";
+import { extractBody } from "@/utils/extractBody";
+
+export const config = {
+  runtime: "edge",
+};
 
 async function loginUser(req: NextRequest, event: NextFetchEvent) {
   if (!process.env.JWT_SECRET || !process.env.DATABASE_URL) {
     throw new Error("Database or web token undefined");
   }
+  const KEY = process.env.JWT_SECRET;
+  console.log("request: ", req.body);
   const body = await extractBody(req);
-  console.log("Body: ", body)
-  const { passwd, username } = schema.parse(body);
+  const { passwd, username } = usernameAndPassword.parse(body);
 
   const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
@@ -31,30 +29,35 @@ async function loginUser(req: NextRequest, event: NextFetchEvent) {
     [username]
   );
   console.log("SQL: ", SQLstatement);
-  const result = await pool.query(SQLstatement);
-  console.log("result: ", result);
 
-  event.waitUntil(pool.end());
+  const result = await pool.query(SQLstatement);
+
+  console.log("result: ", result);
 
   const responsePayload = {
     passwd,
     username,
   };
-
-  if (passwd !== "") {
+  if (passwd) {
     const hashedPasswordFromDb = result.rows[0].passwd;
-    const isMatch = await bcrypt.compare(passwd, hashedPasswordFromDb);
+    console.log("hshd-Pwd-From-Db: ", hashedPasswordFromDb);
 
+    const hpwd = btoa(hashedPasswordFromDb);
+    const isMatch = hpwd === passwd;
     if (isMatch) {
-      const token = jwt.sign({ responsePayload }, process.env.JWT_SECRET, {
-        expiresIn: "3d",
-      });
+      const token = jwt.sign(
+        { responsePayload, admin: username === "ms" },
+        KEY
+      );
 
       return new Response(JSON.stringify({ token }), {
         status: 200,
       });
     }
   }
+
+  event.waitUntil(pool.end());
+
   return new Response("Invalid username or password", {
     status: 401,
   });

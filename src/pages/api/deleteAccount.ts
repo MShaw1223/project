@@ -2,21 +2,15 @@ import { NextFetchEvent, NextRequest } from "next/server";
 import sqlstring from "sqlstring";
 import { Pool } from "@neondatabase/serverless";
 import { extractBody } from "@/utils/extractBody";
-import zod from "zod";
+import { deleteAccountSchema } from "@/utils/schema";
 
 export const config = {
   runtime: "edge",
 };
 
-const schema = zod.object({
-  accountname: zod.string().max(15, {
-    message: "Account name must be less than 15 characters",
-  }),
-});
-
 async function deleteAccountHandler(req: NextRequest, event: NextFetchEvent) {
   const body = await extractBody(req);
-  const { accountname } = schema.parse(body);
+  const { accountname } = deleteAccountSchema.parse(body);
   console.log("body", body);
   console.log("accountname", accountname);
 
