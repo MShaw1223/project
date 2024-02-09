@@ -1,10 +1,5 @@
 import zod, { number } from "zod";
 
-const usernameAndPassword = zod.object({
-  username: zod.string().max(15),
-  unhashedpasswd: zod.string().max(60),
-});
-
 const deleteAccountSchema = zod.object({
   accountname: zod.string().max(15, {
     message: "Account name must be less than 15 characters",
@@ -69,7 +64,6 @@ const newCurrencySchema = zod.object({
 });
 
 export {
-  usernameAndPassword,
   deleteAccountSchema,
   deleteEntrySchema,
   editEntrySchema,
