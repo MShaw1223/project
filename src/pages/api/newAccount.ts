@@ -3,7 +3,7 @@ import { Pool } from "@neondatabase/serverless";
 import zod from "zod";
 import sqlstring from "sqlstring";
 import { extractBody } from "@/utils/extractBody";
-import { newAccountSchema } from "@/utils/schema";
+import { newAccountSchema } from "@/utils/protection/schema";
 
 export const config = {
   runtime: "edge",

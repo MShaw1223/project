@@ -20,17 +20,17 @@ const login: NextPage = () => {
     event.preventDefault();
 
     const data = new FormData(event.target as HTMLFormElement);
-    const uncheckeduser = data.get("user") as string;
-    const uncheckedpassword = data.get("password") as string;
-    const parsedData = await schema.parse({
-      username: uncheckeduser,
-      passwd: uncheckedpassword,
+    const unparseduser = data.get("user") as string;
+    const unparsedpassword = data.get("password") as string;
+    const parsedData = schema.parse({
+      username: unparseduser,
+      passwd: unparsedpassword,
     });
     const response = await fetch("/api/auth/loginApi", {
       method: "POST",
       body: JSON.stringify({
-        user: parsedData.username,
-        password: parsedData.passwd,
+        username: parsedData.username,
+        passwd: parsedData.passwd,
       }),
       headers: {
         "Content-Type": "application/json",
@@ -42,7 +42,7 @@ const login: NextPage = () => {
       router.push("/home");
     }
     if (!response.ok) {
-      throw new Error("Failed to submit data");
+      alert("Failed to login, try again");
     }
   }
 
