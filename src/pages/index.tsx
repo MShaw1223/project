@@ -5,7 +5,6 @@ import { useMutation } from "react-query";
 import { FormEvent, useState } from "react";
 import { NextPage } from "next";
 import { BiSolidHide, BiSolidShow } from "react-icons/bi";
-import withAuth from "@/utils/authorise";
 
 const login: NextPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -22,6 +21,7 @@ const login: NextPage = () => {
         },
         cache: "no-store",
       }).then((t) => t.json());
+      console.log("response client: ", response);
 
       const token = response.token;
       if (token) {
@@ -120,4 +120,4 @@ const login: NextPage = () => {
   );
 };
 
-export default withAuth(login);
+export default login;

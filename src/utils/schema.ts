@@ -2,7 +2,7 @@ import zod, { number } from "zod";
 
 const usernameAndPassword = zod.object({
   username: zod.string().max(15),
-  passwd: zod.string().max(60),
+  unhashedpasswd: zod.string().max(60),
 });
 
 const deleteAccountSchema = zod.object({

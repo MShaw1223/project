@@ -50,12 +50,11 @@ const signUp: NextPage = () => {
       return;
     } else
       try {
-        const passwd = Buffer.from(unhashed_passwd, "base64");
         const dataPackage = JSON.stringify({
           username,
-          passwd,
+          unhashed_passwd,
         });
-        console.log("Not submitted to db yet: ", dataPackage);
+        console.log("Not submitted to api yet: ", dataPackage);
         mutation.mutate(dataPackage);
       } catch (error) {
         console.error("Error:", error);
