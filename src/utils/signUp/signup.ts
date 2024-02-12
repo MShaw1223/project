@@ -1,6 +1,6 @@
 import { Pool } from "@neondatabase/serverless";
 import sqlstring from "sqlstring";
-import { hashPassword } from "../protection/bcryptUtils";
+import { hashPassword } from "../protection/encryptUtils";
 
 type signupCredentials = {
   passwd: string;

@@ -1,6 +1,6 @@
 import { Pool } from "@neondatabase/serverless";
 import sqlstring from "sqlstring";
-import { comparePasswords } from "../protection/bcryptUtils";
+import { comparePasswords } from "../protection/encryptUtils";
 
 type siginCredentials = {
   passwd: string;
