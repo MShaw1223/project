@@ -7,29 +7,24 @@ import AccountDropdown from "@/utils/tradeEntry/selectAccount";
 const journal: NextPage = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedAccount, setSelectedAccount] = useState<string>("");
-  
+
   const handleAccountChange = (selectedAccount: string) => {
     setSelectedAccount(selectedAccount);
-    if(setSelectedAccount !== ""){
-      handler();
-    }else{
-      console.error("Error selecting account")
-    }
   };
 
-  const selected = selectedAccount;
-async function handler() {
-  const reponse = await fetch('/src/pages/api/journal/getInfo.ts',{
-    method: "POST",
-    content: JSON.stringify(selected),
-    headers: {
-      "Content-Type": "application/json",
-    },
-    cache: "no-cache"
-  }),
-  const tradeData = await reponse.json()
-  return tradeData;
-}
+  const selected: string = selectedAccount;
+  async function Handler(selected: string) {
+    const reponse = await fetch("/src/pages/api/journal/getInfo.ts", {
+      method: "POST",
+      content: JSON.stringify(selected),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      cache: "no-cache",
+    });
+    const tradeData = await reponse.json();
+    return tradeData;
+  }
 
   return (
     <>
@@ -48,12 +43,13 @@ async function handler() {
           <div className="flex-1 overflow-auto p-4 text-justify justify-center">
             <div className="p-3 m-2">
               <AccountDropdown>
-              onAccountChange={handleAccountChange}
+                onAccountChange={handleAccountChange}
               </AccountDropdown>
             </div>
             <div>
-              <p>{tradeData.tradeID}</p>
-              <p>{tradeData.notes}</p>
+              <span>Data will be in here</span>
+              {/* <p>{tradeData.tradeID}</p>
+              <p>{tradeData.notes}</p> */}
             </div>
           </div>
         </div>
@@ -63,6 +59,6 @@ async function handler() {
 };
 
 // i will need to use something similar to homesearch api --> style the json response into the tabs
-// 
+//
 
 export default journal;

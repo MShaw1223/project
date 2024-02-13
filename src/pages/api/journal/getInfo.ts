@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { Pool } from "@neondatabase/serverless";
 import sqlstring from "sqlstring";
- //retrieval(variable){
-// etc etc 
+//retrieval(variable){
+// etc etc
 //  }
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -10,21 +10,23 @@ const pool = new Pool({
 
 // where tradesid = ${loggedIn} AND
 
-export default async function retreival (selectedAccount: string) {
+export default async function retreival(selectedAccount: string) {
   try {
     const getTradesInfo = sqlstring.format(
-        `
+      `
         from tableTrades select (tradesid, entryprice,	stoploss,	takeprofit,	tradenotes,	riskratio,	winloss)
-        where accountID = ${selectedAccount}
-        `
+        where accountID = (?)
+        `,
+      selectedAccount
     );
 
     return getTradesInfo;
-  } catch(error){
+  } catch (error) {
     return new Response("Issue in retrieval", {
-      status: 405,})
+      status: 405,
+    });
   }
 }
 
-// db query would return stuff under: 
-// tradesid	accountid	userid	
+// db query would return stuff under:
+// tradesid	accountid	userid
