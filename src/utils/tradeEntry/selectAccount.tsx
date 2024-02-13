@@ -54,7 +54,7 @@ function AccountDropdown({ onAccountChange }: AccountDropdownProps) {
         const account = await findAvailableAccounts();
         setAvailableAccounts(account);
       } catch (error) {
-        console.error("Error fetching available pairs:", error);
+        console.error("Error fetching available accounts:", error);
       }
     };
     fetchAvailablePairs();

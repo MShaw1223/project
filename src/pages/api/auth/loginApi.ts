@@ -10,8 +10,12 @@ export default async function loginHandler(
   res: NextApiResponse
 ) {
   try {
-    const { passwd, username } = req.body;
-    const success = await signinFunc({ passwd, username });
+    const { password, user } = req.body;
+    const credentials = {
+      passwd: password,
+      username: user,
+    }
+    const success = await signinFunc(credentials);
     if (success === true) {
       res.status(200).json({ success: true });
     } else {
