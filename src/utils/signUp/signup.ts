@@ -1,36 +1,39 @@
 import { Pool } from "@neondatabase/serverless";
 import sqlstring from "sqlstring";
-import { hashPassword } from "../protection/encryptUtils";
+import { extractBody } from "../extractBody";
+import { NextFetchEvent, NextRequest } from "next/server";
+import zod from "zod";
 
-type signupCredentials = {
-  passwd: string;
-  username: string;
-};
+const schema = zod.object({
+  username: zod.string(),
+  passwd: zod.string(),
+});
 
-export async function signupFunc(input: signupCredentials) {
+async function signupFunc(req: NextRequest, event: NextFetchEvent) {
   try {
+    const body = await extractBody(req);
+    const { passwd, username } = schema.parse(body);
     const pool = new Pool({
       connectionString: process.env.DATABASE_URL,
     });
-    const unhashed = input.passwd;
-    console.log("pwd", unhashed);
-    const hashed = await hashPassword(unhashed);
-
-    const sqlquery = sqlstring.format(
-      `
-        INSERT INTO tableUsers (username, passwd) VALUES (?,?)
-        `,
-      [input.username, hashed]
-    );
-
-    const submitted = await pool.query(sqlquery);
-
-    await pool.end();
-
-    if (submitted.rowCount > 0) {
-      return true;
+    console.log("pwd", passwd);
+    if (passwd === undefined) {
+      throw new Error("Password undefined");
     } else {
-      throw new Error("Error submitting details to database");
+      const sqlquery = sqlstring.format(
+        `
+      INSERT INTO tableUsers (username, passwd) VALUES (?,?)
+      `,
+        [username, passwd]
+      );
+
+      await pool.query(sqlquery);
+
+      event.waitUntil(pool.end());
+      const input = { username, passwd };
+      return new Response(JSON.stringify({ input }), {
+        status: 200,
+      });
     }
   } catch (error) {
     console.error("Failed to sign up, error: ", error);
@@ -38,4 +41,13 @@ export async function signupFunc(input: signupCredentials) {
       status: 500,
     });
   }
+}
+
+export default async function handler(req: NextRequest, event: NextFetchEvent) {
+  if (req.method === "POST") {
+    return signupFunc(req, event);
+  }
+  return new Response("Invalid Method", {
+    status: 405,
+  });
 }

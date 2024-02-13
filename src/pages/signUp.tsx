@@ -5,6 +5,7 @@ import zod from "zod";
 import { FormEvent, useState } from "react";
 import { NextPage } from "next";
 import { BiSolidHide, BiSolidShow } from "react-icons/bi";
+import { comparePasswords } from "@/utils/comparePwd";
 
 const schema = zod.object({
   passwd: zod.string().max(60),
@@ -15,36 +16,34 @@ const signUp: NextPage = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const router = useRouter();
-
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     const data = new FormData(event.target as HTMLFormElement);
     const user = data.get("user") as string;
-    const unhashed_passwd = data.get("unhpasswd") as string;
+    const entry_pwd = data.get("firstPassword") as string;
     const confirmPasswd = data.get("confirmPassword") as string;
     const parsedData = schema.parse({
+      passwd: entry_pwd,
       username: user,
-      passwd: unhashed_passwd,
     });
-
-    if (unhashed_passwd !== confirmPasswd) {
-      alert("Passwords do not match");
-      return;
+    // reusing the utility for logging in to check the two passwords match
+    const isMatch = await comparePasswords(entry_pwd, confirmPasswd);
+    console.log(parsedData);
+    if (isMatch === true) {
+      const submitData = JSON.stringify(parsedData);
+      console.log(submitData);
+      handler(submitData);
     }
-    if (unhashed_passwd === confirmPasswd) {
+    async function handler(parsedData: string) {
       const response = await fetch("/api/auth/userPwd", {
         method: "POST",
-        body: JSON.stringify({
-          username: parsedData.username,
-          passwd: parsedData.passwd,
-        }),
+        body: parsedData,
         headers: {
           "Content-Type": "application/json",
         },
         cache: "no-store",
       });
-
       if (response.ok) {
         router.push("/home");
       }
@@ -74,9 +73,9 @@ const signUp: NextPage = () => {
                   </div>
                   <div className="p-4 flex flex-row">
                     <Input
-                      id="unhpasswd"
+                      id="firstPassword"
                       type={showPassword ? "text" : "password"}
-                      name="unhpasswd"
+                      name="firstPassword"
                       placeholder="Password....."
                     />
                   </div>
