@@ -8,18 +8,22 @@ const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 });
 
-const getTradesInfo = sqlstring.format(
-    `
-    from tableTrades select (tradesid, entryprice,	stoploss,	takeprofit,	tradenotes,	riskratio,	winloss)
-    where accountID = ${selectedAccount}
-    `
-);
 // where tradesid = ${loggedIn} AND
 
-const 
+export default async function retreival (selectedAccount: string) {
+  try {
+    const getTradesInfo = sqlstring.format(
+        `
+        from tableTrades select (tradesid, entryprice,	stoploss,	takeprofit,	tradenotes,	riskratio,	winloss)
+        where accountID = ${selectedAccount}
+        `
+    );
 
-export default async function retreival () {
-    
+    return getTradesInfo;
+  } catch(error){
+    return new Response("Issue in retrieval", {
+      status: 405,})
+  }
 }
 
 // db query would return stuff under: 
