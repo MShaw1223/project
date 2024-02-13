@@ -11,9 +11,10 @@ const pool = new Pool({
 const getTradesInfo = sqlstring.format(
     `
     from tableTrades select (tradesid, entryprice,	stoploss,	takeprofit,	tradenotes,	riskratio,	winloss)
-    where tradesid = ${loggedIn} AND where accountID = ${selectedAccount}
+    where accountID = ${selectedAccount}
     `
 );
+// where tradesid = ${loggedIn} AND
 
 const 
 
