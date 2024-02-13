@@ -10,10 +10,15 @@ const journal: NextPage = () => {
   
   const handleAccountChange = (selectedAccount: string) => {
     setSelectedAccount(selectedAccount);
+    if(setSelectedAccount !== ""){
+      handler();
+    }else{
+      console.error("Error selecting account")
+    }
   };
 
   const selected = selectedAccount;
-
+async function handler() {
   const reponse = await fetch('/src/pages/api/journal/getInfo.ts',{
     method: "POST",
     content: JSON.stringify(selected),
@@ -23,6 +28,8 @@ const journal: NextPage = () => {
     cache: "no-cache"
   }),
   const tradeData = await reponse.json()
+  return tradeData;
+}
 
   return (
     <>
