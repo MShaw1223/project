@@ -1,4 +1,4 @@
-export async function comparePasswords(password: string, dbPassword: string) {
+export default function comparePasswords(password: string, dbPassword: string) {
   let isMatch;
   if (password !== dbPassword) {
     isMatch = false;

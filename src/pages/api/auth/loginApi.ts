@@ -1,4 +1,4 @@
-import { signinFunc } from "@/utils/index/signin";
+import { signinFunc } from "@/pages/api/auth/signin";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export const config = {
@@ -11,17 +11,11 @@ export default async function loginHandler(
 ) {
   try {
     const { password, user } = req.body;
-    const credentials = {
-      passwd: password,
-      username: user,
-    }
-    const success = await signinFunc(credentials);
-    if (success === true) {
-      res.status(200).json({ success: true });
-    } else {
-      throw new Error("signinFunc returned false");
-    }
+    await signinFunc(user, password);
   } catch (error) {
-    res.status(500).json({ error });
+    console.error("Failed to sign in, error: ", error);
+    return new Response(JSON.stringify({ error }), {
+      status: 500,
+    });
   }
 }

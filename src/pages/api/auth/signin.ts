@@ -1,13 +1,8 @@
+import comparePasswords from "@/utils/comparePwd";
 import { Pool } from "@neondatabase/serverless";
 import sqlstring from "sqlstring";
-import { comparePasswords } from "../comparePwd";
 
-type siginCredentials = {
-  passwd: string;
-  username: string;
-};
-
-export async function signinFunc(input: siginCredentials) {
+export async function signinFunc(passwd: string, username: string) {
   try {
     const pool = new Pool({
       connectionString: process.env.DATABASE_URL,
@@ -17,16 +12,16 @@ export async function signinFunc(input: siginCredentials) {
       `
       SELECT passwd from tableUsers where username = (?)
       `,
-      [input.username]
+      [username]
     );
 
     const indb = await pool.query(sqlquery);
 
     await pool.end();
 
-    const password = input.passwd;
+    const password = passwd;
     const dbPassword = indb.rows[0].passwd;
-    const isMatch = await comparePasswords(password, dbPassword);
+    const isMatch = comparePasswords(password, dbPassword);
 
     if (isMatch === true) {
       return true;

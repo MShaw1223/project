@@ -15,7 +15,9 @@ export default async function handleUserPwd(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  console.log("in handleUserPwd in userPwd.ts");
   try {
+    console.log("in the try catch block");
     const body = await extractBody(req);
     const { passwd, username } = schema.parse(body);
     console.log("pwd: ", passwd);
@@ -24,19 +26,20 @@ export default async function handleUserPwd(
       username,
       passwd,
     });
-    const success = await fetch("/api/auth/userPwd", {
+    const success = await fetch("/api/signup", {
       method: "POST",
       body: sendData,
       headers: {
         "Content-Type": "application/json",
       },
     });
-    if (success.ok) {
-      res.status(200).json({ success: true });
-    } else {
-      throw new Error("Error submitting details to database");
+    if (!success.ok) {
+      alert("Issue submitting data");
+      throw new Error("Issue with success");
     }
   } catch (error) {
-    res.status(500).json({ error });
+    return new Response(JSON.stringify({ error }), {
+      status: 500,
+    });
   }
 }

@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/router";
 import { Input } from "@/components/ui/input";
 import { FormEvent, useState } from "react";
 import { NextPage } from "next";
@@ -13,8 +12,6 @@ const schema = zod.object({
 
 const login: NextPage = () => {
   const [showPassword, setShowPassword] = useState(false);
-
-  const router = useRouter();
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -37,10 +34,6 @@ const login: NextPage = () => {
       },
       cache: "no-store",
     });
-
-    if (response.ok) {
-      router.push("/home");
-    }
     if (!response.ok) {
       alert("Failed to login, try again");
     }

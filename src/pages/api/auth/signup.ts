@@ -1,15 +1,17 @@
 import { Pool } from "@neondatabase/serverless";
 import sqlstring from "sqlstring";
-import { extractBody } from "../extractBody";
+import { extractBody } from "../../../utils/extractBody";
 import { NextFetchEvent, NextRequest } from "next/server";
 import zod from "zod";
+import { useRouter } from "next/router";
 
 const schema = zod.object({
   username: zod.string(),
   passwd: zod.string(),
 });
 
-async function signupFunc(req: NextRequest, event: NextFetchEvent) {
+async function signupFunc(req: NextRequest) {
+  const router = useRouter();
   try {
     const body = await extractBody(req);
     const { passwd, username } = schema.parse(body);
@@ -22,19 +24,17 @@ async function signupFunc(req: NextRequest, event: NextFetchEvent) {
     } else {
       const sqlquery = sqlstring.format(
         `
-      INSERT INTO tableUsers (username, passwd) VALUES (?,?)
-      `,
+        INSERT INTO tableUsers (username, passwd) VALUES (?,?)
+        `,
         [username, passwd]
       );
+      console.log(sqlquery);
 
       await pool.query(sqlquery);
 
-      event.waitUntil(pool.end());
-      const input = { username, passwd };
-      return new Response(JSON.stringify({ input }), {
-        status: 200,
-      });
+      await pool.end();
     }
+    router.push("/home");
   } catch (error) {
     console.error("Failed to sign up, error: ", error);
     return new Response(JSON.stringify({ error }), {
@@ -43,9 +43,9 @@ async function signupFunc(req: NextRequest, event: NextFetchEvent) {
   }
 }
 
-export default async function handler(req: NextRequest, event: NextFetchEvent) {
+export default async function handler(req: NextRequest) {
   if (req.method === "POST") {
-    return signupFunc(req, event);
+    return signupFunc(req);
   }
   return new Response("Invalid Method", {
     status: 405,
