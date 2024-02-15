@@ -9,7 +9,8 @@ create table tablePairs(
 create table tableUsers (
   userID serial primary key,
   username varchar(15),
-  passwd varchar(60)
+  passwd varchar(60),
+  authKey varchar(64)
 );
 
 create table tableAccount(
