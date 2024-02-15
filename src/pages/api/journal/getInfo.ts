@@ -1,4 +1,4 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+// import type { NextApiRequest, NextApiResponse } from "next";
 import { Pool } from "@neondatabase/serverless";
 import sqlstring from "sqlstring";
 //retrieval(variable){

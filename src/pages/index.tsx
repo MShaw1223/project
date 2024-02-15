@@ -15,6 +15,7 @@ const login: NextPage = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const router = useRouter();
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const data = new FormData(event.target as HTMLFormElement);
@@ -35,12 +36,12 @@ const login: NextPage = () => {
       },
       cache: "no-store",
     });
-    if (!response.ok) {
-      alert("Failed to login, try again");
-    }
     if (response.ok) {
       router.push("/home");
+    } else if (!response.ok) {
+      alert("Failed to login, try again");
     }
+    // return response.json();
   }
 
   return (

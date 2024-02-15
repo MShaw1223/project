@@ -2,8 +2,9 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useMutation } from "react-query";
 import { FormEvent } from "react";
+import { NextPage } from "next";
 
-const NewCurrencyPage = () => {
+const NewCurrencyPage: NextPage = () => {
   const mutation = useMutation({
     mutationFn: async (formData: string) => {
       const response = await fetch("/api/newCurrency", {

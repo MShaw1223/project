@@ -1,31 +1,56 @@
-import { signinFunc } from "@/utils/index/signin";
+import comparePasswords from "@/utils/comparePwd";
 import { NextApiRequest, NextApiResponse } from "next";
+import { Pool } from "@neondatabase/serverless";
+import sqlstring from "sqlstring";
 
 export const config = {
-  config: "edge",
+  runtime: "edge",
 };
 
-export default async function loginHandler(
+async function loginHandler(req: NextApiRequest) {
+  const username = req.body.username;
+  console.log("username: ", username);
+  const passwd = req.body.passwd;
+  console.log("password: ", passwd);
+
+  const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+  });
+
+  const sqlquery = sqlstring.format(
+    `
+        SELECT passwd from tableUsers where username = (?)
+        `,
+    [username]
+  );
+
+  const indb = await pool.query(sqlquery);
+
+  await pool.end();
+
+  const password = passwd;
+  console.log("Entered pwd: ", password);
+  const dbPassword = indb.rows[0].passwd;
+  console.log("db pwd: ", dbPassword);
+  const isMatch = comparePasswords(password, dbPassword);
+
+  if (isMatch === true) {
+    console.log("successful");
+    return new Response("Success", {
+      status: 200,
+    });
+  }
+  throw new Error("Wrong method");
+}
+
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  try {
-    if (req.method === "POST") {
-      console.log(req.body);
-      const username = req.body.username;
-      const passwd = req.body.passwd;
-      console.log("in login handler");
-      console.log("user", username);
-      console.log("password", passwd);
-      const result = await signinFunc(username, passwd);
-      if (result === true) {
-        res.status(200);
-      }
-    } else {
-      throw new Error("Wrong method");
-    }
-  } catch (error) {
-    console.error("Failed to sign in, error: ", error);
-    res.status(500);
+  if (req.method === "POST") {
+    return loginHandler(req);
   }
+  return new Response("Failed to sign in, Invalid Method", {
+    status: 405,
+  });
 }
