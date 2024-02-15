@@ -11,7 +11,7 @@ async function undoKey(req: NextApiRequest, res: NextApiResponse) {
     });
     const sqlquery = sqlstring.format(
       `
-            SELECT username from tableUsers where authkey = (?)
+            SELECT username from tableUsers where authkey = ?
             `,
       [authKey]
     );
