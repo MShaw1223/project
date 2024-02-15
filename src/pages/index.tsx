@@ -5,6 +5,7 @@ import { NextPage } from "next";
 import { BiSolidHide, BiSolidShow } from "react-icons/bi";
 import zod from "zod";
 import { useRouter } from "next/router";
+import { generateKey } from "@/utils/protection/hash";
 
 const schema = zod.object({
   passwd: zod.string().max(60),
@@ -25,6 +26,7 @@ const login: NextPage = () => {
       username: unparseduser,
       passwd: unparsedpassword,
     });
+    console.log(parsedData);
     const response = await fetch("/api/auth/loginApi", {
       method: "POST",
       body: JSON.stringify({
@@ -37,7 +39,10 @@ const login: NextPage = () => {
       cache: "no-store",
     });
     if (response.ok) {
-      router.push("/home");
+      const { username } = parsedData;
+      const key = generateKey(username);
+      console.log(key);
+      router.push(`/home?li=${key}`);
     } else if (!response.ok) {
       alert("Failed to login, try again");
     }

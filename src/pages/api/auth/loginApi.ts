@@ -2,15 +2,19 @@ import comparePasswords from "@/utils/comparePwd";
 import { NextApiRequest, NextApiResponse } from "next";
 import { Pool } from "@neondatabase/serverless";
 import sqlstring from "sqlstring";
+import { NextFetchEvent } from "next/server";
+import { extractBody } from "@/utils/extractBody";
 
 export const config = {
   runtime: "edge",
 };
 
-async function loginHandler(req: NextApiRequest) {
-  const username = req.body.username;
+async function loginHandler(req: NextApiRequest, event: NextFetchEvent) {
+  const body = await extractBody(req);
+  console.log(body);
+  const username = body.username;
   console.log("username: ", username);
-  const passwd = req.body.passwd;
+  const passwd = body.passwd;
   console.log("password: ", passwd);
 
   const pool = new Pool({
@@ -19,14 +23,14 @@ async function loginHandler(req: NextApiRequest) {
 
   const sqlquery = sqlstring.format(
     `
-        SELECT passwd from tableUsers where username = (?)
+        SELECT passwd from tableUsers where username = ?
         `,
     [username]
   );
 
   const indb = await pool.query(sqlquery);
 
-  await pool.end();
+  event.waitUntil(pool.end());
 
   const password = passwd;
   console.log("Entered pwd: ", password);
@@ -36,7 +40,8 @@ async function loginHandler(req: NextApiRequest) {
 
   if (isMatch === true) {
     console.log("successful");
-    return new Response("Success", {
+    const loggedIn = username;
+    return new Response(JSON.stringify({ username: loggedIn }), {
       status: 200,
     });
   }
@@ -45,10 +50,10 @@ async function loginHandler(req: NextApiRequest) {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  event: NextFetchEvent
 ) {
   if (req.method === "POST") {
-    return loginHandler(req);
+    return loginHandler(req, event);
   }
   return new Response("Failed to sign in, Invalid Method", {
     status: 405,

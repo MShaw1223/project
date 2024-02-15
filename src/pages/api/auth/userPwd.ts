@@ -1,6 +1,10 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { extractBody } from "@/utils/extractBody";
 import zod from "zod";
+import { Pool } from "@neondatabase/serverless";
+import sqlstring from "sqlstring";
+import { NextFetchEvent } from "next/server";
+import { generateKey } from "@/utils/protection/hash";
 
 export const config = {
   runtime: "edge",
@@ -11,10 +15,7 @@ const schema = zod.object({
   passwd: zod.string(),
 });
 
-export default async function handleUserPwd(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+async function handleUserPwd(req: NextApiRequest, event: NextFetchEvent) {
   console.log("in handleUserPwd in userPwd.ts");
   try {
     console.log("in the try catch block");
@@ -22,24 +23,44 @@ export default async function handleUserPwd(
     const { passwd, username } = schema.parse(body);
     console.log("pwd: ", passwd);
     console.log("user: ", username);
-    const sendData = JSON.stringify({
-      username,
-      passwd,
+
+    const pool = new Pool({
+      connectionString: process.env.DATABASE_URL,
     });
-    const success = await fetch("/api/signup", {
-      method: "POST",
-      body: sendData,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    if (!success.ok) {
-      alert("Issue submitting data");
-      throw new Error("Issue with success");
+    const key = generateKey(username);
+    if (passwd === undefined) {
+      throw new Error("Password undefined");
+    } else {
+      const sqlquery = sqlstring.format(
+        `
+          INSERT INTO tableUsers (username, passwd, authKey) VALUES (?,?, ?)
+          `,
+        [username, passwd, key]
+      );
+      console.log(sqlquery);
+
+      await pool.query(sqlquery);
+
+      event.waitUntil(pool.end());
+
+      return new Response("Success", {
+        status: 200,
+      });
     }
   } catch (error) {
-    return new Response(JSON.stringify({ error }), {
-      status: 500,
-    });
+    console.error("Failed to sign up, error: ", error);
+    throw new Error("Issue with data submission");
   }
+}
+
+export default async function handler(
+  req: NextApiRequest,
+  event: NextFetchEvent
+) {
+  if (req.method === "POST") {
+    return handleUserPwd(req, event);
+  }
+  return new Response("Invalid Method", {
+    status: 405,
+  });
 }

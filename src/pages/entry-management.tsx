@@ -7,6 +7,7 @@ import EditEntry from "@/utils/entryMngmnt/EditEntry";
 import SearchEntry from "@/utils/entryMngmnt/SearchEntry";
 import NewCurrencyPage from "@/utils/entryMngmnt/NewCurrency";
 import { useState } from "react";
+import withAuth from "@/utils/protection/authorise";
 
 const EntryManagement: NextPage = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -51,4 +52,4 @@ const EntryManagement: NextPage = () => {
   );
 };
 
-export default EntryManagement;
+export default withAuth(EntryManagement);

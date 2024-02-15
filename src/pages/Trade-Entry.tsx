@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { BasePairDropdown, QuotePairDropdown } from "@/utils/selectPair";
 import { OutcomeDropdown } from "@/utils/tradeEntry/outcome";
+import withAuth from "@/utils/protection/authorise";
 
 const tradeEntry: NextPage = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -256,4 +257,4 @@ const tradeEntry: NextPage = () => {
   );
 };
 
-export default tradeEntry;
+export default withAuth(tradeEntry);

@@ -5,6 +5,8 @@ import { FormEvent, useState } from "react";
 import { NextPage } from "next";
 import { BiSolidHide, BiSolidShow } from "react-icons/bi";
 import comparePasswords from "@/utils/comparePwd";
+import { useRouter } from "next/router";
+import { generateKey } from "@/utils/protection/hash";
 
 const schema = zod.object({
   passwd: zod.string().max(60),
@@ -30,9 +32,12 @@ const signUp: NextPage = () => {
     const isMatch = comparePasswords(entry_pwd, confirmPasswd);
     if (isMatch === true) {
       handler(entry_pwd, user);
+    } else if (isMatch === false) {
+      alert("Passwords do not match");
     }
   }
 
+  const router = useRouter();
   async function handler(entry_pwd: string, user: string) {
     console.log("in the signup.tsx handler");
     const parsedData = schema.parse({
@@ -40,7 +45,7 @@ const signUp: NextPage = () => {
       username: user,
     });
     console.log(parsedData);
-    const response = await fetch("/api/userPwd", {
+    const response = await fetch("/api/auth/userPwd", {
       method: "POST",
       body: JSON.stringify(parsedData),
       headers: {
@@ -48,6 +53,12 @@ const signUp: NextPage = () => {
       },
       cache: "no-store",
     });
+    if (response.ok) {
+      const { username } = parsedData;
+      const key = generateKey(username);
+      console.log(key);
+      router.push(`/home?li=${key}`);
+    }
     if (!response.ok) {
       alert("Failed to sign up, try again");
     }

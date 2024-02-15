@@ -3,6 +3,7 @@ import Menu from "@/utils/menu";
 import { BsFillJournalBookmarkFill } from "react-icons/bs";
 // import { FormEvent, useState } from "react";
 import { useState } from "react";
+import withAuth from "@/utils/protection/authorise";
 // import AccountDropdown from "@/utils/tradeEntry/selectAccount";
 
 const journal: NextPage = () => {
@@ -59,4 +60,4 @@ const journal: NextPage = () => {
 // i will need to use something similar to homesearch api --> style the json response into the tabs
 //
 
-export default journal;
+export default withAuth(journal);

@@ -11,6 +11,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import withAuth from "@/utils/protection/authorise";
+
 // import withAuth from "@/utils/authorise";
 type TradeData = {
   totalTrades: number;
@@ -21,19 +24,41 @@ type TradeData = {
 };
 
 const Home: NextPage = () => {
+  const router = useRouter();
   const [data, setData] = useState<TradeData | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
-  // Fetch data from the database
+  const [user, setUser] = useState<string | null>(null);
   useEffect(() => {
+    async function getUser() {
+      const { li } = router.query;
+      console.log(li);
+      if (li !== undefined) {
+        try {
+          const user = await fetch("/api/auth/userFromHash", {
+            method: "POST",
+            body: JSON.stringify(li),
+            headers: { "Content-Type": "application/json" },
+          });
+
+          const lgdin = await user.json();
+          console.log("logged in: ", lgdin);
+          setUser(lgdin.loggedIn);
+        } catch (error) {
+          console.error("Error fetching user: ", error);
+        }
+      }
+    }
+    getUser();
+    // Fetch data from the database
     async function fetchData() {
       const response = await fetch("/api/homeSearch");
       const tradeData = await response.json();
       console.log("Fetched data:", tradeData);
       setData(tradeData);
     }
-
     fetchData();
-  }, []);
+  }, [router.query.li]);
+
   return (
     <>
       <div className="flex h-screen bg-slate-200">
@@ -48,8 +73,9 @@ const Home: NextPage = () => {
             <span className="ml-4 my-auto font-bold">Home</span>
           </div>
           <div className="p-2 mt-5 mx-5">
-            <h1 className="text-3xl font-extrabold">Welcome User</h1>
-            {/* make this dynamic */}
+            <h1 className="text-3xl font-extrabold">
+              Welcome {user ? user : "..."}
+            </h1>
           </div>
           <div className="flex flex-1 overflow-auto p-4">
             <Table className="bg-gray-400 rounded-2xl">
@@ -101,5 +127,4 @@ const Home: NextPage = () => {
     </>
   );
 };
-// export default withAuth(Home);
-export default Home;
+export default withAuth(Home);

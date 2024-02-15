@@ -5,6 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import CreateAccount from "@/utils/accountMngmnt/CreateAccount";
 import DeleteAccount from "@/utils/accountMngmnt/DeleteAccount";
 import { useState } from "react";
+import withAuth from "@/utils/protection/authorise";
 
 const accountManagement: NextPage = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -45,4 +46,4 @@ const accountManagement: NextPage = () => {
   );
 };
 
-export default accountManagement;
+export default withAuth(accountManagement);

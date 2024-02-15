@@ -8,6 +8,7 @@ import DeleteUser from "@/utils/users/DeleteUser";
 import UserCreate from "@/utils/users/createUser";
 import EditUser from "@/utils/users/EditUser";
 import { useState } from "react";
+import withAuth from "@/utils/protection/authorise";
 
 const userPage: NextPage = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -46,4 +47,4 @@ const userPage: NextPage = () => {
   );
 };
 
-export default userPage;
+export default withAuth(userPage);

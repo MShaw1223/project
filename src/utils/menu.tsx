@@ -23,6 +23,8 @@ interface MenuProps {
 const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
   const router = useRouter();
   const isLinkActive = (href: string) => router.pathname === href;
+  const { li } = router.query;
+  const value = li;
 
   return (
     <>
@@ -45,7 +47,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
 
             <Separator className="ml-9 my-7 bg-white" />
 
-            <Link href="/home">
+            <Link href={`/home?li=${value}`}>
               <div
                 className={`flex pl-5 py-4 mx-3 focus:outline-none font-bold hover:bg-gray-500 ${
                   isLinkActive("/home") ? "bg-gray-700 hover:bg-gray-700" : ""
@@ -56,7 +58,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
               </div>
             </Link>
 
-            <Link href="/Trade-Entry">
+            <Link href={`/Trade-Entry?li=${value}`}>
               <div
                 className={`flex pl-5 py-4 mx-3 focus:outline-none font-bold hover:bg-gray-500 ${
                   isLinkActive("/Trade-Entry")
@@ -69,7 +71,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
               </div>
             </Link>
 
-            <Link href="/entry-management">
+            <Link href={`/entry-management?li=${value}`}>
               <div
                 className={`flex pl-5 py-4 mx-3 focus:outline-none font-bold hover:bg-gray-500 ${
                   isLinkActive("/entry-management")
@@ -82,9 +84,9 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
               </div>
             </Link>
 
-            <Link href="/account-management">
+            <Link href={`/account-management?li=${value}`}>
               <div
-                className={`flex pl-5 py-4 ml-3 focus:outline-none font-bold hover:bg-gray-500 ${
+                className={`flex pl-5 py-4 mx-3 focus:outline-none font-bold hover:bg-gray-500 ${
                   isLinkActive("/account-management")
                     ? "bg-gray-700 hover:bg-gray-700"
                     : ""
@@ -95,7 +97,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
               </div>
             </Link>
 
-            <Link href="/users">
+            <Link href={`/users?li=${value}`}>
               <div
                 className={`flex pl-5 py-4 mx-3 focus:outline-none font-bold hover:bg-gray-500 ${
                   isLinkActive("/users") ? "bg-gray-700 hover:bg-gray-700" : ""
@@ -106,7 +108,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
               </div>
             </Link>
 
-            <Link href="/journal">
+            <Link href={`/journal?li=${value}`}>
               <div
                 className={`flex pl-5 py-4 mx-3 focus:outline-none font-bold hover:bg-gray-500 ${
                   isLinkActive("/journal")
@@ -129,6 +131,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
             </Link>
           </div>
         ) : (
+          // collapsed
           <div className="top-0 left-0 h-screen flex flex-col items-center justify-center bg-black p-5">
             <div
               onClick={() => setIsOpen(!isOpen)}
@@ -141,7 +144,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
               )}
             </div>
             <div className="h-screen flex flex-col items-center justify-center space-y-7">
-              <Link href="/home">
+              <Link href={`/home?li=${value}`}>
                 <div
                   className={`flex p-2 focus:outline-none font-bold hover:bg-gray-500 ${
                     isLinkActive("/home") ? "bg-gray-700 hover:bg-gray-700" : ""
@@ -151,7 +154,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
                 </div>
               </Link>
 
-              <Link href="/Trade-Entry">
+              <Link href={`/Trade-Entry?li=${value}`}>
                 <div
                   className={`flex p-2 focus:outline-none font-bold hover:bg-gray-500 ${
                     isLinkActive("/Trade-Entry")
@@ -163,7 +166,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
                 </div>
               </Link>
 
-              <Link href="/entry-management">
+              <Link href={`/entry-management?li=${value}`}>
                 <div
                   className={`flex p-2 focus:outline-none font-bold hover:bg-gray-500 ${
                     isLinkActive("/entry-management")
@@ -175,7 +178,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
                 </div>
               </Link>
 
-              <Link href="/account-management">
+              <Link href={`/account-management?li=${value}`}>
                 <div
                   className={`flex p-2 focus:outline-none font-bold hover:bg-gray-500 ${
                     isLinkActive("/account-management")
@@ -187,7 +190,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
                 </div>
               </Link>
 
-              <Link href="/users">
+              <Link href={`/users?li=${value}`}>
                 <div
                   className={`flex p-2 focus:outline-none font-bold hover:bg-gray-500 ${
                     isLinkActive("/users")
@@ -199,7 +202,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
                 </div>
               </Link>
 
-              <Link href="/journal">
+              <Link href={`/journal?li=${value}`}>
                 <div
                   className={`flex p-2 focus:outline-none font-bold hover:bg-gray-500 ${
                     isLinkActive("/journal")

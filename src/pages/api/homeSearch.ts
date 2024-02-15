@@ -42,10 +42,18 @@ export default async function handler(
     console.log("Trade data:", tradeData);
     res.status(200).json(tradeData);
   } catch {
-    console.error("Error executing query:", totalTradesQuery);
-    console.error("Error executing query:", totalWinsQuery);
-    console.error("Error executing query:", bestPairQuery);
-    console.error("Error executing query:", worstPairQuery);
-    res.status(400).end();
+    const totalTrades = 0;
+    const totalWins = 0;
+    const bestPair = 0;
+    const worstPair = 0;
+    const winPercentage = 0;
+    const empty = {
+      totalTrades,
+      totalWins,
+      winPercentage,
+      bestPair,
+      worstPair,
+    };
+    res.status(200).json(empty);
   }
 }
