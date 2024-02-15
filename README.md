@@ -2,7 +2,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 # FXTrax
 
-A trading journal app tailored to a private client for my computer science programming project. 
+A trading journal app for my computer science programming project. 
 
 ## In My Application you may:
   - track progress
