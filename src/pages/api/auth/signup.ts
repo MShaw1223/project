@@ -1,7 +1,7 @@
 import { Pool } from "@neondatabase/serverless";
 import sqlstring from "sqlstring";
 import { extractBody } from "../../../utils/extractBody";
-import { NextFetchEvent, NextRequest } from "next/server";
+import { NextRequest } from "next/server";
 import zod from "zod";
 import { useRouter } from "next/router";
 

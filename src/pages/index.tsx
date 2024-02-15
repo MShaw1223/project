@@ -4,6 +4,7 @@ import { FormEvent, useState } from "react";
 import { NextPage } from "next";
 import { BiSolidHide, BiSolidShow } from "react-icons/bi";
 import zod from "zod";
+import { useRouter } from "next/router";
 
 const schema = zod.object({
   passwd: zod.string().max(60),
@@ -13,9 +14,9 @@ const schema = zod.object({
 const login: NextPage = () => {
   const [showPassword, setShowPassword] = useState(false);
 
+  const router = useRouter();
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-
     const data = new FormData(event.target as HTMLFormElement);
     const unparseduser = data.get("user") as string;
     const unparsedpassword = data.get("password") as string;
@@ -36,6 +37,9 @@ const login: NextPage = () => {
     });
     if (!response.ok) {
       alert("Failed to login, try again");
+    }
+    if (response.ok) {
+      router.push("/home");
     }
   }
 

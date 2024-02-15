@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useRouter } from "next/router";
 import zod from "zod";
 import { FormEvent, useState } from "react";
 import { NextPage } from "next";
@@ -15,7 +14,6 @@ const schema = zod.object({
 const signUp: NextPage = () => {
   const [showPassword, setShowPassword] = useState(false);
 
-  const router = useRouter();
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -31,7 +29,7 @@ const signUp: NextPage = () => {
     console.log(parsedData);
     const isMatch = comparePasswords(entry_pwd, confirmPasswd);
     if (isMatch === true) {
-      handler(entry_pwd, confirmPasswd);
+      handler(entry_pwd, user);
     }
   }
 

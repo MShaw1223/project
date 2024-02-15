@@ -10,7 +10,7 @@ const pool = new Pool({
 
 // where tradesid = ${loggedIn} AND
 
-export default async function retreival(selectedAccount: string) {
+export default async function retreival(selectedAccount: any) {
   try {
     const getTradesInfo = sqlstring.format(
       `
