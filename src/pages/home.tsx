@@ -50,7 +50,7 @@ const Home: NextPage = () => {
     getUser();
     // Fetch data from the database
     async function fetchData() {
-      const response = await fetch("/api/homeSearch", {
+      const response = await fetch("/api/home/homeSearch", {
         method: "POST",
         body: JSON.stringify(user),
         headers: { "Content-Type": "application/json" },

@@ -7,7 +7,7 @@ import { NextPage } from "next";
 const NewCurrencyPage: NextPage = () => {
   const mutation = useMutation({
     mutationFn: async (formData: string) => {
-      const response = await fetch("/api/newCurrency", {
+      const response = await fetch("/api/entrymngmnt/newCurrency", {
         method: "POST",
         body: formData,
         cache: "no-store",

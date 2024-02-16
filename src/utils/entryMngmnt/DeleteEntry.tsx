@@ -7,7 +7,7 @@ import { useMutation } from "react-query";
 const DeleteEntry: NextPage = () => {
   const mutation = useMutation({
     mutationFn: async (formData: string) => {
-      const response = await fetch("/api/deleteEntry", {
+      const response = await fetch("/api/entrymngmnt/deleteEntry", {
         method: "DELETE",
         body: formData,
         headers: {

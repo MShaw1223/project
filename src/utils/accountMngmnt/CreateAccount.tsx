@@ -6,7 +6,7 @@ import { FormEvent } from "react";
 const CreateAccountPage = () => {
   const mutation = useMutation({
     mutationFn: async (formData: string) => {
-      const response = await fetch("/api/newAccount", {
+      const response = await fetch("/api/accmngmnt/newAccount", {
         method: "POST",
         body: formData,
         cache: "no-store",

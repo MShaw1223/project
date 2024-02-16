@@ -9,13 +9,12 @@ const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 });
 
-
 //const { li } = router.query;
-// const loggedIn = li; 
+// const loggedIn = li;
 // where tradesid = ${loggedIn} AND
 
-export default async function retreival(selectedAccount: any) {
-  const router = useRouter(); 
+export default async function retreival() {
+  const router = useRouter();
   const { li } = router.query;
   console.log(li);
   if (li !== undefined) {
@@ -28,34 +27,31 @@ export default async function retreival(selectedAccount: any) {
 
       const lgdin = await user.json();
       console.log("User logged in: ", lgdin);
-      return lgdin;
-    }catch(error){
-      console.error("Error fetching user: ", error);
-    }
-  }
-  try {
-    const ID = await fetch("", {
-      method: "POST",
-      body: lgdin,
-      headers: {"Content-Type": "application/json"}
-    })
-  } catch (error) {
-    console.error("Error fetching ID: ", error);
-  }
-  try {
-    const getTradesInfo = sqlstring.format(
-      `
-        from tableTrades select (tradesid, entryprice,	stoploss,	takeprofit,	tradenotes,	riskratio,	winloss)
+
+      const getIDSQL = sqlstring.format(
+        `
+        SELECT userID from tableusers where username = ?
+      `,
+        [lgdin]
+      );
+
+      const ID = await pool.query(getIDSQL);
+
+      const getTradesInfo = sqlstring.format(
+        `
+        SELECT (tradesid, entryprice,	stoploss,	takeprofit,	tradenotes,	riskratio,	winloss) from tableTrades
         where accountID = (?)
         `,
-      selectedAccount
-    );
-
-    return getTradesInfo;
-  } catch (error) {
-    return new Response("Issue in retrieval", {
-      status: 405,
-    });
+        [ID]
+      );
+      const result = await pool.query(getTradesInfo);
+      await pool.end();
+      return new Response(JSON.stringify(result));
+    } catch (error) {
+      return new Response("Issue finding ID", {
+        status: 405,
+      });
+    }
   }
 }
 

@@ -26,7 +26,7 @@ const searchEntry: NextPage = () => {
 
   useEffect(() => {
     async function fetchData() {
-      const response = await fetch("/api/searchEntries");
+      const response = await fetch("/api/entrymngmnt/searchEntries");
       const tradeData: TradeData[] = await response.json();
       console.log("Fetched data:", tradeData);
       setData(tradeData);

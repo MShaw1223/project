@@ -9,7 +9,7 @@ const DeleteAccount: NextPage = () => {
 
   const mutation = useMutation({
     mutationFn: async (formData: string) => {
-      const response = await fetch("/api/deleteAccount", {
+      const response = await fetch("/api/accmngmnt/deleteAccount", {
         method: "DELETE",
         body: formData,
         headers: {

@@ -11,7 +11,7 @@ const EditEntry: NextPage = () => {
   const [selectedEdit, setSelectedEdit] = useState<string>("");
   const mutation = useMutation({
     mutationFn: async (formData: string) => {
-      const response = await fetch("/api/editEntry", {
+      const response = await fetch("/api/entrymngmnt/editEntry", {
         method: "POST",
         body: formData,
         headers: {

@@ -16,6 +16,7 @@ const tradeEntry: NextPage = () => {
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const [user, setUser] = useState<string | null>(null);
+  const [acc, setAcc] = useState<string | null>(null);
   const [selectedAccount, setSelectedAccount] = useState<string>("");
   const [selectedBasePair, setSelectedBasePair] = useState<string>("");
   const [selectedQuotePair, setSelectedQuotePair] = useState<string>("");
@@ -44,7 +45,7 @@ const tradeEntry: NextPage = () => {
   }, []);
   const mutation = useMutation({
     mutationFn: async (formData: string) => {
-      const response = await fetch("/api/entries", {
+      const response = await fetch("/api/tradeEntry/entries", {
         method: "POST",
         body: formData,
         headers: {
@@ -72,6 +73,18 @@ const tradeEntry: NextPage = () => {
 
   const handleAccountChange = (selectedAccount: string) => {
     setSelectedAccount(selectedAccount);
+    useEffect(() => {
+      async function getAccID() {
+        const response = await fetch("/api/tradeEntry/getAccID", {
+          method: "POST",
+          body: selectedAccount,
+          headers: { "Content-Type": "application/json" },
+        });
+        const accntID = await response.json();
+        setAcc(accntID.accountID);
+      }
+      getAccID();
+    }, []);
   };
   const handleBasePairChange = (selectedBasePair: string) => {
     setSelectedBasePair(selectedBasePair);
@@ -98,7 +111,7 @@ const tradeEntry: NextPage = () => {
     const tradeNotes = data.get("tradeNotes");
     const winOrLoss = selectedOutcome;
     const username = user;
-    const accountID = 6;
+    const accountID = acc;
     if (!entryPrice) {
       alert("Invalid entry price");
       return;
@@ -160,7 +173,7 @@ const tradeEntry: NextPage = () => {
         stopLoss,
         takeProfit,
         tradeNotes,
-        username: user,
+        username: username,
         selectedOutcome: winOrLoss,
       });
       mutation.mutate(dataPackage);
