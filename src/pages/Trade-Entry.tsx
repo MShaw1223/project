@@ -177,8 +177,8 @@ const tradeEntry: NextPage = () => {
         selectedOutcome: winOrLoss,
       });
       mutation.mutate(dataPackage);
-    } catch (e) {
-      console.log(e);
+    } catch (error) {
+      console.log("Error submitting data: ",error);
     }
   }
 
