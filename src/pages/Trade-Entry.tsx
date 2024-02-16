@@ -27,7 +27,7 @@ const tradeEntry: NextPage = () => {
       const hashed = JSON.stringify(li);
       if (hashed !== undefined) {
         try {
-          const response = await fetch("/api/userFromHash", {
+          const response = await fetch("/api/auth/userFromHash", {
             method: "POST",
             body: hashed,
             headers: {
