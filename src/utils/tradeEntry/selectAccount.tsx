@@ -5,6 +5,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 
 interface AccountDropdownProps {
@@ -27,38 +28,49 @@ const findAvailableAccounts = async (): Promise<string[]> => {
   }
 };
 const ApiCall = async () => {
-  try {
-    const response = await fetch("/api/findAccounts", {
-      method: "GET",
-      cache: "no-store",
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to fetch available accounts");
+  const router = useRouter();
+  const { li } = router.query;
+  console.log(li);
+  if (li !== undefined) {
+    try {
+      const user = await fetch("/api/auth/userFromHash", {
+        method: "POST",
+        body: JSON.stringify(li),
+        headers: { "Content-Type": "application/json" },
+      });
+      const lgdin = await user.json();
+      console.log("logged in: ", lgdin);
+      const username = lgdin.loggedIn;
+      const response = await fetch("/api/findAccounts", {
+        method: "POST",
+        body: username,
+        cache: "no-store",
+      });
+      if (!response.ok) {
+        throw new Error("Failed to fetch available accounts");
+      }
+      const data = await response.json();
+      console.log(data);
+      return data;
+    } catch (error) {
+      console.error("Error in API call:", error);
+      throw error;
     }
-    const data = await response.json();
-    console.log(data);
-    return data;
-  } catch (error) {
-    console.error("Error in API call:", error);
-    throw error;
   }
 };
 
 function AccountDropdown({ onAccountChange }: AccountDropdownProps) {
   const [availableAccounts, setAvailableAccounts] = useState<string[]>([]);
-  useEffect(() => {
-    const fetchAvailablePairs = async () => {
-      try {
-        //API function to get available pairs
-        const account = await findAvailableAccounts();
-        setAvailableAccounts(account);
-      } catch (error) {
-        console.error("Error fetching available accounts:", error);
-      }
-    };
-    fetchAvailablePairs();
-  }, []);
+  async function fetchAvailablePairs() {
+    try {
+      //API function to get available pairs
+      const account = await findAvailableAccounts();
+      setAvailableAccounts(account);
+    } catch (error) {
+      console.error("Error fetching available accounts:", error);
+    }
+  }
+  fetchAvailablePairs();
 
   const handleValueChange = (selectedAcc: string) => {
     onAccountChange(selectedAcc);

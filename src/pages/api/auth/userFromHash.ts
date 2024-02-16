@@ -9,17 +9,12 @@ async function undoKey(req: NextApiRequest, res: NextApiResponse) {
     const pool = new Pool({
       connectionString: process.env.DATABASE_URL,
     });
-    const sqlquery = sqlstring.format(
-      `
-            SELECT username from tableUsers where authkey = ?
-            `,
-      [authKey]
-    );
-    console.log(sqlquery);
-    const indb = await pool.query(sqlquery);
+    const sqlquery = "SELECT username from tableUsers where authkey = ?";
+    const indb = await pool.query(sqlstring.format(sqlquery, [authKey]));
 
     const username = await indb.rows[0].username;
     console.log("userFromHash: ", username);
+
     await pool.end();
 
     res.status(200).json({ loggedIn: username });

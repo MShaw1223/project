@@ -71,20 +71,20 @@ const tradeEntry: NextPage = () => {
     },
   });
 
+  async function getAccID() {
+    const response = await fetch("/api/tradeEntry/getAccID", {
+      method: "POST",
+      body: selectedAccount,
+      headers: { "Content-Type": "application/json" },
+    });
+    const accntID = await response.json();
+    console.log("Account ID: ", accntID);
+    setAcc(accntID.accountID);
+  }
+
   const handleAccountChange = (selectedAccount: string) => {
     setSelectedAccount(selectedAccount);
-    useEffect(() => {
-      async function getAccID() {
-        const response = await fetch("/api/tradeEntry/getAccID", {
-          method: "POST",
-          body: selectedAccount,
-          headers: { "Content-Type": "application/json" },
-        });
-        const accntID = await response.json();
-        setAcc(accntID.accountID);
-      }
-      getAccID();
-    }, []);
+    getAccID();
   };
   const handleBasePairChange = (selectedBasePair: string) => {
     setSelectedBasePair(selectedBasePair);
