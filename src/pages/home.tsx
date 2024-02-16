@@ -39,7 +39,6 @@ const Home: NextPage = () => {
             body: JSON.stringify(li),
             headers: { "Content-Type": "application/json" },
           });
-
           const lgdin = await user.json();
           console.log("logged in: ", lgdin);
           setUser(lgdin.loggedIn);
@@ -51,7 +50,9 @@ const Home: NextPage = () => {
     getUser();
     // Fetch data from the database
     async function fetchData() {
-      const response = await fetch("/api/homeSearch");
+      const response = await fetch("/api/homeSearch", {
+        method: "GET",
+      });
       const tradeData = await response.json();
       console.log("Fetched data:", tradeData);
       setData(tradeData);

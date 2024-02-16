@@ -1,7 +1,7 @@
 import AccountDropdown from "@/utils/tradeEntry/selectAccount";
 import { Button } from "@/components/ui/button";
 import { useMutation } from "react-query";
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useEffect } from "react";
 import { NextPage } from "next";
 import Menu from "@/utils/menu";
 import { FaPencilAlt } from "react-icons/fa";
@@ -10,14 +10,45 @@ import { Textarea } from "@/components/ui/textarea";
 import { BasePairDropdown, QuotePairDropdown } from "@/utils/selectPair";
 import { OutcomeDropdown } from "@/utils/tradeEntry/outcome";
 import withAuth from "@/utils/protection/authorise";
+import { useRouter } from "next/router";
 
 const tradeEntry: NextPage = () => {
+  const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [user, setUser] = useState<string | null>(null);
   const [selectedAccount, setSelectedAccount] = useState<string>("");
   const [selectedBasePair, setSelectedBasePair] = useState<string>("");
   const [selectedQuotePair, setSelectedQuotePair] = useState<string>("");
   const [selectedOutcome, setSelectedOutcome] = useState<string>("");
+  useEffect(() => {
+    async function getUser() {
+      const { li } = router.query;
+      const hashed = JSON.stringify(li);
+      if (hashed !== undefined) {
+        try {
+          const response = await fetch("/api/userFromHash", {
+            method: "POST",
+            body: hashed,
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          const lgdin = await response.json();
+        } catch (error) {
+          console.error("Error fetching user: ", error);
+        }
+      }
+    }
+    getUser();
 
+    async function fetchData() {
+      const response = await fetch("/api/entries");
+      const data = await response.json();
+      console.log("Fetched data:", data);
+      setUser(data);
+    }
+    fetchData();
+  }, []);
   const mutation = useMutation({
     mutationFn: async (formData: string) => {
       const response = await fetch("/api/entries", {
