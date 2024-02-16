@@ -51,7 +51,9 @@ const Home: NextPage = () => {
     // Fetch data from the database
     async function fetchData() {
       const response = await fetch("/api/homeSearch", {
-        method: "GET",
+        method: "POST",
+        body: JSON.stringify(user),
+        headers: { "Content-Type": "application/json" },
       });
       const tradeData = await response.json();
       console.log("Fetched data:", tradeData);

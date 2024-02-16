@@ -20,7 +20,7 @@ async function makeEntryHandler(req: NextRequest, event: NextFetchEvent) {
     stopLoss,
     takeProfit,
     tradeNotes,
-    userID,
+    username,
     selectedOutcome: winLoss,
   } = entries_schema.parse(body);
 
@@ -29,6 +29,18 @@ async function makeEntryHandler(req: NextRequest, event: NextFetchEvent) {
   const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
   });
+
+  const findUserSQL = sqlstring.format(
+    `
+    SELECT userID from tableusers
+    WHERE username = ?
+  `,
+    [username]
+  );
+
+  const userIDbody = await pool.query(findUserSQL);
+  console.log(userIDbody);
+  const userID = userIDbody;
 
   const SQLstatement = sqlstring.format(
     `

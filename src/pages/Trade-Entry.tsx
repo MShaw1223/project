@@ -34,20 +34,13 @@ const tradeEntry: NextPage = () => {
             },
           });
           const lgdin = await response.json();
+          setUser(lgdin.loggedIn);
         } catch (error) {
           console.error("Error fetching user: ", error);
         }
       }
     }
     getUser();
-
-    async function fetchData() {
-      const response = await fetch("/api/entries");
-      const data = await response.json();
-      console.log("Fetched data:", data);
-      setUser(data);
-    }
-    fetchData();
   }, []);
   const mutation = useMutation({
     mutationFn: async (formData: string) => {
@@ -104,7 +97,7 @@ const tradeEntry: NextPage = () => {
     const currencyPair = BasePair + QuotePair;
     const tradeNotes = data.get("tradeNotes");
     const winOrLoss = selectedOutcome;
-    const userID = 1;
+    const username = user;
     const accountID = 6;
     if (!entryPrice) {
       alert("Invalid entry price");
@@ -167,7 +160,7 @@ const tradeEntry: NextPage = () => {
         stopLoss,
         takeProfit,
         tradeNotes,
-        userID,
+        username: user,
         selectedOutcome: winOrLoss,
       });
       mutation.mutate(dataPackage);
