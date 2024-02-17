@@ -1,10 +1,9 @@
 import AccountDropdown from "@/utils/tradeEntry/selectAccount";
-import { NextPage } from "next";
 import { FormEvent, useState } from "react";
 import { useMutation } from "react-query";
 import { Button } from "@/components/ui/button";
 
-const DeleteAccount: NextPage = () => {
+const DeleteAccount = () => {
   const [selectedAccount, setSelectedAccount] = useState<string>("");
 
   const mutation = useMutation({
