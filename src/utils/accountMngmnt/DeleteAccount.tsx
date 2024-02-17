@@ -3,6 +3,7 @@ import { FormEvent, useState } from "react";
 import { useMutation } from "react-query";
 import { Button } from "@/components/ui/button";
 
+//add in a modal that pops up ?? are you sure you want to delete etc
 const DeleteAccount = () => {
   const [selectedAccount, setSelectedAccount] = useState<string>("");
 
@@ -14,12 +15,11 @@ const DeleteAccount = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        cache: "no-cache",
+        cache: "no-store",
       });
       if (!response.ok) {
         throw new Error("Failed to submit trade data");
       }
-
       return response.json();
     },
     onSettled: () => {
@@ -33,9 +33,9 @@ const DeleteAccount = () => {
   const handleAccountChange = (selectedAccount: string) => {
     setSelectedAccount(selectedAccount);
   };
+
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-
     const selectedAccountValue = selectedAccount;
     const dataPackage = JSON.stringify({ accountname: selectedAccountValue });
     console.log(dataPackage);
@@ -44,8 +44,6 @@ const DeleteAccount = () => {
   return (
     <>
       <div className="flex">
-        {mutation.isLoading && <div>Deleting Account...</div>}
-        {!mutation.isLoading && (
           <div className="flex items-center justify-center">
             <form onSubmit={handleSubmit}>
               <h1 className="font-bold text-lg underline underline-offset-8">
@@ -65,7 +63,6 @@ const DeleteAccount = () => {
               </div>
             </form>
           </div>
-        )}
       </div>
     </>
   );
