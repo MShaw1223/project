@@ -2,8 +2,10 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useMutation } from "react-query";
 import { FormEvent } from "react";
+import {useRouter} from "next/router"
 
 const CreateAccountPage = () => {
+  const router = useRouter()
   const mutation = useMutation({
     mutationFn: async (formData: string) => {
       const response = await fetch("/api/accmngmnt/newAccount", {
