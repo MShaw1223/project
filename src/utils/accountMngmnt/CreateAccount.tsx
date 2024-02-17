@@ -37,7 +37,6 @@ const CreateAccountPage = () => {
       const dataPackage = JSON.stringify({
         accountname,
         userid: ID,
-        // add the user ID 
       });
       mutation.mutate(dataPackage);
     }
