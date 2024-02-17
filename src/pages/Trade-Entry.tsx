@@ -21,6 +21,16 @@ const tradeEntry: NextPage = () => {
   const [selectedBasePair, setSelectedBasePair] = useState<string>("");
   const [selectedQuotePair, setSelectedQuotePair] = useState<string>("");
   const [selectedOutcome, setSelectedOutcome] = useState<string>("");
+  const getAccID = async () => {
+    const response = await fetch("/api/tradeEntry/getAccID", {
+      method: "POST",
+      body: selectedAccount,
+      headers: { "Content-Type": "application/json" },
+    });
+    const accntID = await response.json();
+    console.log("Account ID: ", accntID);
+    setAcc(accntID.accountID);
+  };
   useEffect(() => {
     async function getUser() {
       const { li } = router.query;
@@ -56,7 +66,6 @@ const tradeEntry: NextPage = () => {
       if (!response.ok) {
         throw new Error("Failed to submit trade data");
       }
-
       return response.json();
     },
     onSettled: () => {
@@ -71,20 +80,9 @@ const tradeEntry: NextPage = () => {
     },
   });
 
-  async function getAccID() {
-    const response = await fetch("/api/tradeEntry/getAccID", {
-      method: "POST",
-      body: selectedAccount,
-      headers: { "Content-Type": "application/json" },
-    });
-    const accntID = await response.json();
-    console.log("Account ID: ", accntID);
-    setAcc(accntID.accountID);
-  }
-
-  const handleAccountChange = (selectedAccount: string) => {
+  const handleAccountChange = async (selectedAccount: string) => {
     setSelectedAccount(selectedAccount);
-    getAccID();
+    await getAccID();
   };
   const handleBasePairChange = (selectedBasePair: string) => {
     setSelectedBasePair(selectedBasePair);
@@ -98,7 +96,6 @@ const tradeEntry: NextPage = () => {
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-
     const data = new FormData(event.target as HTMLFormElement);
     const entryPrice = parseFloat(data.get("entryPrice") as string);
     const stopLoss = parseFloat(data.get("stopLoss") as string);
@@ -111,7 +108,7 @@ const tradeEntry: NextPage = () => {
     const tradeNotes = data.get("tradeNotes");
     const winOrLoss = selectedOutcome;
     const username = user;
-    const accountID = acc;
+    const accID = acc;
     if (!entryPrice) {
       alert("Invalid entry price");
       return;
@@ -164,9 +161,13 @@ const tradeEntry: NextPage = () => {
       alert("Invalid currency pair");
       return;
     }
+    if (!acc) {
+      alert("Account ID unavailable");
+      return;
+    }
     try {
       const dataPackage = JSON.stringify({
-        accountID,
+        accountID: accID,
         selectedPair: currencyPair,
         entryPrice,
         riskRatio,
@@ -178,10 +179,9 @@ const tradeEntry: NextPage = () => {
       });
       mutation.mutate(dataPackage);
     } catch (error) {
-      console.log("Error submitting data: ",error);
+      console.log("Error submitting data: ", error);
     }
   }
-
   return (
     //
     //

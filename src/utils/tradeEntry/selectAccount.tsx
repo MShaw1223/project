@@ -15,7 +15,6 @@ interface AccountDropdownProps {
 const findAvailableAccounts = async (): Promise<string[]> => {
   try {
     const response = await ApiCall();
-    console.log("API RESPONSE: ", response);
     if (Array.isArray(response)) {
       console.log(response);
       return response;
@@ -30,7 +29,6 @@ const findAvailableAccounts = async (): Promise<string[]> => {
 const ApiCall = async () => {
   const router = useRouter();
   const { li } = router.query;
-  console.log(li);
   if (li !== undefined) {
     try {
       const user = await fetch("/api/auth/userFromHash", {
@@ -39,7 +37,6 @@ const ApiCall = async () => {
         headers: { "Content-Type": "application/json" },
       });
       const lgdin = await user.json();
-      console.log("logged in: ", lgdin);
       const username = lgdin.loggedIn;
       const response = await fetch("/api/findAccounts", {
         method: "POST",
@@ -50,7 +47,6 @@ const ApiCall = async () => {
         throw new Error("Failed to fetch available accounts");
       }
       const data = await response.json();
-      console.log(data);
       return data;
     } catch (error) {
       console.error("Error in API call:", error);

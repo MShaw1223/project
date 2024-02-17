@@ -5,7 +5,6 @@ import sqlstring from "sqlstring";
 async function undoKey(req: NextApiRequest, res: NextApiResponse) {
   try {
     const authKey = await req.body;
-    console.log("authkey: ", authKey);
     const pool = new Pool({
       connectionString: process.env.DATABASE_URL,
     });
@@ -13,7 +12,6 @@ async function undoKey(req: NextApiRequest, res: NextApiResponse) {
     const indb = await pool.query(sqlstring.format(sqlquery, [authKey]));
 
     const username = await indb.rows[0].username;
-    console.log("userFromHash: ", username);
 
     await pool.end();
 

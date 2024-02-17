@@ -19,9 +19,7 @@ export default async function handler(
     `;
     const result = await pool.query(sqlstring.format(query, [username]));
     await pool.end();
-    console.log("Account ID response: ", result);
     const accountname = result.rows.map((row) => row.accountname);
-    console.log("Accounts:", accountname);
     res.status(200).json(accountname); // return the accounts
   } catch (error) {
     console.error("Error executing query, details:", error);
