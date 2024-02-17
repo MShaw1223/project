@@ -41,7 +41,7 @@ const Home: NextPage = () => {
           });
           const lgdin = await user.json();
           console.log("logged in: ", lgdin);
-          setUser(lgdin.loggedIn);
+          setUser(lgdin);
         } catch (error) {
           console.error("Error fetching user: ", error);
         }
@@ -50,11 +50,10 @@ const Home: NextPage = () => {
     getUser();
     // Fetch data from the database
     async function fetchData() {
-      const data = JSON.stringify(user);
       if (user !== null) {
         const response = await fetch("/api/home/homeSearch", {
           method: "POST",
-          body: data,
+          body: JSON.stringify(user),
           headers: { "Content-Type": "application/json" },
         });
         const tradeData = await response.json();
@@ -63,7 +62,7 @@ const Home: NextPage = () => {
       }
     }
     fetchData();
-  }, [router.query.li]);
+  }, []);
 
   return (
     <>

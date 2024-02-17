@@ -57,7 +57,7 @@ const entries_schema = zod.object({
 
 const newAccountSchema = zod.object({
   accountname: zod.string().max(15),
-  userid: zod.string()
+  userid: zod.string(),
 });
 
 const newCurrencySchema = zod.object({

@@ -21,6 +21,27 @@ const tradeEntry: NextPage = () => {
   const [selectedBasePair, setSelectedBasePair] = useState<string>("");
   const [selectedQuotePair, setSelectedQuotePair] = useState<string>("");
   const [selectedOutcome, setSelectedOutcome] = useState<string>("");
+  useEffect(() => {
+    async function getUser() {
+      const { li } = router.query;
+      if (li !== undefined) {
+        try {
+          const response = await fetch("/api/auth/userFromHash", {
+            method: "POST",
+            body: JSON.stringify(li),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          const lgdin = await response.json();
+          setUser(lgdin);
+        } catch (error) {
+          console.error("Error fetching user: ", error);
+        }
+      }
+    }
+    getUser();
+  }, []);
   const getAccID = async () => {
     const response = await fetch("/api/tradeEntry/getAccID", {
       method: "POST",
@@ -31,28 +52,6 @@ const tradeEntry: NextPage = () => {
     console.log("Account ID: ", accntID);
     setAcc(accntID.accountID);
   };
-  useEffect(() => {
-    async function getUser() {
-      const { li } = router.query;
-      const hashed = JSON.stringify(li);
-      if (hashed !== undefined) {
-        try {
-          const response = await fetch("/api/auth/userFromHash", {
-            method: "POST",
-            body: hashed,
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-          const lgdin = await response.json();
-          setUser(lgdin.loggedIn);
-        } catch (error) {
-          console.error("Error fetching user: ", error);
-        }
-      }
-    }
-    getUser();
-  }, []);
   const mutation = useMutation({
     mutationFn: async (formData: string) => {
       const response = await fetch("/api/tradeEntry/entries", {

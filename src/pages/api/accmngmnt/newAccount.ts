@@ -13,7 +13,7 @@ async function createNewAccount(req: NextRequest, event: NextFetchEvent) {
 
   const data = newAccountSchema.parse(body);
 
-  console.log("body", body);
+  console.log("body: ", body);
 
   const pool = new Pool({
     connectionString: process.env.DATABASE_URL,

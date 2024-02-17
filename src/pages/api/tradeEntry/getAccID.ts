@@ -31,6 +31,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {
     getAcc(req, res);
   } else {
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(405).json({ error: "Method Not allowed" });
   }
 }

@@ -12,12 +12,27 @@ interface AccountDropdownProps {
   onAccountChange: (account: string) => void;
 }
 
-const findAvailableAccounts = async (): Promise<string[]> => {
+const findAvailableAccounts = async (
+  li: string
+): Promise<string[] | undefined> => {
   try {
-    const response = await ApiCall();
-    if (Array.isArray(response)) {
-      console.log(response);
-      return response;
+    const user = await fetch("/api/auth/userFromHash", {
+      method: "POST",
+      body: JSON.stringify(li),
+      headers: { "Content-Type": "application/json" },
+    });
+    const lgdin = await user.json();
+    const response = await fetch("/api/findAccounts", {
+      method: "POST",
+      body: lgdin,
+      cache: "no-store",
+    });
+    if (!response.ok) {
+      throw new Error("Failed to fetch available accounts");
+    }
+    const data = await response.json();
+    if (Array.isArray(data)) {
+      return data;
     } else {
       throw new Error("Invalid API response format");
     }
@@ -26,48 +41,26 @@ const findAvailableAccounts = async (): Promise<string[]> => {
     throw error;
   }
 };
-const ApiCall = async () => {
-  const router = useRouter();
-  const { li } = router.query;
-  if (li !== undefined) {
-    try {
-      const user = await fetch("/api/auth/userFromHash", {
-        method: "POST",
-        body: JSON.stringify(li),
-        headers: { "Content-Type": "application/json" },
-      });
-      const lgdin = await user.json();
-      const username = lgdin.loggedIn;
-      const response = await fetch("/api/findAccounts", {
-        method: "POST",
-        body: username,
-        cache: "no-store",
-      });
-      if (!response.ok) {
-        throw new Error("Failed to fetch available accounts");
-      }
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error("Error in API call:", error);
-      throw error;
-    }
-  }
-};
 
 function AccountDropdown({ onAccountChange }: AccountDropdownProps) {
+  const router = useRouter();
   const [availableAccounts, setAvailableAccounts] = useState<string[]>([]);
-  async function fetchAvailablePairs() {
-    try {
-      //API function to get available pairs
-      const account = await findAvailableAccounts();
-      setAvailableAccounts(account);
-    } catch (error) {
-      console.error("Error fetching available accounts:", error);
-    }
-  }
-  fetchAvailablePairs();
-
+  useEffect(() => {
+    const fetchAvailableAccs = async () => {
+      try {
+        const { li } = router.query;
+        if (typeof li === "string") {
+          const account = await findAvailableAccounts(li);
+          if (account !== undefined) {
+            setAvailableAccounts(account);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching available accounts:", error);
+      }
+    };
+    fetchAvailableAccs();
+  }, [router.query]);
   const handleValueChange = (selectedAcc: string) => {
     onAccountChange(selectedAcc);
   };

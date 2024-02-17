@@ -92,9 +92,7 @@ function QuotePairDropdown({ onQuotePairChange }: QuoteDropdownProps) {
 const findAvailablePairs = async (): Promise<string[]> => {
   try {
     const response = await ApiCall();
-    console.log("API RESPONSE: ", response);
     if (Array.isArray(response)) {
-      console.log(response);
       return response;
     } else {
       throw new Error("Invalid API response format");
@@ -115,7 +113,6 @@ const ApiCall = async () => {
       throw new Error("Failed to fetch available pairs");
     }
     const data = await response.json();
-    console.log(data);
     return data;
   } catch (error) {
     console.error("Error in API call:", error);
