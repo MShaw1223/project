@@ -2,12 +2,6 @@ import sqlstring from "sqlstring";
 import { Pool } from "@neondatabase/serverless";
 import { NextApiRequest, NextApiResponse } from "next";
 
-/* 
-where userID = 1
-where userID = ${loggedIn} 
-have hardcoded userID for now,  dynamic idea above
-*/
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -17,16 +11,15 @@ export default async function handler(
       connectionString: process.env.DATABASE_URL,
     });
     const username = req.body;
-    const acc_ID_get = "select userID from tableusers where username = ?";
-    const accIDres = await pool.query(
-      sqlstring.format(acc_ID_get, [username])
-      );
-      console.log("Account ID response: ", accIDres);
-    //available accounts check (prettier styles it weird)
-    const AvAcs = "select * from tableAccount where userID = ? ORDER BY accountname"; 
-    const accID = await accIDres.rows[0].userid;
-    const result = await pool.query(sqlstring.format(AvAcs, [accID]));
-    await pool.end()
+    const query = `
+      select tableAccount.accountname from tableusers
+      JOIN tableAccount ON tableusers.userID = tableAccount.userID
+      WHERE tableusers.username = ?
+      ORDER BY tableAccount.accountname
+    `;
+    const result = await pool.query(sqlstring.format(query, [username]));
+    await pool.end();
+    console.log("Account ID response: ", result);
     const accountname = result.rows.map((row) => row.accountname);
     console.log("Accounts:", accountname);
     res.status(200).json(accountname); // return the accounts
