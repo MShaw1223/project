@@ -20,13 +20,15 @@ const CreateAccountPage = () => {
       console.error("Mutation error", error);
     },
   });
-
+  
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     const data = new FormData(event.target as HTMLFormElement);
     const accountname = data.get("accountName");
     const reEntered = data.get("reEnteredAccountName");
+    const { li } = router.query;
+    const ID = li;
     if (accountname !== reEntered) {
       alert("Entries do not match");
       return;
@@ -34,6 +36,8 @@ const CreateAccountPage = () => {
     if (accountname === reEntered) {
       const dataPackage = JSON.stringify({
         accountname,
+        userid: ID,
+        // add the user ID 
       });
       mutation.mutate(dataPackage);
     }

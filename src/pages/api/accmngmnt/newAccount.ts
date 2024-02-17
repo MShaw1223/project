@@ -12,7 +12,7 @@ export const config = {
 async function createNewAccount(req: NextRequest, event: NextFetchEvent) {
   const body = await extractBody(req);
 
-  const accountname = newAccountSchema.parse(body);
+  const data = newAccountSchema.parse(body);
 
   console.log("body", body);
 
@@ -24,25 +24,16 @@ async function createNewAccount(req: NextRequest, event: NextFetchEvent) {
     `
       INSERT INTO tableAccount (accountname, userid) VALUES (?, ?);
     `,
-    [accountname.accountname, 1]
+    [data.accountname, data.userid]
   );
 
-  /*
-  - Hardcoded userid for now
-  - need to change it so there is no way of accessing
-    - could do index and then it renders a new logged in index of the homepage? 
-      or renders /loggedin/home
-    - could have logged in as a variable that is set by userid 
-    - could have just @/loggedin/... as a placeholder
-        e.g. /millershaw/home
-   */
   console.log("SQLstatement", SQLstatement);
 
   await pool.query(SQLstatement);
 
   event.waitUntil(pool.end());
 
-  return new Response(JSON.stringify({ accountname }), {
+  return new Response(JSON.stringify({ data }), {
     status: 200,
   });
 }
