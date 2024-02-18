@@ -20,6 +20,7 @@ interface EUinterface {
 
 //interface finds user and shows a pop-up to edit
 //shadcn has a really nice pop-up for this
+// put is correct http req for this look at how they work
 const formSchema = z.object({
   username: z.string().min(2, {
     message: "Username must be at least 2 characters.",

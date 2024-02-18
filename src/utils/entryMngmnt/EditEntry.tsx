@@ -11,8 +11,9 @@ const EditEntry: NextPage = () => {
   const [selectedEdit, setSelectedEdit] = useState<string>("");
   const mutation = useMutation({
     mutationFn: async (formData: string) => {
+      // put is correct http req for this look at how they work
       const response = await fetch("/api/entrymngmnt/editEntry", {
-        method: "POST",
+        method: "PUT",
         body: formData,
         headers: {
           "Content-Type": "application/json",
