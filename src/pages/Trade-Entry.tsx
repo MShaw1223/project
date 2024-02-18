@@ -1,7 +1,7 @@
-import AccountDropdown from "@/utils/tradeEntry/selectAccount";
+import AccountDropdown from "@/utils/selectAccount";
 import { Button } from "@/components/ui/button";
 import { useMutation } from "react-query";
-import { useState, FormEvent, useEffect } from "react";
+import { useState, FormEvent } from "react";
 import { NextPage } from "next";
 import Menu from "@/utils/menu";
 import { FaPencilAlt } from "react-icons/fa";
@@ -10,48 +10,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { BasePairDropdown, QuotePairDropdown } from "@/utils/selectPair";
 import { OutcomeDropdown } from "@/utils/tradeEntry/outcome";
 import withAuth from "@/utils/protection/authorise";
-import { useRouter } from "next/router";
 
 const tradeEntry: NextPage = () => {
-  const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [user, setUser] = useState<string | null>(null);
   const [acc, setAcc] = useState<string | null>(null);
   const [selectedAccount, setSelectedAccount] = useState<string>("");
   const [selectedBasePair, setSelectedBasePair] = useState<string>("");
   const [selectedQuotePair, setSelectedQuotePair] = useState<string>("");
   const [selectedOutcome, setSelectedOutcome] = useState<string>("");
-  useEffect(() => {
-    async function getUser() {
-      const { li } = router.query;
-      if (li !== undefined) {
-        try {
-          const response = await fetch("/api/auth/userFromHash", {
-            method: "POST",
-            body: JSON.stringify(li),
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-          const lgdin = await response.json();
-          setUser(lgdin);
-        } catch (error) {
-          console.error("Error fetching user: ", error);
-        }
-      }
-    }
-    getUser();
-  }, []);
-  const getAccID = async () => {
-    const response = await fetch("/api/tradeEntry/getAccID", {
-      method: "POST",
-      body: selectedAccount,
-      headers: { "Content-Type": "application/json" },
-    });
-    const accntID = await response.json();
-    console.log("Account ID: ", accntID);
-    setAcc(accntID.accountID);
-  };
   const mutation = useMutation({
     mutationFn: async (formData: string) => {
       const response = await fetch("/api/tradeEntry/entries", {
@@ -81,7 +47,17 @@ const tradeEntry: NextPage = () => {
 
   const handleAccountChange = async (selectedAccount: string) => {
     setSelectedAccount(selectedAccount);
-    await getAccID();
+    console.log(selectedAccount);
+    if (selectedAccount !== "") {
+      const response = await fetch("/api/tradeEntry/getAccID", {
+        method: "POST",
+        body: JSON.stringify(selectedAccount),
+        headers: { "Content-Type": "application/json" },
+      });
+      const accntID = await response.json();
+      console.log("Account ID TE: ", accntID);
+      setAcc(accntID);
+    }
   };
   const handleBasePairChange = (selectedBasePair: string) => {
     setSelectedBasePair(selectedBasePair);
@@ -106,8 +82,6 @@ const tradeEntry: NextPage = () => {
     const currencyPair = BasePair + QuotePair;
     const tradeNotes = data.get("tradeNotes");
     const winOrLoss = selectedOutcome;
-    const username = user;
-    const accID = acc;
     if (!entryPrice) {
       alert("Invalid entry price");
       return;
@@ -165,25 +139,23 @@ const tradeEntry: NextPage = () => {
       return;
     }
     try {
-      const dataPackage = JSON.stringify({
-        accountID: accID,
-        selectedPair: currencyPair,
-        entryPrice,
-        riskRatio,
-        stopLoss,
-        takeProfit,
-        tradeNotes,
-        username: username,
-        selectedOutcome: winOrLoss,
-      });
-      mutation.mutate(dataPackage);
+      mutation.mutate(
+        JSON.stringify({
+          accountID: acc,
+          selectedPair: currencyPair,
+          entryPrice,
+          riskRatio,
+          stopLoss,
+          takeProfit,
+          tradeNotes,
+          selectedOutcome: winOrLoss,
+        })
+      );
     } catch (error) {
       console.log("Error submitting data: ", error);
     }
   }
   return (
-    //
-    //
     <>
       <div className="flex h-screen bg-slate-200">
         <Menu isOpen={menuOpen} setIsOpen={setMenuOpen} />
@@ -266,7 +238,6 @@ const tradeEntry: NextPage = () => {
                             placeholder="Risk Ratio..."
                           ></Input>
                         </div>
-
                         <div className="p-3">
                           <Textarea
                             id="tradeNotes"
@@ -278,7 +249,6 @@ const tradeEntry: NextPage = () => {
                         </div>
                       </div>
                     </div>
-
                     <div className="p-3 text-center">
                       <Button type="submit">Submit Entry</Button>
                     </div>
@@ -292,5 +262,4 @@ const tradeEntry: NextPage = () => {
     </>
   );
 };
-
 export default withAuth(tradeEntry);

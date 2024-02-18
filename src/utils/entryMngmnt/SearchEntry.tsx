@@ -9,6 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 type TradeData = {
   tradesid: string;
@@ -23,13 +24,31 @@ type TradeData = {
 
 const searchEntry: NextPage = () => {
   const [data, setData] = useState<TradeData[]>([]);
-
+  const router = useRouter();
   useEffect(() => {
     async function fetchData() {
-      const response = await fetch("/api/entrymngmnt/searchEntries");
-      const tradeData: TradeData[] = await response.json();
-      console.log("Fetched data:", tradeData);
-      setData(tradeData);
+      const { li } = router.query;
+      if (li !== undefined) {
+        try {
+          const user = await fetch("/api/auth/IDFromHash", {
+            method: "POST",
+            body: JSON.stringify(li),
+            headers: { "Content-Type": "application/json" },
+          });
+          const lgdin = await user.json();
+          console.log("logged in: ", lgdin);
+          const response = await fetch("/api/entrymngmnt/searchEntries", {
+            method: "POST",
+            body: JSON.stringify(lgdin),
+            headers: { "Content-Type": "application/json" },
+          });
+          const tradeData: TradeData[] = await response.json();
+          console.log("Fetched data:", tradeData);
+          setData(tradeData);
+        } catch (error) {
+          console.error("Error fetching user: ", error);
+        }
+      }
     }
     fetchData();
   }, []);

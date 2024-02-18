@@ -57,11 +57,17 @@ const entries_schema = zod.object({
 
 const newAccountSchema = zod.object({
   accountname: zod.string().max(15),
-  userid: zod.string(),
+  userid: zod.number(),
 });
 
 const newCurrencySchema = zod.object({
   pairabbr: zod.string().max(5),
+  userid: zod.number(),
+});
+
+const userPwdSchema = zod.object({
+  username: zod.string(),
+  passwd: zod.string(),
 });
 
 export {
@@ -71,4 +77,5 @@ export {
   entries_schema,
   newAccountSchema,
   newCurrencySchema,
+  userPwdSchema,
 };

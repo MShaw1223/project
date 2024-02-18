@@ -1,11 +1,12 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useMutation } from "react-query";
-import { FormEvent } from "react";
-import {useRouter} from "next/router"
+import { FormEvent, useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 const CreateAccountPage = () => {
-  const router = useRouter()
+  const [user, setUser] = useState<string | null>(null);
+  const router = useRouter();
   const mutation = useMutation({
     mutationFn: async (formData: string) => {
       const response = await fetch("/api/accmngmnt/newAccount", {
@@ -22,20 +23,38 @@ const CreateAccountPage = () => {
       console.error("Mutation error", error);
     },
   });
-  
+  useEffect(() => {
+    async function getUser() {
+      const { li } = router.query;
+      if (li !== undefined) {
+        try {
+          const response = await fetch("/api/auth/IDFromHash", {
+            method: "POST",
+            body: JSON.stringify(li),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          const lgdin = await response.json();
+          setUser(lgdin);
+        } catch (error) {
+          console.error("Error fetching user: ", error);
+        }
+      }
+    }
+    getUser();
+  }, []);
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-
     const data = new FormData(event.target as HTMLFormElement);
     const accountname = data.get("accountName");
     const reEntered = data.get("reEnteredAccountName");
-    const { li } = router.query;
-    const ID = li;
+    const ID = user;
     if (accountname !== reEntered) {
       alert("Entries do not match");
       return;
     }
-    if (accountname === reEntered) {
+    if (accountname === reEntered && ID !== null) {
       const dataPackage = JSON.stringify({
         accountname,
         userid: ID,
@@ -56,7 +75,6 @@ const CreateAccountPage = () => {
               <div className="flex flex-row w-[770px]">
                 <div className="p-2 w-full">
                   <h3>Enter the name of the new account</h3>
-
                   <Input
                     id="accountName"
                     name="accountName"

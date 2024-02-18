@@ -10,80 +10,62 @@ export const config = {
   runtime: "edge",
 };
 
-async function makeEntryHandler(req: NextRequest, event: NextFetchEvent) {
-  const body = await extractBody(req);
-  const {
-    accountID,
-    selectedPair: currencyPair,
-    entryPrice,
-    riskRatio,
-    stopLoss,
-    takeProfit,
-    tradeNotes,
-    username,
-    selectedOutcome: winLoss,
-  } = entries_schema.parse(body);
-
-  console.log("body", body);
-
-  const pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-  });
-
-  const findUserSQL = sqlstring.format(
-    `
-    SELECT userID from tableusers
-    WHERE username = ?
-  `,
-    [username]
-  );
-
-  const userIDbody = await pool.query(findUserSQL);
-  console.log(userIDbody);
-  const userID = userIDbody;
-
-  const SQLstatement = sqlstring.format(
-    `
-        INSERT INTO tableTrades (accountid, currencypair, entryprice, riskratio, stoploss, takeprofit, tradenotes, userid, winloss)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `,
-    [
-      accountID,
-      currencyPair,
-      entryPrice,
-      riskRatio,
-      stopLoss,
-      takeProfit,
-      tradeNotes,
-      userID,
-      winLoss,
-    ]
-  );
-  console.log("SQLstatement", SQLstatement);
-
-  await pool.query(SQLstatement);
-
-  event.waitUntil(pool.end());
-
-  const responsePayload = {
-    entryPrice,
-    stopLoss,
-    takeProfit,
-    tradeNotes,
-    riskRatio,
-    winLoss,
-    currencyPair,
-    userID,
-    accountID,
-  };
-  return new Response(JSON.stringify({ responsePayload }), {
-    status: 200,
-  });
-}
-
 export default async function handler(req: NextRequest, event: NextFetchEvent) {
   if (req.method === "POST") {
-    return makeEntryHandler(req, event);
+    try {
+      const body = await extractBody(req);
+      const {
+        accountID,
+        selectedPair: currencyPair,
+        entryPrice,
+        riskRatio,
+        stopLoss,
+        takeProfit,
+        tradeNotes,
+        username,
+        selectedOutcome: winLoss,
+      } = entries_schema.parse(body);
+      console.log("body: ", body);
+      const pool = new Pool({
+        connectionString: process.env.DATABASE_URL,
+      });
+      const SQLstatement = sqlstring.format(
+        `
+            INSERT INTO tableTrades (accountid, currencypair, entryprice, riskratio, stoploss, takeprofit, tradenotes, winloss)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        `,
+        [
+          accountID,
+          currencyPair,
+          entryPrice,
+          riskRatio,
+          stopLoss,
+          takeProfit,
+          tradeNotes,
+          winLoss,
+        ]
+      );
+      await pool.query(SQLstatement);
+      event.waitUntil(pool.end());
+      console.log("SQLstatement", SQLstatement);
+      const responsePayload = {
+        entryPrice,
+        stopLoss,
+        takeProfit,
+        tradeNotes,
+        riskRatio,
+        winLoss,
+        currencyPair,
+        accountID,
+      };
+      return new Response(JSON.stringify({ responsePayload }), {
+        status: 200,
+      });
+    } catch (error) {
+      return new Response("Unable to enter trade", {
+        status: 400,
+      });
+    }
   }
   return new Response("Invalid Method", {
     status: 405,

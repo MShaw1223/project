@@ -2,16 +2,10 @@
 import { Pool } from "@neondatabase/serverless";
 import sqlstring from "sqlstring";
 import { useRouter } from "next/router";
-//retrieval(variable){
-// etc etc
-//  }
+
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 });
-
-//const { li } = router.query;
-// const loggedIn = li;
-// where tradesid = ${loggedIn} AND
 
 export default async function retreival() {
   const router = useRouter();
@@ -24,19 +18,15 @@ export default async function retreival() {
         body: JSON.stringify(li),
         headers: { "Content-Type": "application/json" },
       });
-
       const lgdin = await user.json();
       console.log("User logged in: ", lgdin);
-
-      const getIDSQL = sqlstring.format(
+      const getIDquery = sqlstring.format(
         `
         SELECT userID from tableusers where username = ?
       `,
         [lgdin]
       );
-
-      const ID = await pool.query(getIDSQL);
-
+      const ID = await pool.query(getIDquery);
       const getTradesInfo = sqlstring.format(
         `
         SELECT (tradesid, entryprice,	stoploss,	takeprofit,	tradenotes,	riskratio,	winloss) from tableTrades
@@ -46,10 +36,12 @@ export default async function retreival() {
       );
       const result = await pool.query(getTradesInfo);
       await pool.end();
-      return new Response(JSON.stringify(result));
+      return new Response(JSON.stringify(result), {
+        status: 200,
+      });
     } catch (error) {
       return new Response("Issue finding ID", {
-        status: 405,
+        status: 400,
       });
     }
   }

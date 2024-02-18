@@ -9,17 +9,17 @@ export default async function handler(
   //checks if http method is correct
   if (req.method === "POST") {
     try {
-      const authKey = await req.body;
+      const authKey = req.body;
       const pool = new Pool({
         connectionString: process.env.DATABASE_URL,
       });
-      // then gets user from the DB with the same authKey
-      const sqlquery = "SELECT username from tableUsers where authkey = ?";
+      // then gets ID from the DB with the same authKey
+      const sqlquery = "SELECT userid from tableUsers where authkey = ?";
       const indb = await pool.query(sqlstring.format(sqlquery, [authKey]));
-      const username = await indb.rows[0].username;
+      const userID = await indb.rows[0].userid;
       await pool.end();
-      // returns a success response with username in json
-      res.status(200).json(username);
+      // returns a success response with userID in json
+      res.status(200).json(userID);
     } catch (error) {
       // if no authkey there is an error thrown (bad request)
       console.error("Error processing request: ", error);

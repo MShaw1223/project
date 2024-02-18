@@ -8,40 +8,35 @@ export const config = {
   runtime: "edge",
 };
 
-async function createNewAccount(req: NextRequest, event: NextFetchEvent) {
-  const body = await extractBody(req);
-
-  const data = newAccountSchema.parse(body);
-
-  console.log("body: ", body);
-
-  const pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-  });
-
-  const SQLstatement = sqlstring.format(
-    `
-      INSERT INTO tableAccount (accountname, userid) VALUES (?, ?);
-    `,
-    [data.accountname, data.userid]
-  );
-
-  console.log("SQLstatement", SQLstatement);
-
-  await pool.query(SQLstatement);
-
-  event.waitUntil(pool.end());
-
-  return new Response(JSON.stringify({ data }), {
-    status: 200,
-  });
-}
-
 export default async function handler(req: NextRequest, event: NextFetchEvent) {
   if (req.method === "POST") {
-    return createNewAccount(req, event);
+    try {
+      const body = await extractBody(req);
+      console.log("body: ", body);
+      const { accountname, userid } = newAccountSchema.parse(body);
+      const pool = new Pool({
+        connectionString: process.env.DATABASE_URL,
+      });
+      const SQLstatement = sqlstring.format(
+        `
+        INSERT INTO tableAccounts (accountname, userid) VALUES (?, ?);
+      `,
+        [accountname, userid]
+      );
+      await pool.query(SQLstatement);
+      event.waitUntil(pool.end());
+      return new Response(JSON.stringify({ accountname, userid }), {
+        status: 200,
+      });
+    } catch (error) {
+      console.error("Issue creating account: ", error);
+      return new Response("Server error", {
+        status: 500,
+      });
+    }
+  } else {
+    return new Response("Method not allowed", {
+      status: 405,
+    });
   }
-  return new Response("Method not allowed", {
-    status: 405,
-  });
 }

@@ -4,7 +4,7 @@ import zod from "zod";
 import { FormEvent, useState } from "react";
 import { NextPage } from "next";
 import { BiSolidHide, BiSolidShow } from "react-icons/bi";
-import comparePasswords from "@/utils/comparePwd";
+import comparePasswords from "@/utils/protection/comparePwd";
 import { useRouter } from "next/router";
 import { generateKey } from "@/utils/protection/hash";
 
@@ -15,8 +15,9 @@ const schema = zod.object({
 
 const signUp: NextPage = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const router = useRouter();
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     const data = new FormData(event.target as HTMLFormElement);
@@ -31,39 +32,33 @@ const signUp: NextPage = () => {
     console.log(parsedData);
     const isMatch = comparePasswords(entry_pwd, confirmPasswd);
     if (isMatch === true) {
-      handler(entry_pwd, user);
+      console.log("in the signup.tsx handler");
+      const parsedData = schema.parse({
+        passwd: entry_pwd,
+        username: user,
+      });
+      console.log(parsedData);
+      const response = await fetch("/api/auth/userPwd", {
+        method: "POST",
+        body: JSON.stringify(parsedData),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        cache: "no-store",
+      });
+      if (response.ok) {
+        const { username } = parsedData;
+        const key = generateKey(username);
+        console.log(key);
+        router.push(`/home?li=${key}`);
+      }
+      if (!response.ok) {
+        alert("Failed to sign up, try again");
+      }
     } else if (isMatch === false) {
       alert("Passwords do not match");
     }
   }
-
-  const router = useRouter();
-  async function handler(entry_pwd: string, user: string) {
-    console.log("in the signup.tsx handler");
-    const parsedData = schema.parse({
-      passwd: entry_pwd,
-      username: user,
-    });
-    console.log(parsedData);
-    const response = await fetch("/api/auth/userPwd", {
-      method: "POST",
-      body: JSON.stringify(parsedData),
-      headers: {
-        "Content-Type": "application/json",
-      },
-      cache: "no-store",
-    });
-    if (response.ok) {
-      const { username } = parsedData;
-      const key = generateKey(username);
-      console.log(key);
-      router.push(`/home?li=${key}`);
-    }
-    if (!response.ok) {
-      alert("Failed to sign up, try again");
-    }
-  }
-
   return (
     <>
       <div className="flex h-screen bg-black">

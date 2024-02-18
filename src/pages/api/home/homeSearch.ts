@@ -14,37 +14,37 @@ export default async function handler(
     });
     const lgdin = await extractBody(req.body);
     console.log("logged in: ", lgdin);
-
-    const getUserID = sqlstring.format(
+    const getUserIDquery = sqlstring.format(
       "select userID from tableusers where username = ?",
       [lgdin]
     );
-    //probably need to change this
-    const userIDres = await pool.query(getUserID);
-    const userID = userIDres.rows[0].userID;
-    console.log("User ID in home search: ", userID);
-
     const totalTradesQuery = sqlstring.format(
-      "select count(*) from tableTrades where winLoss != 'no-entry' AND userID = ?",
-      [userID]
+      "select count(*) from tableTrades where winLoss != 'no-entry' AND userID = ?"
     );
     const totalWinsQuery = sqlstring.format(
-      "select count(*) from tableTrades where winLoss = 'win' AND userID = ?",
-      [userID]
+      "select count(*) from tableTrades where winLoss = 'win' AND userID = ?"
     );
     const bestPairQuery = sqlstring.format(
-      "select currencypair, count(*) as count from tabletrades where userID = ? group by currencypair order by count desc limit 1",
-      [userID]
+      "select currencypair, count(*) as count from tabletrades where userID = ? group by currencypair order by count desc limit 1"
     );
     const worstPairQuery = sqlstring.format(
-      "select currencypair, count(*) as count from tabletrades where userID = ? group by currencypair order by count asc limit 1",
-      [userID]
+      "select currencypair, count(*) as count from tabletrades where userID = ? group by currencypair order by count asc limit 1"
     );
-    const totalTradesResult = await pool.query(totalTradesQuery);
-    const totalWinsResult = await pool.query(totalWinsQuery);
-    const bestPairResult = await pool.query(bestPairQuery);
-    const worstPairResult = await pool.query(worstPairQuery);
-
+    const userIDres = await pool.query(getUserIDquery);
+    const totalTradesResult = await pool.query(
+      sqlstring.format(totalTradesQuery, userIDres.rows[0].userID)
+    );
+    const totalWinsResult = await pool.query(
+      sqlstring.format(totalWinsQuery, userIDres.rows[0].userID)
+    );
+    const bestPairResult = await pool.query(
+      sqlstring.format(bestPairQuery, userIDres.rows[0].userID)
+    );
+    const worstPairResult = await pool.query(
+      sqlstring.format(worstPairQuery, userIDres.rows[0].userID)
+    );
+    await pool.end();
+    console.log("User ID in home search: ", userIDres.rows[0].userID);
     const totalTrades = totalTradesResult.rows[0].count;
     const totalWins = totalWinsResult.rows[0].count;
     const bestPair = bestPairResult.rows[0].currencypair;

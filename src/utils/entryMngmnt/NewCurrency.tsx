@@ -1,10 +1,13 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useMutation } from "react-query";
-import { FormEvent } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { NextPage } from "next";
+import { useRouter } from "next/router";
 
 const NewCurrencyPage: NextPage = () => {
+  const [user, setUser] = useState<string | null>(null);
+  const router = useRouter();
   const mutation = useMutation({
     mutationFn: async (formData: string) => {
       const response = await fetch("/api/entrymngmnt/newCurrency", {
@@ -21,20 +24,41 @@ const NewCurrencyPage: NextPage = () => {
       console.error("Mutation error", error);
     },
   });
-
+  useEffect(() => {
+    async function getUser() {
+      const { li } = router.query;
+      if (li !== undefined) {
+        try {
+          const response = await fetch("/api/auth/IDFromHash", {
+            method: "POST",
+            body: JSON.stringify(li),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          const lgdin = await response.json();
+          setUser(lgdin);
+        } catch (error) {
+          console.error("Error fetching user: ", error);
+        }
+      }
+    }
+    getUser();
+  }, []);
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-
     const data = new FormData(event.target as HTMLFormElement);
     const pairabbr = data.get("Abbreviation");
     const reEntered = data.get("reEnteredAbbreviation");
+    const userid = user;
     if (pairabbr !== reEntered) {
       alert("Entries do not match");
       return;
     }
-    if (pairabbr === reEntered) {
+    if (pairabbr === reEntered && userid !== null && pairabbr !== null) {
       const dataPackage = JSON.stringify({
         pairabbr,
+        userid,
       });
       mutation.mutate(dataPackage);
     }
@@ -52,7 +76,6 @@ const NewCurrencyPage: NextPage = () => {
               <div className="flex flex-row w-[770px]">
                 <div className="p-2 w-full">
                   <h3>Enter the abbreviation of the currency ie GBP</h3>
-
                   <Input
                     id="Abbreviation"
                     name="Abbreviation"

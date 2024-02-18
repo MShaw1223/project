@@ -8,41 +8,38 @@ export const config = {
   runtime: "edge",
 };
 
-async function deleteAccountHandler(req: NextRequest, event: NextFetchEvent) {
-  const body = await extractBody(req);
-  const { accountname } = deleteAccountSchema.parse(body);
-  console.log("body", body);
-  console.log("accountname", accountname);
-
-  const pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-  });
-
-  const deleteAccountQuery = sqlstring.format(
-    `
-      DELETE FROM tableAccount WHERE accountname = (?)
-    `,
-    [accountname]
-  );
-
-  console.log("sql", deleteAccountQuery);
-
-  await pool.query(deleteAccountQuery);
-
-  event.waitUntil(pool.end());
-
-  console.log("Account deleted:", accountname);
-
-  return new Response(JSON.stringify({ accountname }), {
-    status: 200,
-  });
-}
-
 export default async function handler(req: NextRequest, event: NextFetchEvent) {
   if (req.method === "DELETE") {
-    return deleteAccountHandler(req, event);
+    try {
+      const body = await extractBody(req);
+      const { accountname } = deleteAccountSchema.parse(body);
+      console.log("body", body);
+      console.log("accountname", accountname);
+      const pool = new Pool({
+        connectionString: process.env.DATABASE_URL,
+      });
+      const deleteAccountQuery = sqlstring.format(
+        `
+      DELETE FROM tableAccounts WHERE accountname = (?)
+      `,
+        [accountname]
+      );
+      await pool.query(deleteAccountQuery);
+      event.waitUntil(pool.end());
+      console.log("sql: ", deleteAccountQuery);
+      console.log("Account deleted:", accountname);
+      return new Response(JSON.stringify({ accountname }), {
+        status: 200,
+      });
+    } catch (error) {
+      console.error("Issue deleting account: ", error);
+      return new Response("Error deleting account", {
+        status: 400,
+      });
+    }
+  } else {
+    return new Response("Method not allowed", {
+      status: 405,
+    });
   }
-  return new Response("Method not allowed", {
-    status: 405,
-  });
 }

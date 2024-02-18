@@ -12,36 +12,6 @@ interface AccountDropdownProps {
   onAccountChange: (account: string) => void;
 }
 
-const findAvailableAccounts = async (
-  li: string
-): Promise<string[] | undefined> => {
-  try {
-    const user = await fetch("/api/auth/userFromHash", {
-      method: "POST",
-      body: JSON.stringify(li),
-      headers: { "Content-Type": "application/json" },
-    });
-    const lgdin = await user.json();
-    const response = await fetch("/api/findAccounts", {
-      method: "POST",
-      body: lgdin,
-      cache: "no-store",
-    });
-    if (!response.ok) {
-      throw new Error("Failed to fetch available accounts");
-    }
-    const data = await response.json();
-    if (Array.isArray(data)) {
-      return data;
-    } else {
-      throw new Error("Invalid API response format");
-    }
-  } catch (error) {
-    console.error("Error in API call:", error);
-    throw error;
-  }
-};
-
 function AccountDropdown({ onAccountChange }: AccountDropdownProps) {
   const router = useRouter();
   const [availableAccounts, setAvailableAccounts] = useState<string[]>([]);
@@ -50,9 +20,27 @@ function AccountDropdown({ onAccountChange }: AccountDropdownProps) {
       try {
         const { li } = router.query;
         if (typeof li === "string") {
-          const account = await findAvailableAccounts(li);
-          if (account !== undefined) {
-            setAvailableAccounts(account);
+          const user = await fetch("/api/auth/userFromHash", {
+            method: "POST",
+            body: JSON.stringify(li),
+            headers: { "Content-Type": "application/json" },
+          });
+          const lgdin = await user.json();
+          const response = await fetch("/api/findAccounts", {
+            method: "POST",
+            body: lgdin,
+            cache: "no-store",
+          });
+          if (!response.ok) {
+            throw new Error("Failed to fetch available accounts");
+          }
+          const data = await response.json();
+          if (Array.isArray(data)) {
+            if (data !== undefined) {
+              setAvailableAccounts(data);
+            }
+          } else {
+            throw new Error("Invalid API response format");
           }
         }
       } catch (error) {
