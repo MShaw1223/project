@@ -13,7 +13,6 @@ import withAuth from "@/utils/protection/authorise";
 
 const tradeEntry: NextPage = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [acc, setAcc] = useState<string | null>(null);
   const [selectedAccount, setSelectedAccount] = useState<string>("");
   const [selectedBasePair, setSelectedBasePair] = useState<string>("");
   const [selectedQuotePair, setSelectedQuotePair] = useState<string>("");
@@ -48,16 +47,6 @@ const tradeEntry: NextPage = () => {
   const handleAccountChange = async (selectedAccount: string) => {
     setSelectedAccount(selectedAccount);
     console.log(selectedAccount);
-    if (selectedAccount !== "") {
-      const response = await fetch("/api/tradeEntry/getAccID", {
-        method: "POST",
-        body: JSON.stringify(selectedAccount),
-        headers: { "Content-Type": "application/json" },
-      });
-      const accntID = await response.json();
-      console.log("Account ID TE: ", accntID);
-      setAcc(accntID);
-    }
   };
   const handleBasePairChange = (selectedBasePair: string) => {
     setSelectedBasePair(selectedBasePair);
@@ -75,7 +64,6 @@ const tradeEntry: NextPage = () => {
     const entryPrice = parseFloat(data.get("entryPrice") as string);
     const stopLoss = parseFloat(data.get("stopLoss") as string);
     const takeProfit = parseFloat(data.get("takeProfit") as string);
-    const selectedAccountValue = selectedAccount;
     const riskRatio = parseFloat(data.get("riskRatio") as string);
     const BasePair = selectedBasePair;
     const QuotePair = selectedQuotePair;
@@ -102,7 +90,7 @@ const tradeEntry: NextPage = () => {
       alert("Invalid currency pair");
       return;
     }
-    if (selectedAccountValue === "") {
+    if (selectedAccount === "") {
       alert("Invalid account");
       return;
     }
@@ -134,14 +122,10 @@ const tradeEntry: NextPage = () => {
       alert("Invalid currency pair");
       return;
     }
-    if (!acc) {
-      alert("Account ID unavailable");
-      return;
-    }
     try {
       mutation.mutate(
         JSON.stringify({
-          accountID: acc,
+          accountID: selectedAccount,
           selectedPair: currencyPair,
           entryPrice,
           riskRatio,

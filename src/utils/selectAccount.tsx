@@ -9,39 +9,40 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 
 interface AccountDropdownProps {
-  onAccountChange: (account: string) => void;
+  onAccountChange: (account: { id: number; name: string }) => void;
 }
 
 function AccountDropdown({ onAccountChange }: AccountDropdownProps) {
   const router = useRouter();
-  const [availableAccounts, setAvailableAccounts] = useState<string[]>([]);
+  const [availableAccounts, setAvailableAccounts] = useState<
+    { id: number; name: string }[]
+  >([]);
   useEffect(() => {
     const fetchAvailableAccs = async () => {
       try {
         const { li } = router.query;
         if (typeof li === "string") {
-          const user = await fetch("/api/auth/userFromHash", {
-            method: "POST",
+          const id = await fetch("/api/auth/IDFromHash", {
             body: JSON.stringify(li),
+            method: "POST",
             headers: { "Content-Type": "application/json" },
           });
-          const lgdin = await user.json();
+          const lgdin = await id.json();
           const response = await fetch("/api/findAccounts", {
             method: "POST",
-            body: lgdin,
+            body: JSON.stringify(lgdin),
             cache: "no-store",
           });
           if (!response.ok) {
             throw new Error("Failed to fetch available accounts");
           }
           const data = await response.json();
-          if (Array.isArray(data)) {
-            if (data !== undefined) {
-              setAvailableAccounts(data);
-            }
-          } else {
-            throw new Error("Invalid API response format");
+          if (data !== undefined) {
+            console.log("Data in selAcc: ", data);
+            setAvailableAccounts(data);
           }
+        } else {
+          throw new Error("Invalid URL format");
         }
       } catch (error) {
         console.error("Error fetching available accounts:", error);
@@ -49,7 +50,10 @@ function AccountDropdown({ onAccountChange }: AccountDropdownProps) {
     };
     fetchAvailableAccs();
   }, [router.query]);
-  const handleValueChange = (selectedAcc: string) => {
+  const handleValueChange = async (selectedAcc: {
+    id: number;
+    name: string;
+  }) => {
     onAccountChange(selectedAcc);
   };
   return (
@@ -59,9 +63,9 @@ function AccountDropdown({ onAccountChange }: AccountDropdownProps) {
           <SelectValue placeholder="Account Select..." />
         </SelectTrigger>
         <SelectContent>
-          {availableAccounts.map((account, index) => (
-            <SelectItem key={index} value={account}>
-              {account}
+          {availableAccounts.map((account) => (
+            <SelectItem key={account.id} value={account.name}>
+              {account.name}
             </SelectItem>
           ))}
         </SelectContent>
