@@ -22,10 +22,9 @@ export default async function handler(req: NextRequest, event: NextFetchEvent) {
         stopLoss,
         takeProfit,
         tradeNotes,
-        username,
         selectedOutcome: winLoss,
       } = entries_schema.parse(body);
-      console.log("body: ", body);
+      console.log("entries body: ", body);
       const pool = new Pool({
         connectionString: process.env.DATABASE_URL,
       });
@@ -47,7 +46,7 @@ export default async function handler(req: NextRequest, event: NextFetchEvent) {
       );
       await pool.query(SQLstatement);
       event.waitUntil(pool.end());
-      console.log("SQLstatement", SQLstatement);
+      console.log("SQLstatement: ", SQLstatement);
       const responsePayload = {
         entryPrice,
         stopLoss,

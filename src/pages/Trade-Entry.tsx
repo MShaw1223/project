@@ -13,7 +13,7 @@ import withAuth from "@/utils/protection/authorise";
 
 const tradeEntry: NextPage = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [acc, setAcc] = useState<string | null>(null);
+  const [accntID, setAccntID] = useState<string | null>(null);
   const [selectedAccount, setSelectedAccount] = useState<string>("");
   const [selectedBasePair, setSelectedBasePair] = useState<string>("");
   const [selectedQuotePair, setSelectedQuotePair] = useState<string>("");
@@ -54,9 +54,9 @@ const tradeEntry: NextPage = () => {
         body: JSON.stringify(selectedAccount),
         headers: { "Content-Type": "application/json" },
       });
-      const accntID = await response.json();
+      accntID = await response.json();
       console.log("Account ID TE: ", accntID);
-      setAcc(accntID);
+      setAccntID(accntID);
     }
   };
   const handleBasePairChange = (selectedBasePair: string) => {
