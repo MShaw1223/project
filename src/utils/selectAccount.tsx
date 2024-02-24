@@ -9,14 +9,12 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 
 interface AccountDropdownProps {
-  onAccountChange: (account: { id: number; name: string }) => void;
+  onAccountChange: (account: string) => void;
 }
 
 function AccountDropdown({ onAccountChange }: AccountDropdownProps) {
   const router = useRouter();
-  const [availableAccounts, setAvailableAccounts] = useState<
-    { id: number; name: string }[]
-  >([]);
+  const [availableAccounts, setAvailableAccounts] = useState<string[]>([]);
   useEffect(() => {
     const fetchAvailableAccs = async () => {
       try {
@@ -50,22 +48,19 @@ function AccountDropdown({ onAccountChange }: AccountDropdownProps) {
     };
     fetchAvailableAccs();
   }, [router.query]);
-  const handleValueChange = async (selectedAcc: {
-    id: number;
-    name: string;
-  }) => {
+  const handleValueChange = async (selectedAcc: string) => {
     onAccountChange(selectedAcc);
   };
   return (
     <>
-      <Select onValueChange={(selectedAcc) => handleValueChange(selectedAcc)}>
+      <Select onValueChange={handleValueChange}>
         <SelectTrigger className="w-[200px]">
           <SelectValue placeholder="Account Select..." />
         </SelectTrigger>
         <SelectContent>
-          {availableAccounts.map((account) => (
-            <SelectItem key={account.id} value={account.name}>
-              {account.name}
+          {availableAccounts.map((account, index) => (
+            <SelectItem key={index} value={account}>
+              {account}
             </SelectItem>
           ))}
         </SelectContent>

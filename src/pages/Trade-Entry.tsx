@@ -27,6 +27,7 @@ const tradeEntry: NextPage = () => {
         },
         cache: "no-store",
       });
+      console.log("Response in TE: ", response);
       if (!response.ok) {
         throw new Error("Failed to submit trade data");
       }
@@ -58,7 +59,19 @@ const tradeEntry: NextPage = () => {
     setSelectedOutcome(selectedOutcome);
   };
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function getID(selectedAccount: string) {
+    const acctID = await fetch("/api/tradeEntry/findActID", {
+      method: "POST",
+      body: JSON.stringify(selectedAccount),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const lgdin = await acctID.json();
+    console.log("User ID: ", lgdin);
+    return lgdin;
+  }
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const data = new FormData(event.target as HTMLFormElement);
     const entryPrice = parseFloat(data.get("entryPrice") as string);
@@ -70,6 +83,20 @@ const tradeEntry: NextPage = () => {
     const currencyPair = BasePair + QuotePair;
     const tradeNotes = data.get("tradeNotes");
     const winOrLoss = selectedOutcome;
+    const acctID = await getID(selectedAccount);
+
+    console.log("Stuff :", {
+      entryPrice,
+      stopLoss,
+      takeProfit,
+      riskRatio,
+      BasePair,
+      QuotePair,
+      currencyPair,
+      tradeNotes,
+      winOrLoss,
+      acctID,
+    });
     if (!entryPrice) {
       alert("Invalid entry price");
       return;
@@ -125,7 +152,7 @@ const tradeEntry: NextPage = () => {
     try {
       mutation.mutate(
         JSON.stringify({
-          accountID: selectedAccount,
+          accountID: acctID,
           selectedPair: currencyPair,
           entryPrice,
           riskRatio,
