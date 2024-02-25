@@ -24,7 +24,7 @@ export default async function handler(req: NextRequest, event: NextFetchEvent) {
         tradeNotes,
         selectedOutcome: winLoss,
       } = entries_schema.parse(body);
-      console.log("body: ", body);
+      console.log("entries body: ", body);
       const pool = new Pool({
         connectionString: process.env.DATABASE_URL,
       });

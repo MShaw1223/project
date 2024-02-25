@@ -72,7 +72,6 @@ const tradeEntry: NextPage = () => {
 
   const handleAccountChange = async (selectedAccount: string) => {
     setSelectedAccount(selectedAccount);
-    console.log(selectedAccount);
   };
   const handleBasePairChange = (selectedBasePair: string) => {
     setSelectedBasePair(selectedBasePair);
