@@ -51,7 +51,6 @@ const entries_schema = zod.object({
       message: "Risk ratio must be greater than 0",
     }),
   selectedOutcome: zod.string(),
-  username: zod.string(),
   accountID: zod.number(),
 });
 

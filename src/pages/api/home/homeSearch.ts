@@ -24,12 +24,16 @@ export default async function handler(
     const totalWinsQuery = sqlstring.format(
       "select count(*) from tableTrades where winLoss = 'win' AND userID = ?"
     );
+    //  get the count of wins and ttl trades
     const bestPairQuery = sqlstring.format(
       "select currencypair, count(*) as count from tabletrades where userID = ? group by currencypair order by count desc limit 1"
     );
     const worstPairQuery = sqlstring.format(
       "select currencypair, count(*) as count from tabletrades where userID = ? group by currencypair order by count asc limit 1"
     );
+    // get the count of wins and losses
+    // and order by the worst or best
+    // then select the worst for loss and the best for win
     const userIDres = await pool.query(getUserIDquery);
     const totalTradesResult = await pool.query(
       sqlstring.format(totalTradesQuery, userIDres.rows[0].userID)

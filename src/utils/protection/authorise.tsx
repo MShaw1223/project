@@ -6,11 +6,13 @@ function withAuth(Component: ComponentType) {
     const router = useRouter();
 
     useEffect(() => {
-      const { li } = router.query;
-      const loggedIn = li;
-      if (!loggedIn) {
-        router.push("/");
-      }
+      const getLi = async () => {
+        const { li } = router.query;
+        if (typeof li !== "string") {
+          router.push("/");
+        }
+      };
+      getLi();
     }, []);
 
     return <Component {...props} />;

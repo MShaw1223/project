@@ -10,10 +10,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { BasePairDropdown, QuotePairDropdown } from "@/utils/selectPair";
 import { OutcomeDropdown } from "@/utils/tradeEntry/outcome";
 import withAuth from "@/utils/protection/authorise";
+// import { useRouter } from "next/router";
+// import Head from "next/head";
 
 const tradeEntry: NextPage = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [accntID, setAccntID] = useState<string | null>(null);
   const [selectedAccount, setSelectedAccount] = useState<string>("");
   const [selectedBasePair, setSelectedBasePair] = useState<string>("");
   const [selectedQuotePair, setSelectedQuotePair] = useState<string>("");
@@ -28,6 +29,7 @@ const tradeEntry: NextPage = () => {
         },
         cache: "no-store",
       });
+      console.log("Response in TE: ", response);
       if (!response.ok) {
         throw new Error("Failed to submit trade data");
       }
@@ -44,20 +46,32 @@ const tradeEntry: NextPage = () => {
       console.error("Mutation error:", error);
     },
   });
+  // const router = useRouter();
+  // const [user, setUser] = useState<string | null>(null);
+  // useEffect(() => {
+  //   async function getUser() {
+  //     const { li } = router.query;
+  //     console.log(li);
+  //     if (li !== undefined) {
+  //       try {
+  //         const user = await fetch("/api/auth/userFromHash", {
+  //           method: "POST",
+  //           body: JSON.stringify(li),
+  //           headers: { "Content-Type": "application/json" },
+  //         });
+  //         const lgdin = await user.json();
+  //         console.log("logged in: ", lgdin);
+  //         setUser(lgdin);
+  //       } catch (error) {
+  //         console.error("Error fetching user: ", error);
+  //       }
+  //     }
+  //   }
+  //   getUser();
+  // }, []);
 
   const handleAccountChange = async (selectedAccount: string) => {
     setSelectedAccount(selectedAccount);
-    console.log(selectedAccount);
-    if (selectedAccount !== "") {
-      const response = await fetch("/api/tradeEntry/getAccID", {
-        method: "POST",
-        body: JSON.stringify(selectedAccount),
-        headers: { "Content-Type": "application/json" },
-      });
-      accntID = await response.json();
-      console.log("Account ID TE: ", accntID);
-      setAccntID(accntID);
-    }
   };
   const handleBasePairChange = (selectedBasePair: string) => {
     setSelectedBasePair(selectedBasePair);
@@ -69,19 +83,44 @@ const tradeEntry: NextPage = () => {
     setSelectedOutcome(selectedOutcome);
   };
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function getID(selectedAccount: string) {
+    const acctID = await fetch("/api/tradeEntry/findActID", {
+      method: "POST",
+      body: JSON.stringify(selectedAccount),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const lgdin = await acctID.json();
+    console.log("User ID: ", lgdin);
+    return lgdin;
+  }
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const data = new FormData(event.target as HTMLFormElement);
     const entryPrice = parseFloat(data.get("entryPrice") as string);
     const stopLoss = parseFloat(data.get("stopLoss") as string);
     const takeProfit = parseFloat(data.get("takeProfit") as string);
-    const selectedAccountValue = selectedAccount;
     const riskRatio = parseFloat(data.get("riskRatio") as string);
     const BasePair = selectedBasePair;
     const QuotePair = selectedQuotePair;
     const currencyPair = BasePair + QuotePair;
     const tradeNotes = data.get("tradeNotes");
     const winOrLoss = selectedOutcome;
+    const acctID = await getID(selectedAccount);
+
+    console.log("Stuff :", {
+      entryPrice,
+      stopLoss,
+      takeProfit,
+      riskRatio,
+      BasePair,
+      QuotePair,
+      currencyPair,
+      tradeNotes,
+      winOrLoss,
+      acctID,
+    });
     if (!entryPrice) {
       alert("Invalid entry price");
       return;
@@ -102,7 +141,7 @@ const tradeEntry: NextPage = () => {
       alert("Invalid currency pair");
       return;
     }
-    if (selectedAccountValue === "") {
+    if (selectedAccount === "") {
       alert("Invalid account");
       return;
     }
@@ -134,14 +173,10 @@ const tradeEntry: NextPage = () => {
       alert("Invalid currency pair");
       return;
     }
-    if (!acc) {
-      alert("Account ID unavailable");
-      return;
-    }
     try {
       mutation.mutate(
         JSON.stringify({
-          accountID: acc,
+          accountID: acctID,
           selectedPair: currencyPair,
           entryPrice,
           riskRatio,
@@ -157,6 +192,9 @@ const tradeEntry: NextPage = () => {
   }
   return (
     <>
+      {/* <Head>
+        <title>Trade Entry | {user ? user : ""}</title>
+      </Head> */}
       <div className="flex h-screen bg-slate-200">
         <Menu isOpen={menuOpen} setIsOpen={setMenuOpen} />
         <div

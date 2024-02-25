@@ -8,6 +8,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   try {
+    // TODO: get this to work based off of interaction with the dropdown
     const li = await req.body;
     if (li !== undefined) {
       const pool = new Pool({

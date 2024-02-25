@@ -59,6 +59,7 @@ const searchEntry: NextPage = () => {
         <h1 className="p-2 font-bold text-lg underline underline-offset-8">
           Search Entries
         </h1>
+        {/* TODO: add a dropdown that selects the accounts available for the user logged in */}
         <Table className="bg-gray-400 rounded-2xl">
           <TableCaption className="text-gray-500">
             A Table of trades taken.

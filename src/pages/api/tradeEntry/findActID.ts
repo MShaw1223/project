@@ -9,29 +9,26 @@ export default async function handler(
   // check request method
   if (req.method === "POST") {
     try {
-      const userid = await req.body;
+      const accname = await req.body;
       const pool = new Pool({
         connectionString: process.env.DATABASE_URL,
       });
-      //  finds accounts with the same user as the userid in the URL
+      // finds accounts with the same accountname as the one given the request
       // orders by the account names
       const sqlquery = sqlstring.format(
         `
-      SELECT accountname from tableAccounts
-      WHERE userID = ?
-      ORDER BY accountName
+      SELECT accountid from tableAccounts
+      WHERE accountname = ?
       `,
-        [userid]
+        [accname]
       );
       const result = await pool.query(sqlquery);
       await pool.end();
       console.log(sqlquery);
-      // takes the array of rows from the result
-      // and makes an array of account names
+      // returns the account id
       console.log("accinfo: ", result.rows[0]);
-      const array = result.rows.map((row) => row.accountname);
-      console.log("array: ", array);
-      res.status(200).json(array); // return the account names and success (200)
+      const response = result.rows[0].accountid;
+      res.status(200).json(response); // return the account id and success (200)
     } catch (error) {
       console.error("Error executing query, details:", error);
       res.status(400).end();

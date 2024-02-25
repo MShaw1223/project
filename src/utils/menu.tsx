@@ -5,7 +5,7 @@ import {
   FaUserFriends,
   FaPencilAlt,
 } from "react-icons/fa";
-import { MdOutlineAccountBalance, MdOutlineManageSearch } from "react-icons/md";
+import { MdOutlineAccountBalance } from "react-icons/md";
 import {
   BsFillJournalBookmarkFill,
   BsChevronBarLeft,
@@ -45,7 +45,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
               </div>
             </div>
 
-            <Separator className="ml-9 my-7 bg-white" />
+            <Separator className="ml-9 my-7 bg-inherit" />
 
             <Link href={`/home?li=${value}`}>
               <div
@@ -121,7 +121,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
               </div>
             </Link>
 
-            <Separator className="ml-9 my-7 bg-white" />
+            <Separator className="ml-9 my-7 bg-inherit" />
 
             <Link href="/">
               <div className="flex pl-5 py-4 mx-3 focus:outline-none font-bold hover:bg-gray-500 rounded-full">
@@ -143,7 +143,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
                 <BsChevronBarRight className="text-white text-2xl" />
               )}
             </div>
-            <div className="h-screen flex flex-col items-center justify-center space-y-7">
+            <div className="h-screen flex flex-col items-center justify-center space-y-4">
               <Link href={`/home?li=${value}`}>
                 <div
                   className={`flex p-2 focus:outline-none font-bold hover:bg-gray-500 ${

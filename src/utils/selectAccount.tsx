@@ -20,28 +20,27 @@ function AccountDropdown({ onAccountChange }: AccountDropdownProps) {
       try {
         const { li } = router.query;
         if (typeof li === "string") {
-          const user = await fetch("/api/auth/userFromHash", {
-            method: "POST",
+          const id = await fetch("/api/auth/IDFromHash", {
             body: JSON.stringify(li),
+            method: "POST",
             headers: { "Content-Type": "application/json" },
           });
-          const lgdin = await user.json();
+          const lgdin = await id.json();
           const response = await fetch("/api/findAccounts", {
             method: "POST",
-            body: lgdin,
+            body: JSON.stringify(lgdin),
             cache: "no-store",
           });
           if (!response.ok) {
             throw new Error("Failed to fetch available accounts");
           }
           const data = await response.json();
-          if (Array.isArray(data)) {
-            if (data !== undefined) {
-              setAvailableAccounts(data);
-            }
-          } else {
-            throw new Error("Invalid API response format");
+          if (data !== undefined) {
+            console.log("Data in selAcc: ", data);
+            setAvailableAccounts(data);
           }
+        } else {
+          throw new Error("Invalid URL format");
         }
       } catch (error) {
         console.error("Error fetching available accounts:", error);
@@ -49,7 +48,7 @@ function AccountDropdown({ onAccountChange }: AccountDropdownProps) {
     };
     fetchAvailableAccs();
   }, [router.query]);
-  const handleValueChange = (selectedAcc: string) => {
+  const handleValueChange = async (selectedAcc: string) => {
     onAccountChange(selectedAcc);
   };
   return (
