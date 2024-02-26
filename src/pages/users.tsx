@@ -5,7 +5,6 @@ import { FaUserFriends } from "react-icons/fa";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Menu from "@/utils/menu";
 import DeleteUser from "@/utils/users/DeleteUser";
-import UserCreate from "@/utils/users/createUser";
 import EditUser from "@/utils/users/EditUser";
 import { useState } from "react";
 import withAuth from "@/utils/protection/authorise";
