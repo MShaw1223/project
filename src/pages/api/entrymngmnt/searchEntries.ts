@@ -8,23 +8,24 @@ export default async function handler(
   res: NextApiResponse
 ) {
   try {
-    // TODO: get this to work based off of interaction with the dropdown
-    const li = await req.body;
-    if (li !== undefined) {
+    console.log("SE reqbody: ", req.body);
+
+    const accountid = await req.body;
+    if (accountid !== undefined) {
       const pool = new Pool({
         connectionString: process.env.DATABASE_URL,
       });
       const sqlquery = sqlstring.format(
-        "SELECT * FROM tableTrades WHERE tradeid = ?;",
-        [li]
+        "SELECT * FROM tableTrades WHERE accountid = ?;",
+        [accountid]
       );
       const result = await pool.query(sqlquery);
       await pool.end();
       const rows = result.rows;
-      console.log("Result searchEntries.ts:", rows);
+      console.log("Result searchEntries.ts: ", rows);
       res.status(200).json(result.rows);
     } else {
-      throw new Error("Li is undefined");
+      throw new Error("AccountID is undefined");
     }
   } catch {
     console.error("Unable to execute query:", error);

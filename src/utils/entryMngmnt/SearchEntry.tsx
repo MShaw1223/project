@@ -8,8 +8,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import { useState } from "react";
+import AccountDropdown from "../selectAccount";
 
 type TradeData = {
   tradesid: string;
@@ -24,49 +24,38 @@ type TradeData = {
 
 const searchEntry: NextPage = () => {
   const [data, setData] = useState<TradeData[]>([]);
-  const [selectedAccount, setSelectedAccount] = useState<string>("");
-  const [loggedIn, setLi] = useState<string>("");
-  const router = useRouter();
-  useEffect(() => {
-    async function getID() {
-      const { li } = router.query;
-      if (li !== undefined) {
-        try {
-          const user = await fetch("/api/auth/IDFromHash", {
-            method: "POST",
-            body: JSON.stringify(li),
-            headers: { "Content-Type": "application/json" },
-          });
-          const lgdin = await user.json();
-          console.log("logged in: ", lgdin);
-          setLi(lgdin);
-          tableData(selectedAccount, loggedIn);
-        } catch (error) {
-          console.error("Error fetching user: ", error);
-        }
-      }
-    }
-    getID();
-  }, []);
-  
-  function tableData(selectedAccount: string, loggedIn: string){
-    const reqBody = {
-      loggedIn,
-      selectedAccount
-    }
+
+  async function tableData(account: string) {
+    console.log("Account: ", account);
     const response = await fetch("/api/entrymngmnt/searchEntries", {
       method: "POST",
-      body: JSON.stringify(reqBody),
+      body: JSON.stringify(account),
       headers: { "Content-Type": "application/json" },
     });
-    const tradeData: TradeData[] = await response.json();
-    console.log("Fetched data:", tradeData);
-    setData(tradeData);
+    console.log("response from searchEntries: ", response);
+    if (response.ok) {
+      const tradeData: TradeData[] = await response.json();
+      console.log("Fetched data: ", tradeData);
+      setData(tradeData);
+    } else {
+      throw new Error("Problem with API response");
+    }
   }
-  
-  
-  const handleAccountChange = async (selectedAccount: string) => {
-    setSelectedAccount(selectedAccount);
+  async function getID(account: string) {
+    const ID = await fetch("/api/tradeEntry/findActID", {
+      method: "POST",
+      body: JSON.stringify(account),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const response = await ID.json();
+    return response;
+  }
+  const handleAccountChange = async (selAccount: string) => {
+    console.log("Selected Account: ", selAccount);
+    const accountid = await getID(selAccount);
+    tableData(accountid);
   };
 
   return (
@@ -75,18 +64,16 @@ const searchEntry: NextPage = () => {
         <h1 className="p-2 font-bold text-lg underline underline-offset-8">
           Search Entries
         </h1>
-        {/* TODO: add a dropdown that selects the accounts available for the user logged in 
-        use the accounts dd from TE page */}
-        <Table className="bg-gray-400 rounded-2xl">
+        <div className="p-1 m1">
+          <AccountDropdown
+            onAccountChange={handleAccountChange}
+          ></AccountDropdown>
+        </div>
+        <Table className="bg-gray-400 rounded-2xl p-1 m-1">
           <TableCaption className="text-gray-500">
             A Table of trades taken.
           </TableCaption>
           <TableHeader>
-          <div className="p-3">
-            <AccountDropdown
-              onAccountChange={handleAccountChange}
-            ></AccountDropdown>
-          </div>
             <TableRow>
               <TableHead className="text-slate-200">Trade ID</TableHead>
               <TableHead className="text-slate-200">entryprice</TableHead>

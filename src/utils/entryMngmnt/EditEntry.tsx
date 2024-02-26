@@ -39,7 +39,7 @@ const EditEntry: NextPage = () => {
   });
 
   const handleValueChange = (element: string) => {
-    setSelectedEdit(selectedEdit);
+    setSelectedEdit(element);
   };
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -48,17 +48,84 @@ const EditEntry: NextPage = () => {
     const data = new FormData(event.target as HTMLFormElement);
     const tradesid = Number(data.get("tradeID"));
     const editedData = data.get("editedData");
-    const dataPackage = JSON.stringify({
-      tradesid,
-      editedData,
-    });
-    console.log(dataPackage);
-    mutation.mutate(dataPackage);
+    const fieldToChange = selectedEdit;
+    if (selectedEdit === "entryprice") {
+      const dataPackage = JSON.stringify({
+        tradesid,
+        fieldToChange,
+        editedData: Number(editedData),
+      });
+      console.log(dataPackage);
+      mutation.mutate(dataPackage);
+    }
+    if (selectedEdit === "stoploss") {
+      const dataPackage = JSON.stringify({
+        tradesid,
+        fieldToChange,
+        editedData,
+      });
+      console.log(dataPackage);
+      mutation.mutate(dataPackage);
+    }
+    if (selectedEdit === "takeprofit") {
+      const dataPackage = JSON.stringify({
+        tradesid,
+        fieldToChange,
+        editedData,
+      });
+      console.log(dataPackage);
+      mutation.mutate(dataPackage);
+    }
+    if (selectedEdit === "riskratio") {
+      const dataPackage = JSON.stringify({
+        tradesid,
+        fieldToChange,
+        editedData,
+      });
+      console.log(dataPackage);
+      mutation.mutate(dataPackage);
+    }
+    if (selectedEdit === "currencypair") {
+      const dataPackage = JSON.stringify({
+        tradesid,
+        fieldToChange,
+        editedData,
+      });
+      console.log(dataPackage);
+      mutation.mutate(dataPackage);
+    }
+    if (selectedEdit === "account") {
+      const dataPackage = JSON.stringify({
+        tradesid,
+        fieldToChange,
+        editedData,
+      });
+      console.log(dataPackage);
+      mutation.mutate(dataPackage);
+    }
+    if (selectedEdit === "notes") {
+      const dataPackage = JSON.stringify({
+        tradesid,
+        fieldToChange,
+        editedData,
+      });
+      console.log(dataPackage);
+      mutation.mutate(dataPackage);
+    }
+    if (selectedEdit === "outcome") {
+      const dataPackage = JSON.stringify({
+        tradesid,
+        fieldToChange,
+        editedData,
+      });
+      console.log(dataPackage);
+      mutation.mutate(dataPackage);
+    }
   }
   return (
     <>
       <div className="flex">
-        {mutation.isLoading && <p>Submitting New Edit</p>}
+        {mutation.isLoading && <p>Submitting New Edit...</p>}
         {!mutation.isLoading && (
           <div className="flex items-center justify-center">
             <form onSubmit={handleSubmit}>
@@ -80,18 +147,13 @@ const EditEntry: NextPage = () => {
               </div>
               <div className="flex flex-row p-2">
                 <Textarea
-                  id="editeddata"
-                  name="editeddata"
+                  id="editedData"
+                  name="editedData"
                   placeholder="Enter edits here..."
                   className="w-full h-[180px] resize-none border text-sm"
                   maxLength={1250}
                 />
               </div>
-              {/* 
-              this was p-4 
-              however theres a chance the submit button can be pressed accidentally trying p-7
-              trying m-2
-              */}
               <div className="p-8 m-2">
                 <Button type="submit" className="w-full">
                   Submit Change

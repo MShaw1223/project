@@ -11,14 +11,17 @@ const schema = zod.object({
   passwd: zod.string().max(60),
   username: zod.string().max(15),
 });
+// validates the user inputs to ensure there are no unexpected values entered
 
 const login: NextPage = () => {
+  // determines if the password is hidden or not when entering it during login
   const [showPassword, setShowPassword] = useState(false);
 
   const router = useRouter();
-
+  // when user presses the login button it triggers the handleSubmit function
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    // gets all the information from the login form
     const data = new FormData(event.target as HTMLFormElement);
     const unparseduser = data.get("user") as string;
     const unparsedpassword = data.get("password") as string;
@@ -27,6 +30,7 @@ const login: NextPage = () => {
       passwd: unparsedpassword,
     });
     console.log(parsedData);
+    // sends post request with the users entered information as the request body, with data not being cached on the server
     const response = await fetch("/api/auth/loginApi", {
       method: "POST",
       body: JSON.stringify({
@@ -39,6 +43,7 @@ const login: NextPage = () => {
       cache: "no-store",
     });
     if (response.ok) {
+      // if the response returns a 200, it will take the username entered above and generate a key to use as a logged in identifier
       const { username } = parsedData;
       const key = generateKey(username);
       console.log(key);
@@ -46,7 +51,6 @@ const login: NextPage = () => {
     } else if (!response.ok) {
       alert("Failed to login, try again");
     }
-    // return response.json();
   }
 
   return (

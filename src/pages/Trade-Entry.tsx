@@ -92,7 +92,7 @@ const tradeEntry: NextPage = () => {
       },
     });
     const lgdin = await acctID.json();
-    console.log("User ID: ", lgdin);
+    console.log("Account ID: ", lgdin);
     return lgdin;
   }
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
