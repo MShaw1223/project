@@ -109,7 +109,7 @@ const tradeEntry: NextPage = () => {
     const winOrLoss = selectedOutcome;
     const acctID = await getID(selectedAccount);
 
-    console.log("Stuff :", {
+    console.log("Trade Data: ", {
       entryPrice,
       stopLoss,
       takeProfit,

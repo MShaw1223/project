@@ -25,15 +25,11 @@ const userPage: NextPage = () => {
           <span className="ml-16 font-bold">Users</span>
         </div>
         <div className="flex-1 overflow-auto justify-center p-2">
-          <Tabs defaultValue="create" className="p-3 m-1">
+          <Tabs defaultValue="edit" className="p-3 m-1">
             <TabsList className="m-2 mb-6">
-              <TabsTrigger value="create">Create a User</TabsTrigger>
-              <TabsTrigger value="edit">Edit a User</TabsTrigger>
-              <TabsTrigger value="delete">Delete a User</TabsTrigger>
+              <TabsTrigger value="edit">Edit User</TabsTrigger>
+              <TabsTrigger value="delete">Delete User</TabsTrigger>
             </TabsList>
-            <TabsContent value="create">
-              <UserCreate />
-            </TabsContent>
             <TabsContent value="edit">
               <EditUser />
             </TabsContent>

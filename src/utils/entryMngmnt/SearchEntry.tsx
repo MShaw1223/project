@@ -24,9 +24,11 @@ type TradeData = {
 
 const searchEntry: NextPage = () => {
   const [data, setData] = useState<TradeData[]>([]);
+  const [selectedAccount, setSelectedAccount] = useState<string>("");
+  const [loggedIn, setLi] = useState<string>("");
   const router = useRouter();
   useEffect(() => {
-    async function fetchData() {
+    async function getID() {
       const { li } = router.query;
       if (li !== undefined) {
         try {
@@ -37,21 +39,35 @@ const searchEntry: NextPage = () => {
           });
           const lgdin = await user.json();
           console.log("logged in: ", lgdin);
-          const response = await fetch("/api/entrymngmnt/searchEntries", {
-            method: "POST",
-            body: JSON.stringify(lgdin),
-            headers: { "Content-Type": "application/json" },
-          });
-          const tradeData: TradeData[] = await response.json();
-          console.log("Fetched data:", tradeData);
-          setData(tradeData);
+          setLi(lgdin);
+          tableData(selectedAccount, loggedIn);
         } catch (error) {
           console.error("Error fetching user: ", error);
         }
       }
     }
-    fetchData();
+    getID();
   }, []);
+  
+  function tableData(selectedAccount: string, loggedIn: string){
+    const reqBody = {
+      loggedIn,
+      selectedAccount
+    }
+    const response = await fetch("/api/entrymngmnt/searchEntries", {
+      method: "POST",
+      body: JSON.stringify(reqBody),
+      headers: { "Content-Type": "application/json" },
+    });
+    const tradeData: TradeData[] = await response.json();
+    console.log("Fetched data:", tradeData);
+    setData(tradeData);
+  }
+  
+  
+  const handleAccountChange = async (selectedAccount: string) => {
+    setSelectedAccount(selectedAccount);
+  };
 
   return (
     <>
@@ -59,12 +75,18 @@ const searchEntry: NextPage = () => {
         <h1 className="p-2 font-bold text-lg underline underline-offset-8">
           Search Entries
         </h1>
-        {/* TODO: add a dropdown that selects the accounts available for the user logged in */}
+        {/* TODO: add a dropdown that selects the accounts available for the user logged in 
+        use the accounts dd from TE page */}
         <Table className="bg-gray-400 rounded-2xl">
           <TableCaption className="text-gray-500">
             A Table of trades taken.
           </TableCaption>
           <TableHeader>
+          <div className="p-3">
+            <AccountDropdown
+              onAccountChange={handleAccountChange}
+            ></AccountDropdown>
+          </div>
             <TableRow>
               <TableHead className="text-slate-200">Trade ID</TableHead>
               <TableHead className="text-slate-200">entryprice</TableHead>
