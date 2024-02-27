@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { FormEvent, useState } from "react";
+import { useState, FormEvent } from "react";
 import { NextPage } from "next";
 import { BiSolidHide, BiSolidShow } from "react-icons/bi";
 import zod from "zod";
@@ -23,11 +23,9 @@ const login: NextPage = () => {
     event.preventDefault();
     // gets all the information from the login form
     const data = new FormData(event.target as HTMLFormElement);
-    const unparseduser = data.get("user") as string;
-    const unparsedpassword = data.get("password") as string;
     const parsedData = schema.parse({
-      username: unparseduser,
-      passwd: unparsedpassword,
+      username: data.get("user") as string,
+      passwd: data.get("password") as string,
     });
     console.log(parsedData);
     // sends post request with the users entered information as the request body, with data not being cached on the server

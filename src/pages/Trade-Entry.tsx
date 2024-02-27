@@ -1,7 +1,7 @@
 import AccountDropdown from "@/utils/selectAccount";
 import { Button } from "@/components/ui/button";
 import { useMutation } from "react-query";
-import { useState, FormEvent } from "react";
+import * as React from "react";
 import { NextPage } from "next";
 import Menu from "@/utils/menu";
 import { FaPencilAlt } from "react-icons/fa";
@@ -10,15 +10,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { BasePairDropdown, QuotePairDropdown } from "@/utils/selectPair";
 import { OutcomeDropdown } from "@/utils/tradeEntry/outcome";
 import withAuth from "@/utils/protection/authorise";
-// import { useRouter } from "next/router";
-// import Head from "next/head";
 
 const tradeEntry: NextPage = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [selectedAccount, setSelectedAccount] = useState<string>("");
-  const [selectedBasePair, setSelectedBasePair] = useState<string>("");
-  const [selectedQuotePair, setSelectedQuotePair] = useState<string>("");
-  const [selectedOutcome, setSelectedOutcome] = useState<string>("");
+  const [menuOpen, setMenuOpen] = React.useState(false);
+  const [selectedAccount, setSelectedAccount] = React.useState<string>("");
+  const [selectedBasePair, setSelectedBasePair] = React.useState<string>("");
+  const [selectedQuotePair, setSelectedQuotePair] = React.useState<string>("");
+  const [selectedOutcome, setSelectedOutcome] = React.useState<string>("");
   const mutation = useMutation({
     mutationFn: async (formData: string) => {
       const response = await fetch("/api/tradeEntry/entries", {
@@ -46,30 +44,6 @@ const tradeEntry: NextPage = () => {
       console.error("Mutation error:", error);
     },
   });
-  // const router = useRouter();
-  // const [user, setUser] = useState<string | null>(null);
-  // useEffect(() => {
-  //   async function getUser() {
-  //     const { li } = router.query;
-  //     console.log(li);
-  //     if (li !== undefined) {
-  //       try {
-  //         const user = await fetch("/api/auth/userFromHash", {
-  //           method: "POST",
-  //           body: JSON.stringify(li),
-  //           headers: { "Content-Type": "application/json" },
-  //         });
-  //         const lgdin = await user.json();
-  //         console.log("logged in: ", lgdin);
-  //         setUser(lgdin);
-  //       } catch (error) {
-  //         console.error("Error fetching user: ", error);
-  //       }
-  //     }
-  //   }
-  //   getUser();
-  // }, []);
-
   const handleAccountChange = async (selectedAccount: string) => {
     setSelectedAccount(selectedAccount);
   };
@@ -95,7 +69,7 @@ const tradeEntry: NextPage = () => {
     console.log("Account ID: ", lgdin);
     return lgdin;
   }
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const data = new FormData(event.target as HTMLFormElement);
     const entryPrice = parseFloat(data.get("entryPrice") as string);
@@ -192,9 +166,6 @@ const tradeEntry: NextPage = () => {
   }
   return (
     <>
-      {/* <Head>
-        <title>Trade Entry | {user ? user : ""}</title>
-      </Head> */}
       <div className="flex h-screen bg-slate-200">
         <Menu isOpen={menuOpen} setIsOpen={setMenuOpen} />
         <div

@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import React from "react";
 // import { zodResolver } from "@hookform/resolvers/zod";
 // import { useForm } from "react-hook-form";
@@ -25,9 +26,9 @@ export default function DeleteUser() {
     <>
       <div className="p-3 m-1 font-bold">
         <span>REDOING THIS</span>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={() => handleSubmit()}>
           <h1>Just click the button to test the form</h1>
-          <button type="submit"></button>
+          <Button type="submit">Click Me</Button>
         </form>
       </div>
     </>

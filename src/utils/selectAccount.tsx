@@ -19,10 +19,11 @@ function AccountDropdown({ onAccountChange }: AccountDropdownProps) {
     const fetchAvailableAccs = async () => {
       try {
         const { li } = router.query;
+        console.log("li: ", li);
         if (typeof li === "string") {
           const id = await fetch("/api/auth/IDFromHash", {
-            body: JSON.stringify(li),
             method: "POST",
+            body: JSON.stringify(li),
             headers: { "Content-Type": "application/json" },
           });
           const lgdin = await id.json();
@@ -47,7 +48,7 @@ function AccountDropdown({ onAccountChange }: AccountDropdownProps) {
       }
     };
     fetchAvailableAccs();
-  }, [router.query]);
+  }, []);
   const handleValueChange = async (selectedAcc: string) => {
     onAccountChange(selectedAcc);
   };

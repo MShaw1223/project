@@ -6,11 +6,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Menu from "@/utils/menu";
 import DeleteUser from "@/utils/users/DeleteUser";
 import EditUser from "@/utils/users/EditUser";
-import { useState } from "react";
+import * as React from "react";
 import withAuth from "@/utils/protection/authorise";
 
 const userPage: NextPage = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = React.useState(false);
   return (
     <div className="flex h-screen bg-slate-200">
       <Menu isOpen={menuOpen} setIsOpen={setMenuOpen} />
