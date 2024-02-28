@@ -20,7 +20,7 @@ const signUp: NextPage = () => {
     const user = data.get("user") as string;
     const entry_pwd = data.get("firstPassword") as string;
     const confirmPasswd = data.get("confirmPassword") as string;
-    const parsedData = schema.parse({
+    const parsedData = lginSignUpSchema.parse({
       passwd: entry_pwd,
       username: user,
     });
