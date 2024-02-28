@@ -3,14 +3,13 @@ import { NextPage } from "next";
 import { FaCalculator } from "react-icons/fa";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import DeleteEntry from "@/utils/entryMngmnt/DeleteEntry";
-import EditEntry from "@/utils/entryMngmnt/EditEntry";
 import SearchEntry from "@/utils/entryMngmnt/SearchEntry";
 import NewCurrencyPage from "@/utils/entryMngmnt/NewCurrency";
-import { useState } from "react";
+import * as React from "react";
 import withAuth from "@/utils/protection/authorise";
 
 const EntryManagement: NextPage = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = React.useState(false);
   return (
     <>
       <div className="flex h-screen bg-slate-200">
@@ -28,15 +27,11 @@ const EntryManagement: NextPage = () => {
             <Tabs defaultValue="search" className="p-3 m-1">
               <TabsList>
                 <TabsTrigger value="search">Search for an Entry</TabsTrigger>
-                <TabsTrigger value="edit">Edit an Entry</TabsTrigger>
                 <TabsTrigger value="addPair">Add a Currency Pair</TabsTrigger>
                 <TabsTrigger value="delete">Delete an Entry</TabsTrigger>
               </TabsList>
               <TabsContent value="search">
                 <SearchEntry />
-              </TabsContent>
-              <TabsContent value="edit">
-                <EditEntry />
               </TabsContent>
               <TabsContent value="addPair">
                 <NewCurrencyPage />

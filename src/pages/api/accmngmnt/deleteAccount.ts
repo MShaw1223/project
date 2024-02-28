@@ -20,7 +20,7 @@ export default async function handler(req: NextRequest, event: NextFetchEvent) {
       });
       const deleteAccountQuery = sqlstring.format(
         `
-      DELETE FROM tableAccounts WHERE accountname = (?)
+      DELETE FROM tableAccounts WHERE accountname = ?;
       `,
         [accountname]
       );

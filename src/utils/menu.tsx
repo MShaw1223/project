@@ -6,11 +6,7 @@ import {
   FaPencilAlt,
 } from "react-icons/fa";
 import { MdOutlineAccountBalance } from "react-icons/md";
-import {
-  BsFillJournalBookmarkFill,
-  BsChevronBarLeft,
-  BsChevronBarRight,
-} from "react-icons/bs";
+import { BsChevronBarLeft, BsChevronBarRight } from "react-icons/bs";
 import { MdArrowBack } from "react-icons/md";
 import { useRouter } from "next/router";
 import { Separator } from "@/components/ui/separator";
@@ -24,7 +20,6 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
   const router = useRouter();
   const isLinkActive = (href: string) => router.pathname === href;
   const { li } = router.query;
-  const value = li;
 
   return (
     <>
@@ -47,7 +42,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
 
             <Separator className="ml-9 my-7 bg-inherit" />
 
-            <Link href={`/home?li=${value}`}>
+            <Link href={`/home?li=${li}`}>
               <div
                 className={`flex pl-5 py-4 mx-3 focus:outline-none font-bold hover:bg-gray-500 ${
                   isLinkActive("/home") ? "bg-gray-700 hover:bg-gray-700" : ""
@@ -58,7 +53,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
               </div>
             </Link>
 
-            <Link href={`/Trade-Entry?li=${value}`}>
+            <Link href={`/Trade-Entry?li=${li}`}>
               <div
                 className={`flex pl-5 py-4 mx-3 focus:outline-none font-bold hover:bg-gray-500 ${
                   isLinkActive("/Trade-Entry")
@@ -71,7 +66,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
               </div>
             </Link>
 
-            <Link href={`/entry-management?li=${value}`}>
+            <Link href={`/entry-management?li=${li}`}>
               <div
                 className={`flex pl-5 py-4 mx-3 focus:outline-none font-bold hover:bg-gray-500 ${
                   isLinkActive("/entry-management")
@@ -84,7 +79,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
               </div>
             </Link>
 
-            <Link href={`/account-management?li=${value}`}>
+            <Link href={`/account-management?li=${li}`}>
               <div
                 className={`flex pl-5 py-4 mx-3 focus:outline-none font-bold hover:bg-gray-500 ${
                   isLinkActive("/account-management")
@@ -97,7 +92,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
               </div>
             </Link>
 
-            <Link href={`/users?li=${value}`}>
+            <Link href={`/users?li=${li}`}>
               <div
                 className={`flex pl-5 py-4 mx-3 focus:outline-none font-bold hover:bg-gray-500 ${
                   isLinkActive("/users") ? "bg-gray-700 hover:bg-gray-700" : ""
@@ -105,19 +100,6 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
               >
                 <FaUserFriends className="w-6 h-6 text-slate-100"></FaUserFriends>
                 <span className="pl-3 text-slate-100">Users</span>
-              </div>
-            </Link>
-
-            <Link href={`/journal?li=${value}`}>
-              <div
-                className={`flex pl-5 py-4 mx-3 focus:outline-none font-bold hover:bg-gray-500 ${
-                  isLinkActive("/journal")
-                    ? "bg-gray-700 hover:bg-gray-700"
-                    : ""
-                } rounded-full `}
-              >
-                <BsFillJournalBookmarkFill className="w-6 h-6 text-slate-100"></BsFillJournalBookmarkFill>
-                <span className="pl-3 text-slate-100">Journal</span>
               </div>
             </Link>
 
@@ -144,7 +126,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
               )}
             </div>
             <div className="h-screen flex flex-col items-center justify-center space-y-4">
-              <Link href={`/home?li=${value}`}>
+              <Link href={`/home?li=${li}`}>
                 <div
                   className={`flex p-2 focus:outline-none font-bold hover:bg-gray-500 ${
                     isLinkActive("/home") ? "bg-gray-700 hover:bg-gray-700" : ""
@@ -154,7 +136,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
                 </div>
               </Link>
 
-              <Link href={`/Trade-Entry?li=${value}`}>
+              <Link href={`/Trade-Entry?li=${li}`}>
                 <div
                   className={`flex p-2 focus:outline-none font-bold hover:bg-gray-500 ${
                     isLinkActive("/Trade-Entry")
@@ -166,7 +148,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
                 </div>
               </Link>
 
-              <Link href={`/entry-management?li=${value}`}>
+              <Link href={`/entry-management?li=${li}`}>
                 <div
                   className={`flex p-2 focus:outline-none font-bold hover:bg-gray-500 ${
                     isLinkActive("/entry-management")
@@ -178,7 +160,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
                 </div>
               </Link>
 
-              <Link href={`/account-management?li=${value}`}>
+              <Link href={`/account-management?li=${li}`}>
                 <div
                   className={`flex p-2 focus:outline-none font-bold hover:bg-gray-500 ${
                     isLinkActive("/account-management")
@@ -190,7 +172,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
                 </div>
               </Link>
 
-              <Link href={`/users?li=${value}`}>
+              <Link href={`/users?li=${li}`}>
                 <div
                   className={`flex p-2 focus:outline-none font-bold hover:bg-gray-500 ${
                     isLinkActive("/users")
@@ -199,18 +181,6 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
                   } rounded-lg `}
                 >
                   <FaUserFriends className="w-6 h-6 text-slate-100"></FaUserFriends>
-                </div>
-              </Link>
-
-              <Link href={`/journal?li=${value}`}>
-                <div
-                  className={`flex p-2 focus:outline-none font-bold hover:bg-gray-500 ${
-                    isLinkActive("/journal")
-                      ? "bg-gray-700 hover:bg-gray-700"
-                      : ""
-                  } rounded-lg `}
-                >
-                  <BsFillJournalBookmarkFill className="w-6 h-6 text-slate-100"></BsFillJournalBookmarkFill>
                 </div>
               </Link>
 

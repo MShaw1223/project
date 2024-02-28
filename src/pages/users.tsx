@@ -5,13 +5,12 @@ import { FaUserFriends } from "react-icons/fa";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Menu from "@/utils/menu";
 import DeleteUser from "@/utils/users/DeleteUser";
-import UserCreate from "@/utils/users/createUser";
 import EditUser from "@/utils/users/EditUser";
-import { useState } from "react";
+import * as React from "react";
 import withAuth from "@/utils/protection/authorise";
 
 const userPage: NextPage = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = React.useState(false);
   return (
     <div className="flex h-screen bg-slate-200">
       <Menu isOpen={menuOpen} setIsOpen={setMenuOpen} />
@@ -25,15 +24,11 @@ const userPage: NextPage = () => {
           <span className="ml-16 font-bold">Users</span>
         </div>
         <div className="flex-1 overflow-auto justify-center p-2">
-          <Tabs defaultValue="create" className="p-3 m-1">
+          <Tabs defaultValue="edit" className="p-3 m-1">
             <TabsList className="m-2 mb-6">
-              <TabsTrigger value="create">Create a User</TabsTrigger>
-              <TabsTrigger value="edit">Edit a User</TabsTrigger>
-              <TabsTrigger value="delete">Delete a User</TabsTrigger>
+              <TabsTrigger value="edit">Edit User</TabsTrigger>
+              <TabsTrigger value="delete">Delete User</TabsTrigger>
             </TabsList>
-            <TabsContent value="create">
-              <UserCreate />
-            </TabsContent>
             <TabsContent value="edit">
               <EditUser />
             </TabsContent>

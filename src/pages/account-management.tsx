@@ -4,11 +4,12 @@ import { MdOutlineAccountBalance } from "react-icons/md";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import CreateAccount from "@/utils/accountMngmnt/CreateAccount";
 import DeleteAccount from "@/utils/accountMngmnt/DeleteAccount";
-import { useState } from "react";
+import * as React from "react";
 import withAuth from "@/utils/protection/authorise";
+import UpdateAccount from "@/utils/accountMngmnt/UpdateAccount";
 
 const accountManagement: NextPage = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = React.useState(false);
   return (
     <>
       <div className="flex h-screen bg-slate-200">
@@ -28,12 +29,18 @@ const accountManagement: NextPage = () => {
                 <TabsTrigger value="create">
                   Create a new trading account
                 </TabsTrigger>
+                <TabsTrigger value="update">
+                  Update an existing trading account
+                </TabsTrigger>
                 <TabsTrigger value="delete">
                   Delete an existing trading Account
                 </TabsTrigger>
               </TabsList>
               <TabsContent value="create">
                 <CreateAccount />
+              </TabsContent>
+              <TabsContent value="update">
+                <UpdateAccount />
               </TabsContent>
               <TabsContent value="delete">
                 <DeleteAccount />

@@ -8,13 +8,9 @@ const deleteAccountSchema = zod.object({
 
 const deleteEntrySchema = zod.object({
   tradesid: zod.number().min(1, {
-    message: "ID must be at least 1 digits.",
+    message: "ID must be at least 1 digit.",
   }),
-});
-
-const editEntrySchema = zod.object({
-  tradeid: number().min(1),
-  pairabbr: zod.string().max(5),
+  accountid: zod.number().min(1, { message: "ID must be at least 1 digit." }),
 });
 
 const entries_schema = zod.object({
@@ -72,7 +68,6 @@ const userPwdSchema = zod.object({
 export {
   deleteAccountSchema,
   deleteEntrySchema,
-  editEntrySchema,
   entries_schema,
   newAccountSchema,
   newCurrencySchema,

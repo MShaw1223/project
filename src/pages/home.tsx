@@ -10,7 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useEffect, useState } from "react";
+import * as React from "react";
 import { useRouter } from "next/router";
 import withAuth from "@/utils/protection/authorise";
 
@@ -25,10 +25,10 @@ type TradeData = {
 
 const Home: NextPage = () => {
   const router = useRouter();
-  const [data, setData] = useState<TradeData | null>(null);
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [user, setUser] = useState<string | null>(null);
-  useEffect(() => {
+  const [data, setData] = React.useState<TradeData | null>(null);
+  const [menuOpen, setMenuOpen] = React.useState(false);
+  const [user, setUser] = React.useState<string | null>(null);
+  React.useEffect(() => {
     async function getUser() {
       const { li } = router.query;
       console.log(li);

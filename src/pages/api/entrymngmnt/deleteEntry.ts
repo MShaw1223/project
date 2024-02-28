@@ -12,17 +12,18 @@ export default async function handler(req: NextRequest, event: NextFetchEvent) {
   if (req.method === "DELETE") {
     try {
       const body = await extractBody(req);
-      const { tradesid } = deleteEntrySchema.parse(body);
+      const { tradesid, accountid } = deleteEntrySchema.parse(body);
       console.log("body: ", body);
       console.log("tradesID: ", tradesid);
+      console.log("accountID: ", accountid);
       const pool = new Pool({
         connectionString: process.env.DATABASE_URL,
       });
       const deleteEntryQuery = sqlstring.format(
         `
-            DELETE FROM tableTrades WHERE tradesid = (?)
+            DELETE FROM tableTrades WHERE tradesid = ? and accountid = ?;
           `,
-        [tradesid]
+        [tradesid, accountid]
       );
       await pool.query(deleteEntryQuery);
       event.waitUntil(pool.end());
