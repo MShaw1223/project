@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import zod from "zod";
 import * as React from "react";
 import { NextPage } from "next";
 import { BiSolidHide, BiSolidShow } from "react-icons/bi";
@@ -17,16 +16,14 @@ const signUp: NextPage = () => {
     event.preventDefault();
 
     const data = new FormData(event.target as HTMLFormElement);
-    const user = data.get("user") as string;
-    const entry_pwd = data.get("firstPassword") as string;
     const confirmPasswd = data.get("confirmPassword") as string;
     const parsedData = lginSignUpSchema.parse({
-      passwd: entry_pwd,
-      username: user,
+      passwd: data.get("firstPassword") as string,
+      username: data.get("user") as string,
     });
     // reusing the utility for logging in to check the two passwords match
     console.log(parsedData);
-    const isMatch = comparePasswords(entry_pwd, confirmPasswd);
+    const isMatch = comparePasswords(parsedData.passwd, confirmPasswd);
     if (isMatch === true) {
       console.log("in the signup.tsx handler");
       console.log(parsedData);
