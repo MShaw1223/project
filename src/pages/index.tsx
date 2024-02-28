@@ -6,12 +6,7 @@ import { BiSolidHide, BiSolidShow } from "react-icons/bi";
 import zod from "zod";
 import { useRouter } from "next/router";
 import { generateKey } from "@/utils/protection/hash";
-
-const schema = zod.object({
-  passwd: zod.string().max(60),
-  username: zod.string().max(15),
-});
-// validates the user inputs to ensure there are no unexpected values entered
+import { lginSignUpSchema } from "@/utils/protection/schema";
 
 const login: NextPage = () => {
   // determines if the password is hidden or not when entering it during login
