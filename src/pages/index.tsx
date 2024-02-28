@@ -18,7 +18,7 @@ const login: NextPage = () => {
     event.preventDefault();
     // gets all the information from the login form
     const data = new FormData(event.target as HTMLFormElement);
-    const parsedData = schema.parse({
+    const parsedData = lginSignUpSchema.parse({
       username: data.get("user") as string,
       passwd: data.get("password") as string,
     });
