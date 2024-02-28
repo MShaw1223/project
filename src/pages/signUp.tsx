@@ -29,10 +29,6 @@ const signUp: NextPage = () => {
     const isMatch = comparePasswords(entry_pwd, confirmPasswd);
     if (isMatch === true) {
       console.log("in the signup.tsx handler");
-      const parsedData = schema.parse({
-        passwd: entry_pwd,
-        username: user,
-      });
       console.log(parsedData);
       const response = await fetch("/api/auth/userPwd", {
         method: "POST",
