@@ -7,11 +7,7 @@ import { BiSolidHide, BiSolidShow } from "react-icons/bi";
 import comparePasswords from "@/utils/protection/comparePwd";
 import { useRouter } from "next/router";
 import { generateKey } from "@/utils/protection/hash";
-
-const schema = zod.object({
-  passwd: zod.string().max(60),
-  username: zod.string().max(15),
-});
+import { lginSignUpSchema } from "@/utils/protection/schema";
 
 const signUp: NextPage = () => {
   const [showPassword, setShowPassword] = React.useState(false);
