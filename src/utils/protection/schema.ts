@@ -64,7 +64,7 @@ const userPwdSchema = zod.object({
   username: zod.string(),
   passwd: zod.string(),
 });
-const lginSignUpSchema = = zod.object({
+const lginSignUpSchema = zod.object({
   passwd: zod.string().max(60),
   username: zod.string().max(15),
 });
