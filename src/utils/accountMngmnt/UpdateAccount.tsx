@@ -16,11 +16,11 @@ const UpdateAccount = () => {
       const data = new FormData(event.target as HTMLFormElement);
       const firstEdit = data.get("firstEdit") as string;
       const reEnteredEdit = data.get("reEnteredEdit") as string;
-      if (first !== reEnteredEdit) {
+      if (firstEdit !== reEnteredEdit) {
         alert("Entries do not match");
         return;
       }
-      if (first === reEnteredEdit && accountname !== null) {
+      if (firstEdit === reEnteredEdit && selectedAccount !== null) {
         await fetch("/api/accountMngmnt/updateAcc", {
           method: "PUT",
           body: JSON.stringify({

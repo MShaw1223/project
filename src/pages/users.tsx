@@ -3,10 +3,11 @@ import { FaUserFriends } from "react-icons/fa";
 import Menu from "@/utils/menu";
 import * as React from "react";
 import withAuth from "@/utils/protection/authorise";
+import { Button } from "@/components/ui/button";
 
 const userPage: NextPage = () => {
   const [menuOpen, setMenuOpen] = React.useState(false);
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     console.log("Handle Submit works");
   }
