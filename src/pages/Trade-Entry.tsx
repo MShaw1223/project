@@ -72,28 +72,18 @@ const tradeEntry: NextPage = () => {
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const data = new FormData(event.target as HTMLFormElement);
-    const entryPrice = parseFloat(data.get("entryPrice") as string);
-    const stopLoss = parseFloat(data.get("stopLoss") as string);
-    const takeProfit = parseFloat(data.get("takeProfit") as string);
-    const riskRatio = parseFloat(data.get("riskRatio") as string);
-    const BasePair = selectedBasePair;
-    const QuotePair = selectedQuotePair;
-    const currencyPair = BasePair + QuotePair;
-    const tradeNotes = data.get("tradeNotes");
-    const winOrLoss = selectedOutcome;
-    const acctID = await getID(selectedAccount);
-
+    const accountID = await getID(selectedAccount)
     console.log("Trade Data: ", {
-      entryPrice,
-      stopLoss,
-      takeProfit,
-      riskRatio,
-      BasePair,
-      QuotePair,
-      currencyPair,
-      tradeNotes,
-      winOrLoss,
-      acctID,
+      entryPrice: parseFloat(data.get("entryPrice") as string),
+      stopLoss: parseFloat(data.get("stopLoss") as string),
+      takeProfit: parseFloat(data.get("takeProfit") as string),
+      riskRatio: parseFloat(data.get("riskRatio") as string),
+      BasePair: selectedBasePair,
+      QuotePair: selectedQuotePair,
+      currencyPair: selectedBasePair + selectedQuotePair,
+      tradeNotes: data.get("tradeNotes"),
+      winOrLoss: selectedOutcome,
+      acctID: accountID,
     });
     if (!entryPrice) {
       alert("Invalid entry price");
@@ -150,14 +140,14 @@ const tradeEntry: NextPage = () => {
     try {
       mutation.mutate(
         JSON.stringify({
-          accountID: acctID,
-          selectedPair: currencyPair,
-          entryPrice,
-          riskRatio,
-          stopLoss,
-          takeProfit,
-          tradeNotes,
-          selectedOutcome: winOrLoss,
+          accountID: accountID,
+          selectedPair: selectedBasePair + selectedQuotePair,
+          entryPrice: parseFloat(data.get("entryPrice") as string),
+          riskRatio: parseFloat(data.get("riskRatio") as string),
+          stopLoss: parseFloat(data.get("stopLoss") as string),
+          takeProfit: parseFloat(data.get("takeProfit") as string),
+          tradeNotes: data.get("tradeNotes"),
+          selectedOutcome: selectedOutcome,
         })
       );
     } catch (error) {
