@@ -72,7 +72,7 @@ const tradeEntry: NextPage = () => {
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const data = new FormData(event.target as HTMLFormElement);
-    const accountID = await getID(selectedAccount)
+    const accountID = await getID(selectedAccount);
     console.log("Trade Data: ", {
       entryPrice: parseFloat(data.get("entryPrice") as string),
       stopLoss: parseFloat(data.get("stopLoss") as string),
@@ -85,58 +85,6 @@ const tradeEntry: NextPage = () => {
       winOrLoss: selectedOutcome,
       acctID: accountID,
     });
-    if (!entryPrice) {
-      alert("Invalid entry price");
-      return;
-    }
-    if (!stopLoss) {
-      alert("Invalid stop loss");
-      return;
-    }
-    if (!takeProfit) {
-      alert("Invalid take profit");
-      return;
-    }
-    if (!riskRatio) {
-      alert("Invalid risk ratio");
-      return;
-    }
-    if (currencyPair === "") {
-      alert("Invalid currency pair");
-      return;
-    }
-    if (selectedAccount === "") {
-      alert("Invalid account");
-      return;
-    }
-    if (tradeNotes === "") {
-      alert("Invalid notes");
-      return;
-    }
-    if (winOrLoss === "") {
-      alert("Invalid outcome");
-      return;
-    }
-    if (entryPrice === stopLoss) {
-      alert("Invalid stop loss");
-      return;
-    }
-    if (entryPrice === takeProfit) {
-      alert("Invalid take profit");
-      return;
-    }
-    if (riskRatio <= 0) {
-      alert("Invalid risk ratio");
-      return;
-    }
-    if (selectedOutcome === "") {
-      alert("Invalid outcome");
-      return;
-    }
-    if (BasePair === QuotePair) {
-      alert("Invalid currency pair");
-      return;
-    }
     try {
       mutation.mutate(
         JSON.stringify({
@@ -151,6 +99,7 @@ const tradeEntry: NextPage = () => {
         })
       );
     } catch (error) {
+      alert("Error Submitting Trade");
       console.log("Error submitting data: ", error);
     }
   }
