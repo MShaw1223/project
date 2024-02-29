@@ -9,7 +9,7 @@ export default async function editEntryHandler(
 ) {
   try {
     if (req.method === "PUT") {
-      const { field, edits, accountname, newKey } = await req.body;
+      const { field, edits, accountname } = await req.body;
       const pool = new Pool({
         connectionString: process.env.DATABASE_URL,
       });

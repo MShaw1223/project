@@ -14,24 +14,20 @@ const UpdateAccount = () => {
     event.preventDefault();
     try {
       const data = new FormData(event.target as HTMLFormElement);
-      const accountname = selectedAccount;
-      const first = data.get("firstEdit") as string;
+      const firstEdit = data.get("firstEdit") as string;
       const reEnteredEdit = data.get("reEnteredEdit") as string;
       if (first !== reEnteredEdit) {
         alert("Entries do not match");
         return;
       }
       if (first === reEnteredEdit && accountname !== null) {
-        const newhash = generateKey(first);
-        const dataPackage = JSON.stringify({
-          newKey: newhash,
-          field: field,
-          accountname: accountname,
-          edits: first,
-        });
         await fetch("/api/accountMngmnt/updateAcc", {
           method: "PUT",
-          body: JSON.stringify(dataPackage),
+          body: JSON.stringify({
+            field: field,
+            accountname: selectedAccount,
+            edits: firstEdit,
+          }),
           headers: { "Content-Type": "application/json" },
         });
       } else {

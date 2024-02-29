@@ -48,8 +48,8 @@ const NewCurrencyPage: NextPage = () => {
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const data = new FormData(event.target as HTMLFormElement);
-    const pairabbr = data.get("Abbreviation")!;
-    const reEntered = data.get("reEnteredAbbreviation")!;
+    const pairabbr = data.get("Abbreviation")! as string;
+    const reEntered = data.get("reEnteredAbbreviation")! as string;
     const userid = user;
     if (pairabbr !== reEntered) {
       alert("Entries do not match");

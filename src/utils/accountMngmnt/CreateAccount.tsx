@@ -25,12 +25,12 @@ const CreateAccountPage = () => {
   });
   useEffect(() => {
     async function getUser() {
-      const { li } = router.query;
-      if (li !== undefined) {
+      const { li: loggedInVal } = router.query;
+      if (loggedInVal !== undefined) {
         try {
           const response = await fetch("/api/auth/IDFromHash", {
             method: "POST",
-            body: JSON.stringify(li),
+            body: JSON.stringify(loggedInVal),
             headers: {
               "Content-Type": "application/json",
             },
@@ -47,19 +47,19 @@ const CreateAccountPage = () => {
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const data = new FormData(event.target as HTMLFormElement);
-    const accountname = data.get("accountName");
-    const reEntered = data.get("reEnteredAccountName");
-    const ID = user;
+    const accountname = data.get("accountName")! as string;
+    const reEntered = data.get("reEnteredAccountName")! as string;
     if (accountname !== reEntered) {
       alert("Entries do not match");
       return;
     }
-    if (accountname === reEntered && ID !== null) {
-      const dataPackage = JSON.stringify({
-        accountname,
-        userid: ID,
-      });
-      mutation.mutate(dataPackage);
+    if (accountname === reEntered && user !== null) {
+      mutation.mutate(
+        JSON.stringify({
+          accountname,
+          userid: user,
+        })
+      );
     }
   }
   return (

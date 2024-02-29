@@ -1,5 +1,3 @@
-//user page: created, switched and deleted
-
 import { NextPage } from "next";
 import { FaUserFriends } from "react-icons/fa";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";

@@ -25,10 +25,7 @@ const DeleteEntry: NextPage = () => {
     },
     onSettled: () => {
       console.log("Trade Deleted");
-      const inputElement = document.getElementById(
-        "tradeID"
-      ) as HTMLInputElement;
-      inputElement.value = "";
+      setSelectedAccount("");
     },
     onError: (error) => {
       console.error("Mutation error:", error);
@@ -51,13 +48,13 @@ const DeleteEntry: NextPage = () => {
   }
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-
     const data = new FormData(event.target as HTMLFormElement);
-    const tradesid = Number(data.get("tradeID"));
-    const accountid = await getID(selectedAccount);
-    const dataPackage = JSON.stringify({ tradesid, accountid });
-    console.log(dataPackage);
-    mutation.mutate(dataPackage);
+    mutation.mutate(
+      JSON.stringify({
+        tradesid: Number(data.get("tradeID")),
+        accountid: await getID(selectedAccount),
+      })
+    );
   }
   return (
     <>
