@@ -13,6 +13,7 @@ export default async function editEntryHandler(
       const pool = new Pool({
         connectionString: process.env.DATABASE_URL,
       });
+      //this isnt correct should be accountname --> edit all associated updateaccountfiles <--
       if (field === "username") {
         const sqlQuery = sqlstring.format(`
           UPDATE tableAccounts
