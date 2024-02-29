@@ -44,7 +44,7 @@ const tradeEntry: NextPage = () => {
       console.error("Mutation error:", error);
     },
   });
-  const handleAccountChange = async (selectedAccount: string) => {
+  const handleAccountChange = (selectedAccount: string) => {
     setSelectedAccount(selectedAccount);
   };
   const handleBasePairChange = (selectedBasePair: string) => {
