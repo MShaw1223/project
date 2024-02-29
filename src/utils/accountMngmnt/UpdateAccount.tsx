@@ -3,7 +3,6 @@ import { Input } from "@/components/ui/input";
 import * as React from "react";
 import AccountDropdown from "../selectAccount";
 import SelectField from "../selectField";
-import { generateKey } from "../protection/hash";
 const UpdateAccount = () => {
   const [selectedAccount, setSelectedAccount] = React.useState<string>("");
   const [field, setField] = React.useState<string>("");
