@@ -13,25 +13,17 @@ export default async function editEntryHandler(
       const pool = new Pool({
         connectionString: process.env.DATABASE_URL,
       });
-      let sqlQuery;
       if (field === "username") {
-        sqlQuery = sqlstring.format(`
+        const sqlQuery = sqlstring.format(`
           UPDATE tableAccounts
-          SET username = ${edits},
-          hashkey = ${newKey}
+          SET accountname = ${edits},
           WHERE accountname = ${accountname}
         `);
-      } else if (field === "passwd") {
-        sqlQuery = sqlstring.format(`
-          UPDATE tableAccounts
-          SET passwd = ${edits}
-          WHERE accountname = ${accountname}
-        `);
+      await pool.query(sqlQuery);
+      event.waitUntil(pool.end());
       } else {
         throw new Error("Invalid field");
       }
-      await pool.query(sqlQuery);
-      event.waitUntil(pool.end());
     } else {
       throw console.error("Incorrect HTTP method");
     }
