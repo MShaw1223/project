@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import * as React from "react";
 import AccountDropdown from "../selectAccount";
-import SelectField from "../selectField";
 const UpdateAccount = () => {
   const [selectedAccount, setSelectedAccount] = React.useState<string>("");
   const [field, setField] = React.useState<string>("");
@@ -56,13 +55,10 @@ const UpdateAccount = () => {
                     onAccountChange={handleAccountChange}
                   ></AccountDropdown>
                 </div>
-                <div className="p-3">
-                  <SelectField onFieldChange={handleFieldChange}></SelectField>
-                </div>
               </div>
               <div className="flex flex-row w-[770px]">
                 <div className="p-2 w-full">
-                  <h3>Enter the account edit</h3>
+                  <h3>Enter the new account name</h3>
                   <Input
                     id="firstEdit"
                     name="firstEdit"
@@ -70,7 +66,7 @@ const UpdateAccount = () => {
                   />
                 </div>
                 <div className="p-2 pl-5 w-full">
-                  <h3>Re-enter the edit</h3>
+                  <h3>Re-enter the new account name</h3>
                   <Input
                     id="reEnteredEdit"
                     name="reEnteredEdit"
