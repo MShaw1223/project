@@ -14,13 +14,14 @@ const userPage: NextPage = () => {
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     console.log("Handle Submit works");
+    const data = new FormData(event.target as HTMLFormElement);
     const { li: loggedInVal } = router.query;
     await fetch("", {
       method: "PUT",
       body: JSON.stringify({
         field: edit,
         userID: loggedInVal,
-        newInfo,
+        newInfo: data.get("newInfo") as string,
       }),
     });
   }
