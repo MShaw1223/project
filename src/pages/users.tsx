@@ -42,26 +42,28 @@ const userPage: NextPage = () => {
             <FaUserFriends className="w-10 h-10"></FaUserFriends>
             <span className="ml-16 font-bold">Users</span>
           </div>
-          <div className="flex-1 overflow-auto justify-center p-2">
-            <form onSubmit={handleSubmit}>
-              <h1 className="font-bold text-lg">Edit User</h1>
-              <div className="p-3">
-                <SelectEdit onFieldChange={handleFieldChange}></SelectEdit>
-              </div>
-              <div className="p-2">
-                <p>Enter the edit here</p>
-                <Input
-                  id="newInfo"
-                  name="newInfo"
-                  placeholder="New info....."
-                />
-              </div>
-              <div className="p-4">
-                <Button type="submit" className="w-full">
-                  Submit Change
-                </Button>
-              </div>
-            </form>
+          <div className="flex-1">
+            <div className="overflow-auto justify-center p-2">
+              <form onSubmit={handleSubmit}>
+                <h1 className="font-bold text-lg">Edit User</h1>
+                <div className="p-3">
+                  <SelectEdit onFieldChange={handleFieldChange}></SelectEdit>
+                </div>
+                <div className="p-2">
+                  <p>Enter the edit here</p>
+                  <Input
+                    id="newInfo"
+                    name="newInfo"
+                    placeholder="New info....."
+                  />
+                </div>
+                <div className="p-4">
+                  <Button type="submit" className="w-full">
+                    Submit Change
+                  </Button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       </div>
