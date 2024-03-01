@@ -6,6 +6,7 @@ import withAuth from "@/utils/protection/authorise";
 import { Button } from "@/components/ui/button";
 import SelectEdit from "@/utils/users/editUserDD";
 import { useRouter } from "next/router";
+import { Input } from "@/components/ui/input";
 
 const userPage: NextPage = () => {
   const [menuOpen, setMenuOpen] = React.useState(false);
