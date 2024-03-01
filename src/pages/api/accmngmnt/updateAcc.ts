@@ -9,22 +9,18 @@ export default async function editEntryHandler(
 ) {
   try {
     if (req.method === "PUT") {
-      const { field, edits, accountname } = await req.body;
+      const { edits, accountname } = await req.body;
       const pool = new Pool({
         connectionString: process.env.DATABASE_URL,
       });
       //this isnt correct should be accountname --> edit all associated updateaccountfiles <--
-      if (field === "username") {
-        const sqlQuery = sqlstring.format(`
+      const sqlQuery = sqlstring.format(`
           UPDATE tableAccounts
           SET accountname = ${edits},
           WHERE accountname = ${accountname}
         `);
       await pool.query(sqlQuery);
       event.waitUntil(pool.end());
-      } else {
-        throw new Error("Invalid field");
-      }
     } else {
       throw console.error("Incorrect HTTP method");
     }

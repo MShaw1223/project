@@ -4,7 +4,6 @@ import * as React from "react";
 import AccountDropdown from "../selectAccount";
 const UpdateAccount = () => {
   const [selectedAccount, setSelectedAccount] = React.useState<string>("");
-  const [field, setField] = React.useState<string>("");
   const handleAccountChange = async (selectedAccount: string) => {
     setSelectedAccount(selectedAccount);
   };
@@ -22,7 +21,6 @@ const UpdateAccount = () => {
         await fetch("/api/accountMngmnt/updateAcc", {
           method: "PUT",
           body: JSON.stringify({
-            field: field,
             accountname: selectedAccount,
             edits: firstEdit,
           }),
@@ -37,9 +35,6 @@ const UpdateAccount = () => {
       });
     }
   }
-  const handleFieldChange = async (selectedfield: string) => {
-    setField(selectedfield);
-  };
   return (
     <>
       <>
