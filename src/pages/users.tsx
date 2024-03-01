@@ -49,18 +49,20 @@ const userPage: NextPage = () => {
                 <div className="p-3">
                   <SelectEdit onFieldChange={handleFieldChange}></SelectEdit>
                 </div>
-                <div className="p-2">
-                  <p>Enter the edit here</p>
-                  <Input
-                    id="newInfo"
-                    name="newInfo"
-                    placeholder="New info....."
-                  />
-                </div>
-                <div className="p-4">
-                  <Button type="submit" className="w-full">
-                    Submit Change
-                  </Button>
+                <div className="m-1 p-2 w-[450px]">
+                  <div className="p-2">
+                    <p>Enter the edit here</p>
+                    <Input
+                      id="newInfo"
+                      name="newInfo"
+                      placeholder="New info....."
+                    />
+                  </div>
+                  <div className="p-4">
+                    <Button type="submit" className="w-full">
+                      Submit Change
+                    </Button>
+                  </div>
                 </div>
               </form>
             </div>
