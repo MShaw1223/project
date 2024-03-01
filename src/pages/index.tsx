@@ -3,7 +3,6 @@ import { Input } from "@/components/ui/input";
 import { useState, FormEvent } from "react";
 import { NextPage } from "next";
 import { BiSolidHide, BiSolidShow } from "react-icons/bi";
-import zod from "zod";
 import { useRouter } from "next/router";
 import { generateKey } from "@/utils/protection/hash";
 import { lginSignUpSchema } from "@/utils/protection/schema";
