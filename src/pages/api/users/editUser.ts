@@ -10,7 +10,7 @@ export default function editUser(req: NextApiRequest, event: NextFetchEvent) {
       const pool = new Pool({
         connectionString: process.env.DATABASE_URL,
       });
-      const { newInfo, userid, field };
+      const { newInfo, userid, field } = await req.body;
       let sqlStatement;
       if (field === "username") {
         const newKey = generateKey(newInfo);
