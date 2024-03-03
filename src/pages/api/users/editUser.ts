@@ -4,7 +4,7 @@ import { NextApiRequest } from "next";
 import { NextFetchEvent } from "next/server";
 import sqlstring from "sqlstring";
 
-export default function editUser(req: NextApiRequest, event: NextFetchEvent) {
+export default async function editUser(req: NextApiRequest, event: NextFetchEvent) {
   try {
     if (req.method === "PUT") {
       const pool = new Pool({
