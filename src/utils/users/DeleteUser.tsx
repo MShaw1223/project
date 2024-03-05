@@ -9,12 +9,18 @@ const DeleteUserPage: NextPage = () => {
     event.preventDefault();
     console.log("Handle Submit works");
     const { li: loggedInVal } = router.query;
-    await fetch("/api/users/deleteUser", {
+    console.log("Li: ", loggedInVal);
+    const done = await fetch("/api/users/deleteUser", {
       method: "DELETE",
       body: JSON.stringify({
         userID: loggedInVal,
       }),
     });
+    if (!done.ok) {
+      throw new Error("Failed to delete data");
+    } else if (done.ok) {
+      router.push("/");
+    }
   }
   return (
     <>
@@ -23,10 +29,10 @@ const DeleteUserPage: NextPage = () => {
           <h1 className="font-bold text-lg">Delete User</h1>
           <div className="m-1 p-2 w-[450px]">
             <div className="p-2">
-              <p>Delete Account</p>
+              <p>Deleting this user will delete all associated data</p>
             </div>
             <div className="p-4">
-              <Button type="submit" className="w-full">
+              <Button type="submit" className="w-full" variant="destructive">
                 Delete User
               </Button>
             </div>

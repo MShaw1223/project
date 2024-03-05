@@ -13,6 +13,7 @@ export default async function editUser(
         connectionString: process.env.DATABASE_URL,
       });
       const { userid } = await req.body;
+      console.log("userid: ", userid);
       const sqlStatement = sqlstring.format(`
             delete from tableUsers where userid = ${userid};
             delete from tableAccounts where userid = ${userid};
@@ -22,6 +23,7 @@ export default async function editUser(
       // could use join but would have to be its own statement
       await pool.query(sqlStatement);
       event.waitUntil(pool.end());
+      console.log("sql: ", sqlStatement);
     } else {
       throw new Error("Incorrect HTTP request");
     }
