@@ -5,6 +5,7 @@ import * as React from "react";
 import withAuth from "@/utils/protection/authorise";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import EditUserPage from "@/utils/users/editUserPage";
+import DeleteUserPage from "@/utils/users/DeleteUser";
 const userPage: NextPage = () => {
   const [menuOpen, setMenuOpen] = React.useState(false);
   return (
@@ -29,7 +30,9 @@ const userPage: NextPage = () => {
               <TabsContent value="edit">
                 <EditUserPage />
               </TabsContent>
-              <TabsContent value="delete"></TabsContent>
+              <TabsContent value="delete">
+                <DeleteUserPage />
+              </TabsContent>
             </Tabs>
           </div>
         </div>
