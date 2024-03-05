@@ -31,6 +31,7 @@ const DeleteUserPage: NextPage = () => {
       }
     }
   }
+  // TODO: change the form? have an onclick insteadß
   return (
     <>
       <div className="overflow-auto justify-center p-2">
