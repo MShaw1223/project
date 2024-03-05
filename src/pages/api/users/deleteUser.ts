@@ -12,13 +12,13 @@ export default async function editUser(
       const pool = new Pool({
         connectionString: process.env.DATABASE_URL,
       });
-      const { userid } = await req.body;
-      console.log("userid: ", userid);
+      const { userID } = await req.body;
+      console.log("userID: ", userID);
       const sqlStatement = sqlstring.format(`
-            delete from tableUsers where userid = ${userid};
-            delete from tableAccounts where userid = ${userid};
-            delete from tablePairs where userid = ${userid};
-            delete from tableTrades where accountid in (select from tableaccounts where userid = ${userid});
+            delete from tableUsers where userID = ${userID};
+            delete from tableAccounts where userID = ${userID};
+            delete from tablePairs where userID = ${userID};
+            delete from tableTrades where accountid in (select from tableaccounts where userID = ${userID});
         `);
       // could use join but would have to be its own statement
       await pool.query(sqlStatement);
