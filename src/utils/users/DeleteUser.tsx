@@ -10,10 +10,20 @@ const DeleteUserPage: NextPage = () => {
     console.log("Handle Submit works");
     const { li: loggedInVal } = router.query;
     console.log("Li: ", loggedInVal);
+    const getuserID = await fetch("/api/tradeEntry/findActID", {
+      method: "POST",
+      body: JSON.stringify(loggedInVal),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const userFound = await getuserID.json();
+    console.log("Account ID: ", userFound);
+
     const done = await fetch("/api/users/deleteUser", {
       method: "DELETE",
       body: JSON.stringify({
-        userID: loggedInVal,
+        userID: userFound,
       }),
     });
     if (!done.ok) {
