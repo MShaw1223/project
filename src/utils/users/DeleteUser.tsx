@@ -10,7 +10,7 @@ const DeleteUserPage: NextPage = () => {
     async function getuserID() {
       const { li: loggedInVal } = router.query;
       console.log("Li: ", loggedInVal);
-      if (typeof loggedInVal === "string") {
+      if (loggedInVal !== undefined) {
         const getuserID = await fetch("/api/tradeEntry/IDFromHash", {
           method: "POST",
           body: JSON.stringify(loggedInVal),
