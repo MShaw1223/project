@@ -3,7 +3,7 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 import * as React from "react";
 
-const DeleteUserPage: NextPage = () => {
+const DeleteUserPage: NextPage = async () => {
   const router = useRouter();
   const { li: loggedInVal } = await router.query;
   const [ID, setID] = React.useState<number>();
