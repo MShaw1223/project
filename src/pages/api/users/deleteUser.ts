@@ -46,6 +46,7 @@ export default async function delUser(
       console.log("sql tblTrades: ", tblTradesSql);
       return res.status(200).json("Account deleted");
     } catch (error) {
+      console.error("Error deleting user: ", error);
       return res.status(400).json("Bad request");
     }
   } else {
