@@ -3,12 +3,12 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 import * as React from "react";
 
-const DeleteUserPage: NextPage = async () => {
+const DeleteUserPage: NextPage = () => {
   const router = useRouter();
-  const { li: loggedInVal } = await router.query;
   const [ID, setID] = React.useState<number>();
   React.useEffect(() => {
     async function getuserID() {
+      const { li: loggedInVal } = await router.query;
       console.log("Li: ", loggedInVal);
       if (typeof loggedInVal === "string") {
         const getuserID = await fetch("/api/tradeEntry/IDFromHash", {
@@ -29,20 +29,16 @@ const DeleteUserPage: NextPage = async () => {
     try {
       event.preventDefault();
       console.log("Handle Submit works");
-      if (typeof loggedInVal !== "string") {
-        const done = await fetch("/api/users/deleteUser", {
-          method: "DELETE",
-          body: JSON.stringify({
-            userID: ID,
-          }),
-        });
-        if (!done.ok) {
-          throw new Error("Failed to delete data");
-        } else if (done.ok) {
-          router.push("/");
-        }
-      } else {
-        throw new Error("Incorrect Method");
+      const done = await fetch("/api/users/deleteUser", {
+        method: "DELETE",
+        body: JSON.stringify({
+          userID: ID,
+        }),
+      });
+      if (!done.ok) {
+        throw new Error("Failed to delete data");
+      } else if (done.ok) {
+        router.push("/");
       }
     } catch (error) {
       alert("Unable to complete deletion");
