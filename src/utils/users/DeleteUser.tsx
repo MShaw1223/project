@@ -18,14 +18,11 @@ const DeleteUserPage: NextPage = () => {
             "Content-Type": "application/json",
           },
         });
-        return getuserID.json();
+        const foundID = await getuserID.json();
+        setID(foundID);
       }
     }
-    async function settingID() {
-      const foundID = await getuserID();
-      setID(foundID);
-    }
-    settingID();
+    getuserID();
   }, []);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {

@@ -1,6 +1,5 @@
 import { Pool } from "@neondatabase/serverless";
-import { NextApiRequest } from "next";
-import { NextFetchEvent } from "next/server";
+import { NextApiRequest, NextApiResponse } from "next";
 import sqlstring from "sqlstring";
 
 //this deletes all traces of data in the database associated with the userid that is deleted
@@ -11,7 +10,7 @@ export const config = {
 
 export default async function delUser(
   req: NextApiRequest,
-  event: NextFetchEvent
+  res: NextApiResponse
 ) {
   if (req.method === "DELETE") {
     try {
@@ -20,6 +19,7 @@ export default async function delUser(
         connectionString: process.env.DATABASE_URL,
       });
       const { userID } = await req.body;
+      console.log(req.body);
       console.log("userID: ", userID);
       const tblUsersSql = sqlstring.format(`
         delete from tableUsers where userID = ${userID};
@@ -38,20 +38,16 @@ export default async function delUser(
       await pool.query(tblAccountsSql);
       await pool.query(tblPairsSql);
       await pool.query(tblTradesSql);
-      event.waitUntil(pool.end());
+      await pool.end();
       console.log("sql tblUsers: ", tblUsersSql);
       console.log("sql tblAccounts: ", tblAccountsSql);
       console.log("sql tblPairs: ", tblPairsSql);
       console.log("sql tblTrades: ", tblTradesSql);
-      return new Response("Account deleted", {
-        status: 200,
-      });
+      res.status(200).json("Account deleted");
     } catch (error) {
-      return new Response("Bad Request", {
-        status: 400,
-      });
+      res.status(400).json("Bad request");
     }
   } else {
-    throw new Error("Incorrect HTTP request");
+    res.status(405).json({ error: "Method not allowed" });
   }
 }
