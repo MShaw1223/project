@@ -27,10 +27,19 @@ export default async function handler(
       if (passwd === undefined || username === undefined) {
         throw new Error("Password or username undefined");
       }
-      if (passwd !== undefined && username !== undefined) {
+      const keyCheckQuery = sqlstring.format(
+        `
+        select count(*) as count from tableUsers where authKey = ?
+        `,
+        [key]
+      );
+      const keyCheckResult = await pool.query(keyCheckQuery);
+      const keyExists = keyCheckResult.rows[0].count > 0;
+      if (!keyExists) {
+        // Key does not exist, proceed adding the user
         const sqlquery = sqlstring.format(
           `
-          INSERT INTO tableUsers (username, passwd, authKey) VALUES (?,?, ?)
+          insert into tableUsers (username, passwd, authKey) values (?,?, ?)
           `,
           [username, passwd, key]
         );
@@ -39,6 +48,9 @@ export default async function handler(
         return new Response("Success", {
           status: 200,
         });
+      } else {
+        // Key already exists, throws an error
+        throw new Error("Key already exists");
       }
     } catch (error) {
       console.error("Failed to sign up, error: ", error);
