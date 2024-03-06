@@ -5,7 +5,7 @@ import * as React from "react";
 
 const DeleteUserPage: NextPage = () => {
   const router = useRouter();
-  const [ID, setID] = React.useState<number>()
+  const [ID, setID] = React.useState<number>();
   React.useEffect(() => {
     async function getuserID() {
       const { li: loggedInVal } = router.query;
@@ -18,7 +18,7 @@ const DeleteUserPage: NextPage = () => {
             "Content-Type": "application/json",
           },
         });
-        setID(getuserID)
+        setID(getuserID.json());
       }
     }
     getuserID();
