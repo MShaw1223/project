@@ -18,12 +18,12 @@ function AccountDropdown({ onAccountChange }: AccountDropdownProps) {
   useEffect(() => {
     const fetchAvailableAccs = async () => {
       try {
-        const { li } = router.query;
-        console.log("li: ", li);
-        if (typeof li === "string") {
+        const { li: loggedInVal } = router.query;
+        console.log("li: ", loggedInVal);
+        if (typeof loggedInVal === "string") {
           const id = await fetch("/api/auth/IDFromHash", {
             method: "POST",
-            body: JSON.stringify(li),
+            body: JSON.stringify(loggedInVal),
             headers: { "Content-Type": "application/json" },
           });
           const lgdin = await id.json();

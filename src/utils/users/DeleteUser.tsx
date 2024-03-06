@@ -5,10 +5,10 @@ import * as React from "react";
 
 const DeleteUserPage: NextPage = () => {
   const router = useRouter();
-  const [ID, setID] = React.useState<number>();
+  const [ID, setID] = React.useState<string>();
   React.useEffect(() => {
     async function getuserID() {
-      const { li: loggedInVal } = await router.query;
+      const { li: loggedInVal } = router.query;
       console.log("Li: ", loggedInVal);
       if (typeof loggedInVal === "string") {
         const getuserID = await fetch("/api/tradeEntry/IDFromHash", {
@@ -18,11 +18,14 @@ const DeleteUserPage: NextPage = () => {
             "Content-Type": "application/json",
           },
         });
-        const foundID = await getuserID.json();
-        setID(foundID);
+        return getuserID.json();
       }
     }
-    getuserID();
+    async function settingID() {
+      const foundID = await getuserID();
+      setID(foundID);
+    }
+    settingID();
   }, []);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
