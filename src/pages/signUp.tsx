@@ -42,7 +42,7 @@ const signUp: NextPage = () => {
         router.push(`/home?li=${key}`);
       }
       if (!response.ok) {
-        alert("Failed to sign up, try again");
+        alert("Failed to sign up, try another username");
       }
     } else if (isMatch === false) {
       alert("Passwords do not match");
@@ -88,7 +88,6 @@ const signUp: NextPage = () => {
                       {showPassword ? <BiSolidHide /> : <BiSolidShow />}
                     </Button>
                   </div>
-
                   <div className="p-4">
                     <Button type="submit" className="w-full">
                       Go !

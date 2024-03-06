@@ -2,11 +2,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import * as React from "react";
 import AccountDropdown from "../selectAccount";
-import SelectField from "../selectField";
-import { generateKey } from "../protection/hash";
 const UpdateAccount = () => {
   const [selectedAccount, setSelectedAccount] = React.useState<string>("");
-  const [field, setField] = React.useState<string>("");
   const handleAccountChange = async (selectedAccount: string) => {
     setSelectedAccount(selectedAccount);
   };
@@ -14,24 +11,19 @@ const UpdateAccount = () => {
     event.preventDefault();
     try {
       const data = new FormData(event.target as HTMLFormElement);
-      const accountname = selectedAccount;
-      const first = data.get("firstEdit") as string;
+      const firstEdit = data.get("firstEdit") as string;
       const reEnteredEdit = data.get("reEnteredEdit") as string;
-      if (first !== reEnteredEdit) {
+      if (firstEdit !== reEnteredEdit) {
         alert("Entries do not match");
         return;
       }
-      if (first === reEnteredEdit && accountname !== null) {
-        const newhash = generateKey(first);
-        const dataPackage = JSON.stringify({
-          newKey: newhash,
-          field: field,
-          accountname: accountname,
-          edits: first,
-        });
+      if (firstEdit === reEnteredEdit && selectedAccount !== null) {
         await fetch("/api/accountMngmnt/updateAcc", {
           method: "PUT",
-          body: JSON.stringify(dataPackage),
+          body: JSON.stringify({
+            accountname: selectedAccount,
+            edits: firstEdit,
+          }),
           headers: { "Content-Type": "application/json" },
         });
       } else {
@@ -43,9 +35,6 @@ const UpdateAccount = () => {
       });
     }
   }
-  const handleFieldChange = async (selectedfield: string) => {
-    setField(selectedfield);
-  };
   return (
     <>
       <>
@@ -61,13 +50,10 @@ const UpdateAccount = () => {
                     onAccountChange={handleAccountChange}
                   ></AccountDropdown>
                 </div>
-                <div className="p-3">
-                  <SelectField onFieldChange={handleFieldChange}></SelectField>
-                </div>
               </div>
               <div className="flex flex-row w-[770px]">
                 <div className="p-2 w-full">
-                  <h3>Enter the account edit</h3>
+                  <h3>Enter the new account name</h3>
                   <Input
                     id="firstEdit"
                     name="firstEdit"
@@ -75,7 +61,7 @@ const UpdateAccount = () => {
                   />
                 </div>
                 <div className="p-2 pl-5 w-full">
-                  <h3>Re-enter the edit</h3>
+                  <h3>Re-enter the new account name</h3>
                   <Input
                     id="reEnteredEdit"
                     name="reEnteredEdit"

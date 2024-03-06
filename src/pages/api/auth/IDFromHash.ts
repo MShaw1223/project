@@ -9,7 +9,7 @@ export default async function handler(
   //checks if http method is correct
   if (req.method === "POST") {
     try {
-      const authKey = req.body;
+      const authKey = await req.body;
       const pool = new Pool({
         connectionString: process.env.DATABASE_URL,
       });

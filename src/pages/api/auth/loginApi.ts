@@ -32,6 +32,12 @@ export default async function handler(
       );
       const indb = await pool.query(sqlquery);
       event.waitUntil(pool.end());
+      if (indb.rows.length === 0) {
+        // User not found in the database
+        return new Response("User not found", {
+          status: 404,
+        });
+      }
       const password = passwd;
       console.log("Entered pwd: ", password);
       const dbPassword = indb.rows[0].passwd;

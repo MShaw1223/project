@@ -10,7 +10,7 @@ interface FieldDropdownProps {
   onFieldChange: (field: string) => void;
 }
 
-function SelectField({ onFieldChange }: FieldDropdownProps) {
+function SelectEdit({ onFieldChange }: FieldDropdownProps) {
   const handleValueChange = async (selected: string) => {
     onFieldChange(selected);
   };
@@ -29,4 +29,4 @@ function SelectField({ onFieldChange }: FieldDropdownProps) {
   );
 }
 
-export default SelectField;
+export default SelectEdit;

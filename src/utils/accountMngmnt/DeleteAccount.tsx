@@ -36,10 +36,7 @@ const DeleteAccount = () => {
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const selectedAccountValue = selectedAccount;
-    const dataPackage = JSON.stringify({ accountname: selectedAccountValue });
-    console.log(dataPackage);
-    mutation.mutate(dataPackage);
+    mutation.mutate(JSON.stringify({ accountname: selectedAccount }));
   }
   return (
     <>

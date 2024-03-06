@@ -9,27 +9,16 @@ export default async function editEntryHandler(
 ) {
   try {
     if (req.method === "PUT") {
-      const { field, edits, accountname, newKey } = await req.body;
+      const { edits, accountname } = await req.body;
       const pool = new Pool({
         connectionString: process.env.DATABASE_URL,
       });
-      let sqlQuery;
-      if (field === "username") {
-        sqlQuery = sqlstring.format(`
+      //this isnt correct should be accountname --> edit all associated updateaccountfiles <--
+      const sqlQuery = sqlstring.format(`
           UPDATE tableAccounts
-          SET username = ${edits},
-          hashkey = ${newKey}
+          SET accountname = ${edits},
           WHERE accountname = ${accountname}
         `);
-      } else if (field === "passwd") {
-        sqlQuery = sqlstring.format(`
-          UPDATE tableAccounts
-          SET passwd = ${edits}
-          WHERE accountname = ${accountname}
-        `);
-      } else {
-        throw new Error("Invalid field");
-      }
       await pool.query(sqlQuery);
       event.waitUntil(pool.end());
     } else {

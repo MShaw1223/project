@@ -44,7 +44,7 @@ const tradeEntry: NextPage = () => {
       console.error("Mutation error:", error);
     },
   });
-  const handleAccountChange = async (selectedAccount: string) => {
+  const handleAccountChange = (selectedAccount: string) => {
     setSelectedAccount(selectedAccount);
   };
   const handleBasePairChange = (selectedBasePair: string) => {
@@ -72,95 +72,34 @@ const tradeEntry: NextPage = () => {
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const data = new FormData(event.target as HTMLFormElement);
-    const entryPrice = parseFloat(data.get("entryPrice") as string);
-    const stopLoss = parseFloat(data.get("stopLoss") as string);
-    const takeProfit = parseFloat(data.get("takeProfit") as string);
-    const riskRatio = parseFloat(data.get("riskRatio") as string);
-    const BasePair = selectedBasePair;
-    const QuotePair = selectedQuotePair;
-    const currencyPair = BasePair + QuotePair;
-    const tradeNotes = data.get("tradeNotes");
-    const winOrLoss = selectedOutcome;
-    const acctID = await getID(selectedAccount);
-
+    const accountID = await getID(selectedAccount);
     console.log("Trade Data: ", {
-      entryPrice,
-      stopLoss,
-      takeProfit,
-      riskRatio,
-      BasePair,
-      QuotePair,
-      currencyPair,
-      tradeNotes,
-      winOrLoss,
-      acctID,
+      entryPrice: parseFloat(data.get("entryPrice") as string),
+      stopLoss: parseFloat(data.get("stopLoss") as string),
+      takeProfit: parseFloat(data.get("takeProfit") as string),
+      riskRatio: parseFloat(data.get("riskRatio") as string),
+      BasePair: selectedBasePair,
+      QuotePair: selectedQuotePair,
+      currencyPair: selectedBasePair + selectedQuotePair,
+      tradeNotes: data.get("tradeNotes"),
+      winOrLoss: selectedOutcome,
+      acctID: accountID,
     });
-    if (!entryPrice) {
-      alert("Invalid entry price");
-      return;
-    }
-    if (!stopLoss) {
-      alert("Invalid stop loss");
-      return;
-    }
-    if (!takeProfit) {
-      alert("Invalid take profit");
-      return;
-    }
-    if (!riskRatio) {
-      alert("Invalid risk ratio");
-      return;
-    }
-    if (currencyPair === "") {
-      alert("Invalid currency pair");
-      return;
-    }
-    if (selectedAccount === "") {
-      alert("Invalid account");
-      return;
-    }
-    if (tradeNotes === "") {
-      alert("Invalid notes");
-      return;
-    }
-    if (winOrLoss === "") {
-      alert("Invalid outcome");
-      return;
-    }
-    if (entryPrice === stopLoss) {
-      alert("Invalid stop loss");
-      return;
-    }
-    if (entryPrice === takeProfit) {
-      alert("Invalid take profit");
-      return;
-    }
-    if (riskRatio <= 0) {
-      alert("Invalid risk ratio");
-      return;
-    }
-    if (selectedOutcome === "") {
-      alert("Invalid outcome");
-      return;
-    }
-    if (BasePair === QuotePair) {
-      alert("Invalid currency pair");
-      return;
-    }
     try {
       mutation.mutate(
         JSON.stringify({
-          accountID: acctID,
-          selectedPair: currencyPair,
-          entryPrice,
-          riskRatio,
-          stopLoss,
-          takeProfit,
-          tradeNotes,
-          selectedOutcome: winOrLoss,
+          accountID: accountID,
+          selectedPair: selectedBasePair + selectedQuotePair,
+          entryPrice: parseFloat(data.get("entryPrice") as string),
+          riskRatio: parseFloat(data.get("riskRatio") as string),
+          stopLoss: parseFloat(data.get("stopLoss") as string),
+          takeProfit: parseFloat(data.get("takeProfit") as string),
+          tradeNotes: data.get("tradeNotes"),
+          selectedOutcome: selectedOutcome,
         })
       );
     } catch (error) {
+      alert("Error Submitting Trade");
       console.log("Error submitting data: ", error);
     }
   }

@@ -7,8 +7,8 @@ function withAuth(Component: ComponentType) {
 
     useEffect(() => {
       const getLi = async () => {
-        const { li } = router.query;
-        if (typeof li !== "string") {
+        const { li: loggedInVal } = router.query;
+        if (typeof loggedInVal !== "string") {
           router.push("/");
         }
       };

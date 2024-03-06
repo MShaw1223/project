@@ -26,12 +26,12 @@ const NewCurrencyPage: NextPage = () => {
   });
   useEffect(() => {
     async function getUser() {
-      const { li } = router.query;
-      if (li !== undefined) {
+      const { li: loggedInVal } = router.query;
+      if (loggedInVal !== undefined) {
         try {
           const response = await fetch("/api/auth/IDFromHash", {
             method: "POST",
-            body: JSON.stringify(li),
+            body: JSON.stringify(loggedInVal),
             headers: {
               "Content-Type": "application/json",
             },
@@ -48,19 +48,18 @@ const NewCurrencyPage: NextPage = () => {
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const data = new FormData(event.target as HTMLFormElement);
-    const pairabbr = data.get("Abbreviation");
-    const reEntered = data.get("reEnteredAbbreviation");
+    const pairabbr = data.get("Abbreviation")! as string;
+    const reEntered = data.get("reEnteredAbbreviation")! as string;
     const userid = user;
     if (pairabbr !== reEntered) {
       alert("Entries do not match");
       return;
     }
-    if (pairabbr === reEntered && userid !== null && pairabbr !== null) {
-      const dataPackage = JSON.stringify({
+    if (userid !== null) {
+      mutation.mutate(JSON.stringify({
         pairabbr,
         userid,
-      });
-      mutation.mutate(dataPackage);
+      }));
     }
   }
   return (
