@@ -5,13 +5,13 @@ import sqlstring from "sqlstring";
 
 //this deletes all traces of data in the database associated with the userid that is deleted
 // ie the logged in user
-export default async function editUser(
+export default async function delUser(
   req: NextApiRequest,
   event: NextFetchEvent
 ) {
   if (req.method === "DELETE") {
     try {
-      console.log("Inside the editUser function");
+      console.log("Inside the delUser function");
       const pool = new Pool({
         connectionString: process.env.DATABASE_URL,
       });
