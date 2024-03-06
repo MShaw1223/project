@@ -6,32 +6,37 @@ import * as React from "react";
 const DeleteUserPage: NextPage = () => {
   const router = useRouter();
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    console.log("Handle Submit works");
-    const { li: loggedInVal } = router.query;
-    console.log("Li: ", loggedInVal);
-    if (typeof loggedInVal !== "string") {
-      const getuserID = await fetch("/api/tradeEntry/findActID", {
-        method: "POST",
-        body: JSON.stringify(loggedInVal),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const done = await fetch("/api/users/deleteUser", {
-        method: "DELETE",
-        body: JSON.stringify({
-          userID: await getuserID.json(),
-        }),
-      });
-      if (!done.ok) {
-        throw new Error("Failed to delete data");
-      } else if (done.ok) {
-        router.push("/");
+    try {
+      event.preventDefault();
+      console.log("Handle Submit works");
+      const { li: loggedInVal } = router.query;
+      console.log("Li: ", loggedInVal);
+      if (typeof loggedInVal !== "string") {
+        const getuserID = await fetch("/api/tradeEntry/IDFromHash", {
+          method: "POST",
+          body: JSON.stringify(loggedInVal),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const done = await fetch("/api/users/deleteUser", {
+          method: "DELETE",
+          body: JSON.stringify({
+            userID: await getuserID.json(),
+          }),
+        });
+        if (!done.ok) {
+          throw new Error("Failed to delete data");
+        } else if (done.ok) {
+          router.push("/");
+        }
+      } else {
+        throw new Error("Incorrect Method");
       }
+    } catch (error) {
+      alert("Unable to complete deletion");
     }
   }
-  // TODO: change the form? have an onclick insteadß
   return (
     <>
       <div className="overflow-auto justify-center p-2">
