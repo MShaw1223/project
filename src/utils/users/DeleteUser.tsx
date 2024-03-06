@@ -5,10 +5,10 @@ import * as React from "react";
 
 const DeleteUserPage: NextPage = () => {
   const router = useRouter();
+  const { li: loggedInVal } = router.query;
   const [ID, setID] = React.useState<number>();
   React.useEffect(() => {
     async function getuserID() {
-      const { li: loggedInVal } = router.query;
       console.log("Li: ", loggedInVal);
       if (typeof loggedInVal === "string") {
         const getuserID = await fetch("/api/tradeEntry/IDFromHash", {
