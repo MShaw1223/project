@@ -5,7 +5,7 @@ import * as React from "react";
 
 const DeleteUserPage: NextPage = () => {
   const router = useRouter();
-  const { li: loggedInVal } = router.query;
+  const { li: loggedInVal } = await router.query;
   const [ID, setID] = React.useState<number>();
   React.useEffect(() => {
     async function getuserID() {
