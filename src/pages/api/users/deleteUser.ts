@@ -5,6 +5,10 @@ import sqlstring from "sqlstring";
 
 //this deletes all traces of data in the database associated with the userid that is deleted
 // ie the logged in user
+export const config = {
+  runtime: "edge",
+};
+
 export default async function delUser(
   req: NextApiRequest,
   event: NextFetchEvent
