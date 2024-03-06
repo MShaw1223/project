@@ -35,10 +35,11 @@ const DeleteUserPage: NextPage = () => {
           userID: ID,
         }),
       });
-      if (!done.ok) {
-        throw new Error("Failed to delete data");
-      } else if (done.ok) {
+      if (done.ok) {
         router.push("/");
+      } else {
+        const errMessage = await done.text();
+        throw new Error(errMessage);
       }
     } catch (error) {
       alert("Unable to complete deletion");
