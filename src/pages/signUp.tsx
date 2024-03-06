@@ -44,7 +44,7 @@ const signUp: NextPage = () => {
         router.push(`/home?li=${key}`);
       }
       if (!response.ok) {
-        alert("Failed to sign up, try again");
+        alert("Failed to sign up, try another username");
       }
     } else if (isMatch === false) {
       alert("Passwords do not match");
