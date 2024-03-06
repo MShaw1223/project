@@ -33,7 +33,7 @@ const DeleteUserPage: NextPage = () => {
         const done = await fetch("/api/users/deleteUser", {
           method: "DELETE",
           body: JSON.stringify({
-            userID: JSON.stringify(ID),
+            userID: ID,
           }),
         });
         if (!done.ok) {
