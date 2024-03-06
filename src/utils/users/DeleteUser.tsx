@@ -18,7 +18,8 @@ const DeleteUserPage: NextPage = () => {
             "Content-Type": "application/json",
           },
         });
-        setID(getuserID.json());
+        const foundID = await getuserID.json();
+        setID(foundID);
       }
     }
     getuserID();
