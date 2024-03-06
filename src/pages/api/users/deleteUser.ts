@@ -9,8 +9,8 @@ export default async function editUser(
   req: NextApiRequest,
   event: NextFetchEvent
 ) {
-  try {
-    if (req.method === "DELETE") {
+  if (req.method === "DELETE") {
+    try {
       console.log("Inside the editUser function");
       const pool = new Pool({
         connectionString: process.env.DATABASE_URL,
@@ -42,12 +42,12 @@ export default async function editUser(
       return new Response("Account deleted", {
         status: 200,
       });
-    } else {
-      throw new Error("Incorrect HTTP request");
+    } catch (error) {
+      return new Response("Bad Request", {
+        status: 400,
+      });
     }
-  } catch (error) {
-    return new Response("Bad Request", {
-      status: 400,
-    });
+  } else {
+    throw new Error("Incorrect HTTP request");
   }
 }
