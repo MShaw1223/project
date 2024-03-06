@@ -3,27 +3,45 @@ import { NextApiRequest } from "next";
 import { NextFetchEvent } from "next/server";
 import sqlstring from "sqlstring";
 
+//this deletes all traces of data in the database associated with the userid that is deleted
+// ie the logged in user
 export default async function editUser(
   req: NextApiRequest,
   event: NextFetchEvent
 ) {
   try {
     if (req.method === "DELETE") {
+      console.log("Inside the editUser function");
       const pool = new Pool({
         connectionString: process.env.DATABASE_URL,
       });
       const { userID } = await req.body;
       console.log("userID: ", userID);
-      const sqlStatement = sqlstring.format(`
-            delete from tableUsers where userID = ${userID};
-            delete from tableAccounts where userID = ${userID};
-            delete from tablePairs where userID = ${userID};
-            delete from tableTrades where accountid in (select from tableaccounts where userID = ${userID});
-        `);
+      const tblUsersSql = sqlstring.format(`
+        delete from tableUsers where userID = ${userID};
+      `);
+      const tblAccountsSql = sqlstring.format(`
+        delete from tableAccounts where userID = ${userID};
+      `);
+      const tblPairsSql = sqlstring.format(`
+        delete from tablePairs where userID = ${userID};
+      `);
+      const tblTradesSql = sqlstring.format(`
+        delete from tableTrades where accountid in (select from tableaccounts where userID = ${userID});
+      `);
       // could use join but would have to be its own statement
-      await pool.query(sqlStatement);
+      await pool.query(tblUsersSql);
+      await pool.query(tblAccountsSql);
+      await pool.query(tblPairsSql);
+      await pool.query(tblTradesSql);
       event.waitUntil(pool.end());
-      console.log("sql: ", sqlStatement);
+      console.log("sql tblUsers: ", tblUsersSql);
+      console.log("sql tblAccounts: ", tblAccountsSql);
+      console.log("sql tblPairs: ", tblPairsSql);
+      console.log("sql tblTrades: ", tblTradesSql);
+      return new Response("Account deleted", {
+        status: 200,
+      });
     } else {
       throw new Error("Incorrect HTTP request");
     }
