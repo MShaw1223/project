@@ -44,11 +44,11 @@ export default async function delUser(
       console.log("sql tblAccounts: ", tblAccountsSql);
       console.log("sql tblPairs: ", tblPairsSql);
       console.log("sql tblTrades: ", tblTradesSql);
-      res.status(200).json("Account deleted");
+      return res.status(200).json("Account deleted");
     } catch (error) {
-      res.status(400).json("Bad request");
+      return res.status(400).json("Bad request");
     }
   } else {
-    res.status(405).json({ error: "Method not allowed" });
+    return res.status(405).json({ error: "Method not allowed" });
   }
 }
