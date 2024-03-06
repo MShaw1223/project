@@ -1,3 +1,4 @@
+import { extractBody } from "@/utils/extractBody";
 import { Pool } from "@neondatabase/serverless";
 import { NextApiRequest, NextApiResponse } from "next";
 import sqlstring from "sqlstring";
@@ -18,8 +19,8 @@ export default async function delUser(
       const pool = new Pool({
         connectionString: process.env.DATABASE_URL,
       });
-      const { userID } = await req.body;
-      console.log(req.body);
+      const body = await extractBody(req);
+      const { userID } = body;
       console.log("userID: ", userID);
       const tblUsersSql = sqlstring.format(`
         delete from tableUsers where userID = ${userID};
