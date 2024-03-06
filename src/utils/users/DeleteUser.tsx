@@ -5,13 +5,12 @@ import * as React from "react";
 
 const DeleteUserPage: NextPage = () => {
   const router = useRouter();
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    try {
-      event.preventDefault();
-      console.log("Handle Submit works");
+  const [ID, setID] = React.useState<number>()
+  React.useEffect(() => {
+    async function getuserID() {
       const { li: loggedInVal } = router.query;
       console.log("Li: ", loggedInVal);
-      if (typeof loggedInVal !== "string") {
+      if (typeof loggedInVal === "string") {
         const getuserID = await fetch("/api/tradeEntry/IDFromHash", {
           method: "POST",
           body: JSON.stringify(loggedInVal),
@@ -19,10 +18,21 @@ const DeleteUserPage: NextPage = () => {
             "Content-Type": "application/json",
           },
         });
+        setID(getuserID)
+      }
+    }
+    getuserID();
+  }, []);
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    try {
+      event.preventDefault();
+      console.log("Handle Submit works");
+      if (typeof loggedInVal !== "string") {
         const done = await fetch("/api/users/deleteUser", {
           method: "DELETE",
           body: JSON.stringify({
-            userID: await getuserID.json(),
+            userID: JSON.stringify(ID),
           }),
         });
         if (!done.ok) {
