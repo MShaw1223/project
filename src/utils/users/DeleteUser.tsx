@@ -1,12 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import * as React from "react";
+import { useEffect, useState } from "react";
 
 const DeleteUserPage: NextPage = () => {
   const router = useRouter();
-  const [ID, setID] = React.useState<string>();
-  React.useEffect(() => {
+  const [ID, setID] = useState<string>();
+  useEffect(() => {
     async function getuserID() {
       const { li: loggedInVal } = router.query;
       console.log("Li: ", loggedInVal);
