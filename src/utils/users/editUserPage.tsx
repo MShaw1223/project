@@ -35,7 +35,7 @@ const EditUserPage: NextPage = () => {
           </div>
           <div className="m-1 p-2 w-[450px]">
             <div className="p-2">
-              <p>Change your username here</p>
+              <p>Change field here</p>
               <Input id="newInfo" name="newInfo" placeholder="New info....." />
             </div>
             <div className="p-4">
