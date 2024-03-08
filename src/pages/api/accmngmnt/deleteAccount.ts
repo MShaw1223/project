@@ -18,16 +18,21 @@ export default async function handler(req: NextRequest, event: NextFetchEvent) {
       const pool = new Pool({
         connectionString: process.env.DATABASE_URL,
       });
-      const deleteAccountQuery = sqlstring.format(
-        `
-      DELETE FROM tableAccounts WHERE accountname = ?;
-      `,
-        [accountname]
-      );
+      const getAcctID = sqlstring.format(`
+        select accountid from table accounts where accountname = ${accountname};
+      `);
+      await pool.query(getAcctID);
+      const deleteAccountQuery = sqlstring.format(`
+        DELETE FROM tableAccounts WHERE accountid = ${getAcctID};
+      `);
+      const deleteFrmTradeTbl = sqlstring.format(`
+        delete from tabletrades where accountid = ${getAcctID};
+      `);
+      await pool.query(deleteFrmTradeTbl);
       await pool.query(deleteAccountQuery);
       event.waitUntil(pool.end());
       console.log("sql: ", deleteAccountQuery);
-      console.log("Account deleted:", accountname);
+      console.log("Account deleted: ", accountname);
       return new Response(JSON.stringify({ accountname }), {
         status: 200,
       });
