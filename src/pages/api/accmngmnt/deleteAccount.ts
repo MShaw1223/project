@@ -21,8 +21,8 @@ export default async function handler(req: NextRequest, event: NextFetchEvent) {
       const getAcctID = sqlstring.format(`
         select accountid from tableaccounts where accountname = "${accountname}";
       `);
-      await pool.query(getAcctID);
       console.log("getAcctID", getAcctID);
+      await pool.query(getAcctID);
       const deleteAccountQuery = sqlstring.format(`
         DELETE FROM tableAccounts WHERE accountid = ${getAcctID};
       `);
