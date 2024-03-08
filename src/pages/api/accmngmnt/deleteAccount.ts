@@ -19,7 +19,7 @@ export default async function handler(req: NextRequest, event: NextFetchEvent) {
         connectionString: process.env.DATABASE_URL,
       });
       const getAcctID = sqlstring.format(`
-        select accountid from tableAccounts where accountname = "${accountname}";
+        select accountid from tableAccounts where accountname = ${accountname};
       `);
       console.log("getAcctID", getAcctID);
       await pool.query(getAcctID);
