@@ -20,8 +20,8 @@ export default async function handler(req: NextRequest, event: NextFetchEvent) {
       });
       const getAcctID = sqlstring.format(`
         select accountid from tableAccounts 
-        where accountname = ${accountname}
-      `);
+        where accountname = ?
+      `,[accountname]);
       console.log("getAcctID", getAcctID);
       await pool.query(getAcctID);
       const deleteAccountQuery = sqlstring.format(`
