@@ -37,9 +37,8 @@ export default async function handler(req: NextRequest, event: NextFetchEvent) {
         status: 400,
       });
     }
-  } else {
-    return new Response("Method not allowed", {
-      status: 405,
-    });
   }
+  return new Response("Method not allowed", {
+    status: 405,
+  });
 }

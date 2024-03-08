@@ -18,17 +18,17 @@ export default async function editUser(
       if (field === "username") {
         const newKey = generateKey(newInfo);
         sqlStatement = sqlstring.format(`
-            update tableUsers
-            set username = ${newInfo}
-            authKey = ${newKey}
-            where userid = ${userid}
+          update tableUsers
+          set username = ${newInfo}
+          authKey = ${newKey}
+          where userid = ${userid}
         `);
       } else if (field === "passwd") {
         sqlStatement = sqlstring.format(`
-            update tableUsers
-            set passwd = ${newInfo}
-            where userid = ${userid}
-            `);
+          update tableUsers
+          set passwd = ${newInfo}
+          where userid = ${userid}
+        `);
       } else {
         throw new Error("Incorrect field selected");
       }
