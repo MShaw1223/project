@@ -14,7 +14,7 @@ export default async function handler(req: NextRequest, event: NextFetchEvent) {
       const body = await extractBody(req);
       const { accountname } = deleteAccountSchema.parse(body);
       console.log("body", body);
-      console.log("accountname", accountname);
+      console.log("accountname: ", accountname);
       const pool = new Pool({
         connectionString: process.env.DATABASE_URL,
       });
@@ -22,6 +22,7 @@ export default async function handler(req: NextRequest, event: NextFetchEvent) {
         select accountid from tableaccounts where accountname = ${accountname};
       `);
       await pool.query(getAcctID);
+      console.log("getAcctID", getAcctID);
       const deleteAccountQuery = sqlstring.format(`
         DELETE FROM tableAccounts WHERE accountid = ${getAcctID};
       `);
