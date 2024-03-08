@@ -34,8 +34,6 @@ export default async function editUser(
       }
       await pool.query(sqlStatement);
       event.waitUntil(pool.end());
-    } else {
-      throw new Error("Incorrect HTTP request");
     }
   } catch (error) {
     return new Response("Bad Request", {
