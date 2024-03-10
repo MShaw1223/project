@@ -18,17 +18,19 @@ export default async function handler(req: NextRequest, event: NextFetchEvent) {
       const pool = new Pool({
         connectionString: process.env.DATABASE_URL,
       });
-      const getAcctID = sqlstring.format(`
+      const getAcctID = sqlstring.format(
+        `
         select accountid from tableAccounts 
-        where accountname = ?
-      `,[accountname]);
-      console.log("getAcctID", getAcctID);
+        where accountname = '${accountname}'
+      `
+      );
+      console.log("getAcctID: ", getAcctID);
       await pool.query(getAcctID);
       const deleteAccountQuery = sqlstring.format(`
-        DELETE FROM tableAccounts WHERE accountid = ${getAcctID};
+        DELETE FROM tableAccounts WHERE accountid = ${getAcctID}
       `);
       const deleteFrmTradeTbl = sqlstring.format(`
-        delete from tableTrades where accountid = ${getAcctID};
+        delete from tableTrades where accountid = ${getAcctID}
       `);
       await pool.query(deleteFrmTradeTbl);
       await pool.query(deleteAccountQuery);
