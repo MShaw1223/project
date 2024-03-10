@@ -22,12 +22,12 @@ export default async function handler(req: NextRequest, event: NextFetchEvent) {
         select accountid from tableAccounts where accountname = '${accountname}'
       `);
       console.log("getAcctID: ", getAcctID);
-      await pool.query(getAcctID);
+      const accountID = await pool.query(getAcctID);
       const deleteAccountQuery = sqlstring.format(`
-        DELETE FROM tableAccounts WHERE accountid = ${getAcctID}
+        DELETE FROM tableAccounts WHERE accountid = ${accountID}
       `);
       const deleteFrmTradeTbl = sqlstring.format(`
-        delete from tableTrades where accountid = ${getAcctID}
+        delete from tableTrades where accountid = ${accountID}
       `);
       await pool.query(deleteFrmTradeTbl);
       await pool.query(deleteAccountQuery);
