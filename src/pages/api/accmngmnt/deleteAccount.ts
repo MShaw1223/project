@@ -23,6 +23,7 @@ export default async function handler(req: NextRequest, event: NextFetchEvent) {
       `);
       console.log("getAcctID: ", getAcctID);
       const accountID = await pool.query(getAcctID);
+      console.log("acct id: ", accountID);
       const deleteAccountQuery = sqlstring.format(`
         DELETE FROM tableAccounts WHERE accountid = ${accountID}
       `);
