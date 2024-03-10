@@ -27,7 +27,6 @@ const DeleteUserPage: NextPage = () => {
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     try {
-      event.preventDefault();
       console.log("Handle Submit works");
       const done = await fetch("/api/users/deleteUser", {
         method: "DELETE",
@@ -35,12 +34,11 @@ const DeleteUserPage: NextPage = () => {
           userID: ID,
         }),
       });
-      if (done.ok) {
-        router.push("/");
-      } else {
+      if (!done.ok) {
         const errMessage = await done.text();
         throw new Error(errMessage);
       }
+      router.push("/");
     } catch (error) {
       alert("Unable to complete deletion");
     }
