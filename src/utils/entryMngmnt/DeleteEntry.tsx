@@ -59,33 +59,36 @@ const DeleteEntry: NextPage = () => {
   return (
     <>
       <div className="flex">
-        <div className="flex items-center justify-center">
-          <form onSubmit={handleSubmit}>
-            <h1 className="font-bold text-lg underline underline-offset-8">
-              Delete Trade
-            </h1>
-            <div className="flex flex-row w-fit">
-              <div className="p-3">
-                <AccountDropdown
-                  onAccountChange={handleAccountChange}
-                ></AccountDropdown>
+        {mutation.isLoading && <p>Deleting User...</p>}
+        {!mutation.isLoading && (
+          <div className="flex items-center justify-center">
+            <form onSubmit={handleSubmit}>
+              <h1 className="font-bold text-lg underline underline-offset-8">
+                Delete Trade
+              </h1>
+              <div className="flex flex-row w-fit">
+                <div className="p-3">
+                  <AccountDropdown
+                    onAccountChange={handleAccountChange}
+                  ></AccountDropdown>
+                </div>
+                <div className="p-3 w-full">
+                  <Input
+                    id="tradeID"
+                    name="tradeID"
+                    type="number"
+                    placeholder="Trade ID....."
+                  />
+                </div>
+                <div className="p-3 text-center">
+                  <Button type="submit" variant="destructive">
+                    Delete Trade
+                  </Button>
+                </div>
               </div>
-              <div className="p-3 w-full">
-                <Input
-                  id="tradeID"
-                  name="tradeID"
-                  type="number"
-                  placeholder="Trade ID....."
-                />
-              </div>
-              <div className="p-3 text-center">
-                <Button type="submit" variant="destructive">
-                  Delete Trade
-                </Button>
-              </div>
-            </div>
-          </form>
-        </div>
+            </form>
+          </div>
+        )}
       </div>
     </>
   );

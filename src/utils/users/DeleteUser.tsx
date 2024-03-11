@@ -24,41 +24,61 @@ const DeleteUserPage: NextPage = () => {
     }
     getuserID();
   }, []);
-
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    try {
+  const mutation = useMutation({
+    mutationFn: async (formData: number ) => {
       console.log("Handle Submit works");
       const done = await fetch("/api/users/deleteUser", {
         method: "DELETE",
-        body: JSON.stringify({
-          userID: ID,
-        }),
+        body: formData,
       });
       if (!done.ok) {
         const errMessage = await done.text();
         throw new Error(errMessage);
       }
       router.push("/");
-    } catch (error) {
+    },
+    onSettled: () => {
+      setSelectedAccount("");
+    },
+    onError: (error) => {
       alert("Unable to complete deletion");
-    }
+      console.error("Mutation error:", error);
+    },
+  });
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    mutation.mutate(
+      JSON.stringify({
+        userID: ID,
+      })
+    );
   }
   return (
     <>
-      <div className="overflow-auto justify-center p-2">
-        <form onSubmit={handleSubmit}>
-          <h1 className="font-bold text-lg">Delete User</h1>
-          <div className="m-1 p-2 w-[450px]">
-            <div className="p-2">
-              <p>Deleting this user will delete all associated data</p>
-            </div>
-            <div className="p-4">
-              <Button type="submit" className="w-full" variant="destructive">
-                Delete User
-              </Button>
-            </div>
+      <div className="flex">
+        {mutation.isLoading && <p>Deleting User...</p>}
+        {!mutation.isLoading && (
+          <div className="overflow-auto justify-center p-2">
+            <form onSubmit={handleSubmit}>
+              <h1 className="font-bold text-lg">Delete User</h1>
+              <div className="m-1 p-2 w-[450px]">
+                <div className="p-2">
+                  <p>Deleting this user will delete all associated data</p>
+                </div>
+                <div className="p-4">
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    variant="destructive"
+                  >
+                    Delete User
+                  </Button>
+                </div>
+              </div>
+            </form>
           </div>
-        </form>
+        )}
       </div>
     </>
   );

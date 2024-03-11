@@ -40,25 +40,28 @@ const DeleteAccount = () => {
   return (
     <>
       <div className="flex">
-        <div className="flex items-center justify-center">
-          <form onSubmit={handleSubmit}>
-            <h1 className="font-bold text-lg underline underline-offset-8">
-              Delete Account
-            </h1>
-            <div className="flex flex-row w-[450px]">
-              <div className="p-2 w-full">
-                <AccountDropdown
-                  onAccountChange={handleAccountChange}
-                ></AccountDropdown>
+        {mutation.isLoading && <p>Deleting Account...</p>}
+        {!mutation.isLoading && (
+          <div className="flex items-center justify-center">
+            <form onSubmit={handleSubmit}>
+              <h1 className="font-bold text-lg underline underline-offset-8">
+                Delete Account
+              </h1>
+              <div className="flex flex-row w-[450px]">
+                <div className="p-2 w-full">
+                  <AccountDropdown
+                    onAccountChange={handleAccountChange}
+                  ></AccountDropdown>
+                </div>
+                <div className="p-3 text-center">
+                  <Button type="submit" variant="destructive">
+                    Delete Account
+                  </Button>
+                </div>
               </div>
-              <div className="p-3 text-center">
-                <Button type="submit" variant="destructive">
-                  Delete Account
-                </Button>
-              </div>
-            </div>
-          </form>
-        </div>
+            </form>
+          </div>
+        )}
       </div>
     </>
   );
