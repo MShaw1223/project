@@ -7,24 +7,21 @@ import { useMutation } from "react-query";
 const DeleteUserPage: NextPage = () => {
   const router = useRouter();
   const [ID, setID] = useState<string>();
-  useEffect(() => {
-    async function getuserID() {
-      const { li: loggedInVal } = router.query;
-      console.log("Li: ", loggedInVal);
-      if (loggedInVal !== undefined) {
-        const getuserID = await fetch("/api/auth/IDFromHash", {
-          method: "POST",
-          body: JSON.stringify(loggedInVal),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        const foundID = await getuserID.json();
-        setID(foundID);
-      }
+  async function getuserID() {
+    const { li: loggedInVal } = router.query;
+    console.log("Li: ", loggedInVal);
+    if (loggedInVal !== undefined) {
+      const getuserID = await fetch("/api/auth/IDFromHash", {
+        method: "POST",
+        body: JSON.stringify(loggedInVal),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const foundID = await getuserID.json();
+      setID(foundID);
     }
-    getuserID();
-  }, []);
+  }
   const mutation = useMutation({
     mutationFn: async (formData: number) => {
       console.log("Handle Submit works");
@@ -49,11 +46,17 @@ const DeleteUserPage: NextPage = () => {
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    mutation.mutate(
-      JSON.stringify({
-        userID: ID,
-      })
-    );
+    await getuserID();
+    try {
+      mutation.mutate(
+        JSON.stringify({
+          userID: ID,
+        })
+      );
+    } catch (error) {
+      alert("Error Deleting User");
+      console.log("Error with data: ", error);
+    }
   }
   return (
     <>
