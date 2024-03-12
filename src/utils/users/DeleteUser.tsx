@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useState, FormEvent } from "react";
 import { useMutation } from "react-query";
 
 const DeleteUserPage: NextPage = () => {
