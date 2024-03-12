@@ -34,6 +34,9 @@ export default async function editUser(
       }
       await pool.query(sqlStatement);
       event.waitUntil(pool.end());
+      return new Response("Editted Successfully", {
+        status: 200,
+      });
     }
   } catch (error) {
     return new Response("Bad Request", {
