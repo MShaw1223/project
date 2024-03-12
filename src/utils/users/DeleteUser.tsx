@@ -23,7 +23,7 @@ const DeleteUserPage: NextPage = () => {
     }
   }
   const mutation = useMutation({
-    mutationFn: async (formData: number) => {
+    mutationFn: async (formData: string) => {
       console.log("Handle Submit works");
       const done = await fetch("/api/users/deleteUser", {
         method: "DELETE",
