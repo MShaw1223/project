@@ -13,13 +13,23 @@ export default async function editEntryHandler(
       const pool = new Pool({
         connectionString: process.env.DATABASE_URL,
       });
-      //this isnt correct should be accountname --> edit all associated updateaccountfiles <--
-      const sqlQuery = sqlstring.format(`
+      const findAccID = sqlstring.format(
+        `
+          SELECT accountid from tableAccounts
+          WHERE accountname = ${accountname}
+        `
+      );
+      const result = await pool.query(findAccID);
+      await pool.end();
+      const response = result.rows[0].accountid;
+      const changeAccName = sqlstring.format(
+        `
           UPDATE tableAccounts
           SET accountname = ${edits},
-          WHERE accountname = ${accountname}
-        `);
-      await pool.query(sqlQuery);
+          WHERE accountid = ${response}
+        `
+      );
+      await pool.query(changeAccName);
       event.waitUntil(pool.end());
     } else {
       throw console.error("Incorrect HTTP method");

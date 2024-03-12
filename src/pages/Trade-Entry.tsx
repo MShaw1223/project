@@ -58,7 +58,7 @@ const tradeEntry: NextPage = () => {
   };
 
   async function getID(selectedAccount: string) {
-    const acctID = await fetch("/api/tradeEntry/findActID", {
+    const acctID = await fetch("/api/findActID", {
       method: "POST",
       body: JSON.stringify(selectedAccount),
       headers: {
