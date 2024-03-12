@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useMutation } from "react-query";
 
 const DeleteUserPage: NextPage = () => {
@@ -34,9 +34,6 @@ const DeleteUserPage: NextPage = () => {
         throw new Error(errMessage);
       }
       router.push("/");
-    },
-    onSettled: () => {
-      setSelectedAccount("");
     },
     onError: (error) => {
       alert("Unable to complete deletion");
