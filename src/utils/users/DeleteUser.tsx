@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { useMutation } from "react-query";
 
 const DeleteUserPage: NextPage = () => {
   const router = useRouter();
@@ -25,7 +26,7 @@ const DeleteUserPage: NextPage = () => {
     getuserID();
   }, []);
   const mutation = useMutation({
-    mutationFn: async (formData: number ) => {
+    mutationFn: async (formData: number) => {
       console.log("Handle Submit works");
       const done = await fetch("/api/users/deleteUser", {
         method: "DELETE",
@@ -46,7 +47,7 @@ const DeleteUserPage: NextPage = () => {
     },
   });
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     mutation.mutate(
       JSON.stringify({
