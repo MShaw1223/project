@@ -21,7 +21,7 @@ export default async function handler(req: NextRequest, event: NextFetchEvent) {
       });
       const deleteEntryQuery = sqlstring.format(
         `
-            DELETE FROM tableTrades WHERE tradesid = ? and accountid = ?;
+            DELETE FROM tableTrades WHERE tradesid = ? and accountid = ?
           `,
         [tradesid, accountid]
       );

@@ -14,20 +14,28 @@ export default async function handler(req: NextRequest, event: NextFetchEvent) {
       const body = await extractBody(req);
       const { accountname } = deleteAccountSchema.parse(body);
       console.log("body", body);
-      console.log("accountname", accountname);
+      console.log("accountname: ", accountname);
       const pool = new Pool({
         connectionString: process.env.DATABASE_URL,
       });
-      const deleteAccountQuery = sqlstring.format(
-        `
-      DELETE FROM tableAccounts WHERE accountname = ?;
-      `,
-        [accountname]
-      );
+      const getAcctID = sqlstring.format(`
+        select accountid from tableAccounts where accountname = '${accountname}'
+      `);
+      console.log("getAcctID: ", getAcctID);
+      const placeholder = await pool.query(getAcctID);
+      const accountID = placeholder.rows[0].accountid;
+      console.log("acct id: ", accountID);
+      const deleteAccountQuery = sqlstring.format(`
+        DELETE FROM tableAccounts WHERE accountid = ${accountID}
+      `);
+      const deleteFrmTradeTbl = sqlstring.format(`
+        delete from tableTrades where accountid = ${accountID}
+      `);
+      await pool.query(deleteFrmTradeTbl);
       await pool.query(deleteAccountQuery);
       event.waitUntil(pool.end());
       console.log("sql: ", deleteAccountQuery);
-      console.log("Account deleted:", accountname);
+      console.log("Account deleted: ", accountname);
       return new Response(JSON.stringify({ accountname }), {
         status: 200,
       });
@@ -37,9 +45,8 @@ export default async function handler(req: NextRequest, event: NextFetchEvent) {
         status: 400,
       });
     }
-  } else {
-    return new Response("Method not allowed", {
-      status: 405,
-    });
   }
+  return new Response("Method not allowed", {
+    status: 405,
+  });
 }
