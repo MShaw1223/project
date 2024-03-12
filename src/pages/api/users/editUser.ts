@@ -20,7 +20,7 @@ export default async function editUser(
         sqlStatement = sqlstring.format(`
           update tableUsers
           set username = ${newInfo}
-          authKey = ${newKey}
+          ,authKey = ${newKey}
           where userid = ${userid}
         `);
       } else if (field === "passwd") {
