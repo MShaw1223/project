@@ -49,17 +49,13 @@ export default async function handler(
     );
     await pool.end();
     console.log("User ID in home search: ", userIDres.rows[0].userID);
-    const totalTrades = totalTradesResult.rows[0].count;
-    const totalWins = totalWinsResult.rows[0].count;
-    const bestPair = bestPairResult.rows[0].currencypair;
-    const worstPair = worstPairResult.rows[0].currencypair;
     const winPercentage = (totalWins / totalTrades) * 100;
     const tradeData = {
-      totalTrades,
-      totalWins,
+      totalTrades: totalTradesResult.rows[0].count,
+      totalWins: totalWinsResult.rows[0].count,
       winPercentage,
-      bestPair,
-      worstPair,
+      bestPair: bestPairResult.rows[0].currencypair,
+      worstPair: worstPairResult.rows[0].currencypair,
     };
     console.log("Trade data:", tradeData);
     res.status(200).json(tradeData);
