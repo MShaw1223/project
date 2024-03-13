@@ -18,7 +18,7 @@ export default async function handler(
       "select userID from tableusers where username = ?",
       [lgdin]
     );
-    const userid = await getUserIDquery.row[0].userid;
+    const userid = await getUserIDquery;
     const totalTradesQuery = sqlstring.format(
       "select count(*) from tableTrades where winLoss != 'no-entry' AND userID = ?",
       [userid]
