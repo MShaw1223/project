@@ -18,35 +18,34 @@ export default async function handler(
       "select userID from tableusers where username = ?",
       [lgdin]
     );
+    const userid = await getUserIDquery.row[0].userid;
     const totalTradesQuery = sqlstring.format(
-      "select count(*) from tableTrades where winLoss != 'no-entry' AND userID = ?"
+      "select count(*) from tableTrades where winLoss != 'no-entry' AND userID = ?",
+      [userid]
     );
     const totalWinsQuery = sqlstring.format(
-      "select count(*) from tableTrades where winLoss = 'win' AND userID = ?"
+      "select count(*) from tableTrades where winLoss = 'win' AND userID = ?",
+      [userid]
     );
     //  get the count of wins and ttl trades
     const bestPairQuery = sqlstring.format(
-      "select currencypair, count(*) as count from tabletrades where userID = ? group by currencypair order by count desc limit 1"
+      "select currencypair, count(*) as count from tabletrades where userID = ? group by currencypair order by count desc limit 1",
+      [userid]
     );
     const worstPairQuery = sqlstring.format(
-      "select currencypair, count(*) as count from tabletrades where userID = ? group by currencypair order by count asc limit 1"
+      "select currencypair, count(*) as count from tabletrades where userID = ? group by currencypair order by count asc limit 1",
+      [userid]
     );
     // get the count of wins and losses
     // and order by the worst or best
     // then select the worst for loss and the best for win
     const userIDres = await pool.query(getUserIDquery);
     const totalTradesResult = await pool.query(
-      sqlstring.format(totalTradesQuery, userIDres.rows[0].userID)
+      sqlstring.format(totalTradesQuery)
     );
-    const totalWinsResult = await pool.query(
-      sqlstring.format(totalWinsQuery, userIDres.rows[0].userID)
-    );
-    const bestPairResult = await pool.query(
-      sqlstring.format(bestPairQuery, userIDres.rows[0].userID)
-    );
-    const worstPairResult = await pool.query(
-      sqlstring.format(worstPairQuery, userIDres.rows[0].userID)
-    );
+    const totalWinsResult = await pool.query(sqlstring.format(totalWinsQuery));
+    const bestPairResult = await pool.query(sqlstring.format(bestPairQuery));
+    const worstPairResult = await pool.query(sqlstring.format(worstPairQuery));
     await pool.end();
     console.log("User ID in home search: ", userIDres.rows[0].userID);
     const winPercentage = (totalWins / totalTrades) * 100;
