@@ -48,11 +48,11 @@ export default async function handler(
     const worstPairResult = await pool.query(sqlstring.format(worstPairQuery));
     await pool.end();
     console.log("User ID in home search: ", userIDres.rows[0].userID);
-    const winPercentage = (totalWins / totalTrades) * 100;
     const tradeData = {
       totalTrades: totalTradesResult.rows[0].count,
       totalWins: totalWinsResult.rows[0].count,
-      winPercentage,
+      winPercentage:
+        (totalWinsResult.rows[0].count / totalTradesResult.rows[0].count) * 100,
       bestPair: bestPairResult.rows[0].currencypair,
       worstPair: worstPairResult.rows[0].currencypair,
     };
