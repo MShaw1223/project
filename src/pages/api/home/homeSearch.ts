@@ -15,31 +15,35 @@ export default async function handler(
     const lgdin = await extractBody(req.body);
     console.log("logged in: ", lgdin);
     const getUserIDquery = sqlstring.format(
-      "select userID from tableusers where username = ?",
+      "select from tableusers where username = ?",
       [lgdin]
     );
-    const userid = await getUserIDquery;
-    const totalTradesQuery = sqlstring.format(
-      "select count(*) from tableTrades where winLoss != 'no-entry' AND userID = ?",
+    const userid = await pool.query(getUserIDquery);
+    const getAccIDquery = sqlstring.format(
+      "select from tableaccounts where userid = ?",
       [userid]
     );
+    const accountid = await pool.query(getAccIDquery);
+    const totalTradesQuery = sqlstring.format(
+      "select count(*) from tableTrades where winLoss != 'no-entry' AND accountid = ?",
+      [accountid]
+    );
     const totalWinsQuery = sqlstring.format(
-      "select count(*) from tableTrades where winLoss = 'win' AND userID = ?",
-      [userid]
+      "select count(*) from tableTrades where winLoss = 'win' AND acccountid = ?",
+      [accountid]
     );
     //  get the count of wins and ttl trades
     const bestPairQuery = sqlstring.format(
-      "select currencypair, count(*) as count from tabletrades where userID = ? group by currencypair order by count desc limit 1",
-      [userid]
+      "select currencypair, count(*) as count from tabletrades where accountid = ? group by currencypair order by count desc limit 1",
+      [accountid]
     );
     const worstPairQuery = sqlstring.format(
-      "select currencypair, count(*) as count from tabletrades where userID = ? group by currencypair order by count asc limit 1",
-      [userid]
+      "select currencypair, count(*) as count from tabletrades where accountid = ? group by currencypair order by count asc limit 1",
+      [accountid]
     );
     // get the count of wins and losses
     // and order by the worst or best
     // then select the worst for loss and the best for win
-    const userIDres = await pool.query(getUserIDquery);
     const totalTradesResult = await pool.query(
       sqlstring.format(totalTradesQuery)
     );
