@@ -2,8 +2,22 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import * as React from "react";
 import AccountDropdown from "../selectAccount";
+import { useMutation } from "react-query";
 const UpdateAccount = () => {
   const [selectedAccount, setSelectedAccount] = React.useState<string>("");
+  const mutation = useMutation({
+    mutationFn: async (data: string) => {
+      const response = await fetch("/api/accmngmnt/updateAcc", {
+        method: "PUT",
+        body: data,
+        headers: { "Content-Type": "application/json" },
+      });
+      if (!response.ok) {
+        throw new Error("Failed to edit");
+      }
+      return response;
+    },
+  });
   const handleAccountChange = async (selectedAccount: string) => {
     setSelectedAccount(selectedAccount);
   };
@@ -18,14 +32,16 @@ const UpdateAccount = () => {
         return;
       }
       if (firstEdit === reEnteredEdit && selectedAccount !== null) {
-        await fetch("/api/accountMngmnt/updateAcc", {
-          method: "PUT",
-          body: JSON.stringify({
-            accountname: selectedAccount,
-            edits: firstEdit,
-          }),
-          headers: { "Content-Type": "application/json" },
-        });
+        try {
+          mutation.mutate(
+            JSON.stringify({
+              accountname: selectedAccount,
+              edits: firstEdit,
+            })
+          );
+        } catch (error) {
+          alert("Error Editting Account");
+        }
       } else {
         throw new Error("Submitted data is incorrect");
       }
@@ -39,41 +55,44 @@ const UpdateAccount = () => {
     <>
       <>
         <div className="flex">
-          <div className="flex items-center justify-center">
-            <form onSubmit={handleSubmit}>
-              <h1 className="font-bold text-lg underline underline-offset-8">
-                Update Account
-              </h1>
-              <div className="flex flex-row w-[770px]">
-                <div className="p-3">
-                  <AccountDropdown
-                    onAccountChange={handleAccountChange}
-                  ></AccountDropdown>
+          {mutation.isLoading && <p>Submitting Edit...</p>}
+          {!mutation.isLoading && (
+            <div className="flex items-center justify-center">
+              <form onSubmit={handleSubmit}>
+                <h1 className="font-bold text-lg underline underline-offset-8">
+                  Update Account
+                </h1>
+                <div className="flex flex-row w-[770px]">
+                  <div className="p-3">
+                    <AccountDropdown
+                      onAccountChange={handleAccountChange}
+                    ></AccountDropdown>
+                  </div>
                 </div>
-              </div>
-              <div className="flex flex-row w-[770px]">
-                <div className="p-2 w-full">
-                  <h3>Enter the new account name</h3>
-                  <Input
-                    id="firstEdit"
-                    name="firstEdit"
-                    placeholder="Enter Edit....."
-                  />
+                <div className="flex flex-row w-[770px]">
+                  <div className="p-2 w-full">
+                    <h3>Enter the new account name</h3>
+                    <Input
+                      id="firstEdit"
+                      name="firstEdit"
+                      placeholder="Enter Edit....."
+                    />
+                  </div>
+                  <div className="p-2 pl-5 w-full">
+                    <h3>Re-enter the new account name</h3>
+                    <Input
+                      id="reEnteredEdit"
+                      name="reEnteredEdit"
+                      placeholder="Re-enter Edit..."
+                    />
+                  </div>
                 </div>
-                <div className="p-2 pl-5 w-full">
-                  <h3>Re-enter the new account name</h3>
-                  <Input
-                    id="reEnteredEdit"
-                    name="reEnteredEdit"
-                    placeholder="Re-enter Edit..."
-                  />
+                <div className="p-3 text-center">
+                  <Button type="submit">Submit Edits</Button>
                 </div>
-              </div>
-              <div className="p-3 text-center">
-                <Button type="submit">Submit Edits</Button>
-              </div>
-            </form>
-          </div>
+              </form>
+            </div>
+          )}
         </div>
       </>
     </>
