@@ -51,7 +51,7 @@ export default async function handler(
     const bestPairResult = await pool.query(sqlstring.format(bestPairQuery));
     const worstPairResult = await pool.query(sqlstring.format(worstPairQuery));
     await pool.end();
-    console.log("User ID in home search: ", userIDres.rows[0].userID);
+    console.log("User ID in home search: ", userid.rows[0].userID);
     const tradeData = {
       totalTrades: totalTradesResult.rows[0].count,
       totalWins: totalWinsResult.rows[0].count,
