@@ -25,7 +25,7 @@ type TradeData = {
 
 const Home: NextPage = () => {
   const router = useRouter();
-  const [data, setData] = React.useState<TradeData | null>(null);
+  const [data, setData] = React.useState<TradeData>();
   const [menuOpen, setMenuOpen] = React.useState(false);
   const [user, setUser] = React.useState<string>("");
   React.useEffect(() => {
@@ -39,16 +39,16 @@ const Home: NextPage = () => {
             body: JSON.stringify(loggedInVal),
             headers: { "Content-Type": "application/json" },
           });
-          const lgdin = await getuser.json();
+          const lgdin: string = await getuser.json();
+          console.log("home.tsx lgdin: ", lgdin);
           setUser(lgdin);
-          console.log("logged in: ", user);
-          if (user !== null) {
+          if (lgdin !== null) {
             const response = await fetch("/api/home/homeSearch", {
               method: "POST",
-              body: JSON.stringify(user),
+              body: JSON.stringify(lgdin),
               headers: { "Content-Type": "application/json" },
             });
-            const tradeData = await response.json();
+            const tradeData: TradeData = await response.json();
             console.log("Fetched data:", tradeData);
             setData(tradeData);
           }
