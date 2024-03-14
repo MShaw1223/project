@@ -30,18 +30,18 @@ const Home: NextPage = () => {
   const [user, setUser] = React.useState<string | null>(null);
   React.useEffect(() => {
     async function getUser() {
-      const { li } = router.query;
-      console.log(li);
-      if (li !== undefined) {
+      const { li: loggedInVal } = router.query;
+      console.log(loggedInVal);
+      if (loggedInVal !== undefined) {
         try {
-          const user = await fetch("/api/auth/userFromHash", {
+          const getuser = await fetch("/api/auth/userFromHash", {
             method: "POST",
-            body: JSON.stringify(li),
+            body: JSON.stringify(loggedInVal),
             headers: { "Content-Type": "application/json" },
           });
-          const lgdin = await user.json();
-          console.log("logged in: ", lgdin);
+          const lgdin = await getuser.json();
           setUser(lgdin);
+          console.log("logged in: ", user);
           if (user !== null) {
             const response = await fetch("/api/home/homeSearch", {
               method: "POST",
