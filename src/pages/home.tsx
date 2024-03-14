@@ -27,7 +27,7 @@ const Home: NextPage = () => {
   const router = useRouter();
   const [data, setData] = React.useState<TradeData | null>(null);
   const [menuOpen, setMenuOpen] = React.useState(false);
-  const [user, setUser] = React.useState<string>(null);
+  const [user, setUser] = React.useState<string>("");
   React.useEffect(() => {
     async function getUser() {
       const { li: loggedInVal } = router.query;
