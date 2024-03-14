@@ -42,26 +42,22 @@ const Home: NextPage = () => {
           const lgdin = await user.json();
           console.log("logged in: ", lgdin);
           setUser(lgdin);
+          if (user !== null) {
+            const response = await fetch("/api/home/homeSearch", {
+              method: "POST",
+              body: JSON.stringify(user),
+              headers: { "Content-Type": "application/json" },
+            });
+            const tradeData = await response.json();
+            console.log("Fetched data:", tradeData);
+            setData(tradeData);
+          }
         } catch (error) {
           console.error("Error fetching user: ", error);
         }
       }
     }
     getUser();
-    // Fetch data from the database
-    async function fetchData() {
-      if (user !== null) {
-        const response = await fetch("/api/home/homeSearch", {
-          method: "POST",
-          body: JSON.stringify(user),
-          headers: { "Content-Type": "application/json" },
-        });
-        const tradeData = await response.json();
-        console.log("Fetched data:", tradeData);
-        setData(tradeData);
-      }
-    }
-    fetchData();
   }, []);
 
   return (
