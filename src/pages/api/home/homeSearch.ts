@@ -7,51 +7,52 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  console.log(req.body);
   try {
+    console.log("reqbody: ", req.body);
     const pool = new Pool({
       connectionString: process.env.DATABASE_URL,
     });
-    const lgdin = await extractBody(req.body);
+    const lgdin: string = req.body;
     console.log("logged in: ", lgdin);
     const getUserIDquery = sqlstring.format(
-      "select from tableusers where username = ?",
+      "select userid from tableusers where username = ?",
       [lgdin]
     );
-    const userid = await pool.query(getUserIDquery);
+    const responseUserid = await pool.query(getUserIDquery);
+    const userid = responseUserid.rows[0].userid;
+    console.log("userid: ", userid);
     const getAccIDquery = sqlstring.format(
-      "select from tableaccounts where userid = ?",
+      "select accountid from tableaccounts where userid = ?",
       [userid]
     );
-    const accountid = await pool.query(getAccIDquery);
+    const responseAccountid = await pool.query(getAccIDquery);
+    const accountid = responseAccountid.rows[0].accountid;
     const totalTradesQuery = sqlstring.format(
       "select count(*) from tableTrades where winLoss != 'no-entry' AND accountid = ?",
       [accountid]
     );
     const totalWinsQuery = sqlstring.format(
-      "select count(*) from tableTrades where winLoss = 'win' AND acccountid = ?",
+      "select count(*) from tableTrades where winLoss = 'win' AND accountid = ?",
       [accountid]
     );
     //  get the count of wins and ttl trades
     const bestPairQuery = sqlstring.format(
-      "select currencypair, count(*) as count from tabletrades where accountid = ? group by currencypair order by count desc limit 1",
+      "select currencypair, count(*) as count from tabletrades where accountid = ? AND winloss = 'win' group by currencypair",
       [accountid]
     );
     const worstPairQuery = sqlstring.format(
-      "select currencypair, count(*) as count from tabletrades where accountid = ? group by currencypair order by count asc limit 1",
+      "select currencypair, count(*) as count from tabletrades where accountid = ? AND winloss = 'loss' group by currencypair",
       [accountid]
     );
     // get the count of wins and losses
     // and order by the worst or best
     // then select the worst for loss and the best for win
-    const totalTradesResult = await pool.query(
-      sqlstring.format(totalTradesQuery)
-    );
-    const totalWinsResult = await pool.query(sqlstring.format(totalWinsQuery));
-    const bestPairResult = await pool.query(sqlstring.format(bestPairQuery));
-    const worstPairResult = await pool.query(sqlstring.format(worstPairQuery));
+    const totalTradesResult = await pool.query(totalTradesQuery);
+    const totalWinsResult = await pool.query(totalWinsQuery);
+    const bestPairResult = await pool.query(bestPairQuery);
+    const worstPairResult = await pool.query(worstPairQuery);
     await pool.end();
-    console.log("User ID in home search: ", userid.rows[0].userID);
+    console.log("User ID in home search: ", userid);
     const tradeData = {
       totalTrades: totalTradesResult.rows[0].count,
       totalWins: totalWinsResult.rows[0].count,
