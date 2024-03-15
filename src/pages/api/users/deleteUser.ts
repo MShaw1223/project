@@ -21,38 +21,40 @@ export default async function delUser(
         connectionString: process.env.DATABASE_URL,
       });
       const body = await extractBody(req);
-      const { userID } = body;
+      const { userID, authKey } = body;
       console.log("userID: ", userID);
       // Check if there are any records in the tables pairs, accounts, and trades for the specified userID
-      const checkAccountsSql = sqlstring.format(`
-        SELECT COUNT(*) AS count FROM tableAccounts WHERE userID = ${userID};
-      `);
+      const checkAccountsSql = sqlstring.format(
+        "SELECT COUNT(*) AS count FROM tableAccounts WHERE userID = ?;",
+        [userID]
+      );
+      const checkPairsSql = sqlstring.format(
+        "SELECT COUNT(*) AS count FROM tablePairs WHERE userID = ?",
+        [userID]
+      );
+      const checkTradesSql = sqlstring.format(
+        "SELECT COUNT(*) AS count FROM tableTrades WHERE userID = ?;",
+        [userID]
+      );
       const accountsResult = await pool.query(checkAccountsSql);
       const accountCount = accountsResult.rows[0].count;
-      const checkPairsSql = sqlstring.format(`
-        SELECT COUNT(*) AS count FROM tablePairs WHERE userID = ${userID};
-      `);
       const pairsResult = await pool.query(checkPairsSql);
       const pairCount = pairsResult.rows[0].count;
-      const checkTradesSql = sqlstring.format(`
-        SELECT COUNT(*) AS count FROM tableTrades WHERE userID = ${userID};
-      `);
       const tradesResult = await pool.query(checkTradesSql);
       const tradeCount = tradesResult.rows[0].count;
       // unconditionally deletes user as to enter the aplication you must have a user
       //  otherwise entering a trade, pair, or account into the db is optional
-      const tblUsersSql = sqlstring.format(`
-        delete from tableUsers where userID = ${userID};
-        `);
-      const tblAccountsSql = sqlstring.format(`
-          DELETE FROM tableAccounts WHERE userID = ${userID};
-        `);
-      const tblPairsSql = sqlstring.format(`
-        DELETE FROM tablePairs WHERE userID = ${userID};
-        `);
       const tblTradesSql = sqlstring.format(`
-          DELETE FROM tableTrades WHERE userID = ${userID};
-        `);
+          DELETE tableAccounts, tableTrades 
+          FROM tableUsers 
+          JOIN tableusers.userID
+          ON
+          WHERE accountid = ?;
+        `,[accountID]);
+      const tblUsersSql = sqlstring.format(
+        "DELETE tableUsers, tableAccounts, tablePairs FROM tableUsers JOIN tableAccounts, tablePairs ON tableUsers.userID = tableAccounts.userID, tableUsers.userID = tablePairs.userID WHERE userID = ?;",
+        [userID]
+      );
       if (accountCount > 0) {
         // Delete records from tableAccounts
         await pool.query(tblAccountsSql);

@@ -31,3 +31,10 @@ create table tableTrades(
   winLoss text,
   currencyPair text
 );
+
+DELETE tableUsers, tableAccounts, tablePairs 
+FROM tableUsers 
+JOIN tableAccounts, tablePairs
+ON tableUsers.userID = tableAccounts.userID, tableUsers.userID = tablePairs.userID
+WHERE userID = ?;
+[userID]
