@@ -6,13 +6,11 @@ import { useMutation } from "react-query";
 
 const DeleteUserPage: NextPage = () => {
   const router = useRouter();
-  const [auth, setAuth] = useState<string>("");
   const [ID, setID] = useState<string>("");
   async function getuserID() {
     const { li: loggedInVal } = router.query;
     console.log("Li: ", loggedInVal);
     if (loggedInVal !== undefined) {
-      setAuth(loggedInVal);
       const getuserID = await fetch("/api/auth/IDFromHash", {
         method: "POST",
         body: JSON.stringify(loggedInVal),
@@ -52,7 +50,6 @@ const DeleteUserPage: NextPage = () => {
       mutation.mutate(
         JSON.stringify({
           userID: ID,
-          authKey: auth,
         })
       );
     } catch (error) {

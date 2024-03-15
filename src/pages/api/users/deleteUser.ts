@@ -11,7 +11,8 @@ export const config = {
 
 export default async function delUser(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
+  event: NextFetchEvent
 ) {
   if (req.method === "DELETE") {
     console.log("correct method");
@@ -21,58 +22,27 @@ export default async function delUser(
         connectionString: process.env.DATABASE_URL,
       });
       const body = await extractBody(req);
-      const { userID, authKey } = body;
+      const { userID } = body;
       console.log("userID: ", userID);
-      // Check if there are any records in the tables pairs, accounts, and trades for the specified userID
-      const checkAccountsSql = sqlstring.format(
-        "SELECT COUNT(*) AS count FROM tableAccounts WHERE userID = ?;",
+      const accountIDquery = sqlstring.format(
+        "select accountid from tableAccounts where userid = ?",
         [userID]
       );
-      const checkPairsSql = sqlstring.format(
-        "SELECT COUNT(*) AS count FROM tablePairs WHERE userID = ?",
+      const accountsIDResult = await pool.query(accountIDquery);
+      const accountID = accountsIDResult.rows[0].accountid;
+      const tblTradesSql = sqlstring.format(
+        "DELETE from tableTrades where accountid = ?;",
+        [accountID]
+      );
+      const userAccountPairsTableSql = sqlstring.format(
+        "DELETE tableUsers, tableAccounts, tablePairs FROM tableUsers JOIN tableAccounts, tablePairs ON tableUsers.userID = tableAccounts.userID, JOIN tableUsers, tablePairs ON tableUsers.userID = tablePairs.userID WHERE userID = ?;",
         [userID]
       );
-      const checkTradesSql = sqlstring.format(
-        "SELECT COUNT(*) AS count FROM tableTrades WHERE userID = ?;",
-        [userID]
-      );
-      const accountsResult = await pool.query(checkAccountsSql);
-      const accountCount = accountsResult.rows[0].count;
-      const pairsResult = await pool.query(checkPairsSql);
-      const pairCount = pairsResult.rows[0].count;
-      const tradesResult = await pool.query(checkTradesSql);
-      const tradeCount = tradesResult.rows[0].count;
-      // unconditionally deletes user as to enter the aplication you must have a user
-      //  otherwise entering a trade, pair, or account into the db is optional
-      const tblTradesSql = sqlstring.format(`
-          DELETE tableAccounts, tableTrades 
-          FROM tableUsers 
-          JOIN tableusers.userID
-          ON
-          WHERE accountid = ?;
-        `,[accountID]);
-      const tblUsersSql = sqlstring.format(
-        "DELETE tableUsers, tableAccounts, tablePairs FROM tableUsers JOIN tableAccounts, tablePairs ON tableUsers.userID = tableAccounts.userID, tableUsers.userID = tablePairs.userID WHERE userID = ?;",
-        [userID]
-      );
-      if (accountCount > 0) {
-        // Delete records from tableAccounts
-        await pool.query(tblAccountsSql);
-      }
-      if (pairCount > 0) {
-        // Delete records from tablePairs
-        await pool.query(tblPairsSql);
-      }
-      if (tradeCount > 0) {
-        // Delete records from tableTrades
-        await pool.query(tblTradesSql);
-      }
-      await pool.query(tblUsersSql);
-      await pool.end();
-      console.log("sql tblUsers: ", tblUsersSql);
+      await pool.query(userAccountPairsTableSql);
+      await pool.query(tblTradesSql);
+      event.waitUntil(pool.end());
+      console.log("sql tblUsers: ", userAccountPairsTableSql);
       console.log("sql tblTrades: ", tblTradesSql);
-      console.log("sql tblAccounts: ", tblAccountsSql);
-      console.log("sql tblPairs: ", tblPairsSql);
       return res.status(200).json({ userID });
     } catch (error) {
       console.error("Error deleting user: ", error);

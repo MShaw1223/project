@@ -32,9 +32,9 @@ create table tableTrades(
   currencyPair text
 );
 
-DELETE tableUsers, tableAccounts, tablePairs 
-FROM tableUsers 
-JOIN tableAccounts, tablePairs
-ON tableUsers.userID = tableAccounts.userID, tableUsers.userID = tablePairs.userID
-WHERE userID = ?;
+DELETE table1, table2
+FROM table1
+JOIN table2
+ON table1.col1 = table2.col2
+WHERE col1 = ?;
 [userID]
