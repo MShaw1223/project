@@ -1,5 +1,4 @@
-import comparePasswords from "@/utils/protection/comparePwd";
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextApiRequest } from "next";
 import { Pool } from "@neondatabase/serverless";
 import sqlstring from "sqlstring";
 import { NextFetchEvent } from "next/server";
@@ -15,35 +14,33 @@ export default async function handler(
 ) {
   if (req.method === "POST") {
     try {
-      const body = await extractBody(req);
-      console.log(body);
-      const username = body.username;
+      const reqbody = await extractBody(req);
+      console.log(reqbody);
+      const username: string = reqbody.username;
       console.log("username: ", username);
-      const passwd = body.passwd;
+      const passwd: string = reqbody.passwd;
       console.log("password: ", passwd);
       const pool = new Pool({
         connectionString: process.env.DATABASE_URL,
       });
-      const sqlquery = sqlstring.format(
+      const getPwdSql = sqlstring.format(
         `
             SELECT passwd from tableUsers where username = ?
             `,
         [username]
       );
-      const indb = await pool.query(sqlquery);
+      const indb = await pool.query(getPwdSql);
       event.waitUntil(pool.end());
       if (indb.rows.length === 0) {
         // User not found in the database
         return new Response("User not found", {
-          status: 404,
+          status: 400,
         });
       }
-      const password = passwd;
-      console.log("Entered pwd: ", password);
-      const dbPassword = indb.rows[0].passwd;
+      console.log("Entered pwd: ", passwd);
+      const dbPassword: string = indb.rows[0].passwd;
       console.log("db pwd: ", dbPassword);
-      const isMatch = comparePasswords(password, dbPassword);
-      if (isMatch === true) {
+      if (passwd === dbPassword) {
         console.log("successful");
         const loggedIn = username;
         return new Response(JSON.stringify({ username: loggedIn }), {

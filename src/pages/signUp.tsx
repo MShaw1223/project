@@ -3,7 +3,6 @@ import { Input } from "@/components/ui/input";
 import * as React from "react";
 import { NextPage } from "next";
 import { BiSolidHide, BiSolidShow } from "react-icons/bi";
-import comparePasswords from "@/utils/protection/comparePwd";
 import { useRouter } from "next/router";
 import { generateKey } from "@/utils/protection/hash";
 import { lginSignUpSchema } from "@/utils/protection/schema";
@@ -23,8 +22,7 @@ const signUp: NextPage = () => {
     });
     // reusing the utility for logging in to check the two passwords match
     console.log(parsedData);
-    const isMatch = comparePasswords(parsedData.passwd, confirmPasswd);
-    if (isMatch === true) {
+    if (parsedData.passwd  === confirmPasswd) {
       console.log("in the signup.tsx handler");
       console.log(parsedData);
       const response = await fetch("/api/auth/userPwd", {
