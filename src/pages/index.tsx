@@ -41,7 +41,7 @@ const login: NextPage = () => {
       console.log(key);
       router.push(`/home?li=${key}`);
     } else if (!response.ok) {
-      alert("Failed to login, try again");
+      alert("Failed to login. Please try again later.");
     }
   }
 

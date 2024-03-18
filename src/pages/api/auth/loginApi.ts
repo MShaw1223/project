@@ -1,4 +1,4 @@
-import { NextApiRequest } from "next";
+import { NextApiRequest, NextApiResponse } from "next";
 import { Pool } from "@neondatabase/serverless";
 import sqlstring from "sqlstring";
 import { NextFetchEvent } from "next/server";
@@ -10,7 +10,8 @@ export const config = {
 
 export default async function handler(
   req: NextApiRequest,
-  event: NextFetchEvent
+  event: NextFetchEvent,
+  res: NextApiResponse
 ) {
   if (req.method === "POST") {
     try {
@@ -33,28 +34,21 @@ export default async function handler(
       event.waitUntil(pool.end());
       if (indb.rows.length === 0) {
         // User not found in the database
-        return new Response("User not found", {
-          status: 400,
-        });
+        return res.status(400).json({ error: "User not found" });
       }
       console.log("Entered pwd: ", passwd);
       const dbPassword: string = indb.rows[0].passwd;
       console.log("db pwd: ", dbPassword);
-      if (passwd === dbPassword) {
-        console.log("successful");
-        const loggedIn = username;
-        return new Response(JSON.stringify({ username: loggedIn }), {
-          status: 200,
-        });
-      } else {
-        throw new Error("Passwords do not match");
+      if (passwd !== dbPassword) {
+        return res.status(401).json({ error: "Passwords do not match" });
       }
+      console.log("successful");
+      return res.status(200).json({ username });
     } catch (error) {
       console.error("Unable to login: ", error);
+      return res.status(500).json({ error: "internal server error" });
     }
   } else {
-    return new Response("Failed to sign in, Invalid Method", {
-      status: 405,
-    });
+    return res.status(405).json({ error: "Failed to sign in, Invalid Method" });
   }
 }

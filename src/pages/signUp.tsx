@@ -22,7 +22,7 @@ const signUp: NextPage = () => {
     });
     // reusing the utility for logging in to check the two passwords match
     console.log(parsedData);
-    if (parsedData.passwd  === confirmPasswd) {
+    if (parsedData.passwd === confirmPasswd) {
       console.log("in the signup.tsx handler");
       console.log(parsedData);
       const response = await fetch("/api/auth/userPwd", {
@@ -42,7 +42,7 @@ const signUp: NextPage = () => {
       if (!response.ok) {
         alert("Failed to sign up, try another username");
       }
-    } else if (isMatch === false) {
+    } else {
       alert("Passwords do not match");
     }
   }

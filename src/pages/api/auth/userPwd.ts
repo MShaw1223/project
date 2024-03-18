@@ -1,4 +1,4 @@
-import { NextApiRequest } from "next";
+import { NextApiRequest, NextApiResponse } from "next";
 import { extractBody } from "@/utils/extractBody";
 import { Pool } from "@neondatabase/serverless";
 import sqlstring from "sqlstring";
@@ -12,7 +12,8 @@ export const config = {
 
 export default async function handler(
   req: NextApiRequest,
-  event: NextFetchEvent
+  event: NextFetchEvent,
+  res: NextApiResponse
 ) {
   if (req.method === "POST") {
     try {
@@ -45,9 +46,7 @@ export default async function handler(
         );
         await pool.query(sqlquery);
         event.waitUntil(pool.end());
-        return new Response("Success", {
-          status: 200,
-        });
+        return res.status(200).json("successfully added user");
       } else {
         // Key already exists, throws an error
         throw new Error("Key already exists");
@@ -57,8 +56,6 @@ export default async function handler(
       throw new Error("Issue with data submission");
     }
   } else {
-    return new Response("Invalid Method", {
-      status: 405,
-    });
+    return res.status(405).json("Invalid HTTP method");
   }
 }
