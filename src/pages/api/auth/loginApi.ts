@@ -1,18 +1,14 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextApiRequest } from "next";
 import { Pool } from "@neondatabase/serverless";
 import sqlstring from "sqlstring";
-import { NextFetchEvent } from "next/server";
+import { NextResponse } from "next/server";
 import { extractBody } from "@/utils/extractBody";
 
 export const config = {
   runtime: "edge",
 };
 
-export default async function handler(
-  req: NextApiRequest,
-  event: NextFetchEvent,
-  res: NextApiResponse
-) {
+export default async function handler(req: NextApiRequest) {
   if (req.method === "POST") {
     try {
       const reqbody = await extractBody(req);
@@ -31,24 +27,34 @@ export default async function handler(
         [username]
       );
       const indb = await pool.query(getPwdSql);
-      event.waitUntil(pool.end());
+      await pool.end();
       if (indb.rows.length === 0) {
         // User not found in the database
-        return res.status(400).json({ error: "User not found" });
+        return NextResponse.json({ error: "User not found" }, { status: 400 });
       }
       console.log("Entered pwd: ", passwd);
       const dbPassword: string = indb.rows[0].passwd;
       console.log("db pwd: ", dbPassword);
       if (passwd !== dbPassword) {
-        return res.status(401).json({ error: "Passwords do not match" });
+        return NextResponse.json(
+          { error: "Passwords do not match" },
+          { status: 401 }
+        );
       }
       console.log("successful");
-      return res.status(200).json({ username });
+      return NextResponse.json({ username }, { status: 200 });
     } catch (error) {
       console.error("Unable to login: ", error);
-      return res.status(500).json({ error: "internal server error" });
+      console.error("Stack trace: ", (error as Error).stack);
+      return NextResponse.json(
+        { error: "internal server error" },
+        { status: 500 }
+      );
     }
   } else {
-    return res.status(405).json({ error: "Failed to sign in, Invalid Method" });
+    return NextResponse.json(
+      { error: "Failed to sign in, Invalid Method" },
+      { status: 405 }
+    );
   }
 }

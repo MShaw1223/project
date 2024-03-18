@@ -34,6 +34,7 @@ const login: NextPage = () => {
       },
       cache: "no-store",
     });
+    console.log("Response status:", response?.status);
     if (response.ok) {
       // if the response returns a 200, it will take the username entered above and generate a key to use as a logged in identifier
       const { username } = parsedData;

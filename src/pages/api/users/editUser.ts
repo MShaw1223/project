@@ -2,17 +2,14 @@ import { extractBody } from "@/utils/extractBody";
 import { generateKey } from "@/utils/protection/hash";
 import { Pool } from "@neondatabase/serverless";
 import { NextApiRequest } from "next";
-import { NextFetchEvent } from "next/server";
+import { NextResponse } from "next/server";
 import sqlstring from "sqlstring";
 
 export const config = {
   runtime: "edge",
 };
 
-export default async function editUser(
-  req: NextApiRequest,
-  event: NextFetchEvent
-) {
+export default async function editUser(req: NextApiRequest) {
   try {
     if (req.method === "PUT") {
       const pool = new Pool({
@@ -38,10 +35,10 @@ export default async function editUser(
       }
 
       await pool.query(sqlStatement);
-      event.waitUntil(pool.end());
+      await pool.end();
     }
   } catch (error) {
-    return new Response("Bad Request", {
+    return NextResponse.json("Bad Request", {
       status: 400,
     });
   }

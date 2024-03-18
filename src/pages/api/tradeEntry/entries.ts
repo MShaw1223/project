@@ -1,6 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 
-import { NextFetchEvent, NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { Pool } from "@neondatabase/serverless";
 import sqlstring from "sqlstring";
 import { extractBody } from "@/utils/extractBody";
@@ -10,7 +10,7 @@ export const config = {
   runtime: "edge",
 };
 
-export default async function handler(req: NextRequest, event: NextFetchEvent) {
+export default async function handler(req: NextRequest) {
   if (req.method === "POST") {
     try {
       const body = await extractBody(req);
@@ -45,7 +45,7 @@ export default async function handler(req: NextRequest, event: NextFetchEvent) {
         ]
       );
       await pool.query(SQLstatement);
-      event.waitUntil(pool.end());
+      await pool.end();
       console.log("SQLstatement: ", SQLstatement);
       const responsePayload = {
         entryPrice,
@@ -57,16 +57,19 @@ export default async function handler(req: NextRequest, event: NextFetchEvent) {
         currencyPair,
         accountID,
       };
-      return new Response(JSON.stringify({ responsePayload }), {
-        status: 200,
-      });
+      return NextResponse.json(
+        { responsePayload },
+        {
+          status: 200,
+        }
+      );
     } catch (error) {
-      return new Response("Unable to enter trade", {
+      return NextResponse.json("Unable to enter trade", {
         status: 400,
       });
     }
   }
-  return new Response("Invalid Method", {
+  return NextResponse.json("Invalid Method", {
     status: 405,
   });
 }

@@ -1,6 +1,7 @@
 import { extractBody } from "@/utils/extractBody";
 import { Pool } from "@neondatabase/serverless";
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextApiRequest } from "next";
+import { NextResponse } from "next/server";
 import sqlstring from "sqlstring";
 
 //this deletes all traces of data in the database associated with the userid that is deleted
@@ -9,11 +10,7 @@ export const config = {
   runtime: "edge",
 };
 
-export default async function delUser(
-  req: NextApiRequest,
-  res: NextApiResponse,
-  event: NextFetchEvent
-) {
+export default async function delUser(req: NextApiRequest) {
   if (req.method === "DELETE") {
     console.log("correct method");
     try {
@@ -40,14 +37,14 @@ export default async function delUser(
       );
       await pool.query(userAccountPairsTableSql);
       await pool.query(tblTradesSql);
-      event.waitUntil(pool.end());
+      await pool.end();
       console.log("sql tblUsers: ", userAccountPairsTableSql);
       console.log("sql tblTrades: ", tblTradesSql);
-      return res.status(200).json({ userID });
+      return NextResponse.json({ userID }, { status: 200 });
     } catch (error) {
       console.error("Error deleting user: ", error);
-      return res.status(400).json("Bad request");
+      return NextResponse.json("Bad request", { status: 400 });
     }
   }
-  return res.status(405).json({ error: "Method not allowed" });
+  return NextResponse.json({ error: "Method not allowed" }, { status: 405 });
 }

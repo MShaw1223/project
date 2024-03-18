@@ -1,4 +1,4 @@
-import { NextFetchEvent, NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import sqlstring from "sqlstring";
 import { Pool } from "@neondatabase/serverless";
 import { extractBody } from "@/utils/extractBody";
@@ -8,7 +8,7 @@ export const config = {
   runtime: "edge",
 };
 
-export default async function handler(req: NextRequest, event: NextFetchEvent) {
+export default async function handler(req: NextRequest) {
   if (req.method === "DELETE") {
     try {
       const body = await extractBody(req);
@@ -33,20 +33,18 @@ export default async function handler(req: NextRequest, event: NextFetchEvent) {
       `);
       await pool.query(deleteFrmTradeTbl);
       await pool.query(deleteAccountQuery);
-      event.waitUntil(pool.end());
+      await pool.end();
       console.log("sql: ", deleteAccountQuery);
       console.log("Account deleted: ", accountname);
-      return new Response(JSON.stringify({ accountname }), {
-        status: 200,
-      });
+      return NextResponse.json({ accountname }, { status: 200 });
     } catch (error) {
       console.error("Issue deleting account: ", error);
-      return new Response("Error deleting account", {
+      return NextResponse.json("Error deleting account", {
         status: 400,
       });
     }
   }
-  return new Response("Method not allowed", {
+  return NextResponse.json("Method not allowed", {
     status: 405,
   });
 }

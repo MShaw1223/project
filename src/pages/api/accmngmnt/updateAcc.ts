@@ -1,17 +1,14 @@
 import { extractBody } from "@/utils/extractBody";
 import { Pool } from "@neondatabase/serverless";
 import { NextApiRequest } from "next";
-import { NextFetchEvent } from "next/server";
+import { NextResponse } from "next/server";
 import sqlstring from "sqlstring";
 
 export const config = {
   runtime: "edge",
 };
 
-export default async function editEntryHandler(
-  req: NextApiRequest,
-  event: NextFetchEvent
-) {
+export default async function editEntryHandler(req: NextApiRequest) {
   try {
     if (req.method === "PUT") {
       const body = await extractBody(req);
@@ -24,12 +21,13 @@ export default async function editEntryHandler(
         [edits, accountname]
       );
       await pool.query(sqlQuery);
-      event.waitUntil(pool.end());
+      await pool.end();
+      return NextResponse.json("successful account update", { status: 200 });
     } else {
       throw new Error("Incorrect HTTP method");
     }
   } catch (error) {
-    return new Response("Bad Request", {
+    return NextResponse.json("Bad Request", {
       status: 400,
     });
   }
