@@ -23,6 +23,31 @@ const DeleteUserPage: NextPage = () => {
     }
   }
   const mutation = useMutation({
+    //formdata is likely the root cause? if not look at how id is handled front and backend
+//     Error deleting user:   error: invalid input syntax for type integer: ""
+//     at (node_modules/@neondatabase/serverless/index.js:1340:61)
+//     at (src/pages/api/users/deleteUser.ts:28:31)
+//     at (node_modules/next/dist/esm/server/web/adapter.js:157:0) {
+//   length: 105,
+//   name: 'error',
+//   severity: 'ERROR',
+//   code: '22P02',
+//   detail: undefined,
+//   hint: undefined,
+//   position: '52',
+//   internalPosition: undefined,
+//   internalQuery: undefined,
+//   where: undefined,
+//   schema: undefined,
+//   table: undefined,
+//   column: undefined,
+//   dataType: undefined,
+//   constraint: undefined,
+//   file: 'numutils.c',
+//   line: '232',
+//   routine: 'pg_strtoint32'
+// }
+// userid is also in default state of ""
     mutationFn: async (formData: string) => {
       console.log("Handle Submit works");
       const done = await fetch("/api/users/deleteUser", {
