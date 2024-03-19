@@ -31,19 +31,29 @@ export default async function delUser(req: NextApiRequest) {
         "DELETE from tableTrades where accountid = ?;",
         [accountID]
       );
-      const userAccountPairsTableSql = sqlstring.format(
-        "DELETE tableUsers, tableAccounts, tablePairs FROM tableUsers JOIN tableAccounts, tablePairs ON tableUsers.userID = tableAccounts.userID, JOIN tableUsers, tablePairs ON tableUsers.userID = tablePairs.userID WHERE userID = ?;",
+      const usersTableSql = sqlstring.format(
+        "DELETE tableUsers WHERE userID = ?;",
         [userID]
       );
-      await pool.query(userAccountPairsTableSql);
+      const accountsTableSql = sqlstring.format(
+        "DELETE from tableAccounts WHERE userID = ?;",
+        [userID]
+      );
+      const pairsTableSql = sqlstring.format(
+        "DELETE from tablePairs WHERE userID = ?;",
+        [userID]
+      );
+      await pool.query(usersTableSql);
+      await pool.query(pairsTableSql);
+      await pool.query(accountsTableSql);
       await pool.query(tblTradesSql);
       await pool.end();
-      console.log("sql tblUsers: ", userAccountPairsTableSql);
+      console.log("sql tblUsers: ");
       console.log("sql tblTrades: ", tblTradesSql);
-      return NextResponse.json({ userID }, { status: 200 });
+      return NextResponse.json("Deleted user", { status: 200 });
     } catch (error) {
       console.error("Error deleting user: ", error);
-      return NextResponse.json("Bad request", { status: 400 });
+      return NextResponse.json({ error: "Bad request" }, { status: 400 });
     }
   }
   return NextResponse.json({ error: "Method not allowed" }, { status: 405 });
