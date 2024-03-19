@@ -6,7 +6,7 @@ import { useMutation } from "react-query";
 
 const DeleteUserPage: NextPage = () => {
   const router = useRouter();
-  const [ID, setID] = useState<string>();
+  const [ID, setID] = useState<string>("");
   async function getuserID() {
     const { li: loggedInVal } = router.query;
     console.log("Li: ", loggedInVal);
@@ -33,6 +33,8 @@ const DeleteUserPage: NextPage = () => {
         const errMessage = await done.text();
         throw new Error(errMessage);
       }
+    },
+    onSettled: () => {
       router.push("/");
     },
     onError: (error) => {

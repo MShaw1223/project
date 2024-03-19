@@ -1,4 +1,4 @@
-import type { NextFetchEvent, NextRequest } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 import { Pool } from "@neondatabase/serverless";
 import sqlstring from "sqlstring";
 import { extractBody } from "@/utils/extractBody";
@@ -8,7 +8,7 @@ export const config = {
   runtime: "edge",
 };
 
-export default async function handler(req: NextRequest, event: NextFetchEvent) {
+export default async function handler(req: NextRequest) {
   if (req.method === "POST") {
     try {
       const body = await extractBody(req);
@@ -24,18 +24,21 @@ export default async function handler(req: NextRequest, event: NextFetchEvent) {
         [pairabbr, userid]
       );
       await pool.query(SQLstatement);
-      event.waitUntil(pool.end());
+      await pool.end();
       console.log("SQLstatement: ", SQLstatement);
-      return new Response(JSON.stringify({ pairabbr }), {
-        status: 200,
-      });
+      return NextResponse.json(
+        { pairabbr },
+        {
+          status: 200,
+        }
+      );
     } catch (error) {
-      return new Response("Unable to add new currency", {
+      return NextResponse.json("Unable to add new currency", {
         status: 400,
       });
     }
   } else {
-    return new Response("Invalid Method", {
+    return NextResponse.json("Invalid Method", {
       status: 405,
     });
   }

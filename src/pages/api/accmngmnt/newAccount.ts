@@ -1,4 +1,4 @@
-import { NextRequest, NextFetchEvent } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { Pool } from "@neondatabase/serverless";
 import sqlstring from "sqlstring";
 import { extractBody } from "@/utils/extractBody";
@@ -8,7 +8,7 @@ export const config = {
   runtime: "edge",
 };
 
-export default async function handler(req: NextRequest, event: NextFetchEvent) {
+export default async function handler(req: NextRequest) {
   if (req.method === "POST") {
     try {
       const body = await extractBody(req);
@@ -24,18 +24,21 @@ export default async function handler(req: NextRequest, event: NextFetchEvent) {
         [accountname, userid]
       );
       await pool.query(SQLstatement);
-      event.waitUntil(pool.end());
-      return new Response(JSON.stringify({ accountname, userid }), {
-        status: 200,
-      });
+      await pool.end();
+      return NextResponse.json(
+        { accountname, userid },
+        {
+          status: 200,
+        }
+      );
     } catch (error) {
       console.error("Issue creating account: ", error);
-      return new Response("Server error", {
+      return NextResponse.json("Server error", {
         status: 500,
       });
     }
   } else {
-    return new Response("Method not allowed", {
+    return NextResponse.json("Method not allowed", {
       status: 405,
     });
   }
