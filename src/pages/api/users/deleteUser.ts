@@ -23,43 +23,44 @@ export default async function delUser(req: NextApiRequest) {
       const { userID } = body;
       console.log("userID: ", userID);
       const accountIDquery = sqlstring.format(
-        "select accountid from tableAccounts where userid = ?",
+        "SELECT accountid FROM tableAccounts WHERE userid = ?",
         [userID]
       );
       const accountsIDResult = await pool.query(accountIDquery);
       const accountID = accountsIDResult.rows[0]?.accountid; // optional chaining for if no accountID
-      const usersTableSql = sqlstring.format(
-        "DELETE from tableUsers WHERE userid = ?;",
-        [userID]
-      );
-      const accountsTableSql = sqlstring.format(
-        "DELETE from tableAccounts WHERE userID = ?;",
-        [userID]
-      );
+      //  the SQL query to delete trades associated with the account
       const tblTradesSql = accountID
-        ? sqlstring.format("DELETE FROM tableTrades WHERE accountid = ?;", [
-            accountID,
-          ])
+        ? sqlstring.format(
+            "DELETE FROM tableTrades WHERE accountid IN (SELECT accountID FROM tableAccounts WHERE userID = ?);",
+            [userID]
+          )
         : null; // If there's no accountID, set tblTradesSql to null
+      // the SQL query to delete accounts associated with the user
+      const accountsTableSql = sqlstring.format(
+        "DELETE FROM tableAccounts WHERE userID = ?;",
+        [userID]
+      );
+      // the SQL query to delete pairs associated with the account
       const pairsTableSql = accountID
-        ? sqlstring.format("DELETE FROM tablePairs WHERE accountid = ?;", [
-            accountID,
-          ])
+        ? sqlstring.format("DELETE FROM tablePairs WHERE userID = ?;", [userID])
         : null; // If there's no accountID, set pairsTableSql to null
-
-      await pool.query(usersTableSql);
-      await pool.query(accountsTableSql);
+      // the SQL query to delete the user
+      const usersTableSql = sqlstring.format(
+        "DELETE FROM tableUsers WHERE userID = ?;",
+        [userID]
+      );
+      // Perform deletions
       if (tblTradesSql) {
         await pool.query(tblTradesSql);
         console.log("sql tblTrades: ", tblTradesSql);
       }
+      await pool.query(accountsTableSql);
       if (pairsTableSql) {
         await pool.query(pairsTableSql);
         console.log("sql tblPairs: ", pairsTableSql);
       }
+      await pool.query(usersTableSql);
       await pool.end();
-      console.log("sql tblUsers: ");
-      console.log("sql tblTrades: ", tblTradesSql);
       return NextResponse.json("Deleted user", { status: 200 });
     } catch (error) {
       console.error("Error deleting user: ", error);
