@@ -33,7 +33,6 @@ export default async function editUser(req: NextApiRequest) {
       } else {
         throw new Error("Incorrect field selected");
       }
-
       await pool.query(sqlStatement);
       await pool.end();
     }

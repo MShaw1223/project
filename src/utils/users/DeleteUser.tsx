@@ -1,34 +1,21 @@
 import { Button } from "@/components/ui/button";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useEffect } from "react";
 import { useMutation } from "react-query";
 
 const DeleteUserPage: NextPage = () => {
   const router = useRouter();
   const [ID, setID] = useState<string>("");
-  async function getuserID() {
-    const { li: loggedInVal } = router.query;
-    console.log("Li: ", loggedInVal);
-    if (loggedInVal !== undefined) {
-      const getuserID = await fetch("/api/auth/IDFromHash", {
-        method: "POST",
-        body: JSON.stringify(loggedInVal),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const foundID = await getuserID.json();
-      setID(foundID);
-    }
-  }
   const mutation = useMutation({
     mutationFn: async (formData: string) => {
       console.log("Handle Submit works");
+      console.log("formdata: ", formData);
       const done = await fetch("/api/users/deleteUser", {
         method: "DELETE",
         body: formData,
       });
+      console.log("Response status:", done?.status);
       if (!done.ok) {
         const errMessage = await done.text();
         throw new Error(errMessage);
@@ -42,10 +29,27 @@ const DeleteUserPage: NextPage = () => {
       console.error("Mutation error:", error);
     },
   });
+  useEffect(() => {
+    async function getuserID() {
+      const { li: loggedInVal } = router.query;
+      console.log("Li: ", loggedInVal);
+      if (loggedInVal !== undefined) {
+        const getuserID = await fetch("/api/auth/IDFromHash", {
+          method: "POST",
+          body: JSON.stringify(loggedInVal),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const foundID = await getuserID.json();
+        setID(foundID);
+      }
+    }
+    getuserID();
+  }, []);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    await getuserID();
     try {
       mutation.mutate(
         JSON.stringify({
