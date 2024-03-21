@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { Pool } from "@neondatabase/serverless";
 import sqlstring from "sqlstring";
-import { extractBody } from "@/utils/extractBody";
 
 export default async function handler(
   req: NextApiRequest,
