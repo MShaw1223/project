@@ -8,20 +8,25 @@ import { generateKey } from "@/utils/protection/hash";
 import { lginSignUpSchema } from "@/utils/protection/schema";
 
 const signUp: NextPage = () => {
+  // determines if the password is hidden or not when entering it during login
   const [showPassword, setShowPassword] = React.useState(false);
+  // used for pushing between different pages, in this case to the home page
   const router = useRouter();
-
+  // when user presses the 'Go !' button it triggers the handleSubmit function
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    // prevents the page from refreshing during the process
     event.preventDefault();
-
+    // gets all the information from the form
     const data = new FormData(event.target as HTMLFormElement);
     const confirmPasswd = data.get("confirmPassword") as string;
     const parsedData = lginSignUpSchema.parse({
       passwd: data.get("firstPassword") as string,
       username: data.get("user") as string,
     });
-    // reusing the utility for logging in to check the two passwords match
     console.log(parsedData);
+    // the if statement checks the password has been entered correctly before submitting the parsedData object
+    // to the api to be submitted to the Neon database
+    // ( parseData containing the future login credentials of username and passwd )
     if (parsedData.passwd === confirmPasswd) {
       console.log("in the signup.tsx handler");
       console.log(parsedData);
@@ -34,6 +39,9 @@ const signUp: NextPage = () => {
         cache: "no-store",
       });
       if (response.ok) {
+        // if the response returns a 200,
+        // the generateKey function takes the username entered above as a param
+        // to generate a key  the key will be used as a logged in identifier
         const { username } = parsedData;
         const key = generateKey(username);
         console.log(key);

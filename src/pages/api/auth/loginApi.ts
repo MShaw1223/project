@@ -3,7 +3,6 @@ import { Pool } from "@neondatabase/serverless";
 import sqlstring from "sqlstring";
 import { NextResponse } from "next/server";
 import { extractBody } from "@/utils/extractBody";
-
 export const config = {
   runtime: "edge",
 };
@@ -11,15 +10,20 @@ export const config = {
 export default async function handler(req: NextApiRequest) {
   if (req.method === "POST") {
     try {
+      // takes the request and extracts the body from the readable stream sent
       const reqbody = await extractBody(req);
       console.log(reqbody);
+      // takes the username variable from the reqbody object
       const username: string = reqbody.username;
       console.log("username: ", username);
+      // takes the passwd variable from the reqbody object
       const passwd: string = reqbody.passwd;
       console.log("password: ", passwd);
+      // starts the pooled db connection
       const pool = new Pool({
         connectionString: process.env.DATABASE_URL,
       });
+      // queries the tableusers table of the db for the passwd of the entered username
       const getPwdSql = sqlstring.format(
         `
             SELECT passwd from tableUsers where username = ?
@@ -35,6 +39,7 @@ export default async function handler(req: NextApiRequest) {
       console.log("Entered pwd: ", passwd);
       const dbPassword: string = indb.rows[0].passwd;
       console.log("db pwd: ", dbPassword);
+      // checks the entered password matches the password in the database
       if (passwd !== dbPassword) {
         return NextResponse.json(
           { error: "Passwords do not match" },
