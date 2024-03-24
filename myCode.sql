@@ -11,18 +11,18 @@ create table tableUsers (
 create table tablePairs(
   pairID serial primary key,
   pairAbbr varchar(4),
-  userID integer references tableUsers(userID)
+  userID integer references tableUsers(userID) on delete cascade
 );
 
 create table tableAccounts(
   accountID serial primary key,
   accountName varchar(15),
-  userID integer references tableUsers(userID)
+  userID integer references tableUsers(userID) on delete cascade
 );
 
 create table tableTrades(
   tradesID serial primary key,
-  accountID integer references tableAccounts(accountID),
+  accountID integer references tableAccounts(accountID) on delete cascade,
   entryPrice numeric(14,7),
   stopLoss numeric(14,7),
   takeProfit numeric(14,7),
