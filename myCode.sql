@@ -31,10 +31,3 @@ create table tableTrades(
   winLoss text,
   currencyPair text
 );
-
-DELETE table1, table2
-FROM table1
-JOIN table2
-ON table1.col1 = table2.col2
-WHERE col1 = ?;
-[userID]
