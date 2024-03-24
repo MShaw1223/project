@@ -72,6 +72,14 @@ const tradeEntry: NextPage = () => {
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const data = new FormData(event.target as HTMLFormElement);
+    if (!selectedBasePair || !selectedQuotePair || !selectedOutcome) {
+      alert("Please select base pair, quote pair, and outcome.");
+      return;
+    }
+    if (selectedBasePair === selectedQuotePair) {
+      alert("Please select different base and quote pairs.");
+      return;
+    }
     const accountID = await getID(selectedAccount);
     console.log("Trade Data: ", {
       entryPrice: parseFloat(data.get("entryPrice") as string),
