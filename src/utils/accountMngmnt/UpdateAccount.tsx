@@ -31,7 +31,7 @@ const UpdateAccount = () => {
         alert("Entries do not match");
         return;
       }
-      if (firstEdit === reEnteredEdit && selectedAccount !== null) {
+      if (firstEdit === reEnteredEdit && selectedAccount !== "") {
         mutation.mutate(
           JSON.stringify({
             accountname: selectedAccount,
