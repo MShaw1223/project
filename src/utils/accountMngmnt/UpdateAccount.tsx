@@ -72,6 +72,7 @@ const UpdateAccount = () => {
                     name="firstEdit"
                     placeholder="Enter Edit....."
                     className="w-[200px] sm:w-48 md:w-[280px] lg:w-[340px]"
+                    maxLength={15}
                   />
                 </div>
                 <div className="p-2 flex-row">
@@ -81,6 +82,7 @@ const UpdateAccount = () => {
                     name="reEnteredEdit"
                     placeholder="Re-enter Edit..."
                     className="w-[200px] sm:w-48 md:w-[280px] lg:w-[340px]"
+                    maxLength={15}
                   />
                 </div>
                 <div className="p-3 text-center">
