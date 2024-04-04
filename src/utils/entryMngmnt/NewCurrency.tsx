@@ -78,6 +78,7 @@ const NewCurrencyPage: NextPage = () => {
                   name="Abbreviation"
                   placeholder="New Currency Abbreviation....."
                   maxLength={4}
+                  minLength={3}
                 />
               </div>
               <div className="p-2 flex-row">
@@ -87,6 +88,7 @@ const NewCurrencyPage: NextPage = () => {
                   name="reEnteredAbbreviation"
                   placeholder="Re-enter Abbreviation..."
                   maxLength={4}
+                  min={3}
                 />
               </div>
               <div className="p-3 text-center">
