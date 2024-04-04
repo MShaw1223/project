@@ -59,7 +59,7 @@ const DeleteEntry: NextPage = () => {
   return (
     <>
       <div className="flex">
-        {mutation.isLoading && <p>Deleting User...</p>}
+        {mutation.isLoading && <p>Deleting Entry...</p>}
         {!mutation.isLoading && (
           <div className="flex-col mx-auto">
             <form onSubmit={handleSubmit}>

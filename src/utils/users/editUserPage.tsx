@@ -81,7 +81,7 @@ const EditUserPage: NextPage = () => {
                 <h3>Select which field you would like to edit</h3>
                 <SelectEdit onFieldChange={handleFieldChange}></SelectEdit>
               </div>
-              <div className="m-1 p-2 w-[450px]">
+              <div className="p-2">
                 <div className="p-2">
                   <p>Enter changes here</p>
                   <Input

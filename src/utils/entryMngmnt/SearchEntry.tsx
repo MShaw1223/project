@@ -62,45 +62,47 @@ const searchEntry: NextPage = () => {
     <>
       <div className="flex">
         <div className="m-3 overflow-hidden text-left mx-auto">
-          <h3>Select an account to search through</h3>
+          <h3 className="text-xs sm:text-xs md:text-sm lg:text-lg">
+            Select an account to search through
+          </h3>
           <div className="p-1 my-4">
             <AccountDropdown
               onAccountChange={handleAccountChange}
             ></AccountDropdown>
           </div>
-          <div className="flex-1 overflow-auto p-2 text-center m-2">
-            <h3 className="text-slate-700">
+          <div className="flex-1 overflow-auto p-1 text-center m-1">
+            <h3 className="text-slate-700 text-xs sm:text-xs md:text-sm lg:text-lg">
               Tip: Right click to copy the trade ID you would like to delete and
               paste it into the input on the delete entry tab
             </h3>
-            <Table className="bg-gray-400 w-[400px] sm:w-[310px] md:w-[400px] lg:w-[910] rounded-2xl">
+            <Table className="bg-gray-400 w-[400px] sm:w-[310px] md:w-[450px] lg:w-[300px] rounded-2xl">
               <TableCaption className="text-gray-500">
                 A Table of trades taken.
               </TableCaption>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="text-slate-200 lg:text-2xl md:text-lg sm:text-xs">
-                    Trade ID
+                  <TableHead className="text-slate-200 lg:text-xl md:text-lg sm:text-xs">
+                    TradeID
                   </TableHead>
-                  <TableHead className="text-slate-200 lg:text-2xl md:text-lg sm:text-xs">
+                  <TableHead className="text-slate-200 lg:text-xl md:text-lg sm:text-xs">
                     entryprice
                   </TableHead>
-                  <TableHead className="text-slate-200 lg:text-2xl md:text-lg sm:text-xs">
+                  <TableHead className="text-slate-200 lg:text-xl md:text-lg sm:text-xs">
                     stoploss
                   </TableHead>
-                  <TableHead className="text-slate-200 lg:text-2xl md:text-lg sm:text-xs">
+                  <TableHead className="text-slate-200 lg:text-xl md:text-lg sm:text-xs">
                     takeprofit
                   </TableHead>
-                  <TableHead className="text-slate-200 lg:text-2xl md:text-lg sm:text-xs">
+                  <TableHead className="text-slate-200 lg:text-xl md:text-lg sm:text-xs">
                     tradenotes
                   </TableHead>
-                  <TableHead className="text-slate-200 lg:text-2xl md:text-lg sm:text-xs">
+                  <TableHead className="text-slate-200 lg:text-xl md:text-lg sm:text-xs">
                     riskratio
                   </TableHead>
-                  <TableHead className="text-slate-200 lg:text-2xl md:text-lg sm:text-xs">
+                  <TableHead className="text-slate-200 lg:text-xl md:text-lg sm:text-xs">
                     outcome
                   </TableHead>
-                  <TableHead className="text-slate-200 lg:text-2xl md:text-lg sm:text-xs">
+                  <TableHead className="text-slate-200 lg:text-xl md:text-lg sm:text-xs">
                     currencypair
                   </TableHead>
                 </TableRow>
@@ -108,28 +110,28 @@ const searchEntry: NextPage = () => {
               <TableBody>
                 {data.map((trade) => (
                   <TableRow key={trade.tradesid}>
-                    <TableCell className="lg:text-2xl md:text-lg sm:text-xs">
+                    <TableCell className="lg:text-lg md:text-base sm:text-xs text-base">
                       {trade.tradesid}
                     </TableCell>
-                    <TableCell className="lg:text-2xl md:text-lg sm:text-xs">
+                    <TableCell className="lg:text-lg md:text-base sm:text-xs text-base">
                       {trade.entryprice}
                     </TableCell>
-                    <TableCell className="lg:text-2xl md:text-lg sm:text-xs">
+                    <TableCell className="lg:text-lg md:text-base sm:text-xs text-base">
                       {trade.stoploss}
                     </TableCell>
-                    <TableCell className="lg:text-2xl md:text-lg sm:text-xs">
+                    <TableCell className="lg:text-lg md:text-base sm:text-xs text-base">
                       {trade.takeprofit}
                     </TableCell>
-                    <TableCell className="lg:text-2xl md:text-lg sm:text-xs">
+                    <TableCell className="lg:text-lg md:text-base sm:text-xs text-base">
                       {trade.tradenotes}
                     </TableCell>
-                    <TableCell className="lg:text-2xl md:text-lg sm:text-xs">
+                    <TableCell className="lg:text-lg md:text-base sm:text-xs text-base">
                       {trade.riskratio}
                     </TableCell>
-                    <TableCell className="lg:text-2xl md:text-lg sm:text-xs">
+                    <TableCell className="lg:text-lg md:text-base sm:text-xs text-base">
                       {trade.winloss}
                     </TableCell>
-                    <TableCell className="lg:text-2xl md:text-lg sm:text-xs">
+                    <TableCell className="lg:text-lg md:text-base sm:text-xs text-base">
                       {trade.currencypair}
                     </TableCell>
                   </TableRow>

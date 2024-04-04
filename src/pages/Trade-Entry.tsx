@@ -29,7 +29,7 @@ const tradeEntry: NextPage = () => {
       });
       console.log("Response in TE: ", response);
       if (!response.ok) {
-        throw new Error("Failed to submit trade data");
+        alert("Failed to submit trade data");
       }
       return response.json();
     },
@@ -124,97 +124,89 @@ const tradeEntry: NextPage = () => {
             <FaPencilAlt className="h-10 w-10"></FaPencilAlt>
             <span className="ml-4 my-auto font-bold">Trade Entry</span>
           </div>
-          <div className="flex w-full overflow-auto p-2 mx-auto justify-center items-center my-32">
+          <div className="flex w-full overflow-auto p-2 mx-auto justify-center items-center">
             {mutation.isLoading && <p>Submitting Trade Data...</p>}
             {!mutation.isLoading && (
-              <div className="flex ">
-                <form onSubmit={handleSubmit}>
+              <form onSubmit={handleSubmit}>
+                <div className="flex">
                   <div className="flex flex-col">
-                    <div className="flex flex-row">
-                      <div className="p-3">
-                        <AccountDropdown
-                          onAccountChange={handleAccountChange}
-                        ></AccountDropdown>
-                      </div>
-                      <div className="p-3">
-                        <OutcomeDropdown
-                          on_outcome_change={handleOutcomeChange}
-                        ></OutcomeDropdown>
-                      </div>
+                    <div className="p-2">
+                      <AccountDropdown
+                        onAccountChange={handleAccountChange}
+                      ></AccountDropdown>
                     </div>
-                    <div className="flex flex-row">
-                      <div className="flex flex-col p-3">
-                        <div className="pb-3">
-                          <Input
-                            id="entryPrice"
-                            name="entryPrice"
-                            type="number"
-                            step="any"
-                            placeholder="Entry Price..."
-                            className="w-[200px] sm:w-48 md:w-[250px] lg:w-[300px]"
-                          ></Input>
-                        </div>
-                        <div className="py-3">
-                          <Input
-                            id="stopLoss"
-                            name="stopLoss"
-                            type="number"
-                            step="any"
-                            placeholder="Stop Loss..."
-                          ></Input>
-                        </div>
-                        <div className="py-3">
-                          <Input
-                            id="takeProfit"
-                            name="takeProfit"
-                            type="number"
-                            step="any"
-                            placeholder="Take Profit..."
-                          ></Input>
-                        </div>
-                        <div className="flex flex-row">
-                          <div className="p-1">
-                            <BasePairDropdown
-                              onBasePairChange={handleBasePairChange}
-                            ></BasePairDropdown>
-                          </div>
-                          <div className="p-1">
-                            <QuotePairDropdown
-                              onQuotePairChange={handleQuotePairChange}
-                            ></QuotePairDropdown>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex flex-col">
-                        <div className="p-3">
-                          <Input
-                            id="riskRatio"
-                            name="riskRatio"
-                            type="number"
-                            step="any"
-                            placeholder="Risk Ratio..."
-                            className="w-[200px] sm:w-48 md:w-[250px] lg:w-[300px]"
-                          ></Input>
-                        </div>
-                        <div className="p-3">
-                          <Textarea
-                            id="tradeNotes"
-                            name="tradeNotes"
-                            placeholder="Notes..."
-                            className="w-full h-[180px] resize-none border text-sm"
-                            maxLength={1250}
-                          ></Textarea>
-                        </div>
-                      </div>
+                    <div className="p-2">
+                      <OutcomeDropdown
+                        on_outcome_change={handleOutcomeChange}
+                      ></OutcomeDropdown>
                     </div>
-                    <div className="p-3 text-center">
-                      <Button type="submit" className="w-24 md:w-36 lg:w-52">
-                        Submit Entry
-                      </Button>
+                    <div className="p-2">
+                      <Input
+                        id="entryPrice"
+                        name="entryPrice"
+                        type="number"
+                        step="any"
+                        placeholder="Entry Price..."
+                        className="w-40 sm:w-[200px] md:w-[250px] lg:w-[300px]"
+                      ></Input>
+                    </div>
+                    <div className="p-2">
+                      <Input
+                        id="stopLoss"
+                        name="stopLoss"
+                        type="number"
+                        step="any"
+                        placeholder="Stop Loss..."
+                        className="w-40 sm:w-[200px] md:w-[250px] lg:w-[300px]"
+                      ></Input>
+                    </div>
+                    <div className="p-2">
+                      <Input
+                        id="takeProfit"
+                        name="takeProfit"
+                        type="number"
+                        step="any"
+                        placeholder="Take Profit..."
+                        className="w-40 sm:w-[200px] md:w-[250px] lg:w-[300px]"
+                      ></Input>
                     </div>
                   </div>
-                </form>
-              </div>
+                  <div className="flex flex-col">
+                    <div className="flex flex-row p-2 mx-auto">
+                      <BasePairDropdown
+                        onBasePairChange={handleBasePairChange}
+                      ></BasePairDropdown>
+                      <QuotePairDropdown
+                        onQuotePairChange={handleQuotePairChange}
+                      ></QuotePairDropdown>
+                    </div>
+                    <div className="p-2">
+                      <Input
+                        id="riskRatio"
+                        name="riskRatio"
+                        type="number"
+                        step="any"
+                        placeholder="Risk Ratio..."
+                        className="w-40 sm:w-[200px] md:w-[250px] lg:w-[300px]"
+                      ></Input>
+                    </div>
+                    <div className="p-2">
+                      <Textarea
+                        id="tradeNotes"
+                        name="tradeNotes"
+                        placeholder="Notes..."
+                        className="w-40 sm:w-[200px] md:w-[250px] lg:w-[300px] h-[150px] resize-none border text-sm"
+                        maxLength={1250}
+                      ></Textarea>
+                    </div>
+                  </div>
+                </div>
+                <div className="p-3 text-center">
+                  <Button type="submit" className="w-24 md:w-36 lg:w-52">
+                    Submit Entry
+                  </Button>
+                </div>
+              </form>
             )}
           </div>
         </div>

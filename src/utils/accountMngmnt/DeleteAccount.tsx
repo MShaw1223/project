@@ -47,22 +47,19 @@ const DeleteAccount = () => {
               <div className="flex-row">
                 <div className="p-2 text-center items-center">
                   <h3>Select the account you would like to delete</h3>
-                  <div className="ml-16">
-                    <AccountDropdown
-                      onAccountChange={handleAccountChange}
-                    ></AccountDropdown>
-                  </div>
+                  <AccountDropdown
+                    onAccountChange={handleAccountChange}
+                  ></AccountDropdown>
                 </div>
               </div>
               <div className="p-2 text-center">
-                <h3>
-                  Data stored on trading accounts cannot be recovered.
-                  <br></br> Are you sure you would like to proceed?
-                </h3>
+                <h3>Data stored on trading accounts cannot be recovered.</h3>
+                <br />
+                <h3>Are you sure you would like to proceed?</h3>
                 <Button
                   type="submit"
                   variant="destructive"
-                  className="m-3 w-28 md:w-36 lg:w-52"
+                  className="m-10 w-28 md:w-36 lg:w-52"
                 >
                   Delete Account
                 </Button>

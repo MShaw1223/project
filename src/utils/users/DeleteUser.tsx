@@ -68,7 +68,7 @@ const DeleteUserPage: NextPage = () => {
         {!mutation.isLoading && (
           <div className="overflow-auto mx-auto p-2 text-center">
             <form onSubmit={handleSubmit}>
-              <div className="m-1 p-2 w-[450px]">
+              <div className="m-1 p-2">
                 <div className="p-2">
                   <p>Deleting this user will delete all associated data</p>
                 </div>
@@ -79,7 +79,7 @@ const DeleteUserPage: NextPage = () => {
                   </h3>
                   <Button
                     type="submit"
-                    className="w-24 md:w-36 lg:w-52 m-3"
+                    className="w-24 md:w-36 lg:w-52 m-10"
                     variant="destructive"
                   >
                     Delete User

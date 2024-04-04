@@ -127,7 +127,6 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
         ) : (
           // collapsed
           <div
-            // className="top-0 left-0 h-screen flex flex-col items-center justify-center bg-black p-2"
             className={`flex flex-col top-0 left-0 p-2 h-screen bg-black transition-width duration-500 ease-in-out ${
               isOpen ? "w-[250px] md:w-1/8 lg:w-1/4" : "w-16 md:w-24 lg:w-32"
             }`}
