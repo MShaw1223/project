@@ -70,6 +70,10 @@ const EditUserPage: NextPage = () => {
   async function handleFieldChange(field: string) {
     setEdit(field);
   }
+  const maxLengths: Record<string, number> = {
+    username: 15,
+    passwd: 60,
+  };
   return (
     <>
       <div className="flex">
@@ -88,6 +92,7 @@ const EditUserPage: NextPage = () => {
                     id="newInfo"
                     name="newInfo"
                     placeholder="New info....."
+                    maxLength={edit in maxLengths ? maxLengths[edit] : 15}
                   />
                 </div>
                 <div className="p-4">
