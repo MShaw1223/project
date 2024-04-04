@@ -19,7 +19,7 @@ const DeleteEntry: NextPage = () => {
       });
       if (!response.ok) {
         alert("Unable to delete the trade");
-        throw new Error("Failed to submit data");
+        return;
       }
       return response.json();
     },
