@@ -38,6 +38,7 @@ const EditUserPage: NextPage = () => {
         headers: { "Content-Type": "application/json" },
       });
       if (!response.ok) {
+        alert("Issue with submission, try again");
         throw new Error("Failed to edit");
       }
       return response;
@@ -50,19 +51,25 @@ const EditUserPage: NextPage = () => {
     event.preventDefault();
     try {
       const data = new FormData(event.target as HTMLFormElement);
-      const placeholder = data.get("newInfo") as string;
+      console.log(data.get("newInfo"));
+      const placeholder = data.get("newInfo")! as string;
       console.log("Handle Submit works, info submitting: ", {
         edit,
         user,
         placeholder,
       });
-      mutation.mutate(
-        JSON.stringify({
-          field: edit,
-          user: user,
-          newInfo: placeholder,
-        })
-      );
+      if (edit !== "" && placeholder !== "") {
+        mutation.mutate(
+          JSON.stringify({
+            field: edit!,
+            user: user,
+            newInfo: placeholder,
+          })
+        );
+      } else {
+        alert("Enter edits or select a field");
+        return;
+      }
     } catch (error) {
       alert("Unable to edit user");
     }
@@ -70,10 +77,6 @@ const EditUserPage: NextPage = () => {
   async function handleFieldChange(field: string) {
     setEdit(field);
   }
-  const maxLengths: Record<string, number> = {
-    username: 15,
-    passwd: 60,
-  };
   return (
     <>
       <div className="flex">
@@ -92,7 +95,9 @@ const EditUserPage: NextPage = () => {
                     id="newInfo"
                     name="newInfo"
                     placeholder="New info....."
-                    maxLength={edit in maxLengths ? maxLengths[edit] : 15}
+                    maxLength={
+                      edit === "passwd" ? 60 : edit === "username" ? 15 : 15
+                    }
                   />
                 </div>
                 <div className="p-4">
