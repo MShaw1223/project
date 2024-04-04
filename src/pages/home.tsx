@@ -108,7 +108,11 @@ const Home: NextPage = () => {
                       {data.totalWins}
                     </TableCell>
                     <TableCell className="lg:text-2xl md:text-lg sm:text-xs">
-                      {`${data.winPercentage}%`}
+                      <TableCell className="lg:text-2xl md:text-lg sm:text-xs">
+                        {data.winPercentage !== undefined
+                          ? `${data.winPercentage}%`
+                          : "No Data"}
+                      </TableCell>
                     </TableCell>
                     <TableCell className="lg:text-2xl md:text-lg sm:text-xs">
                       {data.bestPair}
