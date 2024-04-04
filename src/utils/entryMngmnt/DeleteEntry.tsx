@@ -18,9 +18,9 @@ const DeleteEntry: NextPage = () => {
         cache: "no-cache",
       });
       if (!response.ok) {
+        alert("Unable to delete the trade");
         throw new Error("Failed to submit data");
       }
-
       return response.json();
     },
     onSettled: () => {
@@ -49,12 +49,17 @@ const DeleteEntry: NextPage = () => {
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const data = new FormData(event.target as HTMLFormElement);
-    mutation.mutate(
-      JSON.stringify({
-        tradesid: Number(data.get("tradeID")),
-        accountid: await getID(selectedAccount),
-      })
-    );
+    try {
+      mutation.mutate(
+        JSON.stringify({
+          tradesid: Number(data.get("tradeID")),
+          accountid: await getID(selectedAccount),
+        })
+      );
+    } catch (error) {
+      alert("Error with selected account");
+      return;
+    }
   }
   return (
     <>
