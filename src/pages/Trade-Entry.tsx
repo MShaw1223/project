@@ -172,14 +172,6 @@ const tradeEntry: NextPage = () => {
                     </div>
                   </div>
                   <div className="flex flex-col">
-                    <div className="flex flex-row p-2 mx-auto">
-                      <BasePairDropdown
-                        onBasePairChange={handleBasePairChange}
-                      ></BasePairDropdown>
-                      <QuotePairDropdown
-                        onQuotePairChange={handleQuotePairChange}
-                      ></QuotePairDropdown>
-                    </div>
                     <div className="p-2">
                       <Input
                         id="riskRatio"
@@ -189,6 +181,14 @@ const tradeEntry: NextPage = () => {
                         placeholder="Risk Ratio..."
                         className="w-40 sm:w-[200px] md:w-[250px] lg:w-[300px]"
                       ></Input>
+                    </div>
+                    <div className="flex flex-row p-2 mx-auto">
+                      <BasePairDropdown
+                        onBasePairChange={handleBasePairChange}
+                      ></BasePairDropdown>
+                      <QuotePairDropdown
+                        onQuotePairChange={handleQuotePairChange}
+                      ></QuotePairDropdown>
                     </div>
                     <div className="p-2">
                       <Textarea
