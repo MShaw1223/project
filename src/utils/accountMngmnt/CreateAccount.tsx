@@ -53,6 +53,10 @@ const CreateAccountPage = () => {
       alert("Entries do not match");
       return;
     }
+    if (!accountname || !reEntered) {
+      alert("Enter the new account in both fields");
+      return;
+    }
     if (accountname === reEntered && user !== null) {
       mutation.mutate(
         JSON.stringify({

@@ -32,20 +32,17 @@ const UpdateAccount = () => {
         return;
       }
       if (firstEdit === reEnteredEdit && selectedAccount !== null) {
-        try {
-          mutation.mutate(
-            JSON.stringify({
-              accountname: selectedAccount,
-              edits: firstEdit,
-            })
-          );
-        } catch (error) {
-          alert("Error Editting Account");
-        }
+        mutation.mutate(
+          JSON.stringify({
+            accountname: selectedAccount,
+            edits: firstEdit,
+          })
+        );
       } else {
         throw new Error("Submitted data is incorrect");
       }
     } catch (error) {
+      alert("Error Editting Account");
       return new Response("Error", {
         status: 403,
       });

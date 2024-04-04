@@ -49,9 +49,11 @@ const signUp: NextPage = () => {
       }
       if (!response.ok) {
         alert("Failed to sign up, try another username");
+        return;
       }
     } else {
       alert("Passwords do not match");
+      return;
     }
   }
   return (
