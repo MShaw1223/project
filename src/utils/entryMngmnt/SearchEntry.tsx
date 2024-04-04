@@ -110,28 +110,28 @@ const searchEntry: NextPage = () => {
               <TableBody>
                 {data.map((trade) => (
                   <TableRow key={trade.tradesid}>
-                    <TableCell className="lg:text-lg md:text-base sm:text-xs text-base">
+                    <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
                       {trade.tradesid}
                     </TableCell>
-                    <TableCell className="lg:text-lg md:text-base sm:text-xs text-base">
+                    <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
                       {trade.entryprice}
                     </TableCell>
-                    <TableCell className="lg:text-lg md:text-base sm:text-xs text-base">
+                    <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
                       {trade.stoploss}
                     </TableCell>
-                    <TableCell className="lg:text-lg md:text-base sm:text-xs text-base">
+                    <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
                       {trade.takeprofit}
                     </TableCell>
-                    <TableCell className="lg:text-lg md:text-base sm:text-xs text-base">
+                    <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
                       {trade.tradenotes}
                     </TableCell>
-                    <TableCell className="lg:text-lg md:text-base sm:text-xs text-base">
+                    <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
                       {trade.riskratio}
                     </TableCell>
-                    <TableCell className="lg:text-lg md:text-base sm:text-xs text-base">
+                    <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
                       {trade.winloss}
                     </TableCell>
-                    <TableCell className="lg:text-lg md:text-base sm:text-xs text-base">
+                    <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
                       {trade.currencypair}
                     </TableCell>
                   </TableRow>
