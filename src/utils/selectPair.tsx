@@ -75,7 +75,7 @@ function BasePairDropdown({ onBasePairChange }: BaseDropdownProps) {
   return (
     <>
       <Select onValueChange={handleValueChange}>
-        <SelectTrigger className="w-[90px]">
+        <SelectTrigger className="w-[90px] sm:w-[86px] md:w-[115px] lg:w-[140px]">
           <SelectValue placeholder="Base" />
         </SelectTrigger>
         <SelectContent>
@@ -117,7 +117,7 @@ function QuotePairDropdown({ onQuotePairChange }: QuoteDropdownProps) {
   return (
     <>
       <Select onValueChange={handleValueChange}>
-        <SelectTrigger className="w-[90px]">
+        <SelectTrigger className="w-[90px] sm:w-[86px] md:w-[115px] lg:w-[140px]">
           <SelectValue placeholder="Quote" />
         </SelectTrigger>
         <SelectContent>

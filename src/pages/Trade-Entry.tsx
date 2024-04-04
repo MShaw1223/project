@@ -120,11 +120,11 @@ const tradeEntry: NextPage = () => {
             menuOpen ? "ml-20" : ""
           }`}
         >
-          <div className="flex p-3 text-3xl">
+          <div className="flex p-3 text-3xl justify-center">
             <FaPencilAlt className="h-10 w-10"></FaPencilAlt>
             <span className="ml-4 my-auto font-bold">Trade Entry</span>
           </div>
-          <div className="flex w-full overflow-auto p-5 mx-auto justify-center items-center">
+          <div className="flex w-full overflow-auto p-2 mx-auto justify-center items-center my-32">
             {mutation.isLoading && <p>Submitting Trade Data...</p>}
             {!mutation.isLoading && (
               <div className="flex ">
@@ -151,6 +151,7 @@ const tradeEntry: NextPage = () => {
                             type="number"
                             step="any"
                             placeholder="Entry Price..."
+                            className="w-[200px] sm:w-48 md:w-[250px] lg:w-[300px]"
                           ></Input>
                         </div>
                         <div className="py-3">
@@ -192,6 +193,7 @@ const tradeEntry: NextPage = () => {
                             type="number"
                             step="any"
                             placeholder="Risk Ratio..."
+                            className="w-[200px] sm:w-48 md:w-[250px] lg:w-[300px]"
                           ></Input>
                         </div>
                         <div className="p-3">
@@ -206,7 +208,9 @@ const tradeEntry: NextPage = () => {
                       </div>
                     </div>
                     <div className="p-3 text-center">
-                      <Button type="submit">Submit Entry</Button>
+                      <Button type="submit" className="w-24 md:w-36 lg:w-52">
+                        Submit Entry
+                      </Button>
                     </div>
                   </div>
                 </form>

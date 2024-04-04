@@ -67,31 +67,30 @@ const CreateAccountPage = () => {
       <div className="flex">
         {mutation.isLoading && <p>Submitting New Account</p>}
         {!mutation.isLoading && (
-          <div className="flex items-center justify-center">
+          <div className="flex-col mx-auto">
             <form onSubmit={handleSubmit}>
-              <h1 className="font-bold text-lg underline underline-offset-8">
-                New Account
-              </h1>
-              <div className="flex flex-row w-[770px]">
-                <div className="p-2 w-full">
-                  <h3>Enter the name of the new account</h3>
-                  <Input
-                    id="accountName"
-                    name="accountName"
-                    placeholder="New Account Name....."
-                  />
-                </div>
-                <div className="p-2 pl-5 w-full">
-                  <h3>Re-enter the Account Name</h3>
-                  <Input
-                    id="reEnteredAccountName"
-                    name="reEnteredAccountName"
-                    placeholder="Re-enter Account Name..."
-                  />
-                </div>
+              <div className="p-2 flex-row">
+                <h3>Enter the name of the new account</h3>
+                <Input
+                  id="accountName"
+                  name="accountName"
+                  placeholder="New Account Name....."
+                  className="sm:w-48 md:w-[280px] lg:w-[340px]"
+                />
+              </div>
+              <div className="p-2 flex-row">
+                <h3>Re-enter the Account Name</h3>
+                <Input
+                  id="reEnteredAccountName"
+                  name="reEnteredAccountName"
+                  placeholder="Re-enter Account Name..."
+                  className="sm:w-48 md:w-[280px] lg:w-[340px]"
+                />
               </div>
               <div className="p-3 text-center">
-                <Button type="submit">Submit New</Button>
+                <Button type="submit" className="w-24 md:w-36 lg:w-52">
+                  Submit New
+                </Button>
               </div>
             </form>
           </div>

@@ -61,18 +61,17 @@ const DeleteEntry: NextPage = () => {
       <div className="flex">
         {mutation.isLoading && <p>Deleting User...</p>}
         {!mutation.isLoading && (
-          <div className="flex items-center justify-center">
+          <div className="flex-col mx-auto">
             <form onSubmit={handleSubmit}>
-              <h1 className="font-bold text-lg underline underline-offset-8">
-                Delete Trade
-              </h1>
-              <div className="flex flex-row w-fit">
-                <div className="p-3">
+              <div className="flex-row">
+                <div className="p-3 text-center items-center">
+                  <h3>Select the account the trade is on</h3>
                   <AccountDropdown
                     onAccountChange={handleAccountChange}
                   ></AccountDropdown>
                 </div>
-                <div className="p-3 w-full">
+                <div className="p-3 w-full text-center">
+                  <h3>Enter the trade ID of the trade</h3>
                   <Input
                     id="tradeID"
                     name="tradeID"
@@ -80,11 +79,19 @@ const DeleteEntry: NextPage = () => {
                     placeholder="Trade ID....."
                   />
                 </div>
-                <div className="p-3 text-center">
-                  <Button type="submit" variant="destructive">
-                    Delete Trade
-                  </Button>
-                </div>
+              </div>
+              <div className="p-3 text-center">
+                <h3>
+                  Trades cannot be recovered once deleted.
+                  <br></br> Are you sure you would like to proceed?
+                </h3>
+                <Button
+                  type="submit"
+                  variant="destructive"
+                  className="m-3 w-24 md:w-36 lg:w-52"
+                >
+                  Delete Trade
+                </Button>
               </div>
             </form>
           </div>

@@ -64,40 +64,36 @@ const Home: NextPage = () => {
     <>
       <div className="flex h-screen bg-slate-200">
         <Menu isOpen={menuOpen} setIsOpen={setMenuOpen} />
-        <div
-          className={`flex-1 flex flex-col overflow-hidden ${
-            menuOpen ? "ml-20" : ""
-          }`}
-        >
-          <div className="flex p-3 text-3xl">
+        <div className="flex-1 flex flex-col overflow-hidden">
+          <div className="flex p-3 text-3xl justify-center">
             <FaHome className="h-10 w-10"></FaHome>
-            <span className="ml-4 my-auto font-bold">Home</span>
+            <span className="my-auto font-bold">Home</span>
           </div>
-          <div className="p-2 mt-5 mx-5">
-            <h1 className="text-3xl font-extrabold">
+          <div className="p-2 mt-5 mx-5 text-center">
+            <h1 className="text-2xl sm:text-2xl md:text-4xl font-extrabold">
               Welcome {user ? user : "..."}
             </h1>
           </div>
-          <div className="flex flex-1 overflow-auto p-4">
-            <Table className="bg-gray-400 rounded-2xl">
+          <div className="flex flex-1 overflow-auto p-2 justify-center my-28 mx-auto">
+            <Table className="bg-gray-400 w-[400px] sm:w-[310px] md:w-[400px] lg:w-[900px] rounded-2xl">
               <TableCaption className="text-gray-500">
                 A Table of your recent Trades.
               </TableCaption>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="text-slate-200 p-5 text-lg">
-                    Trades Taken
+                  <TableHead className="text-slate-200 lg:text-2xl md:text-lg sm:text-xs">
+                    N<sup>o</sup> Trades
                   </TableHead>
-                  <TableHead className="text-slate-200 p-5 text-lg">
-                    Winning Trades
+                  <TableHead className="text-slate-200 lg:text-2xl md:text-lg sm:text-xs">
+                    Trades Won
                   </TableHead>
-                  <TableHead className="text-slate-200 p-5 text-lg">
-                    Win %
+                  <TableHead className="text-slate-200 lg:text-2xl md:text-lg sm:text-xs">
+                    Win Rate
                   </TableHead>
-                  <TableHead className="text-slate-200 p-5 text-lg">
+                  <TableHead className="text-slate-200 lg:text-2xl md:text-lg sm:text-xs">
                     Best Pair
                   </TableHead>
-                  <TableHead className="text-slate-200 p-5 text-lg">
+                  <TableHead className="text-slate-200 lg:text-2xl md:text-lg sm:text-xs">
                     Worst Pair
                   </TableHead>
                 </TableRow>
@@ -105,17 +101,19 @@ const Home: NextPage = () => {
               <TableBody>
                 {data && (
                   <TableRow>
-                    <TableCell className="p-5 text-lg">
+                    <TableCell className="lg:text-2xl md:text-lg sm:text-xs">
                       {data.totalTrades}
                     </TableCell>
-                    <TableCell className="p-5 text-lg">
+                    <TableCell className="lg:text-2xl md:text-lg sm:text-xs">
                       {data.totalWins}
                     </TableCell>
-                    <TableCell className="p-5 text-lg">{`${data.winPercentage}%`}</TableCell>
-                    <TableCell className="p-5 text-lg">
+                    <TableCell className="lg:text-2xl md:text-lg sm:text-xs">
+                      {`${data.winPercentage}%`}
+                    </TableCell>
+                    <TableCell className="lg:text-2xl md:text-lg sm:text-xs">
                       {data.bestPair}
                     </TableCell>
-                    <TableCell className="p-5 text-lg">
+                    <TableCell className="lg:text-2xl md:text-lg sm:text-xs">
                       {data.worstPair}
                     </TableCell>
                   </TableRow>

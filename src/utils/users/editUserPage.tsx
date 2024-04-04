@@ -75,15 +75,15 @@ const EditUserPage: NextPage = () => {
       <div className="flex">
         {mutation.isLoading && <p>Submitting Edit...</p>}
         {!mutation.isLoading && (
-          <div className="overflow-auto justify-center p-2">
+          <div className="overflow-auto text-center mx-auto p-2">
             <form onSubmit={handleSubmit}>
-              <h1 className="font-bold text-lg">Edit User</h1>
               <div className="p-3">
+                <h3>Select which field you would like to edit</h3>
                 <SelectEdit onFieldChange={handleFieldChange}></SelectEdit>
               </div>
               <div className="m-1 p-2 w-[450px]">
                 <div className="p-2">
-                  <p>Change field here</p>
+                  <p>Enter changes here</p>
                   <Input
                     id="newInfo"
                     name="newInfo"
@@ -91,7 +91,7 @@ const EditUserPage: NextPage = () => {
                   />
                 </div>
                 <div className="p-4">
-                  <Button type="submit" className="w-full">
+                  <Button type="submit" className="m-3 w-28 md:w-36 lg:w-52">
                     Submit Change
                   </Button>
                 </div>

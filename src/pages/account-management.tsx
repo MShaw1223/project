@@ -19,21 +19,19 @@ const accountManagement: NextPage = () => {
             menuOpen ? "ml-20" : ""
           }`}
         >
-          <div className="flex p-3 text-3xl">
+          <div className="flex p-3 text-3xl justify-center">
             <MdOutlineAccountBalance className="w-10 h-10"></MdOutlineAccountBalance>
-            <span className="ml-4  font-bold">Account Management</span>
+            <span className="ml-4 font-bold">Account Management</span>
           </div>
-          <div className="flex-1 overflow-auto p-4 text-justify justify-center">
-            <Tabs defaultValue="create" className="p-3 m-1">
-              <TabsList className="m-2 mb-6">
-                <TabsTrigger value="create">
-                  Create a new trading account
-                </TabsTrigger>
+          <div className="flex-1 overflow-auto p-4">
+            <Tabs defaultValue="create" className="p-2 m-1">
+              <TabsList>
+                <TabsTrigger value="create">Create a new account</TabsTrigger>
                 <TabsTrigger value="update">
-                  Update an existing trading account
+                  Update an existing account
                 </TabsTrigger>
                 <TabsTrigger value="delete">
-                  Delete an existing trading Account
+                  Delete an existing account
                 </TabsTrigger>
               </TabsList>
               <TabsContent value="create">

@@ -17,9 +17,9 @@ const userPage: NextPage = () => {
             menuOpen ? "ml-20" : ""
           }`}
         >
-          <div className="flex p-3 text-3xl">
+          <div className="flex p-3 text-3xl justify-center">
             <FaUserFriends className="w-10 h-10"></FaUserFriends>
-            <span className="ml-16 font-bold">Users</span>
+            <span className="ml-10 font-bold">Users</span>
           </div>
           <div className="flex-1">
             <Tabs defaultValue="edit" className="p-3 m-1">

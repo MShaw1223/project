@@ -57,35 +57,34 @@ const UpdateAccount = () => {
         <div className="flex">
           {mutation.isLoading && <p>Submitting Edit...</p>}
           {!mutation.isLoading && (
-            <div className="flex items-center justify-center">
+            <div className="flex-col mx-auto">
               <form onSubmit={handleSubmit}>
-                <h1 className="font-bold text-lg underline underline-offset-8">
-                  Update Account
-                </h1>
-                <div className="flex flex-row w-[770px]">
-                  <div className="p-3">
+                <div className="flex flex-row">
+                  <div className="p-2">
+                    <h3>Select account to update</h3>
                     <AccountDropdown
                       onAccountChange={handleAccountChange}
                     ></AccountDropdown>
                   </div>
                 </div>
-                <div className="flex flex-row w-[770px]">
-                  <div className="p-2 w-full">
-                    <h3>Enter the new account name</h3>
-                    <Input
-                      id="firstEdit"
-                      name="firstEdit"
-                      placeholder="Enter Edit....."
-                    />
-                  </div>
-                  <div className="p-2 pl-5 w-full">
-                    <h3>Re-enter the new account name</h3>
-                    <Input
-                      id="reEnteredEdit"
-                      name="reEnteredEdit"
-                      placeholder="Re-enter Edit..."
-                    />
-                  </div>
+
+                <div className="p-2 flex-row">
+                  <h3>Updated account name</h3>
+                  <Input
+                    id="firstEdit"
+                    name="firstEdit"
+                    placeholder="Enter Edit....."
+                    className="w-[200px] sm:w-48 md:w-[280px] lg:w-[340px]"
+                  />
+                </div>
+                <div className="p-2 flex-row">
+                  <h3>Re-enter update</h3>
+                  <Input
+                    id="reEnteredEdit"
+                    name="reEnteredEdit"
+                    placeholder="Re-enter Edit..."
+                    className="w-[200px] sm:w-48 md:w-[280px] lg:w-[340px]"
+                  />
                 </div>
                 <div className="p-3 text-center">
                   <Button type="submit">Submit Edits</Button>

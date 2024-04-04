@@ -66,17 +66,20 @@ const DeleteUserPage: NextPage = () => {
       <div className="flex">
         {mutation.isLoading && <p>Deleting User...</p>}
         {!mutation.isLoading && (
-          <div className="overflow-auto justify-center p-2">
+          <div className="overflow-auto mx-auto p-2 text-center">
             <form onSubmit={handleSubmit}>
-              <h1 className="font-bold text-lg">Delete User</h1>
               <div className="m-1 p-2 w-[450px]">
                 <div className="p-2">
                   <p>Deleting this user will delete all associated data</p>
                 </div>
                 <div className="p-4">
+                  <h3>
+                    This action cannot be undone, deleted data cannot be
+                    recovered
+                  </h3>
                   <Button
                     type="submit"
-                    className="w-full"
+                    className="w-24 md:w-36 lg:w-52 m-3"
                     variant="destructive"
                   >
                     Delete User

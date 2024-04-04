@@ -27,10 +27,10 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
         {isOpen ? (
           <div
             className={`fixed h-screen bg-black transition-width duration-500 ease-in-out ${
-              isOpen ? "sm:w-[290px] lg:w-1/8" : "w-20"
+              isOpen ? "w-[250px] md:w-1/8 lg:w-1/4" : "w-16 md:w-24 lg:w-32"
             }`}
           >
-            <div className="flex justify-between items-center p-5 text-2xl font-sans font-semibold text-slate-100">
+            <div className="flex justify-between items-center p-5 text-xl md:text-3xl font-sans font-semibold text-slate-100">
               <span>Menu</span>
               <div
                 onClick={() => setIsOpen(!isOpen)}
@@ -49,7 +49,9 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
                 } rounded-full `}
               >
                 <FaHome className="w-6 h-6 text-slate-100"></FaHome>
-                <span className="pl-3 text-slate-100">Home</span>
+                <span className="pl-3 text-slate-100 text-lg md:text-xl lg:text-2xl">
+                  Home
+                </span>
               </div>
             </Link>
 
@@ -62,7 +64,9 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
                 } rounded-full `}
               >
                 <FaPencilAlt className="w-6 h-6 text-slate-100"></FaPencilAlt>
-                <span className="pl-3 text-slate-100">Trade Entry</span>
+                <span className="pl-3 text-slate-100 text-lg md:text-xl lg:text-2xl">
+                  Trade Entry
+                </span>
               </div>
             </Link>
 
@@ -75,7 +79,9 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
                 } rounded-full `}
               >
                 <FaCalculator className="w-6 h-6 text-slate-100"></FaCalculator>
-                <span className="pl-3 text-slate-100">Entry Management</span>
+                <span className="pl-3 text-slate-100 text-lg md:text-xl lg:text-2xl">
+                  Entry Management
+                </span>
               </div>
             </Link>
 
@@ -88,7 +94,9 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
                 } rounded-full`}
               >
                 <MdOutlineAccountBalance className="w-6 h-6 text-slate-100"></MdOutlineAccountBalance>
-                <span className="pl-3 text-slate-100">Account Management</span>
+                <span className="pl-3 text-slate-100 text-lg md:text-xl lg:text-2xl">
+                  Account Management
+                </span>
               </div>
             </Link>
 
@@ -99,7 +107,9 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
                 } rounded-full `}
               >
                 <FaUserFriends className="w-6 h-6 text-slate-100"></FaUserFriends>
-                <span className="pl-3 text-slate-100">Users</span>
+                <span className="pl-3 text-slate-100 text-lg md:text-xl lg:text-2xl">
+                  Users
+                </span>
               </div>
             </Link>
 
@@ -108,43 +118,50 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
             <Link href="/">
               <div className="flex pl-5 py-4 mx-3 focus:outline-none font-bold hover:bg-gray-500 rounded-full">
                 <MdArrowBack className="w-6 h-6 text-slate-100"></MdArrowBack>
-                <span className="pl-3 text-slate-100">Back to Login</span>
+                <span className="pl-3 text-slate-100 text-lg md:text-xl lg:text-2xl">
+                  Back to Login
+                </span>
               </div>
             </Link>
           </div>
         ) : (
           // collapsed
-          <div className="top-0 left-0 h-screen flex flex-col items-center justify-center bg-black p-5">
+          <div
+            // className="top-0 left-0 h-screen flex flex-col items-center justify-center bg-black p-2"
+            className={`flex flex-col top-0 left-0 p-2 h-screen bg-black transition-width duration-500 ease-in-out ${
+              isOpen ? "w-[250px] md:w-1/8 lg:w-1/4" : "w-16 md:w-24 lg:w-32"
+            }`}
+          >
             <div
               onClick={() => setIsOpen(!isOpen)}
               className="focus:outline-none hover:bg-gray-500 rounded-lg p-2"
             >
               {isOpen ? (
-                <BsChevronBarLeft className="text-white text-2xl" />
+                <BsChevronBarLeft className="text-white text-2xl md:text-4xl mx-auto mt-4" />
               ) : (
-                <BsChevronBarRight className="text-white text-2xl" />
+                <BsChevronBarRight className="text-white text-2xl md:text-4xl mx-auto" />
               )}
             </div>
             <div className="h-screen flex flex-col items-center justify-center space-y-4">
               <Link href={`/home?li=${li}`}>
                 <div
-                  className={`flex p-2 focus:outline-none font-bold hover:bg-gray-500 ${
+                  className={`flex p-3 focus:outline-none font-bold hover:bg-gray-500 ${
                     isLinkActive("/home") ? "bg-gray-700 hover:bg-gray-700" : ""
                   } rounded-lg `}
                 >
-                  <FaHome className="w-6 h-6 text-slate-100"></FaHome>
+                  <FaHome className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10 text-slate-100"></FaHome>
                 </div>
               </Link>
 
               <Link href={`/Trade-Entry?li=${li}`}>
                 <div
-                  className={`flex p-2 focus:outline-none font-bold hover:bg-gray-500 ${
+                  className={`flex p-3 focus:outline-none font-bold hover:bg-gray-500 ${
                     isLinkActive("/Trade-Entry")
                       ? "bg-gray-700 hover:bg-gray-700"
                       : ""
                   } rounded-lg `}
                 >
-                  <FaPencilAlt className="w-6 h-6 text-slate-100"></FaPencilAlt>
+                  <FaPencilAlt className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10 text-slate-100"></FaPencilAlt>
                 </div>
               </Link>
 
@@ -156,7 +173,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
                       : ""
                   } rounded-lg `}
                 >
-                  <FaCalculator className="w-6 h-6 text-slate-100"></FaCalculator>
+                  <FaCalculator className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10 text-slate-100"></FaCalculator>
                 </div>
               </Link>
 
@@ -168,7 +185,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
                       : ""
                   } rounded-lg`}
                 >
-                  <MdOutlineAccountBalance className="w-6 h-6 text-slate-100"></MdOutlineAccountBalance>
+                  <MdOutlineAccountBalance className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10 text-slate-100"></MdOutlineAccountBalance>
                 </div>
               </Link>
 
@@ -180,13 +197,13 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
                       : ""
                   } rounded-lg `}
                 >
-                  <FaUserFriends className="w-6 h-6 text-slate-100"></FaUserFriends>
+                  <FaUserFriends className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10 text-slate-100"></FaUserFriends>
                 </div>
               </Link>
 
               <Link href="/">
                 <div className="flex p-2 focus:outline-none font-bold hover:bg-gray-500 rounded-lg">
-                  <MdArrowBack className="w-6 h-6 text-slate-100"></MdArrowBack>
+                  <MdArrowBack className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10 text-slate-100"></MdArrowBack>
                 </div>
               </Link>
             </div>

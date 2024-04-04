@@ -60,46 +60,84 @@ const searchEntry: NextPage = () => {
 
   return (
     <>
-      <div className="flex-1 overflow-auto p-4 text-justify justify-center w-full">
-        <h1 className="p-2 font-bold text-lg underline underline-offset-8">
-          Search Entries
-        </h1>
-        <div className="p-1 m1">
-          <AccountDropdown
-            onAccountChange={handleAccountChange}
-          ></AccountDropdown>
+      <div className="flex">
+        <div className="m-3 overflow-hidden text-left mx-auto">
+          <h3>Select an account to search through</h3>
+          <div className="p-1 my-4">
+            <AccountDropdown
+              onAccountChange={handleAccountChange}
+            ></AccountDropdown>
+          </div>
+          <div className="flex-1 overflow-auto p-2 text-center m-2">
+            <h3 className="text-slate-700">
+              Tip: Right click to copy the trade ID you would like to delete and
+              paste it into the input on the delete entry tab
+            </h3>
+            <Table className="bg-gray-400 w-[400px] sm:w-[310px] md:w-[400px] lg:w-[910] rounded-2xl">
+              <TableCaption className="text-gray-500">
+                A Table of trades taken.
+              </TableCaption>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="text-slate-200 lg:text-2xl md:text-lg sm:text-xs">
+                    Trade ID
+                  </TableHead>
+                  <TableHead className="text-slate-200 lg:text-2xl md:text-lg sm:text-xs">
+                    entryprice
+                  </TableHead>
+                  <TableHead className="text-slate-200 lg:text-2xl md:text-lg sm:text-xs">
+                    stoploss
+                  </TableHead>
+                  <TableHead className="text-slate-200 lg:text-2xl md:text-lg sm:text-xs">
+                    takeprofit
+                  </TableHead>
+                  <TableHead className="text-slate-200 lg:text-2xl md:text-lg sm:text-xs">
+                    tradenotes
+                  </TableHead>
+                  <TableHead className="text-slate-200 lg:text-2xl md:text-lg sm:text-xs">
+                    riskratio
+                  </TableHead>
+                  <TableHead className="text-slate-200 lg:text-2xl md:text-lg sm:text-xs">
+                    outcome
+                  </TableHead>
+                  <TableHead className="text-slate-200 lg:text-2xl md:text-lg sm:text-xs">
+                    currencypair
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {data.map((trade) => (
+                  <TableRow key={trade.tradesid}>
+                    <TableCell className="lg:text-2xl md:text-lg sm:text-xs">
+                      {trade.tradesid}
+                    </TableCell>
+                    <TableCell className="lg:text-2xl md:text-lg sm:text-xs">
+                      {trade.entryprice}
+                    </TableCell>
+                    <TableCell className="lg:text-2xl md:text-lg sm:text-xs">
+                      {trade.stoploss}
+                    </TableCell>
+                    <TableCell className="lg:text-2xl md:text-lg sm:text-xs">
+                      {trade.takeprofit}
+                    </TableCell>
+                    <TableCell className="lg:text-2xl md:text-lg sm:text-xs">
+                      {trade.tradenotes}
+                    </TableCell>
+                    <TableCell className="lg:text-2xl md:text-lg sm:text-xs">
+                      {trade.riskratio}
+                    </TableCell>
+                    <TableCell className="lg:text-2xl md:text-lg sm:text-xs">
+                      {trade.winloss}
+                    </TableCell>
+                    <TableCell className="lg:text-2xl md:text-lg sm:text-xs">
+                      {trade.currencypair}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </div>
-        <Table className="bg-gray-400 rounded-2xl p-1 m-1">
-          <TableCaption className="text-gray-500">
-            A Table of trades taken.
-          </TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="text-slate-200">Trade ID</TableHead>
-              <TableHead className="text-slate-200">entryprice</TableHead>
-              <TableHead className="text-slate-200">stoploss</TableHead>
-              <TableHead className="text-slate-200">takeprofit</TableHead>
-              <TableHead className="text-slate-200">tradenotes</TableHead>
-              <TableHead className="text-slate-200">riskratio</TableHead>
-              <TableHead className="text-slate-200">outcome</TableHead>
-              <TableHead className="text-slate-200">currencypair</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {data.map((trade) => (
-              <TableRow key={trade.tradesid}>
-                <TableCell>{trade.tradesid}</TableCell>
-                <TableCell>{trade.entryprice}</TableCell>
-                <TableCell>{trade.stoploss}</TableCell>
-                <TableCell>{trade.takeprofit}</TableCell>
-                <TableCell>{trade.tradenotes}</TableCell>
-                <TableCell>{trade.riskratio}</TableCell>
-                <TableCell>{trade.winloss}</TableCell>
-                <TableCell>{trade.currencypair}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
       </div>
     </>
   );

@@ -22,7 +22,6 @@ const login: NextPage = () => {
       username: data.get("user") as string,
       passwd: data.get("password") as string,
     });
-    console.log(parsedData);
     // sends post request to check the credentials are correct,
     // with the username and password satisfying the schema
     const response = await fetch("/api/auth/loginApi", {

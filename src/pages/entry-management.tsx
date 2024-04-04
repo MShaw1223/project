@@ -19,12 +19,12 @@ const EntryManagement: NextPage = () => {
             menuOpen ? "ml-20" : ""
           }`}
         >
-          <div className="flex p-3 text-3xl">
+          <div className="flex p-3 text-3xl justify-center">
             <FaCalculator className="h-10 w-10"></FaCalculator>
-            <span className="ml-4 my-auto font-bold">Entry Management</span>
+            <span className="ml-4 font-bold">Entry Management</span>
           </div>
-          <div className="flex-1 overflow-auto p-4 text-justify justify-center w-full">
-            <Tabs defaultValue="search" className="p-3 m-1">
+          <div className="flex-1 overflow-auto p-4 w-full">
+            <Tabs defaultValue="search" className="p-2 m-1">
               <TabsList>
                 <TabsTrigger value="search">Search for an Entry</TabsTrigger>
                 <TabsTrigger value="addPair">Add a Currency Pair</TabsTrigger>

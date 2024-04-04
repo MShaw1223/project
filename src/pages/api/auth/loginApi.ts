@@ -12,13 +12,10 @@ export default async function handler(req: NextApiRequest) {
     try {
       // takes the request and extracts the body from the readable stream sent
       const reqbody = await extractBody(req);
-      console.log(reqbody);
       // takes the username variable from the reqbody object
       const username: string = reqbody.username;
-      console.log("username: ", username);
       // takes the passwd variable from the reqbody object
       const passwd: string = reqbody.passwd;
-      console.log("password: ", passwd);
       // starts the pooled db connection
       const pool = new Pool({
         connectionString: process.env.DATABASE_URL,
@@ -36,9 +33,7 @@ export default async function handler(req: NextApiRequest) {
         // User not found in the database
         return NextResponse.json({ error: "User not found" }, { status: 400 });
       }
-      console.log("Entered pwd: ", passwd);
       const dbPassword: string = indb.rows[0].passwd;
-      console.log("db pwd: ", dbPassword);
       // checks the entered password matches the password in the database
       if (passwd !== dbPassword) {
         return NextResponse.json(
@@ -46,8 +41,7 @@ export default async function handler(req: NextApiRequest) {
           { status: 401 }
         );
       }
-      console.log("successful");
-      return NextResponse.json({ username }, { status: 200 });
+      return NextResponse.json({ status: 200 });
     } catch (error) {
       console.error("Unable to login: ", error);
       console.error("Stack trace: ", (error as Error).stack);

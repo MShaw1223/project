@@ -55,7 +55,7 @@ function AccountDropdown({ onAccountChange }: AccountDropdownProps) {
   return (
     <>
       <Select onValueChange={handleValueChange}>
-        <SelectTrigger className="w-[200px]">
+        <SelectTrigger className="w-[200px] sm:w-48 md:w-[250px] lg:w-[300px]">
           <SelectValue placeholder="Account Select..." />
         </SelectTrigger>
         <SelectContent>

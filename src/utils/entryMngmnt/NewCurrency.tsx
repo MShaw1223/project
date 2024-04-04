@@ -56,42 +56,41 @@ const NewCurrencyPage: NextPage = () => {
       return;
     }
     if (userid !== null) {
-      mutation.mutate(JSON.stringify({
-        pairabbr,
-        userid,
-      }));
+      mutation.mutate(
+        JSON.stringify({
+          pairabbr,
+          userid,
+        })
+      );
     }
   }
   return (
     <>
-      <div className="flex">
+      <div className="flex m-2 p-4 my-auto">
         {mutation.isLoading && <p>Submitting New Currency</p>}
         {!mutation.isLoading && (
-          <div className="flex items-center justify-center">
+          <div className="flex-col mx-auto">
             <form onSubmit={handleSubmit}>
-              <h1 className="font-bold text-lg underline underline-offset-8">
-                New Currency
-              </h1>
-              <div className="flex flex-row w-[770px]">
-                <div className="p-2 w-full">
-                  <h3>Enter the abbreviation of the currency ie GBP</h3>
-                  <Input
-                    id="Abbreviation"
-                    name="Abbreviation"
-                    placeholder="New Currency Abbreviation....."
-                  />
-                </div>
-                <div className="p-2 pl-5 w-full">
-                  <h3>Re-enter the abbreviation</h3>
-                  <Input
-                    id="reEnteredAbbreviation"
-                    name="reEnteredAbbreviation"
-                    placeholder="Re-enter Abbreviation..."
-                  />
-                </div>
+              <div className="p-2 flex-row">
+                <h3>Enter currency abbreviation i.e. GBP, BTC etc</h3>
+                <Input
+                  id="Abbreviation"
+                  name="Abbreviation"
+                  placeholder="New Currency Abbreviation....."
+                />
+              </div>
+              <div className="p-2 flex-row">
+                <h3>Re-enter the abbreviation</h3>
+                <Input
+                  id="reEnteredAbbreviation"
+                  name="reEnteredAbbreviation"
+                  placeholder="Re-enter Abbreviation..."
+                />
               </div>
               <div className="p-3 text-center">
-                <Button type="submit">Submit New</Button>
+                <Button type="submit" className="w-24 md:w-36 lg:w-52">
+                  Submit New
+                </Button>
               </div>
             </form>
           </div>
