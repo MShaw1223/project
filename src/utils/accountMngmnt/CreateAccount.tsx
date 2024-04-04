@@ -80,6 +80,7 @@ const CreateAccountPage = () => {
                   name="accountName"
                   placeholder="New Account Name....."
                   className="sm:w-48 md:w-[280px] lg:w-[340px]"
+                  maxLength={15}
                 />
               </div>
               <div className="p-2 flex-row">
@@ -89,6 +90,7 @@ const CreateAccountPage = () => {
                   name="reEnteredAccountName"
                   placeholder="Re-enter Account Name..."
                   className="sm:w-48 md:w-[280px] lg:w-[340px]"
+                  maxLength={15}
                 />
               </div>
               <div className="p-3 text-center">
