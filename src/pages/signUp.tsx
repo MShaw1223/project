@@ -60,14 +60,14 @@ const signUp: NextPage = () => {
     <>
       <div className="flex h-screen bg-black">
         <div className="flex-1 flex flex-col overflow-hidden">
-          <div className="flex ml-20 mt-20 mb-24 text-3xl">
-            <span className="my-auto ml-20 font-black text-white">
-              Sign Up To FXTrax...
+          <div className="flex m-24 text-3xl">
+            <span className="my-auto font-black text-white">
+              Sign Up To FXTrax
             </span>
           </div>
           <div className="flex-1 overflow-auto p-4 text-3xl">
-            <div className="my-auto mx-auto w-[430px] border rounded-3xl bg-slate-300">
-              <div className="p-3 flex w-full">
+            <div className="my-auto mx-auto h-[360px] max-w-[460px] min-w-[230px] border rounded-3xl bg-slate-300">
+              <div className="p-3 flex">
                 <form onSubmit={handleSubmit} className="flex flex-col w-full">
                   <h1 className="font-bold text-lg p-2">Sign Up</h1>
                   <div className="p-4 flex flex-row">

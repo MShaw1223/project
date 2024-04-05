@@ -53,20 +53,23 @@ const login: NextPage = () => {
     <>
       <div className="flex bg-black h-screen">
         <div className="flex-1 flex flex-col overflow-hidden">
-          <div className="flex ml-20 mt-20 mb-24 text-3xl">
-            <span className="my-auto ml-20 font-black text-white">
-              Welcome to FXTrax...
+          <div className="flex m-24 text-3xl">
+            <span className="my-auto font-black text-white">
+              Welcome to FXTrax
             </span>
           </div>
           <div className="flex-1 overflow-auto p-4 text-3xl">
-            <div className="my-auto mx-auto w-[420px] border rounded-3xl bg-slate-300">
-              <div className="p-3 flex w-full">
-                <form onSubmit={handleSubmit} className="flex flex-col w-full">
+            <div className="my-auto mx-auto h-[360px] max-w-[460px] min-w-[250px] border rounded-3xl bg-slate-300">
+              <div className="p-3 flex">
+                <form
+                  onSubmit={handleSubmit}
+                  className="flex flex-col space-y-2 w-full"
+                >
                   <h1 className="font-bold text-lg p-2">Login</h1>
                   <div className="p-4 flex flex-row">
                     <Input id="user" name="user" placeholder="Username....." />
                   </div>
-                  <div className="p-4 flex flex-row w-full">
+                  <div className="p-4 flex flex-row">
                     <Input
                       id="password"
                       type={showPassword ? "text" : "password"}

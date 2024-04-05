@@ -1,15 +1,49 @@
 # FXTrax
 
-A trading journal app for my computer science programming project.
+FXTrax is a trading journal app developed for a computer science programming project.
 
-## In My Application you may:
+## Features
 
-- track progress
-- improve trading habits
-- see what areas you perform well on
-- reflect on areas you may be performing weaker on
+FXTrax offers the following features to enhance your trading experience:
 
-## How do I use FXTrax ?
+- **Progress Tracking**: Monitor your trading progress over time.
+- **Habit Improvement**: Identify and work on improving your trading habits.
+- **Performance Analysis**: Analyze your performance to recognize areas of strength and weakness.
+- **Reflection**: Reflect on your trading activities and decisions to make informed adjustments.
 
-- To access FXTrax, click the link 👉 [here](https://project-rho-hazel.vercel.app/) 👈
-- Press sign up and enter a password and username from here you will be sent to the homepage
+## Getting Started
+
+To start using FXTrax, follow these steps:
+
+1. **Access FXTrax**:
+
+   - Visit the [FXTrax website](https://project-rho-hazel.vercel.app/) to access the application.
+
+2. **Sign Up**:
+
+   - Click on the provided link to access the FXTrax website.
+   - Navigate to the sign-up page.
+   - Enter a username and password when prompted.
+
+3. **Using FXTrax**:
+
+   - Upon signing up, you will be directed to the homepage.
+   - Follow the advised setup process to maximize your experience:
+
+     - **Account Management**:
+
+       1. Navigate to the 'Account Management' page.
+       2. Create a new account if you haven't already.
+
+     - **Currency Pair Setup**:
+
+       1. Proceed to the 'Entry Management' page.
+       2. Click on the 'Add a Currency Pair' tab.
+       3. Enter the abbreviation of the tokens or currencies you trade with (e.g., BTC, GBP, XAU).
+
+     - **Trade Entry**:
+       - Once the setup is complete, you can start entering trades on the 'Trade Entry' page.
+
+By following these steps, you can effectively utilize FXTrax to enhance your trading journey.
+
+Happy trading!
