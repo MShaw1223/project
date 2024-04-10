@@ -4,7 +4,7 @@ import * as React from "react";
 import { NextPage } from "next";
 import { BiSolidHide, BiSolidShow } from "react-icons/bi";
 import { useRouter } from "next/router";
-import { generateKey } from "@/utils/protection/hash";
+import { keyGenerator } from "@/utils/protection/hash";
 import { lginSignUpSchema } from "@/utils/protection/schema";
 
 const signUp: NextPage = () => {
@@ -23,13 +23,11 @@ const signUp: NextPage = () => {
       passwd: data.get("firstPassword") as string,
       username: data.get("user") as string,
     });
-    console.log(parsedData);
+
     // the if statement checks the password has been entered correctly before submitting the parsedData object
     // to the api to be submitted to the Neon database
     // ( parseData containing the future login credentials of username and passwd )
     if (parsedData.passwd === confirmPasswd) {
-      console.log("in the signup.tsx handler");
-      console.log(parsedData);
       const response = await fetch("/api/auth/userPwd", {
         method: "POST",
         body: JSON.stringify(parsedData),
@@ -40,11 +38,10 @@ const signUp: NextPage = () => {
       });
       if (response.ok) {
         // if the response returns a 200,
-        // the generateKey function takes the username entered above as a param
+        // the keyGenerator function takes the username entered above as a param
         // to generate a key  the key will be used as a logged in identifier
         const { username } = parsedData;
-        const key = generateKey(username);
-        console.log(key);
+        const key = keyGenerator(username);
         router.push(`/home?li=${key}`);
       }
       if (!response.ok) {

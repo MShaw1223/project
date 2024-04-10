@@ -25,35 +25,31 @@ type TradeData = {
 const searchEntry: NextPage = () => {
   const [data, setData] = useState<TradeData[]>([]);
 
-  async function tableData(account: string) {
-    console.log("Account: ", account);
-    const response = await fetch("/api/entrymngmnt/searchEntries", {
+  async function tableData(account: number) {
+    const response = await fetch("/api/entryManagement", {
       method: "POST",
       body: JSON.stringify(account),
       headers: { "Content-Type": "application/json" },
     });
-    console.log("response from searchEntries: ", response);
     if (response.ok) {
       const tradeData: TradeData[] = await response.json();
-      console.log("Fetched data: ", tradeData);
       setData(tradeData);
     } else {
       throw new Error("Problem with API response");
     }
   }
   async function getID(account: string) {
-    const ID = await fetch("/api/tradeEntry/findActID", {
+    const ID = await fetch("/api/findActID", {
       method: "POST",
       body: JSON.stringify(account),
       headers: {
         "Content-Type": "application/json",
       },
     });
-    const response = await ID.json();
+    const response: number = await ID.json();
     return response;
   }
   const handleAccountChange = async (selAccount: string) => {
-    console.log("Selected Account: ", selAccount);
     const accountid = await getID(selAccount);
     tableData(accountid);
   };
@@ -71,10 +67,6 @@ const searchEntry: NextPage = () => {
             ></AccountDropdown>
           </div>
           <div className="flex-1 overflow-auto p-1 text-center m-1">
-            <h3 className="text-slate-700 text-xs sm:text-xs md:text-sm lg:text-lg">
-              Tip: Right click to copy the trade ID you would like to delete and
-              paste it into the input on the delete entry tab
-            </h3>
             <Table className="bg-gray-400 w-[400px] sm:w-[310px] md:w-[450px] lg:w-[300px] rounded-2xl">
               <TableCaption className="text-gray-500">
                 A Table of trades taken.

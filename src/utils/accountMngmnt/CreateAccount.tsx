@@ -9,7 +9,7 @@ const CreateAccountPage = () => {
   const router = useRouter();
   const mutation = useMutation({
     mutationFn: async (formData: string) => {
-      const response = await fetch("/api/accmngmnt/newAccount", {
+      const response = await fetch("/api/accountManagement", {
         method: "POST",
         body: formData,
         cache: "no-store",
@@ -19,8 +19,9 @@ const CreateAccountPage = () => {
       }
       return response.json();
     },
-    onError: (error) => {
-      console.error("Mutation error", error);
+    onError: () => {
+      alert("Program error");
+      return;
     },
   });
   useEffect(() => {
@@ -38,7 +39,7 @@ const CreateAccountPage = () => {
           const lgdin = await response.json();
           setUser(lgdin);
         } catch (error) {
-          console.error("Error fetching user: ", error);
+          alert("Error fetching user");
         }
       }
     }

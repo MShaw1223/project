@@ -9,7 +9,6 @@ export default async function handler(
   if (req.method === "POST") {
     try {
       const selected = await req.body;
-      console.log("Selected Account: ", selected);
       const pool = new Pool({
         connectionString: process.env.DATABASE_URL,
       });
@@ -22,11 +21,8 @@ export default async function handler(
       const indb = await pool.query(sqlquery);
       const accID = await indb.rows[0];
       await pool.end();
-      console.log(sqlquery);
-      console.log("account ID getaccid: ", accID);
       res.status(200).json({ accID });
     } catch (error) {
-      console.error("Error processing request: ", error);
       res.status(400).json({ error: "Problem with request" });
     }
   } else {

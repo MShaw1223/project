@@ -10,7 +10,7 @@ const NewCurrencyPage: NextPage = () => {
   const router = useRouter();
   const mutation = useMutation({
     mutationFn: async (formData: string) => {
-      const response = await fetch("/api/entrymngmnt/newCurrency", {
+      const response = await fetch("/api/newCurrency", {
         method: "POST",
         body: formData,
         cache: "no-store",
@@ -55,7 +55,7 @@ const NewCurrencyPage: NextPage = () => {
       alert("Entries do not match");
       return;
     }
-    if (pairabbr! || reEntered!) {
+    if (!pairabbr || !reEntered) {
       alert("Enter the new pair in both fields");
       return;
     }

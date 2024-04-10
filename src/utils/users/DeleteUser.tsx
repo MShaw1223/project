@@ -9,13 +9,10 @@ const DeleteUserPage: NextPage = () => {
   const [ID, setID] = useState<string>("");
   const mutation = useMutation({
     mutationFn: async (formData: string) => {
-      console.log("Handle Submit works");
-      console.log("formdata: ", formData);
-      const done = await fetch("/api/users/deleteUser", {
+      const done = await fetch("/api/users", {
         method: "DELETE",
         body: formData,
       });
-      console.log("Response status:", done?.status);
       if (!done.ok) {
         const errMessage = await done.text();
         throw new Error(errMessage);
@@ -32,7 +29,6 @@ const DeleteUserPage: NextPage = () => {
   useEffect(() => {
     async function getuserID() {
       const { li: loggedInVal } = router.query;
-      console.log("Li: ", loggedInVal);
       if (loggedInVal !== undefined) {
         const getuserID = await fetch("/api/auth/IDFromHash", {
           method: "POST",
@@ -58,7 +54,6 @@ const DeleteUserPage: NextPage = () => {
       );
     } catch (error) {
       alert("Error Deleting User");
-      console.log("Error with data: ", error);
     }
   }
   return (

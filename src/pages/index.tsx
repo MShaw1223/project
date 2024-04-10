@@ -4,7 +4,7 @@ import { useState, FormEvent } from "react";
 import { NextPage } from "next";
 import { BiSolidHide, BiSolidShow } from "react-icons/bi";
 import { useRouter } from "next/router";
-import { generateKey } from "@/utils/protection/hash";
+import { keyGenerator } from "@/utils/protection/hash";
 import { lginSignUpSchema } from "@/utils/protection/schema";
 
 const login: NextPage = () => {
@@ -36,14 +36,12 @@ const login: NextPage = () => {
       cache: "no-store",
     });
     // data not being cached on the server due to passwords being handled
-    console.log("Response status:", response?.status);
     if (response.ok) {
       // if the response returns a 200,
-      // the generateKey function takes the username entered above as a param
+      // the keyGenerator function takes the username entered above as a param
       // to generate a key  the key will be used as a logged in identifier
       const { username } = parsedData;
-      const key = generateKey(username);
-      console.log(key);
+      const key = keyGenerator(username);
       router.push(`/home?li=${key}`);
     } else if (!response.ok) {
       alert("Failed to login. Please try again.");

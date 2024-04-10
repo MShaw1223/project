@@ -26,13 +26,9 @@ const accountManagement: NextPage = () => {
           <div className="flex-1 overflow-auto p-4">
             <Tabs defaultValue="create" className="p-2 m-1">
               <TabsList>
-                <TabsTrigger value="create">Create a new account</TabsTrigger>
-                <TabsTrigger value="update">
-                  Update an existing account
-                </TabsTrigger>
-                <TabsTrigger value="delete">
-                  Delete an existing account
-                </TabsTrigger>
+                <TabsTrigger value="create">Create new account</TabsTrigger>
+                <TabsTrigger value="update">Update account</TabsTrigger>
+                <TabsTrigger value="delete">Delete account</TabsTrigger>
               </TabsList>
               <TabsContent value="create">
                 <CreateAccount />

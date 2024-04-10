@@ -9,7 +9,7 @@ const DeleteEntry: NextPage = () => {
   const [selectedAccount, setSelectedAccount] = useState<string>("");
   const mutation = useMutation({
     mutationFn: async (formData: string) => {
-      const response = await fetch("/api/entrymngmnt/deleteEntry", {
+      const response = await fetch("/api/entryManagement", {
         method: "DELETE",
         body: formData,
         headers: {
@@ -24,18 +24,18 @@ const DeleteEntry: NextPage = () => {
       return response.json();
     },
     onSettled: () => {
-      console.log("Trade Deleted");
       setSelectedAccount("");
     },
-    onError: (error) => {
-      console.error("Mutation error:", error);
+    onError: () => {
+      alert("Program error");
+      return;
     },
   });
   const handleAccountChange = async (selectedAccount: string) => {
     setSelectedAccount(selectedAccount);
   };
   async function getID(selectedAccount: string) {
-    const acctID = await fetch("/api/tradeEntry/findActID", {
+    const acctID = await fetch("/api/findActID", {
       method: "POST",
       body: JSON.stringify(selectedAccount),
       headers: {
@@ -43,7 +43,6 @@ const DeleteEntry: NextPage = () => {
       },
     });
     const lgdin = await acctID.json();
-    console.log("Account ID: ", lgdin);
     return lgdin;
   }
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {

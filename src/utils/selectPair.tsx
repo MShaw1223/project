@@ -17,7 +17,6 @@ interface QuoteDropdownProps {
 
 // Call API - return array of available pairs to map
 const findAvailablePairs = async (li: string): Promise<string[]> => {
-  console.log("In findavailable pairs fn");
   try {
     const responseIDFH = await fetch("/api/auth/IDFromHash", {
       method: "POST",
@@ -27,14 +26,12 @@ const findAvailablePairs = async (li: string): Promise<string[]> => {
       },
     });
     const lgdin = await responseIDFH.json();
-    console.log("User ID: ", lgdin);
-    const responsefAP = await fetch("/api/tradeEntry/findAvailablePairs", {
+    const responsefAP = await fetch("/api/findAvailablePairs", {
       method: "POST",
       body: JSON.stringify(lgdin),
       headers: { "Content-Type": "application/json" },
     });
     const data = await responsefAP.json();
-    console.log("Data: ", data);
     if (!responsefAP.ok) {
       throw new Error("Failed to fetch available pairs");
     }
@@ -44,7 +41,6 @@ const findAvailablePairs = async (li: string): Promise<string[]> => {
       throw new Error("Invalid API response format");
     }
   } catch (error) {
-    console.error("Error in API call:", error);
     throw error;
   }
 };
@@ -57,13 +53,12 @@ function BasePairDropdown({ onBasePairChange }: BaseDropdownProps) {
     const fetchAvailablePairs = async () => {
       try {
         const { li } = router.query;
-        console.log(li);
         if (typeof li === "string") {
           const pairs = await findAvailablePairs(li);
           setAvailablePairs(pairs);
         }
       } catch (error) {
-        console.error("Error fetching available pairs:", error);
+        throw error;
       }
     };
     fetchAvailablePairs();
@@ -75,7 +70,7 @@ function BasePairDropdown({ onBasePairChange }: BaseDropdownProps) {
   return (
     <>
       <Select onValueChange={handleValueChange}>
-        <SelectTrigger className="w-[90px] sm:w-[86px] md:w-[115px] lg:w-[140px]">
+        <SelectTrigger className="w-22 sm:w-[86px] md:w-[115px] lg:w-[140px]">
           <SelectValue placeholder="Base" />
         </SelectTrigger>
         <SelectContent>
@@ -103,7 +98,7 @@ function QuotePairDropdown({ onQuotePairChange }: QuoteDropdownProps) {
           setAvailablePairs(pairs);
         }
       } catch (error) {
-        console.error("Error fetching available pairs:", error);
+        throw error;
       }
     };
 
@@ -117,7 +112,7 @@ function QuotePairDropdown({ onQuotePairChange }: QuoteDropdownProps) {
   return (
     <>
       <Select onValueChange={handleValueChange}>
-        <SelectTrigger className="w-[90px] sm:w-[86px] md:w-[115px] lg:w-[140px]">
+        <SelectTrigger className="w-22 sm:w-[86px] md:w-[115px] lg:w-[140px]">
           <SelectValue placeholder="Quote" />
         </SelectTrigger>
         <SelectContent>

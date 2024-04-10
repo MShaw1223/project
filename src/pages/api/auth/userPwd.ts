@@ -3,7 +3,7 @@ import { extractBody } from "@/utils/extractBody";
 import { Pool } from "@neondatabase/serverless";
 import sqlstring from "sqlstring";
 import { NextResponse } from "next/server";
-import { generateKey } from "@/utils/protection/hash";
+import { keyGenerator } from "@/utils/protection/hash";
 import { userPwdSchema } from "@/utils/protection/schema";
 export const config = {
   runtime: "edge",
@@ -16,10 +16,8 @@ export default async function handler(req: NextApiRequest) {
       const body = await extractBody(req);
       // takes the passwd and username variables from the body object
       const { passwd, username } = userPwdSchema.parse(body);
-      console.log("pwd: ", passwd);
-      console.log("user: ", username);
       // generates the key for the new user
-      const key = generateKey(username);
+      const key = keyGenerator(username);
       // starts the pooled db connection
       const pool = new Pool({
         connectionString: process.env.DATABASE_URL,
@@ -52,7 +50,6 @@ export default async function handler(req: NextApiRequest) {
         throw new Error("Key already exists");
       }
     } catch (error) {
-      console.error("Failed to sign up, error: ", error);
       return NextResponse.json("Not allowed, account exists", { status: 403 });
     }
   } else {

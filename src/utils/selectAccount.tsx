@@ -17,34 +17,28 @@ function AccountDropdown({ onAccountChange }: AccountDropdownProps) {
   const [availableAccounts, setAvailableAccounts] = useState<string[]>([]);
   useEffect(() => {
     const fetchAvailableAccs = async () => {
-      try {
-        const { li: loggedInVal } = router.query;
-        console.log("li: ", loggedInVal);
-        if (typeof loggedInVal === "string") {
-          const id = await fetch("/api/auth/IDFromHash", {
-            method: "POST",
-            body: JSON.stringify(loggedInVal),
-            headers: { "Content-Type": "application/json" },
-          });
-          const lgdin = await id.json();
-          const response = await fetch("/api/findAccounts", {
-            method: "POST",
-            body: JSON.stringify(lgdin),
-            cache: "no-store",
-          });
-          if (!response.ok) {
-            throw new Error("Failed to fetch available accounts");
-          }
-          const data = await response.json();
-          if (data !== undefined) {
-            console.log("Data in selAcc: ", data);
-            setAvailableAccounts(data);
-          }
-        } else {
-          throw new Error("Invalid URL format");
+      const { li: loggedInVal } = router.query;
+      if (typeof loggedInVal === "string") {
+        const id = await fetch("/api/auth/IDFromHash", {
+          method: "POST",
+          body: JSON.stringify(loggedInVal),
+          headers: { "Content-Type": "application/json" },
+        });
+        const lgdin = await id.json();
+        const response = await fetch("/api/findAccounts", {
+          method: "POST",
+          body: JSON.stringify(lgdin),
+          cache: "no-store",
+        });
+        if (!response.ok) {
+          throw new Error("Failed to fetch available accounts");
         }
-      } catch (error) {
-        console.error("Error fetching available accounts:", error);
+        const data = await response.json();
+        if (data !== undefined) {
+          setAvailableAccounts(data);
+        }
+      } else {
+        throw new Error("Invalid URL format");
       }
     };
     fetchAvailableAccs();
@@ -55,8 +49,8 @@ function AccountDropdown({ onAccountChange }: AccountDropdownProps) {
   return (
     <>
       <Select onValueChange={handleValueChange}>
-        <SelectTrigger className="w-40 sm:w-[200px] md:w-[250px] lg:w-[300px]">
-          <SelectValue placeholder="Account Select..." />
+        <SelectTrigger className="w-32 sm:w-[200px] md:w-[250px] lg:w-[300px]">
+          <SelectValue placeholder="Account..." />
         </SelectTrigger>
         <SelectContent>
           {availableAccounts.map((account, index) => (

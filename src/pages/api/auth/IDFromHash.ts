@@ -22,7 +22,6 @@ export default async function handler(
       res.status(200).json(userID);
     } catch (error) {
       // if no authkey there is an error thrown (bad request)
-      console.error("Error processing request: ", error);
       res.status(400).json({ error: "Bad request" });
     }
   } else {

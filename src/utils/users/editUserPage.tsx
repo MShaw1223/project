@@ -14,7 +14,6 @@ const EditUserPage: NextPage = () => {
     const getUserID = async () => {
       try {
         const { li: loggedInVal } = router.query;
-        console.log("li: ", loggedInVal);
         if (typeof loggedInVal === "string") {
           const user = await fetch("/api/auth/userFromHash", {
             method: "POST",
@@ -25,14 +24,14 @@ const EditUserPage: NextPage = () => {
           setuser(lgdin);
         }
       } catch (error) {
-        console.error("Error fetching available accounts:", error);
+        alert("Error fetching available accounts");
       }
     };
     getUserID();
   }, []);
   const mutation = useMutation({
     mutationFn: async (data: string) => {
-      const response = await fetch("/api/users/editUser", {
+      const response = await fetch("/api/users", {
         method: "PUT",
         body: data,
         headers: { "Content-Type": "application/json" },
@@ -51,13 +50,7 @@ const EditUserPage: NextPage = () => {
     event.preventDefault();
     try {
       const data = new FormData(event.target as HTMLFormElement);
-      console.log(data.get("newInfo"));
       const placeholder = data.get("newInfo")! as string;
-      console.log("Handle Submit works, info submitting: ", {
-        edit,
-        user,
-        placeholder,
-      });
       if (edit !== "" && placeholder !== "") {
         mutation.mutate(
           JSON.stringify({

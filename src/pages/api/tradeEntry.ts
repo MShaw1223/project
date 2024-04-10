@@ -24,7 +24,6 @@ export default async function handler(req: NextRequest) {
         tradeNotes,
         selectedOutcome: winLoss,
       } = entries_schema.parse(body);
-      console.log("entries body: ", body);
       const pool = new Pool({
         connectionString: process.env.DATABASE_URL,
       });
@@ -46,7 +45,6 @@ export default async function handler(req: NextRequest) {
       );
       await pool.query(SQLstatement);
       await pool.end();
-      console.log("SQLstatement: ", SQLstatement);
       const responsePayload = {
         entryPrice,
         stopLoss,

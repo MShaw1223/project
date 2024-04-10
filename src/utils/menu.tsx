@@ -27,29 +27,37 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
         {isOpen ? (
           <div
             className={`fixed h-screen bg-black transition-width duration-500 ease-in-out ${
-              isOpen ? "w-[250px] md:w-1/8 lg:w-1/4" : "w-16 md:w-24 lg:w-32"
+              isOpen
+                ? "w-[235px] sm:w-[250px] md:w-1/8 lg:w-1/4"
+                : "w-16 md:w-24 lg:w-32"
             }`}
           >
-            <div className="flex justify-between items-center p-5 text-xl md:text-3xl font-sans font-semibold text-slate-100">
-              <span>Menu</span>
+            <div className="flex justify-between p-2">
+              <h1 className="text-xl font-sans font-semibold text-slate-100 p-2">
+                Menu
+              </h1>
               <div
                 onClick={() => setIsOpen(!isOpen)}
-                className=" focus:outline-none hover:bg-gray-500 rounded-lg p-1"
+                className=" focus:outline-none hover:bg-gray-500 rounded-lg p-2"
               >
-                {isOpen ? <BsChevronBarLeft /> : <BsChevronBarRight />}
+                {isOpen ? (
+                  <BsChevronBarLeft className="text-white text-xl sm:text-xl md:text-xl lg:text-xl mx-auto m-1" />
+                ) : (
+                  <BsChevronBarRight />
+                )}
               </div>
             </div>
 
-            <Separator className="ml-9 my-7 bg-inherit" />
+            <Separator className="ml-9 my-5 bg-inherit" />
 
             <Link href={`/home?li=${li}`}>
               <div
                 className={`flex pl-5 py-4 mx-3 focus:outline-none font-bold hover:bg-gray-500 ${
                   isLinkActive("/home") ? "bg-gray-700 hover:bg-gray-700" : ""
-                } rounded-full `}
+                } rounded-2xl `}
               >
                 <FaHome className="w-6 h-6 text-slate-100"></FaHome>
-                <span className="pl-3 text-slate-100 text-lg md:text-xl lg:text-2xl">
+                <span className="pl-3 text-slate-100 text-sm sm:text-base md:text-lg lg:text-xl">
                   Home
                 </span>
               </div>
@@ -61,10 +69,10 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
                   isLinkActive("/Trade-Entry")
                     ? "bg-gray-700 hover:bg-gray-700"
                     : ""
-                } rounded-full `}
+                } rounded-2xl `}
               >
                 <FaPencilAlt className="w-6 h-6 text-slate-100"></FaPencilAlt>
-                <span className="pl-3 text-slate-100 text-lg md:text-xl lg:text-2xl">
+                <span className="pl-3 text-slate-100 text-sm sm:text-base md:text-lg lg:text-xl">
                   Trade Entry
                 </span>
               </div>
@@ -76,10 +84,10 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
                   isLinkActive("/entry-management")
                     ? "bg-gray-700 hover:bg-gray-700"
                     : ""
-                } rounded-full `}
+                } rounded-2xl `}
               >
                 <FaCalculator className="w-6 h-6 text-slate-100"></FaCalculator>
-                <span className="pl-3 text-slate-100 text-lg md:text-xl lg:text-2xl">
+                <span className="pl-3 text-slate-100 text-sm sm:text-base md:text-lg lg:text-xl">
                   Entry Management
                 </span>
               </div>
@@ -91,10 +99,10 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
                   isLinkActive("/account-management")
                     ? "bg-gray-700 hover:bg-gray-700"
                     : ""
-                } rounded-full`}
+                } rounded-2xl`}
               >
                 <MdOutlineAccountBalance className="w-6 h-6 text-slate-100"></MdOutlineAccountBalance>
-                <span className="pl-3 text-slate-100 text-lg md:text-xl lg:text-2xl">
+                <span className="pl-3 text-slate-100 text-sm sm:text-base md:text-lg lg:text-xl">
                   Account Management
                 </span>
               </div>
@@ -104,10 +112,10 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
               <div
                 className={`flex pl-5 py-4 mx-3 focus:outline-none font-bold hover:bg-gray-500 ${
                   isLinkActive("/users") ? "bg-gray-700 hover:bg-gray-700" : ""
-                } rounded-full `}
+                } rounded-2xl `}
               >
                 <FaUserFriends className="w-6 h-6 text-slate-100"></FaUserFriends>
-                <span className="pl-3 text-slate-100 text-lg md:text-xl lg:text-2xl">
+                <span className="pl-3 text-slate-100 text-sm sm:text-base md:text-lg lg:text-xl">
                   Users
                 </span>
               </div>
@@ -116,9 +124,9 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
             <Separator className="ml-9 my-7 bg-inherit" />
 
             <Link href="/">
-              <div className="flex pl-5 py-4 mx-3 focus:outline-none font-bold hover:bg-gray-500 rounded-full">
+              <div className="flex pl-5 py-4 mx-3 focus:outline-none font-bold hover:bg-gray-500 rounded-2xl">
                 <MdArrowBack className="w-6 h-6 text-slate-100"></MdArrowBack>
-                <span className="pl-3 text-slate-100 text-lg md:text-xl lg:text-2xl">
+                <span className="pl-3 text-slate-100 text-sm sm:text-base md:text-lg lg:text-xl">
                   Back to Login
                 </span>
               </div>
@@ -128,7 +136,9 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
           // collapsed
           <div
             className={`flex flex-col top-0 left-0 p-2 h-screen bg-black transition-width duration-500 ease-in-out ${
-              isOpen ? "w-[250px] md:w-1/8 lg:w-1/4" : "w-16 md:w-24 lg:w-32"
+              isOpen
+                ? "w-[250px] md:w-1/8 lg:w-1/4"
+                : " w-12 sm:w-16 md:w-24 lg:w-32"
             }`}
           >
             <div
@@ -136,9 +146,9 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
               className="focus:outline-none hover:bg-gray-500 rounded-lg p-2"
             >
               {isOpen ? (
-                <BsChevronBarLeft className="text-white text-2xl md:text-4xl mx-auto mt-4" />
+                <BsChevronBarLeft className="text-white" />
               ) : (
-                <BsChevronBarRight className="text-white text-2xl md:text-4xl mx-auto" />
+                <BsChevronBarRight className="text-white text-xl sm:text-xl md:text-xl lg:text-xl mx-auto m-1" />
               )}
             </div>
             <div className="h-screen flex flex-col items-center justify-center space-y-4">

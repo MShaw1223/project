@@ -24,13 +24,10 @@ export default async function handler(
       );
       const result = await pool.query(sqlquery);
       await pool.end();
-      console.log(sqlquery);
       // returns the account id
-      console.log("accinfo: ", result.rows[0]);
       const response = result.rows[0].accountid;
       res.status(200).json(response); // return the account id and success (200)
     } catch (error) {
-      console.error("Error executing query, details:", error);
       res.status(400).end();
     }
   } else {

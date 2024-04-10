@@ -7,7 +7,7 @@ const UpdateAccount = () => {
   const [selectedAccount, setSelectedAccount] = React.useState<string>("");
   const mutation = useMutation({
     mutationFn: async (data: string) => {
-      const response = await fetch("/api/accmngmnt/updateAcc", {
+      const response = await fetch("/api/accountManagement", {
         method: "PUT",
         body: data,
         headers: { "Content-Type": "application/json" },

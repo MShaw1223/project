@@ -25,15 +25,11 @@ export default async function handler(
       );
       const result = await pool.query(sqlquery);
       await pool.end();
-      console.log(sqlquery);
       // takes the array of rows from the result
       // and makes an array of account names
-      console.log("accinfo: ", result.rows[0]);
       const array = result.rows.map((row) => row.accountname);
-      console.log("array: ", array);
       res.status(200).json(array); // return the account names and success (200)
     } catch (error) {
-      console.error("Error executing query, details:", error);
       res.status(400).end();
     }
   } else {

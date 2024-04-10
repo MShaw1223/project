@@ -19,7 +19,7 @@ const tradeEntry: NextPage = () => {
   const [selectedOutcome, setSelectedOutcome] = React.useState<string>("");
   const mutation = useMutation({
     mutationFn: async (formData: string) => {
-      const response = await fetch("/api/tradeEntry/entries", {
+      const response = await fetch("/api/tradeEntry", {
         method: "POST",
         body: formData,
         headers: {
@@ -27,7 +27,6 @@ const tradeEntry: NextPage = () => {
         },
         cache: "no-store",
       });
-      console.log("Response in TE: ", response);
       if (!response.ok) {
         alert("Failed to submit trade data");
       }
@@ -40,8 +39,9 @@ const tradeEntry: NextPage = () => {
       setSelectedQuotePair("");
       setSelectedOutcome("");
     },
-    onError: (error) => {
-      console.error("Mutation error:", error);
+    onError: () => {
+      alert("Program error");
+      return;
     },
   });
   const handleAccountChange = (selectedAccount: string) => {
@@ -58,7 +58,7 @@ const tradeEntry: NextPage = () => {
   };
 
   async function getID(selectedAccount: string) {
-    const acctID = await fetch("/api/tradeEntry/findActID", {
+    const acctID = await fetch("/api/findActID", {
       method: "POST",
       body: JSON.stringify(selectedAccount),
       headers: {
@@ -66,7 +66,6 @@ const tradeEntry: NextPage = () => {
       },
     });
     const lgdin = await acctID.json();
-    console.log("Account ID: ", lgdin);
     return lgdin;
   }
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -81,25 +80,27 @@ const tradeEntry: NextPage = () => {
       return;
     }
     const accountID = await getID(selectedAccount);
-    console.log("Trade Data: ", {
-      entryPrice: parseFloat(data.get("entryPrice") as string),
-      stopLoss: parseFloat(data.get("stopLoss") as string),
-      takeProfit: parseFloat(data.get("takeProfit") as string),
-      riskRatio: parseFloat(data.get("riskRatio") as string),
-      BasePair: selectedBasePair,
-      QuotePair: selectedQuotePair,
-      currencyPair: selectedBasePair + selectedQuotePair,
-      tradeNotes: data.get("tradeNotes"),
-      winOrLoss: selectedOutcome,
-      acctID: accountID,
-    });
+    function riskCalculation(
+      entry: number,
+      stop: number,
+      profit: number
+    ): number {
+      var risk: number = entry - stop;
+      var reward: number = profit - entry;
+      var riskratio: number = reward / risk;
+      return riskratio;
+    }
     try {
       mutation.mutate(
         JSON.stringify({
           accountID: accountID,
           selectedPair: selectedBasePair + selectedQuotePair,
           entryPrice: parseFloat(data.get("entryPrice") as string),
-          riskRatio: parseFloat(data.get("riskRatio") as string),
+          riskRatio: riskCalculation(
+            parseFloat(data.get("entryPrice") as string),
+            parseFloat(data.get("stopLoss") as string),
+            parseFloat(data.get("takeProfit") as string)
+          ),
           stopLoss: parseFloat(data.get("stopLoss") as string),
           takeProfit: parseFloat(data.get("takeProfit") as string),
           tradeNotes: data.get("tradeNotes"),
@@ -108,7 +109,6 @@ const tradeEntry: NextPage = () => {
       );
     } catch (error) {
       alert("Error Submitting Trade");
-      console.log("Error submitting data: ", error);
     }
   }
   return (
@@ -124,65 +124,55 @@ const tradeEntry: NextPage = () => {
             <FaPencilAlt className="h-10 w-10"></FaPencilAlt>
             <span className="ml-4 my-auto font-bold">Trade Entry</span>
           </div>
-          <div className="flex w-full overflow-auto p-2 mx-auto justify-center items-center">
+          <div className="flex p-2 sm:my-auto md:my-auto lg:my-auto justify-center items-center">
             {mutation.isLoading && <p>Submitting Trade Data...</p>}
             {!mutation.isLoading && (
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={handleSubmit} className="mx-auto">
                 <div className="flex">
                   <div className="flex flex-col">
-                    <div className="p-2">
+                    <div className="p-1 sm:p-2 md:p-3 lg:p-5">
                       <AccountDropdown
                         onAccountChange={handleAccountChange}
                       ></AccountDropdown>
                     </div>
-                    <div className="p-2">
+                    <div className="p-1 sm:p-2 md:p-3 lg:p-5">
                       <OutcomeDropdown
                         on_outcome_change={handleOutcomeChange}
                       ></OutcomeDropdown>
                     </div>
-                    <div className="p-2">
+                    <div className="p-1 sm:p-2 md:p-3 lg:p-5">
                       <Input
                         id="entryPrice"
                         name="entryPrice"
                         type="number"
                         step="any"
                         placeholder="Entry Price..."
-                        className="w-40 sm:w-[200px] md:w-[250px] lg:w-[300px]"
+                        className="w-32 sm:w-[200px] md:w-[250px] lg:w-[300px]"
                       ></Input>
                     </div>
-                    <div className="p-2">
+                    <div className="p-1 sm:p-2 md:p-3 lg:p-5">
                       <Input
                         id="stopLoss"
                         name="stopLoss"
                         type="number"
                         step="any"
                         placeholder="Stop Loss..."
-                        className="w-40 sm:w-[200px] md:w-[250px] lg:w-[300px]"
+                        className="w-32 sm:w-[200px] md:w-[250px] lg:w-[300px]"
                       ></Input>
                     </div>
-                    <div className="p-2">
+                    <div className="p-1 sm:p-2 md:p-3 lg:p-5">
                       <Input
                         id="takeProfit"
                         name="takeProfit"
                         type="number"
                         step="any"
                         placeholder="Take Profit..."
-                        className="w-40 sm:w-[200px] md:w-[250px] lg:w-[300px]"
+                        className="w-32 sm:w-[200px] md:w-[250px] lg:w-[300px]"
                       ></Input>
                     </div>
                   </div>
                   <div className="flex flex-col">
-                    <div className="p-2">
-                      <Input
-                        id="riskRatio"
-                        name="riskRatio"
-                        type="number"
-                        step="any"
-                        placeholder="Risk Ratio..."
-                        className="w-40 sm:w-[200px] md:w-[250px] lg:w-[300px]"
-                      ></Input>
-                    </div>
-                    <div className="flex flex-row p-2 mx-auto">
+                    <div className="flex flex-row p-1 sm:p-2 md:p-3 lg:p-5 mx-auto space-x-2">
                       <BasePairDropdown
                         onBasePairChange={handleBasePairChange}
                       ></BasePairDropdown>
@@ -190,12 +180,12 @@ const tradeEntry: NextPage = () => {
                         onQuotePairChange={handleQuotePairChange}
                       ></QuotePairDropdown>
                     </div>
-                    <div className="p-2">
+                    <div className="p-1 sm:p-2 md:p-3 lg:p-5">
                       <Textarea
                         id="tradeNotes"
                         name="tradeNotes"
                         placeholder="Notes..."
-                        className="w-40 sm:w-[200px] md:w-[250px] lg:w-[300px] h-[150px] resize-none border text-sm"
+                        className="w-[170px] sm:w-[200px] md:w-[250px] lg:w-[300px] h-[185px] sm:h-[210px] md:h-[230px] lg:h-[280px] resize-none border text-sm"
                         maxLength={1250}
                       ></Textarea>
                     </div>

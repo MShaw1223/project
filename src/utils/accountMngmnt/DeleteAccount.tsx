@@ -9,7 +9,7 @@ const DeleteAccount = () => {
 
   const mutation = useMutation({
     mutationFn: async (formData: string) => {
-      const response = await fetch("/api/accmngmnt/deleteAccount", {
+      const response = await fetch("/api/accountManagement", {
         method: "DELETE",
         body: formData,
         headers: {
@@ -24,8 +24,9 @@ const DeleteAccount = () => {
     onSettled: () => {
       setSelectedAccount("");
     },
-    onError: (error) => {
-      console.error("Mutation error:", error);
+    onError: () => {
+      alert("Program error");
+      return;
     },
   });
 

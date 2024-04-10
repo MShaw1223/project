@@ -43,8 +43,6 @@ export default async function handler(req: NextApiRequest) {
       }
       return NextResponse.json({ status: 200 });
     } catch (error) {
-      console.error("Unable to login: ", error);
-      console.error("Stack trace: ", (error as Error).stack);
       return NextResponse.json(
         { error: "internal server error" },
         { status: 500 }

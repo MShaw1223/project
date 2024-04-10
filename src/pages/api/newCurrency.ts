@@ -13,7 +13,6 @@ export default async function handler(req: NextRequest) {
     try {
       const body = await extractBody(req);
       const { pairabbr, userid } = newCurrencySchema.parse(body);
-      console.log("body: ", body);
       const pool = new Pool({
         connectionString: process.env.DATABASE_URL,
       });
@@ -25,7 +24,6 @@ export default async function handler(req: NextRequest) {
       );
       await pool.query(SQLstatement);
       await pool.end();
-      console.log("SQLstatement: ", SQLstatement);
       return NextResponse.json(
         { pairabbr },
         {

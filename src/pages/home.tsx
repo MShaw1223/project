@@ -14,7 +14,6 @@ import * as React from "react";
 import { useRouter } from "next/router";
 import withAuth from "@/utils/protection/authorise";
 
-// import withAuth from "@/utils/authorise";
 type TradeData = {
   totalTrades: number;
   totalWins: number;
@@ -31,7 +30,6 @@ const Home: NextPage = () => {
   React.useEffect(() => {
     async function getUser() {
       const { li: loggedInVal } = router.query;
-      console.log(loggedInVal);
       if (loggedInVal !== undefined) {
         try {
           const getuser = await fetch("/api/auth/userFromHash", {
@@ -40,20 +38,19 @@ const Home: NextPage = () => {
             headers: { "Content-Type": "application/json" },
           });
           const lgdin: string = await getuser.json();
-          console.log("home.tsx lgdin: ", lgdin);
           setUser(lgdin);
           if (lgdin !== null) {
-            const response = await fetch("/api/home/homeSearch", {
+            const response = await fetch("/api/home", {
               method: "POST",
               body: JSON.stringify(lgdin),
               headers: { "Content-Type": "application/json" },
             });
             const tradeData: TradeData = await response.json();
-            console.log("Fetched data:", tradeData);
             setData(tradeData);
           }
         } catch (error) {
-          console.error("Error fetching user: ", error);
+          alert("Error fetching user");
+          return;
         }
       }
     }
@@ -70,30 +67,30 @@ const Home: NextPage = () => {
             <span className="my-auto font-bold">Home</span>
           </div>
           <div className="p-2 mt-5 mx-5 text-center">
-            <h1 className="text-2xl sm:text-2xl md:text-4xl font-extrabold">
+            <h1 className="text-2xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold">
               Welcome {user ? user : "..."}
             </h1>
           </div>
-          <div className="flex flex-1 overflow-auto p-2 justify-center my-28 mx-auto">
-            <Table className="bg-gray-400 w-[400px] sm:w-[310px] md:w-[400px] lg:w-[900px] rounded-2xl">
+          <div className="flex flex-1 overflow-auto p-1 justify-center mx-auto">
+            <Table className="bg-gray-400 w-[300px] sm:w-[400px] md:w-[600px] lg:w-[900px] rounded-2xl">
               <TableCaption className="text-gray-500">
                 A Table of your recent Trades.
               </TableCaption>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="text-slate-200 lg:text-2xl md:text-lg sm:text-xs">
+                  <TableHead className="text-slate-200 text-xs lg:text-2xl md:text-lg sm:text-sm">
                     N<sup>o</sup> Trades
                   </TableHead>
-                  <TableHead className="text-slate-200 lg:text-2xl md:text-lg sm:text-xs">
-                    Trades Won
+                  <TableHead className="text-slate-200 text-xs lg:text-2xl md:text-lg sm:text-sm">
+                    Winners
                   </TableHead>
-                  <TableHead className="text-slate-200 lg:text-2xl md:text-lg sm:text-xs">
+                  <TableHead className="text-slate-200 text-xs lg:text-2xl md:text-lg sm:text-sm">
                     Win Rate
                   </TableHead>
-                  <TableHead className="text-slate-200 lg:text-2xl md:text-lg sm:text-xs">
+                  <TableHead className="text-slate-200 text-xs lg:text-2xl md:text-lg sm:text-sm">
                     Best Pair
                   </TableHead>
-                  <TableHead className="text-slate-200 lg:text-2xl md:text-lg sm:text-xs">
+                  <TableHead className="text-slate-200 text-xs lg:text-2xl md:text-lg sm:text-sm">
                     Worst Pair
                   </TableHead>
                 </TableRow>
@@ -101,23 +98,23 @@ const Home: NextPage = () => {
               <TableBody>
                 {data && (
                   <TableRow>
-                    <TableCell className="lg:text-2xl md:text-lg sm:text-xs">
+                    <TableCell className="text-xs lg:text-2xl md:text-lg sm:text-sm">
                       {data.totalTrades}
                     </TableCell>
-                    <TableCell className="lg:text-2xl md:text-lg sm:text-xs">
+                    <TableCell className="text-xs lg:text-2xl md:text-lg sm:text-sm">
                       {data.totalWins}
                     </TableCell>
-                    <TableCell className="lg:text-2xl md:text-lg sm:text-xs">
-                      <TableCell className="lg:text-2xl md:text-lg sm:text-xs">
+                    <TableCell className="text-xs lg:text-2xl md:text-lg sm:text-sm">
+                      <TableCell className="text-xs lg:text-2xl md:text-lg sm:text-sm">
                         {data.winPercentage !== undefined
                           ? `${data.winPercentage}%`
                           : "No Data"}
                       </TableCell>
                     </TableCell>
-                    <TableCell className="lg:text-2xl md:text-lg sm:text-xs">
+                    <TableCell className="text-xs lg:text-2xl md:text-lg sm:text-sm">
                       {data.bestPair}
                     </TableCell>
-                    <TableCell className="lg:text-2xl md:text-lg sm:text-xs">
+                    <TableCell className="text-xs lg:text-2xl md:text-lg sm:text-sm">
                       {data.worstPair}
                     </TableCell>
                   </TableRow>

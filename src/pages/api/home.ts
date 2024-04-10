@@ -6,20 +6,21 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  function returnTruncated(value: number): number {
+    var placeholder = Math.trunc(value * 100) / 100;
+    return placeholder;
+  }
   try {
-    console.log("reqbody: ", req.body);
     const pool = new Pool({
       connectionString: process.env.DATABASE_URL,
     });
     const lgdin: string = req.body;
-    console.log("logged in: ", lgdin);
     const getUserIDquery = sqlstring.format(
       "select userid from tableusers where username = ?",
       [lgdin]
     );
     const responseUserid = await pool.query(getUserIDquery);
     const userid = responseUserid.rows[0].userid;
-    console.log("userid: ", userid);
     const getAccIDquery = sqlstring.format(
       "select accountid from tableaccounts where userid = ?",
       [userid]
@@ -51,16 +52,15 @@ export default async function handler(
     const bestPairResult = await pool.query(bestPairQuery);
     const worstPairResult = await pool.query(worstPairQuery);
     await pool.end();
-    console.log("User ID in home search: ", userid);
     const tradeData = {
       totalTrades: totalTradesResult.rows[0].count,
       totalWins: totalWinsResult.rows[0].count,
-      winPercentage:
-        (totalWinsResult.rows[0].count / totalTradesResult.rows[0].count) * 100,
+      winPercentage: returnTruncated(
+        (totalWinsResult.rows[0].count / totalTradesResult.rows[0].count) * 100
+      ),
       bestPair: bestPairResult.rows[0].currencypair,
       worstPair: worstPairResult.rows[0].currencypair,
     };
-    console.log("Trade data:", tradeData);
     res.status(200).json(tradeData);
   } catch (error) {
     res.status(200).json(error);
