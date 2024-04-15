@@ -23,8 +23,8 @@ const EntryManagement: NextPage = () => {
             <FaCalculator className="h-10 w-10"></FaCalculator>
             <span className="ml-4 font-bold">Entry Management</span>
           </div>
-          <div className="flex-1 overflow-auto p-3">
-            <Tabs defaultValue="search">
+          <div className="flex-1 overflow-auto">
+            <Tabs defaultValue="search" className="p-2 m-1">
               <TabsList>
                 <TabsTrigger value="search">Search for an Entry</TabsTrigger>
                 <TabsTrigger value="addPair">Add a Currency Pair</TabsTrigger>

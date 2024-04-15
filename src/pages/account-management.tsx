@@ -23,7 +23,7 @@ const accountManagement: NextPage = () => {
             <MdOutlineAccountBalance className="w-10 h-10"></MdOutlineAccountBalance>
             <span className="ml-4 font-bold">Account Management</span>
           </div>
-          <div className="flex-1 overflow-auto p-4">
+          <div className="flex-1 overflow-auto">
             <Tabs defaultValue="create" className="p-2 m-1">
               <TabsList>
                 <TabsTrigger value="create">Create new account</TabsTrigger>

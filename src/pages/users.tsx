@@ -21,8 +21,8 @@ const userPage: NextPage = () => {
             <FaUserFriends className="w-10 h-10"></FaUserFriends>
             <span className="ml-10 font-bold">Users</span>
           </div>
-          <div className="flex-1">
-            <Tabs defaultValue="edit" className="p-3 m-1">
+          <div className="flex-1 overflow-auto">
+            <Tabs defaultValue="edit" className="p-2 m-1">
               <TabsList>
                 <TabsTrigger value="edit">Edit your User</TabsTrigger>
                 <TabsTrigger value="delete">Delete your User</TabsTrigger>
