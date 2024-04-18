@@ -14,9 +14,12 @@ interface BaseDropdownProps {
 interface QuoteDropdownProps {
   onQuotePairChange: (pair: string) => void;
 }
+interface DropdownProps {
+  onPairChange: (pair: string) => void;
+}
 
 // Call API - return array of available pairs to map
-const findAvailablePairs = async (li: string): Promise<string[]> => {
+const findAvailablePairs = async (li: string) => {
   try {
     const responseIDFH = await fetch("/api/auth/IDFromHash", {
       method: "POST",
@@ -31,17 +34,17 @@ const findAvailablePairs = async (li: string): Promise<string[]> => {
       body: JSON.stringify(lgdin),
       headers: { "Content-Type": "application/json" },
     });
-    const data = await responsefAP.json();
+    const data: string[] = await responsefAP.json();
     if (!responsefAP.ok) {
-      throw new Error("Failed to fetch available pairs");
+      alert("Failed to fetch available pairs");
     }
-    if (Array.isArray(data)) {
-      return data;
-    } else {
-      throw new Error("Invalid API response format");
+    if (!Array.isArray(data)) {
+      alert("Invalid API response format");
     }
+
+    return data;
   } catch (error) {
-    throw error;
+    alert(error);
   }
 };
 //functions to get available pairs
@@ -55,10 +58,10 @@ function BasePairDropdown({ onBasePairChange }: BaseDropdownProps) {
         const { li } = router.query;
         if (typeof li === "string") {
           const pairs = await findAvailablePairs(li);
-          setAvailablePairs(pairs);
+          setAvailablePairs(pairs!);
         }
       } catch (error) {
-        throw error;
+        alert(error);
       }
     };
     fetchAvailablePairs();
@@ -70,7 +73,7 @@ function BasePairDropdown({ onBasePairChange }: BaseDropdownProps) {
   return (
     <>
       <Select onValueChange={handleValueChange}>
-        <SelectTrigger className="w-22 sm:w-[86px] md:w-[115px] lg:w-[140px]">
+        <SelectTrigger className="w-20 sm:w-[86px] md:w-[115px] lg:w-[140px]">
           <SelectValue placeholder="Base" />
         </SelectTrigger>
         <SelectContent>
@@ -95,7 +98,7 @@ function QuotePairDropdown({ onQuotePairChange }: QuoteDropdownProps) {
         const { li } = router.query;
         if (typeof li === "string") {
           const pairs = await findAvailablePairs(li);
-          setAvailablePairs(pairs);
+          setAvailablePairs(pairs!);
         }
       } catch (error) {
         throw error;
@@ -112,7 +115,7 @@ function QuotePairDropdown({ onQuotePairChange }: QuoteDropdownProps) {
   return (
     <>
       <Select onValueChange={handleValueChange}>
-        <SelectTrigger className="w-22 sm:w-[86px] md:w-[115px] lg:w-[140px]">
+        <SelectTrigger className="w-20 sm:w-[86px] md:w-[115px] lg:w-[140px]">
           <SelectValue placeholder="Quote" />
         </SelectTrigger>
         <SelectContent>
@@ -126,5 +129,46 @@ function QuotePairDropdown({ onQuotePairChange }: QuoteDropdownProps) {
     </>
   );
 }
+function PairDropdown({ onPairChange }: DropdownProps) {
+  //Mapped under the quote pair
+  const router = useRouter();
+  const [availablePairs, setAvailablePairs] = useState<string[]>([]);
+  useEffect(() => {
+    const fetchAvailablePairs = async () => {
+      try {
+        const { li } = router.query;
+        if (typeof li === "string") {
+          const pairs = await findAvailablePairs(li);
+          setAvailablePairs(pairs!);
+        }
+      } catch (error) {
+        throw error;
+      }
+    };
 
-export { BasePairDropdown, QuotePairDropdown };
+    fetchAvailablePairs();
+  }, []);
+
+  const handleValueChange = (selectedPair: string) => {
+    onPairChange(selectedPair);
+  };
+
+  return (
+    <>
+      <Select onValueChange={handleValueChange}>
+        <SelectTrigger className="sm:w-[275px] md:w-[300px] lg:w-[350px] w-56">
+          <SelectValue placeholder="Select Pair" />
+        </SelectTrigger>
+        <SelectContent>
+          {availablePairs.map((pair, index) => (
+            <SelectItem key={index} value={pair}>
+              {pair}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </>
+  );
+}
+
+export { BasePairDropdown, QuotePairDropdown, PairDropdown };

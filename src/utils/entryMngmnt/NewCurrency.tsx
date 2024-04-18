@@ -10,7 +10,7 @@ const NewCurrencyPage: NextPage = () => {
   const router = useRouter();
   const mutation = useMutation({
     mutationFn: async (formData: string) => {
-      const response = await fetch("/api/newCurrency", {
+      const response = await fetch("/api/currency", {
         method: "POST",
         body: formData,
         cache: "no-store",

@@ -15,7 +15,7 @@ const CreateAccountPage = () => {
         cache: "no-store",
       });
       if (!response.ok) {
-        throw new Error("Failed to send off new account");
+        alert("Failed to send off new account");
       }
       return response.json();
     },

@@ -49,5 +49,9 @@ export default async function handler(req: NextRequest) {
         status: 400,
       });
     }
+  } else {
+    return NextResponse.json("Invalid Method", {
+      status: 405,
+    });
   }
 }

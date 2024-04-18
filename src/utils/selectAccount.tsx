@@ -31,14 +31,14 @@ function AccountDropdown({ onAccountChange }: AccountDropdownProps) {
           cache: "no-store",
         });
         if (!response.ok) {
-          throw new Error("Failed to fetch available accounts");
+          alert("Failed to fetch available accounts");
         }
         const data = await response.json();
         if (data !== undefined) {
           setAvailableAccounts(data);
         }
       } else {
-        throw new Error("Invalid URL format");
+        alert("Invalid URL format");
       }
     };
     fetchAvailableAccs();

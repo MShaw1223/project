@@ -14,7 +14,7 @@ const TabsList = React.forwardRef<
   <TabsPrimitive.List
     ref={ref}
     className={cn(
-      "inline-flex h-8 sm:h-9 md:h-10 lg:h-12 items-center justify-center space-x-1 rounded-md bg-black p-2 text-muted-foreground w-[300px] sm:w-[400px] md:w-[500px] lg:w-[600px]",
+      "inline-flex h-8 sm:h-9 md:h-10 lg:h-12 items-center justify-center space-x-1 rounded-md bg-black p-1 text-muted-foreground w-[330px] sm:w-[400px] md:w-[500px] lg:w-[600px]",
       className
     )}
     {...props}
@@ -29,7 +29,7 @@ const TabsTrigger = React.forwardRef<
   <TabsPrimitive.Trigger
     ref={ref}
     className={cn(
-      "inline-flex items-center justify-center whitespace-nowrap w-[300px] rounded-sm px-1 py-1 text-2xs sm:text:xs md:text-sm lg:text-base font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm",
+      "inline-flex items-center justify-center whitespace-nowrap w-[300px] rounded-sm p-1 text-2xs sm:text:xs md:text-sm lg:text-base font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm",
       className
     )}
     {...props}

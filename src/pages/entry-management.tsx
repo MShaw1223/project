@@ -7,6 +7,7 @@ import SearchEntry from "@/utils/entryMngmnt/SearchEntry";
 import NewCurrencyPage from "@/utils/entryMngmnt/NewCurrency";
 import * as React from "react";
 import withAuth from "@/utils/protection/authorise";
+import DeleteCurrency from "@/utils/entryMngmnt/deleteCurrency";
 
 const EntryManagement: NextPage = () => {
   const [menuOpen, setMenuOpen] = React.useState(false);
@@ -24,10 +25,11 @@ const EntryManagement: NextPage = () => {
             <span className="ml-4 font-bold">Entry Management</span>
           </div>
           <div className="flex-1 overflow-auto">
-            <Tabs defaultValue="search" className="p-2 m-1">
+            <Tabs defaultValue="search" className="p-1 m-1">
               <TabsList>
-                <TabsTrigger value="search">Search for an Entry</TabsTrigger>
-                <TabsTrigger value="addPair">Add a Currency Pair</TabsTrigger>
+                <TabsTrigger value="search">Search Entries</TabsTrigger>
+                <TabsTrigger value="addPair">Add Currencies</TabsTrigger>
+                <TabsTrigger value="delPair">Delete Currencies</TabsTrigger>
                 <TabsTrigger value="delete">Delete an Entry</TabsTrigger>
               </TabsList>
               <TabsContent value="search">
@@ -35,6 +37,9 @@ const EntryManagement: NextPage = () => {
               </TabsContent>
               <TabsContent value="addPair">
                 <NewCurrencyPage />
+              </TabsContent>
+              <TabsContent value="delPair">
+                <DeleteCurrency />
               </TabsContent>
               <TabsContent value="delete">
                 <DeleteEntry />
