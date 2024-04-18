@@ -53,13 +53,13 @@ export default async function handler(
     const worstPairResult = await pool.query(worstPairQuery);
     await pool.end();
     const tradeData = {
-      totalTrades: totalTradesResult.rows[0].count,
-      totalWins: totalWinsResult.rows[0].count,
+      totalTrades: totalTradesResult.rows[0].count as number,
+      totalWins: totalWinsResult.rows[0].count as number,
       winPercentage: returnTruncated(
         (totalWinsResult.rows[0].count / totalTradesResult.rows[0].count) * 100
       ),
-      bestPair: bestPairResult.rows[0].currencypair,
-      worstPair: worstPairResult.rows[0].currencypair,
+      bestPair: bestPairResult.rows[0].currencypair as string,
+      worstPair: worstPairResult.rows[0]?.currencypair as string,
     };
     res.status(200).json(tradeData);
   } catch (error) {

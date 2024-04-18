@@ -57,7 +57,7 @@ const searchEntry: NextPage = () => {
   return (
     <>
       <div className="flex">
-        <div className="m-3 overflow-hidden text-left mx-auto">
+        <div className="m-3 text-left mx-auto">
           <h3 className="text-xs sm:text-xs md:text-sm lg:text-lg">
             Select an account to search through
           </h3>
@@ -66,8 +66,8 @@ const searchEntry: NextPage = () => {
               onAccountChange={handleAccountChange}
             ></AccountDropdown>
           </div>
-          <div className="flex-1 overflow-auto p-1 text-center m-1">
-            <Table className="bg-gray-400 w-[400px] sm:w-[310px] md:w-[450px] lg:w-[300px] rounded-2xl">
+          <div className="flex-1 p-1 text-center m-1">
+            <Table className="bg-gray-400 w-[400px] sm:w-[310px] md:w-[450px] lg:w-[550px] rounded-2xl">
               <TableCaption className="text-gray-500">
                 A Table of trades taken.
               </TableCaption>
@@ -85,7 +85,7 @@ const searchEntry: NextPage = () => {
                   <TableHead className="text-slate-200 lg:text-xl md:text-lg sm:text-xs">
                     takeprofit
                   </TableHead>
-                  <TableHead className="text-slate-200 lg:text-xl md:text-lg sm:text-xs">
+                  <TableHead className="text-slate-200 lg:text-xl md:text-lg sm:text-xs px-3">
                     tradenotes
                   </TableHead>
                   <TableHead className="text-slate-200 lg:text-xl md:text-lg sm:text-xs">
@@ -114,7 +114,7 @@ const searchEntry: NextPage = () => {
                     <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
                       {trade.takeprofit}
                     </TableCell>
-                    <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
+                    <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs px-3">
                       {trade.tradenotes}
                     </TableCell>
                     <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
