@@ -58,16 +58,11 @@ export default async function handler(req: NextRequest) {
     try {
       const body = await extractBody(req);
       const { accountname } = deleteAccountSchema.parse(body);
-      const getAcctID = sqlstring.format(`
-          select accountid from tableAccounts where accountname = '${accountname}'
-        `);
-      const placeholder = await pool.query(getAcctID);
-      const accountID = placeholder.rows[0].accountid;
       const deleteAccountQuery = sqlstring.format(`
-          DELETE FROM tableAccounts WHERE accountid = ${accountID}
+          DELETE FROM tableAccounts WHERE accountid = (select accountid from tableAccounts where accountname = '${accountname}')
         `);
       const deleteFrmTradeTbl = sqlstring.format(`
-          delete from tableTrades where accountid = ${accountID}
+          delete from tableTrades where accountid = (select accountid from tableAccounts where accountname = '${accountname}')
         `);
       await pool.query(deleteFrmTradeTbl);
       await pool.query(deleteAccountQuery);
