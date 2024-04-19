@@ -129,6 +129,7 @@ const searchEntry: NextPage = () => {
                       </TableCell>
                     </TableRow>
                   ))}
+                {!data && <TableRow>"Select an account above"</TableRow>}
               </TableBody>
             </Table>
           </div>
