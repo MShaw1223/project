@@ -1,15 +1,15 @@
-import AccountDropdown from "@/utils/selectAccount";
+import AccountDropdown from "@/components/selectAccount";
 import { Button } from "@/components/ui/button";
 import { useMutation } from "react-query";
 import * as React from "react";
 import { NextPage } from "next";
-import Menu from "@/utils/menu";
+import Menu from "@/components/menu";
 import { FaPencilAlt } from "react-icons/fa";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { BasePairDropdown, QuotePairDropdown } from "@/utils/selectPair";
-import { OutcomeDropdown } from "@/utils/tradeEntry/outcome";
-import withAuth from "@/utils/protection/authorise";
+import { BasePairDropdown, QuotePairDropdown } from "@/components/selectPair";
+import { OutcomeDropdown } from "@/components/tradeEntry/outcome";
+import withAuth from "@/components/authorise";
 
 const tradeEntry: NextPage = () => {
   const [menuOpen, setMenuOpen] = React.useState(false);

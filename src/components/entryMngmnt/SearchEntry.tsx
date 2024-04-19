@@ -22,7 +22,7 @@ type TradeData = {
   currencypair: string;
 };
 
-const searchEntry: NextPage = () => {
+const SearchEntry: NextPage = () => {
   const [data, setData] = useState<TradeData[]>([]);
 
   async function tableData(account: number) {
@@ -138,4 +138,4 @@ const searchEntry: NextPage = () => {
     </>
   );
 };
-export default searchEntry;
+export default SearchEntry;

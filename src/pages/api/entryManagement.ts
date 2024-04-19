@@ -1,5 +1,5 @@
 import { extractBody } from "@/utils/extractBody";
-import { deleteEntrySchema } from "@/utils/protection/schema";
+import { deleteEntrySchema } from "@/utils/schema";
 import { Pool } from "@neondatabase/serverless";
 import { NextRequest, NextResponse } from "next/server";
 import sqlstring from "sqlstring";

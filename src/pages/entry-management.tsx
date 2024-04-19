@@ -1,13 +1,13 @@
-import Menu from "@/utils/menu";
 import { NextPage } from "next";
 import { FaCalculator } from "react-icons/fa";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import DeleteEntry from "@/utils/entryMngmnt/DeleteEntry";
-import SearchEntry from "@/utils/entryMngmnt/SearchEntry";
-import NewCurrencyPage from "@/utils/entryMngmnt/NewCurrency";
 import * as React from "react";
-import withAuth from "@/utils/protection/authorise";
-import DeleteCurrency from "@/utils/entryMngmnt/deleteCurrency";
+import Menu from "@/components/menu";
+import NewCurrencyPage from "@/components/entryMngmnt/NewCurrency";
+import SearchEntry from "@/components/entryMngmnt/SearchEntry";
+import DeleteCurrency from "@/components/entryMngmnt/deleteCurrency";
+import DeleteEntry from "@/components/entryMngmnt/DeleteEntry";
+import withAuth from "@/components/authorise";
 
 const EntryManagement: NextPage = () => {
   const [menuOpen, setMenuOpen] = React.useState(false);

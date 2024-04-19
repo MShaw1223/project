@@ -3,8 +3,8 @@ import { extractBody } from "@/utils/extractBody";
 import { Pool } from "@neondatabase/serverless";
 import sqlstring from "sqlstring";
 import { NextResponse } from "next/server";
-import { keyGenerator } from "@/utils/protection/hash";
-import { userPwdSchema } from "@/utils/protection/schema";
+import { keyGenerator } from "@/utils/hash";
+import { userPwdSchema } from "@/utils/schema";
 export const config = {
   runtime: "edge",
 };

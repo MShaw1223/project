@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import Menu from "@/utils/menu";
+
 import { FaHome } from "react-icons/fa";
 import {
   Table,
@@ -12,7 +12,8 @@ import {
 } from "@/components/ui/table";
 import * as React from "react";
 import { useRouter } from "next/router";
-import withAuth from "@/utils/protection/authorise";
+import withAuth from "@/components/authorise";
+import Menu from "@/components/menu";
 
 type TradeData = {
   totalTrades: number;
@@ -102,18 +103,22 @@ const Home: NextPage = () => {
                   {data && (
                     <TableRow>
                       <TableCell className="text-xs lg:text-2xl md:text-lg sm:text-sm">
-                        {data.totalTrades !== undefined ? data.totalTrades : "N/A"}
+                        {data.totalTrades !== undefined
+                          ? data.totalTrades
+                          : "N/A"}
                       </TableCell>
                       <TableCell className="text-xs lg:text-2xl md:text-lg sm:text-sm">
                         {data.totalWins !== undefined ? data.totalWins : "N/A"}
                       </TableCell>
                       <TableCell className="text-xs lg:text-2xl md:text-lg sm:text-sm">
                         <TableCell className="text-xs lg:text-2xl md:text-lg sm:text-sm">
-                          {data.winPercentage !== undefined ? `${data.winPercentage}%` : "N/A"}
+                          {data.winPercentage !== undefined
+                            ? `${data.winPercentage}%`
+                            : "N/A"}
                         </TableCell>
                       </TableCell>
                       <TableCell className="text-xs lg:text-2xl md:text-lg sm:text-sm">
-                        {data.bestPair!== undefined ? data.bestPair : "N/A"}
+                        {data.bestPair !== undefined ? data.bestPair : "N/A"}
                       </TableCell>
                       <TableCell className="text-xs lg:text-2xl md:text-lg sm:text-sm">
                         {data.worstPair !== undefined ? data.worstPair : "N/A"}

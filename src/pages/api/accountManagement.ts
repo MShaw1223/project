@@ -2,10 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import sqlstring from "sqlstring";
 import { Pool } from "@neondatabase/serverless";
 import { extractBody } from "@/utils/extractBody";
-import {
-  deleteAccountSchema,
-  newAccountSchema,
-} from "@/utils/protection/schema";
+import { deleteAccountSchema, newAccountSchema } from "@/utils/schema";
 
 export const config = {
   runtime: "edge",

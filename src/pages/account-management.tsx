@@ -1,12 +1,12 @@
-import Menu from "@/utils/menu";
+import Menu from "@/components/menu";
 import { NextPage } from "next";
 import { MdOutlineAccountBalance } from "react-icons/md";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import CreateAccount from "@/utils/accountMngmnt/CreateAccount";
-import DeleteAccount from "@/utils/accountMngmnt/DeleteAccount";
+import CreateAccount from "@/components/accountMngmnt/CreateAccount";
+import DeleteAccount from "@/components/accountMngmnt/DeleteAccount";
 import * as React from "react";
-import withAuth from "@/utils/protection/authorise";
-import UpdateAccount from "@/utils/accountMngmnt/UpdateAccount";
+import withAuth from "@/components/authorise";
+import UpdateAccount from "@/components/accountMngmnt/UpdateAccount";
 
 const accountManagement: NextPage = () => {
   const [menuOpen, setMenuOpen] = React.useState(false);

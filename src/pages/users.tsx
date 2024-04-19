@@ -1,11 +1,11 @@
 import { NextPage } from "next";
 import { FaUserFriends } from "react-icons/fa";
-import Menu from "@/utils/menu";
+import Menu from "@/components/menu";
 import * as React from "react";
-import withAuth from "@/utils/protection/authorise";
+import withAuth from "@/components/authorise";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import EditUserPage from "@/utils/users/editUserPage";
-import DeleteUserPage from "@/utils/users/DeleteUser";
+import EditUserPage from "@/components/users/editUserPage";
+import DeleteUserPage from "@/components/users/DeleteUser";
 const userPage: NextPage = () => {
   const [menuOpen, setMenuOpen] = React.useState(false);
   return (

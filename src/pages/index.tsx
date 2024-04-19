@@ -4,8 +4,8 @@ import { useState, FormEvent } from "react";
 import { NextPage } from "next";
 import { BiSolidHide, BiSolidShow } from "react-icons/bi";
 import { useRouter } from "next/router";
-import { keyGenerator } from "@/utils/protection/hash";
-import { lginSignUpSchema } from "@/utils/protection/schema";
+import { keyGenerator } from "@/utils/hash";
+import { lginSignUpSchema } from "@/utils/schema";
 
 const login: NextPage = () => {
   // determines if the password is hidden or not when entering it during login

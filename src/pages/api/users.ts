@@ -1,5 +1,5 @@
 import { extractBody } from "@/utils/extractBody";
-import { keyGenerator } from "@/utils/protection/hash";
+import { keyGenerator } from "@/utils/hash";
 import { Pool } from "@neondatabase/serverless";
 import { NextRequest, NextResponse } from "next/server";
 import sqlstring from "sqlstring";
