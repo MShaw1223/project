@@ -48,7 +48,6 @@ const Home: NextPage = () => {
               headers: { "Content-Type": "application/json" },
             });
             const tradeData: TradeData = await response.json();
-            console.log("TD: ", tradeData);
             setData(tradeData);
           }
         } catch (error) {

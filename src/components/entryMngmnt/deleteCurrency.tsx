@@ -40,7 +40,7 @@ const DeleteCurrency: NextPage = () => {
         },
       });
       if (!response.ok) {
-        throw new Error("Failed to delete account");
+        alert("Failed to delete");
       }
       return response.json();
     },
@@ -73,7 +73,7 @@ const DeleteCurrency: NextPage = () => {
     event.preventDefault();
     try {
       if (selectedPair !== "") {
-        const pairID = await getPairID(selectedPair, userID!);
+        const pairID = await getPairID(selectedPair, userID);
         mutation.mutate(JSON.stringify({ pairID, userID }));
       } else {
         alert("No account selected");
@@ -94,7 +94,6 @@ const DeleteCurrency: NextPage = () => {
                 <div className="m-1 pt-4 pb-10">
                   <PairDropdown onPairChange={handlePairChange} />
                 </div>
-
                 <div className="p-10 pt-20">
                   <Button
                     type="submit"
