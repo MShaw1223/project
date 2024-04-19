@@ -67,7 +67,7 @@ const searchEntry: NextPage = () => {
             ></AccountDropdown>
           </div>
           <div className="flex-1 p-1 text-center m-1">
-            <Table className="bg-gray-400 w-[400px] sm:w-[310px] md:w-[450px] lg:w-[550px] rounded-2xl">
+            <Table className="bg-gray-400 w-[300px] sm:w-[400px] md:w-[500px] lg:w-[700px] rounded-2xl">
               <TableCaption className="text-gray-500">
                 A Table of trades taken.
               </TableCaption>
@@ -100,34 +100,36 @@ const searchEntry: NextPage = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {data ? (data.map((trade) => (
-                  <TableRow key={trade.tradesid}>
-                    <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
-                      {trade.tradesid}
-                    </TableCell>
-                    <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
-                      {trade.entryprice}
-                    </TableCell>
-                    <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
-                      {trade.stoploss}
-                    </TableCell>
-                    <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
-                      {trade.takeprofit}
-                    </TableCell>
-                    <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs px-3">
-                      {trade.tradenotes}
-                    </TableCell>
-                    <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
-                      {trade.riskratio}
-                    </TableCell>
-                    <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
-                      {trade.winloss}
-                    </TableCell>
-                    <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
-                      {trade.currencypair}
-                    </TableCell>
-                  </TableRow>
-                ))): "Select a currency"}
+                {data
+                  ? data.map((trade) => (
+                      <TableRow key={trade.tradesid}>
+                        <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
+                          {trade.tradesid}
+                        </TableCell>
+                        <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
+                          {trade.entryprice}
+                        </TableCell>
+                        <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
+                          {trade.stoploss}
+                        </TableCell>
+                        <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
+                          {trade.takeprofit}
+                        </TableCell>
+                        <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs px-3">
+                          {trade.tradenotes}
+                        </TableCell>
+                        <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
+                          {trade.riskratio}
+                        </TableCell>
+                        <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
+                          {trade.winloss}
+                        </TableCell>
+                        <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
+                          {trade.currencypair}
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  : ("Select a currency")}
               </TableBody>
             </Table>
           </div>

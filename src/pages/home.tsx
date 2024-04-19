@@ -75,7 +75,7 @@ const Home: NextPage = () => {
           </div>
           <div className="flex flex-1 overflow-auto p-1 justify-center mx-auto">
             {user ? (
-              <Table className="bg-gray-400 w-[300px] sm:w-[400px] md:w-[600px] lg:w-[900px] rounded-2xl">
+              <Table className="bg-gray-400 w-[300px] sm:w-[400px] md:w-[500px] lg:w-[700px] rounded-2xl">
                 <TableCaption className="text-gray-500">
                   A Table of your recent Trades.
                 </TableCaption>
