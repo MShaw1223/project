@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import SelectEdit from "@/utils/users/editUserDD";
+import SelectEdit from "@/components/users/editUserDD";
 import { Input } from "@/components/ui/input";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
