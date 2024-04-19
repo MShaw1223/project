@@ -85,7 +85,7 @@ const searchEntry: NextPage = () => {
                   <TableHead className="text-slate-200 lg:text-xl md:text-lg sm:text-xs">
                     takeprofit
                   </TableHead>
-                  <TableHead className="text-slate-200 lg:text-xl md:text-lg sm:text-xs px-3">
+                  <TableHead className="text-slate-200 lg:text-xl md:text-lg sm:text-xs">
                     tradenotes
                   </TableHead>
                   <TableHead className="text-slate-200 lg:text-xl md:text-lg sm:text-xs">
@@ -115,7 +115,7 @@ const searchEntry: NextPage = () => {
                       <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
                         {trade.takeprofit}
                       </TableCell>
-                      <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs px-3">
+                      <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
                         {trade.tradenotes}
                       </TableCell>
                       <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
