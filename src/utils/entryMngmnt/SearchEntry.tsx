@@ -100,7 +100,7 @@ const searchEntry: NextPage = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {data && (data.map((trade) => (
+                {data ? (data.map((trade) => (
                   <TableRow key={trade.tradesid}>
                     <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
                       {trade.tradesid}
@@ -127,7 +127,7 @@ const searchEntry: NextPage = () => {
                       {trade.currencypair}
                     </TableCell>
                   </TableRow>
-                )))}
+                ))): "Select a currency"}
               </TableBody>
             </Table>
           </div>
