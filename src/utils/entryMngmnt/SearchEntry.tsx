@@ -61,7 +61,7 @@ const searchEntry: NextPage = () => {
           <h3 className="text-xs sm:text-xs md:text-sm lg:text-lg">
             Select an account to search through
           </h3>
-          <div className="p-1 my-4">
+          <div className="pt-1 mt-4">
             <AccountDropdown
               onAccountChange={handleAccountChange}
             ></AccountDropdown>
