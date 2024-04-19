@@ -23,7 +23,7 @@ type TradeData = {
 };
 
 const searchEntry: NextPage = () => {
-  const [data, setData] = useState<TradeData[]>([]);
+  const [data, setData] = useState<TradeData[]>(["Select an account above"]);
 
   async function tableData(account: number) {
     const response = await fetch("/api/entryManagement", {
@@ -100,36 +100,35 @@ const searchEntry: NextPage = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {data
-                  ? data.map((trade) => (
-                      <TableRow key={trade.tradesid}>
-                        <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
-                          {trade.tradesid}
-                        </TableCell>
-                        <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
-                          {trade.entryprice}
-                        </TableCell>
-                        <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
-                          {trade.stoploss}
-                        </TableCell>
-                        <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
-                          {trade.takeprofit}
-                        </TableCell>
-                        <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs px-3">
-                          {trade.tradenotes}
-                        </TableCell>
-                        <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
-                          {trade.riskratio}
-                        </TableCell>
-                        <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
-                          {trade.winloss}
-                        </TableCell>
-                        <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
-                          {trade.currencypair}
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  : ("Select a currency")}
+                {data &&
+                  data.map((trade) => (
+                    <TableRow key={trade.tradesid}>
+                      <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
+                        {trade.tradesid}
+                      </TableCell>
+                      <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
+                        {trade.entryprice}
+                      </TableCell>
+                      <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
+                        {trade.stoploss}
+                      </TableCell>
+                      <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
+                        {trade.takeprofit}
+                      </TableCell>
+                      <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs px-3">
+                        {trade.tradenotes}
+                      </TableCell>
+                      <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
+                        {trade.riskratio}
+                      </TableCell>
+                      <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
+                        {trade.winloss}
+                      </TableCell>
+                      <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
+                        {trade.currencypair}
+                      </TableCell>
+                    </TableRow>
+                  ))}
               </TableBody>
             </Table>
           </div>
