@@ -102,18 +102,18 @@ const Home: NextPage = () => {
                   {data && (
                     <TableRow>
                       <TableCell className="text-xs lg:text-2xl md:text-lg sm:text-sm">
-                        {data.totalTrades}
+                        {data.totalTrades !== undefined ? data.totalTrades : "N/A"}
                       </TableCell>
                       <TableCell className="text-xs lg:text-2xl md:text-lg sm:text-sm">
-                        {data.totalWins}
+                        {data.totalWins !== undefined ? data.totalWins : "N/A"}
                       </TableCell>
                       <TableCell className="text-xs lg:text-2xl md:text-lg sm:text-sm">
                         <TableCell className="text-xs lg:text-2xl md:text-lg sm:text-sm">
-                          {data.winPercentage}%
+                          {data.winPercentage !== undefined ? `${data.winPercentage}%` : "N/A"}
                         </TableCell>
                       </TableCell>
                       <TableCell className="text-xs lg:text-2xl md:text-lg sm:text-sm">
-                        {data.bestPair}
+                        {data.bestPair!== undefined ? data.bestPair : "N/A"}
                       </TableCell>
                       <TableCell className="text-xs lg:text-2xl md:text-lg sm:text-sm">
                         {data.worstPair !== undefined ? data.worstPair : "N/A"}
