@@ -23,7 +23,7 @@ type TradeData = {
 };
 
 const searchEntry: NextPage = () => {
-  const [data, setData] = useState<TradeData[]>(["Select an account above"]);
+  const [data, setData] = useState<TradeData[]>([]);
 
   async function tableData(account: number) {
     const response = await fetch("/api/entryManagement", {
