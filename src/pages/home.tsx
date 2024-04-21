@@ -104,16 +104,16 @@ const Home: NextPage = () => {
                       <TableCell className="text-xs lg:text-2xl md:text-lg sm:text-sm">
                         {data.totalTrades !== undefined
                           ? data.totalTrades
-                          : "N/A"}
+                          : "0"}
                       </TableCell>
                       <TableCell className="text-xs lg:text-2xl md:text-lg sm:text-sm">
-                        {data.totalWins !== undefined ? data.totalWins : "N/A"}
+                        {data.totalWins !== undefined ? data.totalWins : "0"}
                       </TableCell>
                       <TableCell className="text-xs lg:text-2xl md:text-lg sm:text-sm">
                         <TableCell className="text-xs lg:text-2xl md:text-lg sm:text-sm">
                           {data.winPercentage !== undefined
                             ? `${data.winPercentage}%`
-                            : "N/A"}
+                            : "0%"}
                         </TableCell>
                       </TableCell>
                       <TableCell className="text-xs lg:text-2xl md:text-lg sm:text-sm">

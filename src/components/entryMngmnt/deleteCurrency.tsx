@@ -41,6 +41,7 @@ const DeleteCurrency: NextPage = () => {
       });
       if (!response.ok) {
         alert("Failed to delete");
+        return;
       }
       return response.json();
     },

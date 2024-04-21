@@ -51,7 +51,7 @@ const login: NextPage = () => {
     <>
       <div className="flex bg-black h-screen">
         <div className="flex-1 flex flex-col overflow-hidden">
-          <div className="flex m-24 text-3xl">
+          <div className="flex m-12 text-3xl">
             <span className="my-auto font-black text-white">
               Welcome to FXTrax
             </span>

@@ -32,7 +32,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
                 : "w-16 md:w-24 lg:w-32"
             }`}
           >
-            <div className="flex justify-between p-2">
+            <div className="flex justify-between p-2 mb-36">
               <h1 className="text-xl font-sans font-semibold text-slate-100 p-2">
                 Menu
               </h1>
@@ -47,8 +47,6 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
                 )}
               </div>
             </div>
-
-            <Separator className="ml-9 my-5 bg-inherit" />
 
             <Link href={`/home?li=${li}`}>
               <div

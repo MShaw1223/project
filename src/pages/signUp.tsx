@@ -6,6 +6,8 @@ import { BiSolidHide, BiSolidShow } from "react-icons/bi";
 import { useRouter } from "next/router";
 import { keyGenerator } from "@/utils/hash";
 import { lginSignUpSchema } from "@/utils/schema";
+import { BsChevronBarLeft } from "react-icons/bs";
+import Link from "next/link";
 
 const signUp: NextPage = () => {
   // determines if the password is hidden or not when entering it during login
@@ -57,7 +59,7 @@ const signUp: NextPage = () => {
     <>
       <div className="flex h-screen bg-black">
         <div className="flex-1 flex flex-col overflow-hidden">
-          <div className="flex m-24 text-3xl">
+          <div className="flex m-12 text-3xl">
             <span className="my-auto font-black text-white">
               Sign Up To FXTrax
             </span>
@@ -66,7 +68,15 @@ const signUp: NextPage = () => {
             <div className="my-auto mx-auto h-[360px] max-w-[460px] min-w-[230px] border rounded-3xl bg-slate-300">
               <div className="p-3 flex">
                 <form onSubmit={handleSubmit} className="flex flex-col w-full">
-                  <h1 className="font-bold text-lg p-2">Sign Up</h1>
+                  <div className="p-2 flex flex-row justify-between">
+                    <h1 className="font-bold text-lg p-1">Sign Up</h1>
+                    <Link href="/">
+                      <div className="flex justify-between hover:bg-slate-200 rounded-md p-1">
+                        <BsChevronBarLeft />
+                        <p className="text-center font-bold text-lg">Back</p>
+                      </div>
+                    </Link>
+                  </div>
                   <div className="p-4 flex flex-row">
                     <Input id="user" name="user" placeholder="Username....." />
                   </div>
