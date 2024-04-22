@@ -15,18 +15,25 @@ export default async function handler(
       connectionString: process.env.DATABASE_URL,
     });
     const lgdin: string = req.body;
-    const getUserIDquery = sqlstring.format(
-      "select userid from tableusers where username = ?",
-      [lgdin]
-    );
-    const responseUserid = await pool.query(getUserIDquery);
-    const userid = responseUserid.rows[0].userid;
     const getAccIDquery = sqlstring.format(
-      "select accountid from tableaccounts where userid = ?",
-      [userid]
+      "select accountid from tableaccounts where userid = (select userid from tableusers where authkey = ?)",
+      [lgdin]
     );
     const responseAccountid = await pool.query(getAccIDquery);
     const accountid = responseAccountid.rows[0].accountid;
+    /*TODO:
+    -Find the number of rows, have a foreach in rows to get all acctids?
+    -have a for function that has the end conditional as the max in it
+
+    for (i = 0, i < maxRows, i++){
+      const totalTradesQuery...
+      const totalWinsQuery... etc
+      const xyz = await pool.query(abcQuery);
+      const dfg = await...
+      *then add to a hashmap
+      w/ each index being the different queries then sum each and return as normal*
+    }
+    */
     const totalTradesQuery = sqlstring.format(
       "select count(*) from tableTrades where winLoss != 'no-entry' AND accountid = ?",
       [accountid]

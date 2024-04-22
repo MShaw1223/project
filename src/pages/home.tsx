@@ -44,7 +44,7 @@ const Home: NextPage = () => {
           if (lgdin !== null) {
             const response = await fetch("/api/home", {
               method: "POST",
-              body: JSON.stringify(lgdin),
+              body: JSON.stringify(loggedInVal),
               headers: { "Content-Type": "application/json" },
             });
             const tradeData: TradeData = await response.json();
