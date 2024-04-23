@@ -1,14 +1,22 @@
 {
   "cSpell.words": [
+    "accountid",
+    "accountids",
+    "authkey",
+    "currencypair",
     "indb",
+    "lgdin",
     "lgin",
     "neondatabase",
     "pairabbr",
     "pairid",
     "reqbody",
+    "tableaccounts",
     "tablepairs",
+    "tabletrades",
     "tableusers",
     "Trax",
-    "userid"
+    "userid",
+    "winloss"
   ]
 }

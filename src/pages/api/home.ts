@@ -14,62 +14,63 @@ export default async function handler(
     const pool = new Pool({
       connectionString: process.env.DATABASE_URL,
     });
+
     const lgdin: string = req.body;
     const getAccIDquery = sqlstring.format(
       "select accountid from tableaccounts where userid = (select userid from tableusers where authkey = ?)",
       [lgdin]
     );
     const responseAccountid = await pool.query(getAccIDquery);
-    const accountid = responseAccountid.rows[0].accountid;
-    /*TODO:
-    -Find the number of rows, have a foreach in rows to get all acctids?
-    -have a for function that has the end conditional as the max in it
+    const accountids = responseAccountid.rows.map((row) => row.accountid);
 
-    for (i = 0, i < maxRows, i++){
-      const totalTradesQuery...
-      const totalWinsQuery... etc
-      const xyz = await pool.query(abcQuery);
-      const dfg = await...
-      *then add to a hashmap
-      w/ each index being the different queries then sum each and return as normal*
+    const tradeData = [];
+
+    for (let i = 0; i < accountids.length; i++) {
+      const accountid = accountids[i];
+      const totalTradesQuery = sqlstring.format(
+        "select count(*) from tableTrades where winLoss != 'no-entry' AND accountid = ?",
+        [accountid]
+      );
+      const totalWinsQuery = sqlstring.format(
+        "select count(*) from tableTrades where winLoss = 'win' AND accountid = ?",
+        [accountid]
+      );
+      //  get the count of wins and ttl trades
+      const bestPairQuery = sqlstring.format(
+        "select currencypair, count(*) as count from tabletrades where accountid = ? AND winloss = 'win' group by currencypair",
+        [accountid]
+      );
+      const worstPairQuery = sqlstring.format(
+        "select currencypair, count(*) as count from tabletrades where accountid = ? AND winloss = 'loss' group by currencypair",
+        [accountid]
+      );
+      const [
+        totalTradesResult,
+        totalWinsResult,
+        bestPairResult,
+        worstPairResult,
+      ] = await Promise.all([
+        pool.query(totalTradesQuery),
+        pool.query(totalWinsQuery),
+        pool.query(bestPairQuery),
+        pool.query(worstPairQuery),
+      ]);
+      const payload = {
+        accountid: accountid,
+        totalTrades: totalTradesResult.rows[0].count as number,
+        totalWins: totalWinsResult.rows[0].count as number,
+        winPercentage: returnTruncated(
+          (totalWinsResult.rows[0].count / totalTradesResult.rows[0].count) *
+            100
+        ),
+        bestPair: bestPairResult.rows[0]?.currencypair as string,
+        worstPair: worstPairResult.rows[0]?.currencypair as string,
+      };
+      tradeData.push(payload);
     }
-    */
-    const totalTradesQuery = sqlstring.format(
-      "select count(*) from tableTrades where winLoss != 'no-entry' AND accountid = ?",
-      [accountid]
-    );
-    const totalWinsQuery = sqlstring.format(
-      "select count(*) from tableTrades where winLoss = 'win' AND accountid = ?",
-      [accountid]
-    );
-    //  get the count of wins and ttl trades
-    const bestPairQuery = sqlstring.format(
-      "select currencypair, count(*) as count from tabletrades where accountid = ? AND winloss = 'win' group by currencypair",
-      [accountid]
-    );
-    const worstPairQuery = sqlstring.format(
-      "select currencypair, count(*) as count from tabletrades where accountid = ? AND winloss = 'loss' group by currencypair",
-      [accountid]
-    );
-    // get the count of wins and losses
-    // and order by the worst or best
-    // then select the worst for loss and the best for win
-    const totalTradesResult = await pool.query(totalTradesQuery);
-    const totalWinsResult = await pool.query(totalWinsQuery);
-    const bestPairResult = await pool.query(bestPairQuery);
-    const worstPairResult = await pool.query(worstPairQuery);
     await pool.end();
-    const tradeData = {
-      totalTrades: totalTradesResult.rows[0].count as number,
-      totalWins: totalWinsResult.rows[0].count as number,
-      winPercentage: returnTruncated(
-        (totalWinsResult.rows[0].count / totalTradesResult.rows[0].count) * 100
-      ),
-      bestPair: bestPairResult.rows[0].currencypair as string,
-      worstPair: worstPairResult.rows[0]?.currencypair as string,
-    };
     res.status(200).json(tradeData);
   } catch (error) {
-    res.status(200).json(error);
+    res.status(500).json(error);
   }
 }
