@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/table";
 import { useState } from "react";
 import AccountDropdown from "../selectAccount";
+import NotesModal from "./notesModal";
 
 type TradeData = {
   tradesid: string;
@@ -116,7 +117,7 @@ const SearchEntry: NextPage = () => {
                         {trade.takeprofit}
                       </TableCell>
                       <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
-                        {trade.tradenotes}
+                        <NotesModal info={trade} />
                       </TableCell>
                       <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
                         {trade.riskratio}
