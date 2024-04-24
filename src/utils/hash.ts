@@ -3,7 +3,7 @@ export function keyGenerator(username: string): string {
   for (let i = 0; i < username.length; i++) {
     const char = username.charCodeAt(i); // converts to unicode
     hash = (hash << 5) - hash + char; //left shift the hash 5 places then - hash + unicode of username
-    hash &= hash; // Convert to 32-bit integer
+    hash &= hash; // bitwise and to ensure the code remains 32 bit
   }
-  return hash.toString(16);
+  return hash.toString(16); //converts to a hexadecimal string
 }
