@@ -17,7 +17,7 @@ To start using FXTrax, follow these steps:
 
 1. **Access FXTrax**:
 
-   - Visit the [FXTrax website](https://project-rho-hazel.vercel.app/) to access the application.
+   - Visit the [FXTrax website](https://fxtrax.vercel.app/) to access the application.
 
 2. **Sign Up**:
 
