@@ -44,6 +44,4 @@ To start using FXTrax, follow these steps:
      - **Trade Entry**:
        - Once the setup is complete, you can start entering trades on the 'Trade Entry' page.
 
-By following these steps, you can effectively utilize FXTrax to enhance your trading journey.
-
 Happy trading!
