@@ -10,17 +10,11 @@ interface winLossProps {
   on_outcome_change: (outcome: string) => void;
 }
 
-enum outcomesValues {
+enum Outcomes {
   win = "win",
   loss = "loss",
   break_even = "break-even",
   no_entry = "no-entry",
-}
-enum outcomesDisplays {
-  win = "Win",
-  loss = "Loss",
-  break_even = "Break Even",
-  no_entry = "No Entry",
 }
 
 export function OutcomeDropdown({ on_outcome_change }: winLossProps) {
@@ -34,18 +28,11 @@ export function OutcomeDropdown({ on_outcome_change }: winLossProps) {
           <SelectValue placeholder="Outcome..." />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value={outcomesValues.win}>
-            {outcomesDisplays.win}
-          </SelectItem>
-          <SelectItem value={outcomesValues.loss}>
-            {outcomesDisplays.loss}
-          </SelectItem>
-          <SelectItem value={outcomesValues.break_even}>
-            {outcomesDisplays.break_even}
-          </SelectItem>
-          <SelectItem value={outcomesValues.no_entry}>
-            {outcomesDisplays.no_entry}
-          </SelectItem>
+          {Object.values(Outcomes).map((outcome) => (
+            <SelectItem key={outcome} value={outcome}>
+              {outcome.replace(/_/g, " ")}
+            </SelectItem>
+          ))}
         </SelectContent>
       </Select>
     </>
