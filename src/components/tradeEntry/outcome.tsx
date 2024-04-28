@@ -10,11 +10,17 @@ interface winLossProps {
   on_outcome_change: (outcome: string) => void;
 }
 
-enum outcomes {
-  win = { display: "Win", value: "win" },
-  loss = { display: "Loss", value: "loss" },
-  break_even = { display: "Break Even", value: "break-even" },
-  no_entry = { display: "No Entry", value: "no-entry" },
+enum outcomesValues {
+  win = "win",
+  loss = "loss",
+  break_even = "break-even",
+  no_entry = "no-entry",
+}
+enum outcomesDisplays {
+  win = "Win",
+  loss = "Loss",
+  break_even = "Break Even",
+  no_entry = "No Entry",
 }
 
 export function OutcomeDropdown({ on_outcome_change }: winLossProps) {
@@ -28,17 +34,17 @@ export function OutcomeDropdown({ on_outcome_change }: winLossProps) {
           <SelectValue placeholder="Outcome..." />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value={outcomes.win.value}>
-            {outcomes.win.display}
+          <SelectItem value={outcomesValues.win}>
+            {outcomesDisplays.win}
           </SelectItem>
-          <SelectItem value={outcomes.loss.value}>
-            {outcomes.loss.display}
+          <SelectItem value={outcomesValues.loss}>
+            {outcomesDisplays.loss}
           </SelectItem>
-          <SelectItem value={outcomes.break_even.value}>
-            {outcomes.break_even.display}
+          <SelectItem value={outcomesValues.break_even}>
+            {outcomesDisplays.break_even}
           </SelectItem>
-          <SelectItem value={outcomes.no_entry.value}>
-            {outcomes.no_entry.display}
+          <SelectItem value={outcomesValues.no_entry}>
+            {outcomesDisplays.no_entry}
           </SelectItem>
         </SelectContent>
       </Select>
