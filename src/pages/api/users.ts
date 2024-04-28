@@ -57,13 +57,11 @@ export default async function handler(req: NextRequest) {
       // the SQL query to delete pairs associated with the account
       const pairsTableSql = accountID
         ? sqlstring.format("DELETE FROM tablePairs WHERE userID = ?;", [userID])
-        : null; // If there's no accountID, set pairsTableSql to null
-      // the SQL query to delete the user
+        : null;
       const usersTableSql = sqlstring.format(
         "DELETE FROM tableUsers WHERE userID = ?;",
         [userID]
       );
-      // Perform deletions
       if (tblTradesSql) {
         await pool.query(tblTradesSql);
       }

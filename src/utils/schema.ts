@@ -5,14 +5,12 @@ const deleteAccountSchema = zod.object({
     message: "Account name must be less than 15 characters",
   }),
 });
-
 const deleteEntrySchema = zod.object({
   tradesid: zod.number().min(1, {
     message: "ID must be at least 1 digit.",
   }),
   accountid: zod.number().min(1, { message: "ID must be at least 1 digit." }),
 });
-
 const entries_schema = zod.object({
   entryPrice: number()
     .max(9999999.9999999, {
@@ -49,25 +47,23 @@ const entries_schema = zod.object({
   selectedOutcome: zod.string(),
   accountID: zod.number(),
 });
-
 const newAccountSchema = zod.object({
   accountname: zod.string().max(15),
   userid: zod.number(),
 });
-
 const newCurrencySchema = zod.object({
   pairabbr: zod.string().max(5),
   userid: zod.number(),
 });
-
 const userPwdSchema = zod.object({
-  username: zod.string(),
-  passwd: zod.string(),
+  username: zod.string().max(60),
+  passwd: zod.string().max(15),
 });
 const lginSignUpSchema = zod.object({
   passwd: zod.string().max(60),
   username: zod.string().max(15),
 });
+
 export {
   deleteAccountSchema,
   deleteEntrySchema,
