@@ -30,7 +30,7 @@ export function OutcomeDropdown({ on_outcome_change }: winLossProps) {
         <SelectContent>
           {Object.values(Outcomes).map((outcome) => (
             <SelectItem key={outcome} value={outcome}>
-              {outcome.replace(/_/g, " ")}
+              {outcome.replace(/-/g, " ")}
             </SelectItem>
           ))}
         </SelectContent>
