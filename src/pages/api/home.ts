@@ -21,19 +21,6 @@ export default async function handler(
     );
     const responseAccountid = await pool.query(getAccIDquery);
     const accountid = responseAccountid.rows[0].accountid;
-    /*TODO:
-    -Find the number of rows, have a foreach in rows to get all acctids?
-    -have a for function that has the end conditional as the max in it
-
-    for (i = 0, i < maxRows, i++){
-      const totalTradesQuery...
-      const totalWinsQuery... etc
-      const xyz = await pool.query(abcQuery);
-      const dfg = await...
-      *then add to a hashmap
-      w/ each index being the different queries then sum each and return as normal*
-    }
-    */
     const totalTradesQuery = sqlstring.format(
       "select count(*) from tableTrades where winLoss != 'no-entry' AND accountid = ?",
       [accountid]
