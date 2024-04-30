@@ -1,3 +1,19 @@
 {
-  "cSpell.words": ["neondatabase", "pairabbr", "pairid", "tablepairs", "userid"]
+  "cSpell.words": [
+    "accountid",
+    "currencypair",
+    "entryprice",
+    "lgdin",
+    "neondatabase",
+    "pairabbr",
+    "pairid",
+    "riskratio",
+    "stoploss",
+    "tablepairs",
+    "takeprofit",
+    "tradenotes",
+    "tradesid",
+    "userid",
+    "winloss"
+  ]
 }

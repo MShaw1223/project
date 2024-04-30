@@ -58,45 +58,45 @@ const SearchEntry: NextPage = () => {
   return (
     <>
       <div className="flex">
-        <div className="m-3 text-left mx-auto">
+        <div className="flex flex-col m-3 mx-auto">
           <h3 className="text-xs sm:text-xs md:text-sm lg:text-lg">
             Select an account to search through
           </h3>
-          <div className="pt-1 mt-4">
+          <div className="pt-1 mt-4 m-2">
             <AccountDropdown
               onAccountChange={handleAccountChange}
             ></AccountDropdown>
           </div>
-          <div className="flex-1 p-1 text-center m-1">
-            <Table className="bg-gray-400 w-[300px] sm:w-[400px] md:w-[500px] lg:w-[700px] rounded-2xl">
+          <div className="flex flex-1 p-1 m-2">
+            <Table className="bg-gray-400 rounded-2xl max-w-full">
               <TableCaption className="text-gray-500">
                 A Table of trades taken.
               </TableCaption>
               <TableHeader>
                 <TableRow>
                   <TableHead className="text-slate-200 lg:text-xl md:text-lg sm:text-xs">
-                    TradeID
+                    ID
                   </TableHead>
                   <TableHead className="text-slate-200 lg:text-xl md:text-lg sm:text-xs">
-                    entryprice
+                    entry price
                   </TableHead>
                   <TableHead className="text-slate-200 lg:text-xl md:text-lg sm:text-xs">
-                    stoploss
+                    stop loss
                   </TableHead>
                   <TableHead className="text-slate-200 lg:text-xl md:text-lg sm:text-xs">
-                    takeprofit
+                    take profit
                   </TableHead>
                   <TableHead className="text-slate-200 lg:text-xl md:text-lg sm:text-xs">
-                    tradenotes
+                    notes
                   </TableHead>
                   <TableHead className="text-slate-200 lg:text-xl md:text-lg sm:text-xs">
-                    riskratio
+                    risk ratio
                   </TableHead>
                   <TableHead className="text-slate-200 lg:text-xl md:text-lg sm:text-xs">
                     outcome
                   </TableHead>
                   <TableHead className="text-slate-200 lg:text-xl md:text-lg sm:text-xs">
-                    currencypair
+                    pair
                   </TableHead>
                 </TableRow>
               </TableHeader>
