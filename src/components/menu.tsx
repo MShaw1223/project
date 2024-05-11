@@ -152,7 +152,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
             <div className="h-screen flex flex-col items-center justify-center space-y-4">
               <Link href={`/home?li=${li}`}>
                 <div
-                  className={`flex p-3 focus:outline-none font-bold hover:bg-gray-500 ${
+                  className={`flex p-2 focus:outline-none font-bold hover:bg-gray-500 ${
                     isLinkActive("/home") ? "bg-gray-700 hover:bg-gray-700" : ""
                   } rounded-lg `}
                 >
@@ -162,7 +162,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, setIsOpen }) => {
 
               <Link href={`/Trade-Entry?li=${li}`}>
                 <div
-                  className={`flex p-3 focus:outline-none font-bold hover:bg-gray-500 ${
+                  className={`flex p-2 focus:outline-none font-bold hover:bg-gray-500 ${
                     isLinkActive("/Trade-Entry")
                       ? "bg-gray-700 hover:bg-gray-700"
                       : ""

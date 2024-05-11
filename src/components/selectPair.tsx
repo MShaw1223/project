@@ -115,7 +115,7 @@ function QuotePairDropdown({ onQuotePairChange }: QuoteDropdownProps) {
   return (
     <>
       <Select onValueChange={handleValueChange}>
-        <SelectTrigger className="w-20 sm:w-[86px] md:w-[115px] lg:w-[140px]">
+        <SelectTrigger className="w-20 sm:w-[86px] md:w-[115px] lg:w-[140px] p-2">
           <SelectValue placeholder="Quote" />
         </SelectTrigger>
         <SelectContent>
