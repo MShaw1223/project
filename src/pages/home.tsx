@@ -8,7 +8,7 @@ import Menu from "@/components/menu";
 import HomeTable from "@/components/home/homeTable";
 
 export type HomeData = {
-  accountid: number;
+  accountName: string;
   totalTrades: number;
   totalWins: number;
   winPercentage: number;
@@ -32,7 +32,6 @@ const Home: NextPage = () => {
             headers: { "Content-Type": "application/json" },
           });
           const lgdin: string = await getuser.json();
-          console.log("loggedin: ", lgdin);
           setUser(lgdin);
           if (lgdin !== null) {
             const response = await fetch("/api/home", {
@@ -41,7 +40,6 @@ const Home: NextPage = () => {
               headers: { "Content-Type": "application/json" },
             });
             const tradeData: HomeData[] = await response.json();
-            console.log(tradeData);
             setData(tradeData);
           }
         } catch (error) {
@@ -60,7 +58,7 @@ const Home: NextPage = () => {
         <div className="flex-1 flex flex-col overflow-hidden">
           <div className="flex p-3 text-3xl justify-center">
             <FaHome className="h-10 w-10"></FaHome>
-            <span className="my-auto font-bold">Home</span>
+            <h1 className="my-auto font-bold">Home</h1>
           </div>
           <div className="p-2 mt-5 mx-3 text-center">
             <h1 className="text-2xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold">

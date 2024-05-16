@@ -27,6 +27,10 @@ export default async function handler(
 
     for (let i = 0; i < accountids.length; i++) {
       const accountid = accountids[i];
+      const accNameQuery = sqlstring.format(
+        "select accountname from tableaccounts where accountid = ?",
+        [accountid]
+      );
       const totalTradesQuery = sqlstring.format(
         "select count(*) from tableTrades where winLoss != 'no-entry' AND accountid = ?",
         [accountid]
@@ -45,18 +49,20 @@ export default async function handler(
         [accountid]
       );
       const [
+        accountName,
         totalTradesResult,
         totalWinsResult,
         bestPairResult,
         worstPairResult,
       ] = await Promise.all([
+        pool.query(accNameQuery),
         pool.query(totalTradesQuery),
         pool.query(totalWinsQuery),
         pool.query(bestPairQuery),
         pool.query(worstPairQuery),
       ]);
       const payload = {
-        accountid: accountid,
+        accountName: accountName.rows[0].accountname,
         totalTrades: totalTradesResult.rows[0].count as number,
         totalWins: totalWinsResult.rows[0].count as number,
         winPercentage: returnTruncated(
