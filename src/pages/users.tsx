@@ -9,7 +9,7 @@ const userPage: NextPage = () => {
   return (
     <>
       <div className="flex h-screen bg-slate-200">
-        <div className="flex-1 flex flex-col overflow-hidden ml-24">
+        <div className="flex-1 flex flex-col overflow-hidden ml-10 sm:ml-24">
           <div className="flex p-3 text-3xl justify-center">
             <FaUserFriends className="w-10 h-10"></FaUserFriends>
             <span className="ml-10 font-bold">Users</span>

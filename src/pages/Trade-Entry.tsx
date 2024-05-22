@@ -112,7 +112,7 @@ const tradeEntry: NextPage = () => {
   return (
     <>
       <div className="flex h-screen bg-slate-200">
-        <div className="flex-1 flex flex-col overflow-hidden ml-20">
+        <div className="flex-1 flex flex-col overflow-hidden ml-9 sm:ml-20">
           <div className="flex p-3 text-3xl justify-center">
             <FaPencilAlt className="h-10 w-10"></FaPencilAlt>
             <span className="ml-4 my-auto font-bold">Trade Entry</span>

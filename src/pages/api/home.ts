@@ -64,7 +64,6 @@ export default async function handler(
       const payload = {
         accountName: accountName.rows[0].accountname,
         totalTrades: totalTradesResult.rows[0].count as number,
-        totalWins: totalWinsResult.rows[0].count as number,
         winPercentage: returnTruncated(
           (totalWinsResult.rows[0].count / totalTradesResult.rows[0].count) *
             100

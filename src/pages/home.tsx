@@ -8,7 +8,6 @@ import HomeTable from "@/components/home/homeTable";
 export type HomeData = {
   accountName: string;
   totalTrades: number;
-  totalWins: number;
   winPercentage: number;
   bestPair: string;
   worstPair: string;
@@ -53,15 +52,15 @@ const Home: NextPage = () => {
       <div className="flex h-screen bg-slate-200">
         <div className="flex-1 flex flex-col overflow-hidden">
           <div className="flex p-3 text-3xl justify-center">
-            <FaHome className="h-10 w-10"></FaHome>
-            <h1 className="my-auto font-bold">Home</h1>
+            <FaHome className="h-10 w-10" />
+            <h1 className="m-1 font-bold">Home</h1>
           </div>
-          <div className="p-2 mt-5 mx-3 text-center">
+          <div className="p-2 mt-5 text-center">
             <h1 className="text-2xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold">
-              Welcome {user ? user : "..."}
+              {user ? `Welcome ${user}` : "..."}
             </h1>
           </div>
-          <div className="mx-auto">
+          <div className="ml-14 sm:mx-auto">
             {user ? <HomeTable data={data} /> : "loading"}
           </div>
         </div>

@@ -12,7 +12,7 @@ const EntryManagement: NextPage = () => {
   return (
     <>
       <div className="flex h-screen bg-slate-200">
-        <div className="flex-1 flex flex-col overflow-hidden ml-24">
+        <div className="flex-1 flex flex-col overflow-hidden ml-11 sm:ml-24">
           <div className="flex p-3 text-3xl justify-center">
             <FaCalculator className="h-10 w-10"></FaCalculator>
             <span className="ml-4 font-bold">Entry Management</span>

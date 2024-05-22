@@ -15,7 +15,7 @@ interface tableData {
 
 export default function HomeTable({ data }: tableData) {
   return (
-    <Table className="bg-gray-400 w-[300px] sm:w-[400px] md:w-[500px] lg:w-[700px] rounded-2xl">
+    <Table className="bg-gray-400 w-auto sm:w-[400px] md:w-[500px] lg:w-[700px] rounded-2xl">
       <TableCaption className="text-gray-500">
         Overview of trades on all accounts
       </TableCaption>
@@ -25,10 +25,7 @@ export default function HomeTable({ data }: tableData) {
             Account
           </TableHead>
           <TableHead className="text-slate-200 text-xs lg:text-2xl md:text-lg sm:text-sm">
-            N<sup>o</sup> Trades
-          </TableHead>
-          <TableHead className="text-slate-200 text-xs lg:text-2xl md:text-lg sm:text-sm">
-            Wins
+            Trades
           </TableHead>
           <TableHead className="text-slate-200 text-xs lg:text-2xl md:text-lg sm:text-sm">
             Win Rate
@@ -50,9 +47,6 @@ export default function HomeTable({ data }: tableData) {
               </TableCell>
               <TableCell className="text-xs lg:text-2xl md:text-lg sm:text-sm">
                 {data.totalTrades !== undefined ? data.totalTrades : "0"}
-              </TableCell>
-              <TableCell className="text-xs lg:text-2xl md:text-lg sm:text-sm">
-                {data.totalWins !== undefined ? data.totalWins : "0"}
               </TableCell>
               <TableCell className="text-xs lg:text-2xl md:text-lg sm:text-sm">
                 {data.winPercentage !== undefined && data.winPercentage !== null

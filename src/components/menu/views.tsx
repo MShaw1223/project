@@ -12,10 +12,7 @@ interface Props {
 export const OpenView = ({ li, isActive, setOpen, isOpen }: Props) => {
   return (
     <>
-      <div
-        className={`fixed flex flex-col p-2 h-screen bg-black w-[235px] sm:w-[250px] md:w-1/8 lg:w-1/4
-        `}
-      >
+      <div className="fixed flex flex-col p-2 h-screen bg-black w-[245px] sm:w-[250px] md:w-1/8 lg:w-1/4">
         <div
           onClick={() => setOpen(!isOpen)}
           className=" focus:outline-none hover:bg-gray-500 rounded-lg p-2"
@@ -35,9 +32,7 @@ export const OpenView = ({ li, isActive, setOpen, isOpen }: Props) => {
 export const CollapsedView = ({ li, isActive, setOpen, isOpen }: Props) => {
   return (
     <>
-      <div
-        className={`fixed flex flex-col p-2 h-screen bg-black w-12 sm:w-16 md:w-24 lg:w-32}`}
-      >
+      <div className="fixed flex flex-col p-2 h-screen bg-black w-12 sm:w-16 md:w-24 lg:w-32">
         <div
           onClick={() => setOpen(!isOpen)}
           className="focus:outline-none hover:bg-gray-500 rounded-lg p-2"
