@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { useMutation } from "react-query";
 import * as React from "react";
 import { NextPage } from "next";
-import Menu from "@/components/menu";
 import { FaPencilAlt } from "react-icons/fa";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -12,7 +11,6 @@ import { OutcomeDropdown } from "@/components/tradeEntry/outcome";
 import withAuth from "@/components/authorise";
 
 const tradeEntry: NextPage = () => {
-  const [menuOpen, setMenuOpen] = React.useState(false);
   const [selectedAccount, setSelectedAccount] = React.useState<string>("");
   const [selectedBasePair, setSelectedBasePair] = React.useState<string>("");
   const [selectedQuotePair, setSelectedQuotePair] = React.useState<string>("");
@@ -114,12 +112,7 @@ const tradeEntry: NextPage = () => {
   return (
     <>
       <div className="flex h-screen bg-slate-200">
-        <Menu isOpen={menuOpen} setIsOpen={setMenuOpen} />
-        <div
-          className={`flex-1 flex flex-col overflow-hidden ${
-            menuOpen ? "ml-20" : ""
-          }`}
-        >
+        <div className="flex-1 flex flex-col overflow-hidden ml-20">
           <div className="flex p-3 text-3xl justify-center">
             <FaPencilAlt className="h-10 w-10"></FaPencilAlt>
             <span className="ml-4 my-auto font-bold">Trade Entry</span>

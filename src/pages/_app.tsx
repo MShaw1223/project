@@ -2,6 +2,8 @@ import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Be_Vietnam_Pro } from "next/font/google";
+import Menu from "@/components/menu/menu";
+import { useRouter } from "next/router";
 
 const bevietpro = Be_Vietnam_Pro({
   subsets: ["latin"],
@@ -11,6 +13,7 @@ const bevietpro = Be_Vietnam_Pro({
 const queryClient = new QueryClient();
 
 export default function App({ Component, pageProps }: AppProps) {
+  const router = useRouter();
   return (
     <>
       <style jsx global>{`
@@ -19,7 +22,10 @@ export default function App({ Component, pageProps }: AppProps) {
         }
       `}</style>
       <QueryClientProvider client={queryClient}>
-        <Component {...pageProps} />
+        {router.pathname !== "/" ? <Menu /> : <></>}
+        <main>
+          <Component {...pageProps} />
+        </main>
       </QueryClientProvider>
     </>
   );

@@ -1,10 +1,8 @@
 import { NextPage } from "next";
-
 import { FaHome } from "react-icons/fa";
 import * as React from "react";
 import { useRouter } from "next/router";
 import withAuth from "@/components/authorise";
-import Menu from "@/components/menu";
 import HomeTable from "@/components/home/homeTable";
 
 export type HomeData = {
@@ -19,7 +17,6 @@ export type HomeData = {
 const Home: NextPage = () => {
   const router = useRouter();
   const [data, setData] = React.useState<HomeData[]>([]);
-  const [menuOpen, setMenuOpen] = React.useState(false);
   const [user, setUser] = React.useState<string>("");
   React.useEffect(() => {
     async function getUser() {
@@ -54,7 +51,6 @@ const Home: NextPage = () => {
   return (
     <>
       <div className="flex h-screen bg-slate-200">
-        <Menu isOpen={menuOpen} setIsOpen={setMenuOpen} />
         <div className="flex-1 flex flex-col overflow-hidden">
           <div className="flex p-3 text-3xl justify-center">
             <FaHome className="h-10 w-10"></FaHome>
