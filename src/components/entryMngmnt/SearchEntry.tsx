@@ -49,11 +49,11 @@ const SearchEntry: NextPage = () => {
   return (
     <>
       <div className="flex">
-        <div className="m-3 text-left mx-auto">
-          <h3 className="text-xs sm:text-xs md:text-sm lg:text-lg">
+        <div className="text-left mx-auto">
+          <h3 className="m-3 text-xs sm:text-xs md:text-sm lg:text-lg">
             Select an account to search through
           </h3>
-          <div className="pt-1 mt-4">
+          <div>
             <AccountDropdown
               onAccountChange={handleAccountChange}
             ></AccountDropdown>

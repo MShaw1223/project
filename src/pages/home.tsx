@@ -60,7 +60,7 @@ const Home: NextPage = () => {
               {user ? `Welcome ${user}` : "..."}
             </h1>
           </div>
-          <div className="ml-14 sm:mx-auto">
+          <div className="mx-auto">
             {user ? <HomeTable data={data} /> : "loading"}
           </div>
         </div>

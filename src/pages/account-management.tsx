@@ -11,10 +11,10 @@ const accountManagement: NextPage = () => {
   return (
     <>
       <div className="flex h-screen bg-slate-200">
-        <div className="flex-1 flex flex-col overflow-hidden ml-10 sm:ml-24">
+        <div className="flex-1 flex flex-col overflow-hidden items-center">
           <div className="flex p-3 text-3xl justify-center">
             <MdOutlineAccountBalance className="w-10 h-10"></MdOutlineAccountBalance>
-            <span className="ml-4 font-bold">Account Management</span>
+            <span className="ml-2 font-bold">Account Management</span>
           </div>
           <div className="flex-1 overflow-auto">
             <Tabs defaultValue="create" className="p-2 m-1">

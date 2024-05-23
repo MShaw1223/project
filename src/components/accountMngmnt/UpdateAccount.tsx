@@ -42,7 +42,7 @@ const UpdateAccount = () => {
         throw new Error("Submitted data is incorrect");
       }
     } catch (error) {
-      alert("Error Editting Account");
+      alert("Error Editing Account");
       return new Response("Error", {
         status: 403,
       });
@@ -56,13 +56,11 @@ const UpdateAccount = () => {
           {!mutation.isLoading && (
             <div className="flex-col mx-auto">
               <form onSubmit={handleSubmit}>
-                <div className="flex flex-row">
-                  <div className="p-2">
-                    <h3>Select account to update</h3>
-                    <AccountDropdown
-                      onAccountChange={handleAccountChange}
-                    ></AccountDropdown>
-                  </div>
+                <div className="p-2">
+                  <h3>Select account to update</h3>
+                  <AccountDropdown
+                    onAccountChange={handleAccountChange}
+                  ></AccountDropdown>
                 </div>
 
                 <div className="p-2 flex-row">

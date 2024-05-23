@@ -17,7 +17,7 @@ function SelectEdit({ onFieldChange }: FieldDropdownProps) {
   return (
     <>
       <Select onValueChange={handleValueChange}>
-        <SelectTrigger className="w-[200px] sm:w-48 md:w-[250px] lg:w-[300px]">
+        <SelectTrigger>
           <SelectValue placeholder="Field Select..." />
         </SelectTrigger>
         <SelectContent>

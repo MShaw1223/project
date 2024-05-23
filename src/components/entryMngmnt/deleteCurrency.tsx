@@ -49,7 +49,7 @@ const DeleteCurrency: NextPage = () => {
       setSelectedPair("");
     },
     onError: () => {
-      alert("Program error");
+      alert("Unable to delete");
       return;
     },
   });
