@@ -10,7 +10,6 @@ const login: NextPage = () => {
   const router = useRouter();
   // when user presses the login button it triggers the handleSubmit function
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    // prevents the page from refreshing during the process
     event.preventDefault();
     // gets all the information from the login form
     const data = new FormData(event.target as HTMLFormElement);
@@ -18,8 +17,7 @@ const login: NextPage = () => {
       username: data.get("user") as string,
       passwd: data.get("password") as string,
     });
-    // sends post request to check the credentials are correct,
-    // with the username and password satisfying the schema
+    // sends post request to check the credentials are correct with the username and password satisfying the schema
     const response = await fetch("/api/auth/loginApi", {
       method: "POST",
       body: JSON.stringify({
@@ -31,11 +29,8 @@ const login: NextPage = () => {
       },
       cache: "no-store",
     });
-    // data not being cached on the server due to passwords being handled
     if (response.ok) {
-      // if the response returns a 200,
-      // the keyGenerator function takes the username entered above as a param
-      // to generate a key  the key will be used as a logged in identifier
+      // if the response returns a 200 the keyGenerator function takes the username entered above as a param to generate a key  the key will be used as a logged in identifier
       const { username } = parsedData;
       const key = keyGenerator(username);
       router.push(`/home?li=${key}`);
@@ -49,5 +44,4 @@ const login: NextPage = () => {
     </>
   );
 };
-
 export default login;

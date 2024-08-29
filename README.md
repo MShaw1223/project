@@ -17,7 +17,7 @@ To start using FXTrax, follow these steps:
 
 1. **Access FXTrax**:
 
-   - Visit the [FXTrax website](https://project-rho-hazel.vercel.app/) to access the application.
+   - Visit the [FXTrax website](https://fxtrax.vercel.app/) to access the application.
 
 2. **Sign Up**:
 
@@ -43,7 +43,5 @@ To start using FXTrax, follow these steps:
 
      - **Trade Entry**:
        - Once the setup is complete, you can start entering trades on the 'Trade Entry' page.
-
-By following these steps, you can effectively utilize FXTrax to enhance your trading journey.
 
 Happy trading!

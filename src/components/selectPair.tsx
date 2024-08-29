@@ -17,7 +17,6 @@ interface QuoteDropdownProps {
 interface DropdownProps {
   onPairChange: (pair: string) => void;
 }
-
 // Call API - return array of available pairs to map
 const findAvailablePairs = async (li: string) => {
   try {
@@ -41,7 +40,6 @@ const findAvailablePairs = async (li: string) => {
     if (!Array.isArray(data)) {
       alert("Invalid API response format");
     }
-
     return data;
   } catch (error) {
     alert(error);
