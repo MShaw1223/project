@@ -46,7 +46,7 @@ const DeleteAccount = () => {
           <div className="flex-col mx-auto m-2">
             <form onSubmit={handleSubmit}>
               <div className="flex-row">
-                <div className="p-2 text-center items-center">
+                <div className="p-2 text-center">
                   <h3>Select the account you would like to delete</h3>
                   <AccountDropdown
                     onAccountChange={handleAccountChange}

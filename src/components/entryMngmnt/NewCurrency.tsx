@@ -8,6 +8,28 @@ import { useRouter } from "next/router";
 const NewCurrencyPage: NextPage = () => {
   const [user, setUser] = useState<string | null>(null);
   const router = useRouter();
+  useEffect(() => {
+    async function getUser() {
+      const { li: loggedInVal } = router.query;
+      if (loggedInVal !== undefined) {
+        try {
+          const response = await fetch("/api/auth/IDFromHash", {
+            method: "POST",
+            body: JSON.stringify(loggedInVal),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          const lgdin = await response.json();
+          setUser(lgdin);
+        } catch (error) {
+          alert("Error fetching user");
+          router.push("/");
+        }
+      }
+    }
+    getUser();
+  }, []);
   const mutation = useMutation({
     mutationFn: async (formData: string) => {
       const response = await fetch("/api/currency", {
@@ -24,27 +46,6 @@ const NewCurrencyPage: NextPage = () => {
       console.error("Mutation error", error);
     },
   });
-  useEffect(() => {
-    async function getUser() {
-      const { li: loggedInVal } = router.query;
-      if (loggedInVal !== undefined) {
-        try {
-          const response = await fetch("/api/auth/IDFromHash", {
-            method: "POST",
-            body: JSON.stringify(loggedInVal),
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-          const lgdin = await response.json();
-          setUser(lgdin);
-        } catch (error) {
-          console.error("Error fetching user: ", error);
-        }
-      }
-    }
-    getUser();
-  }, []);
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const data = new FormData(event.target as HTMLFormElement);

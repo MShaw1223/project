@@ -1,18 +1,9 @@
 import { NextPage } from "next";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { useState } from "react";
 import AccountDropdown from "../selectAccount";
-import NotesModal from "./notesModal";
+import SearchTable from "./searchTable";
 
-type TradeData = {
+export type TradeData = {
   tradesid: string;
   entryprice: number;
   stoploss: number;
@@ -58,80 +49,17 @@ const SearchEntry: NextPage = () => {
   return (
     <>
       <div className="flex">
-        <div className="flex flex-col m-3 mx-auto">
-          <h3 className="text-xs sm:text-xs md:text-sm lg:text-lg">
+        <div className="text-left mx-auto">
+          <h3 className="m-3 text-xs sm:text-xs md:text-sm lg:text-lg">
             Select an account to search through
           </h3>
-          <div className="pt-1 mt-4 m-2">
+          <div>
             <AccountDropdown
               onAccountChange={handleAccountChange}
             ></AccountDropdown>
           </div>
-          <div className="flex flex-1 p-1 m-2">
-            <Table className="bg-gray-400 rounded-2xl max-w-full">
-              <TableCaption className="text-gray-500">
-                A Table of trades taken.
-              </TableCaption>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="text-slate-200 lg:text-xl md:text-lg sm:text-xs">
-                    ID
-                  </TableHead>
-                  <TableHead className="text-slate-200 lg:text-xl md:text-lg sm:text-xs">
-                    entry price
-                  </TableHead>
-                  <TableHead className="text-slate-200 lg:text-xl md:text-lg sm:text-xs">
-                    stop loss
-                  </TableHead>
-                  <TableHead className="text-slate-200 lg:text-xl md:text-lg sm:text-xs">
-                    take profit
-                  </TableHead>
-                  <TableHead className="text-slate-200 lg:text-xl md:text-lg sm:text-xs">
-                    notes
-                  </TableHead>
-                  <TableHead className="text-slate-200 lg:text-xl md:text-lg sm:text-xs">
-                    risk ratio
-                  </TableHead>
-                  <TableHead className="text-slate-200 lg:text-xl md:text-lg sm:text-xs">
-                    outcome
-                  </TableHead>
-                  <TableHead className="text-slate-200 lg:text-xl md:text-lg sm:text-xs">
-                    pair
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {data &&
-                  data.map((trade) => (
-                    <TableRow key={trade.tradesid}>
-                      <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
-                        {trade.tradesid}
-                      </TableCell>
-                      <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
-                        {trade.entryprice}
-                      </TableCell>
-                      <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
-                        {trade.stoploss}
-                      </TableCell>
-                      <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
-                        {trade.takeprofit}
-                      </TableCell>
-                      <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
-                        <NotesModal info={trade} />
-                      </TableCell>
-                      <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
-                        {trade.riskratio}
-                      </TableCell>
-                      <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
-                        {trade.winloss}
-                      </TableCell>
-                      <TableCell className="lg:text-lg md:text-base sm:text-sm text-xs">
-                        {trade.currencypair}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-              </TableBody>
-            </Table>
+          <div className="flex-1 p-1 text-center m-1">
+            <SearchTable data={data} />
           </div>
         </div>
       </div>
