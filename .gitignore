@@ -3,3 +3,4 @@ node_modules
 myCode.sql
 .env.local
 .drawio
+.DS_Store
