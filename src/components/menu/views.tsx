@@ -3,10 +3,10 @@ import { OpenOptions } from "./menuOptions";
 import { MenuProps } from "@/utils/helpful";
 import { Menu } from "lucide-react";
 
-type ClosedViewProps = {
+interface ClosedViewProps extends MenuProps {
   setOpen: (isOpen: boolean) => void;
   isOpen: boolean;
-};
+}
 
 interface OpenViewProps extends MenuProps, ClosedViewProps {}
 
