@@ -6,7 +6,7 @@ import { Separator } from "../ui/separator";
 interface Props {
   li: string;
   isActive: (x: string) => boolean;
-  setOpen: (isOpen: boolean) => boolean;
+  setOpen: (isOpen: boolean) => void;
   isOpen: boolean;
 }
 

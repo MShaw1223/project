@@ -3,7 +3,7 @@ import { OpenView, CollapsedView } from "./views";
 import { useState } from "react";
 
 const Menu = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setOpen] = useState(false);
   const router = useRouter();
   const isLinkActive = (href: string) => router.pathname === href;
   const { li } = router.query;
@@ -16,7 +16,7 @@ const Menu = () => {
         <OpenView
           li={liParam}
           isActive={isLinkActive}
-          setOpen={setIsOpen}
+          setOpen={setOpen}
           isOpen={isOpen}
         />
       ) : (
@@ -24,7 +24,7 @@ const Menu = () => {
         <CollapsedView
           li={liParam}
           isActive={isLinkActive}
-          setOpen={setIsOpen}
+          setOpen={setOpen}
           isOpen={isOpen}
         />
       )}

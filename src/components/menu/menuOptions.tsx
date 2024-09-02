@@ -12,7 +12,7 @@ import { MdArrowBack } from "react-icons/md";
 interface OptProps {
   li: string;
   isActive: (x: string) => boolean;
-  setOpen: (isOpen: boolean) => boolean;
+  setOpen?: (isOpen: boolean) => void;
 }
 
 export const OpenOptions = ({ li, isActive, setOpen }: OptProps) => {
