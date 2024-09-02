@@ -1,5 +1,5 @@
+import { encoder } from "@/utils/encodeUser";
 import { extractBody } from "@/utils/extractBody";
-import { keyGenerator } from "@/utils/hash";
 import { Pool } from "@neondatabase/serverless";
 import { NextRequest, NextResponse } from "next/server";
 import sqlstring from "sqlstring";
@@ -17,15 +17,15 @@ export default async function handler(req: NextRequest) {
     const { newInfo, user, field } = body;
     let sqlStatement;
     if (field === "username") {
-      const newKey = keyGenerator(newInfo);
+      const newKey = encoder(newInfo);
       sqlStatement = sqlstring.format(
         "update tableUsers set username = ?, authKey = ? where username = ?",
-        [newInfo, newKey, user]
+        [newInfo, newKey, user],
       );
     } else if (field === "passwd") {
       sqlStatement = sqlstring.format(
         "update tableUsers set passwd = ? where username = ?",
-        [newInfo, user]
+        [newInfo, user],
       );
     } else {
       throw new Error("Incorrect field selected");
@@ -38,7 +38,7 @@ export default async function handler(req: NextRequest) {
       const { userID } = body;
       const accountIDquery = sqlstring.format(
         "SELECT accountid FROM tableAccounts WHERE userid = ?",
-        [userID]
+        [userID],
       );
       const accountsIDResult = await pool.query(accountIDquery);
       const accountID = accountsIDResult.rows[0]?.accountid; // optional chaining for if no accountID
@@ -46,13 +46,13 @@ export default async function handler(req: NextRequest) {
       const tblTradesSql = accountID
         ? sqlstring.format(
             "DELETE FROM tableTrades WHERE accountid IN (SELECT accountID FROM tableAccounts WHERE userID = ?);",
-            [userID]
+            [userID],
           )
         : null; // If there's no accountID, set tblTradesSql to null
       // the SQL query to delete accounts associated with the user
       const accountsTableSql = sqlstring.format(
         "DELETE FROM tableAccounts WHERE userID = ?;",
-        [userID]
+        [userID],
       );
       // the SQL query to delete pairs associated with the account
       const pairsTableSql = accountID
@@ -60,7 +60,7 @@ export default async function handler(req: NextRequest) {
         : null;
       const usersTableSql = sqlstring.format(
         "DELETE FROM tableUsers WHERE userID = ?;",
-        [userID]
+        [userID],
       );
       if (tblTradesSql) {
         await pool.query(tblTradesSql);

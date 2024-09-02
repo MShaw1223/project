@@ -1,3 +1,4 @@
+import { MenuProps } from "@/utils/helpful";
 import { menuOptions } from "@/utils/menuOptions";
 import { useRouter } from "next/navigation";
 import {
@@ -9,14 +10,11 @@ import {
 import { MdOutlineAccountBalance } from "react-icons/md";
 import { MdArrowBack } from "react-icons/md";
 
-type OptProps = {
-  li: string;
-  isActive: (x: string) => boolean;
-};
-
-interface OpenOpts extends OptProps {
+interface OpenOpts extends MenuProps {
   setOpen: (isOpen: boolean) => void;
 }
+
+interface ClosedOpts extends MenuProps {}
 
 export const OpenOptions = ({ li, isActive, setOpen }: OpenOpts) => {
   const router = useRouter();
@@ -63,7 +61,7 @@ export const OpenOptions = ({ li, isActive, setOpen }: OpenOpts) => {
     </>
   );
 };
-export const CollapsedOptions = ({ li, isActive }: OptProps) => {
+export const CollapsedOptions = ({ li, isActive }: ClosedOpts) => {
   const router = useRouter();
   return (
     <>

@@ -7,16 +7,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useRouter } from "next/router";
+import { DropdownProps } from "@/utils/helpful";
 
-interface BaseDropdownProps {
-  onBasePairChange: (pair: string) => void;
-}
-interface QuoteDropdownProps {
-  onQuotePairChange: (pair: string) => void;
-}
-interface DropdownProps {
-  onPairChange: (pair: string) => void;
-}
+interface BaseDropdownProps extends DropdownProps {}
+
+interface QuoteDropdownProps extends DropdownProps {}
+
 // Call API - return array of available pairs to map
 const findAvailablePairs = async (li: string) => {
   try {
@@ -46,7 +42,7 @@ const findAvailablePairs = async (li: string) => {
   }
 };
 //functions to get available pairs
-function BasePairDropdown({ onBasePairChange }: BaseDropdownProps) {
+function BasePairDropdown({ onPairChange: onPairChange }: BaseDropdownProps) {
   // mapped under the base pair dropdown
   const router = useRouter();
   const [availablePairs, setAvailablePairs] = useState<string[]>([]);
@@ -66,7 +62,7 @@ function BasePairDropdown({ onBasePairChange }: BaseDropdownProps) {
   }, []);
 
   const handleValueChange = (selectedPair: string) => {
-    onBasePairChange(selectedPair);
+    onPairChange(selectedPair);
   };
   return (
     <>
@@ -86,7 +82,7 @@ function BasePairDropdown({ onBasePairChange }: BaseDropdownProps) {
   );
 }
 
-function QuotePairDropdown({ onQuotePairChange }: QuoteDropdownProps) {
+function QuotePairDropdown({ onPairChange: onPairChange }: QuoteDropdownProps) {
   //Mapped under the quote pair
   const router = useRouter();
   const [availablePairs, setAvailablePairs] = useState<string[]>([]);
@@ -107,13 +103,13 @@ function QuotePairDropdown({ onQuotePairChange }: QuoteDropdownProps) {
   }, []);
 
   const handleValueChange = (selectedPair: string) => {
-    onQuotePairChange(selectedPair);
+    onPairChange(selectedPair);
   };
 
   return (
     <>
       <Select onValueChange={handleValueChange}>
-        <SelectTrigger className="w-20 sm:w-[86px] md:w-[115px] lg:w-[140px] p-2">
+        <SelectTrigger className="w-20 p-2 sm:w-[86px] md:w-[115px] lg:w-[140px]">
           <SelectValue placeholder="Quote" />
         </SelectTrigger>
         <SelectContent>
@@ -154,7 +150,7 @@ function PairDropdown({ onPairChange }: DropdownProps) {
   return (
     <>
       <Select onValueChange={handleValueChange}>
-        <SelectTrigger className="sm:w-[275px] md:w-[300px] lg:w-[350px] w-56">
+        <SelectTrigger className="w-56 sm:w-[275px] md:w-[300px] lg:w-[350px]">
           <SelectValue placeholder="Select Pair" />
         </SelectTrigger>
         <SelectContent>

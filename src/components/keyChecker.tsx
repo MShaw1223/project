@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { ComponentType, useEffect } from "react";
 
-function withAuth(Component: ComponentType) {
+function withKey(Component: ComponentType) {
   return function AuthenticatedComponent(props: any) {
     const router = useRouter();
 
@@ -19,4 +19,4 @@ function withAuth(Component: ComponentType) {
   };
 }
 
-export default withAuth;
+export default withKey;

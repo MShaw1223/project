@@ -2,8 +2,8 @@ import { NextPage } from "next";
 import { FaHome } from "react-icons/fa";
 import * as React from "react";
 import { useRouter } from "next/router";
-import withAuth from "@/components/authorise";
 import HomeTable from "@/components/home/homeTable";
+import withKey from "@/components/keyChecker";
 
 export type HomeData = {
   accountName: string;
@@ -49,14 +49,15 @@ const Home: NextPage = () => {
 
   return (
     <>
+      <title>FXTrax - Home</title>
       <div className="flex h-screen bg-slate-200">
-        <div className="flex-1 flex flex-col overflow-hidden">
-          <div className="flex p-3 text-3xl justify-center">
+        <div className="flex flex-1 flex-col overflow-hidden">
+          <div className="flex justify-center p-3 text-3xl">
             <FaHome className="h-10 w-10" />
             <h1 className="m-1 font-bold">Home</h1>
           </div>
-          <div className="p-2 mt-5 text-center">
-            <h1 className="text-2xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold">
+          <div className="mt-5 p-2 text-center">
+            <h1 className="text-2xl font-extrabold sm:text-2xl md:text-3xl lg:text-4xl">
               {user ? `Welcome ${user}` : "..."}
             </h1>
           </div>
@@ -68,4 +69,4 @@ const Home: NextPage = () => {
     </>
   );
 };
-export default withAuth(Home);
+export default withKey(Home);

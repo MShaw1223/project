@@ -3,8 +3,8 @@ import { extractBody } from "@/utils/extractBody";
 import { Pool } from "@neondatabase/serverless";
 import sqlstring from "sqlstring";
 import { NextResponse } from "next/server";
-import { keyGenerator } from "@/utils/hash";
 import { userPwdSchema } from "@/utils/schema";
+import { encoder } from "@/utils/encodeUser";
 export const config = {
   runtime: "edge",
 };
@@ -17,7 +17,7 @@ export default async function handler(req: NextApiRequest) {
       // takes the passwd and username variables from the body object
       const { passwd, username } = userPwdSchema.parse(body);
       // generates the key for the new user
-      const key = keyGenerator(username);
+      const key = encoder(username);
       // starts the pooled db connection
       const pool = new Pool({
         connectionString: process.env.DATABASE_URL,
@@ -29,7 +29,7 @@ export default async function handler(req: NextApiRequest) {
         `
         select count(*) as count from tableUsers where authKey = ?
         `,
-        [key]
+        [key],
       );
       const keyCheckResult = await pool.query(keyCheckQuery);
       const keyExists = keyCheckResult.rows[0].count > 0;
@@ -40,7 +40,7 @@ export default async function handler(req: NextApiRequest) {
           `
           insert into tableUsers (username, passwd, authKey) values (?,?, ?)
           `,
-          [username, passwd, key]
+          [username, passwd, key],
         );
         await pool.query(sqlquery);
         await pool.end();

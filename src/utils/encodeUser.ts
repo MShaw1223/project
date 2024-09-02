@@ -1,4 +1,4 @@
-export function keyGenerator(username: string): string {
+export function encoder(username: string): string {
   let hash = 0;
   for (let i = 0; i < username.length; i++) {
     const char = username.charCodeAt(i); // converts to unicode

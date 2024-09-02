@@ -1,15 +1,13 @@
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { keyGenerator } from "@/utils/hash";
 import { lginSignUpSchema } from "@/utils/schema";
 import * as React from "react";
 import { SignupForm } from "@/components/signUp/signupForm";
+import { encoder } from "@/utils/encodeUser";
 
 const signUp: NextPage = () => {
-  // used for pushing between different pages, in this case to the home page
   const router = useRouter();
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    // prevents the page from refreshing during the process
     event.preventDefault();
     const data = new FormData(event.target as HTMLFormElement);
     const confirmPasswd = data.get("confirmPassword") as string;
@@ -28,9 +26,9 @@ const signUp: NextPage = () => {
         cache: "no-store",
       });
       if (response.ok) {
-        // if the response returns a 200, the keyGenerator function takes the username entered above as a param to generate a key  the key will be used as a logged in identifier
+        // if the response returns a 200, the encoder function takes the username entered above as a param to generate a key the key will be used as a logged in identifier
         const { username } = parsedData;
-        const key = keyGenerator(username);
+        const key = encoder(username);
         router.push(`/home?li=${key}`);
       }
       if (!response.ok) {
@@ -44,6 +42,7 @@ const signUp: NextPage = () => {
   }
   return (
     <>
+      <title>FXTrax - Sign Up</title>
       <SignupForm handler={handleSubmit} />
     </>
   );

@@ -2,15 +2,14 @@ import { BsChevronBarLeft, BsChevronBarRight } from "react-icons/bs";
 import { OpenOptions } from "./menuOptions";
 import { CollapsedOptions } from "./menuOptions";
 import { Separator } from "../ui/separator";
+import { MenuProps } from "@/utils/helpful";
 
-interface Props {
-  li: string;
-  isActive: (x: string) => boolean;
+interface ViewProps extends MenuProps {
   setOpen: (isOpen: boolean) => void;
   isOpen: boolean;
 }
 
-export const OpenView = ({ li, isActive, setOpen, isOpen }: Props) => {
+export const OpenView = ({ li, isActive, setOpen, isOpen }: ViewProps) => {
   return (
     <>
       <div className="md:w-1/8 fixed flex h-screen w-[245px] flex-col bg-black p-2 opacity-90 sm:w-[250px] lg:w-1/4">
@@ -30,7 +29,7 @@ export const OpenView = ({ li, isActive, setOpen, isOpen }: Props) => {
   );
 };
 
-export const CollapsedView = ({ li, isActive, setOpen, isOpen }: Props) => {
+export const CollapsedView = ({ li, isActive, setOpen, isOpen }: ViewProps) => {
   return (
     <>
       <div className="max-w-screen fixed bottom-0 flex flex-row bg-black p-2 opacity-90 sm:h-screen sm:w-16 sm:flex-col md:w-24 lg:w-32">
