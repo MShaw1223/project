@@ -9,13 +9,16 @@ import {
 import { MdOutlineAccountBalance } from "react-icons/md";
 import { MdArrowBack } from "react-icons/md";
 
-interface OptProps {
+type OptProps = {
   li: string;
   isActive: (x: string) => boolean;
-  setOpen?: (isOpen: boolean) => void;
+};
+
+interface OpenOpts extends OptProps {
+  setOpen: (isOpen: boolean) => void;
 }
 
-export const OpenOptions = ({ li, isActive, setOpen }: OptProps) => {
+export const OpenOptions = ({ li, isActive, setOpen }: OpenOpts) => {
   const router = useRouter();
   return (
     <>
