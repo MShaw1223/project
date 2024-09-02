@@ -1,5 +1,5 @@
 import { menuOptions } from "@/utils/menuOptions";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   FaCalculator,
   FaHome,
@@ -12,73 +12,91 @@ import { MdArrowBack } from "react-icons/md";
 interface OptProps {
   li: string;
   isActive: (x: string) => boolean;
+  setOpen: (isOpen: boolean) => boolean;
 }
 
-export const OpenOptions = ({ li, isActive }: OptProps) => {
+export const OpenOptions = ({ li, isActive, setOpen }: OptProps) => {
+  const router = useRouter();
   return (
     <>
-      <div className="h-screen flex flex-col justify-center space-y-1">
+      <div className="flex h-screen flex-col justify-center space-y-1">
         {menuOptions.map((opt) => (
-          <Link href={`${opt.value}?li=${li}`} key={opt.name}>
+          <a
+            // href={}
+            key={opt.name}
+            onClick={(e) => {
+              e.preventDefault();
+              setOpen(false);
+              router.push(`${opt.value}?li=${li}`);
+            }}
+          >
             <div
-              className={`flex pl-5 py-4 focus:outline-none font-bold hover:bg-gray-500 ${
+              className={`flex py-4 pl-5 font-bold hover:bg-gray-500 focus:outline-none ${
                 isActive(opt.value) ? "bg-gray-700 hover:bg-gray-700" : ""
-              } rounded-2xl `}
+              } rounded-2xl`}
             >
               {opt.name === "Home" ? (
-                <FaHome className="my-[6px] w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10 text-slate-100" />
+                <FaHome className="my-[6px] h-6 w-6 text-slate-100 md:h-8 md:w-8 lg:h-10 lg:w-10" />
               ) : opt.name === "Trade Entry" ? (
-                <FaPencilAlt className="my-[6px] w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10 text-slate-100" />
+                <FaPencilAlt className="my-[6px] h-6 w-6 text-slate-100 md:h-8 md:w-8 lg:h-10 lg:w-10" />
               ) : opt.name === "Manage Entries" ? (
-                <FaCalculator className="my-[6px] w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10 text-slate-100" />
+                <FaCalculator className="my-[6px] h-6 w-6 text-slate-100 md:h-8 md:w-8 lg:h-10 lg:w-10" />
               ) : opt.name === "Manage Account" ? (
-                <MdOutlineAccountBalance className="my-[6px] w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10 text-slate-100" />
+                <MdOutlineAccountBalance className="my-[6px] h-6 w-6 text-slate-100 md:h-8 md:w-8 lg:h-10 lg:w-10" />
               ) : opt.name === "Users" ? (
-                <FaUserFriends className="my-[6px] w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10 text-slate-100" />
+                <FaUserFriends className="my-[6px] h-6 w-6 text-slate-100 md:h-8 md:w-8 lg:h-10 lg:w-10" />
               ) : opt.value === "/" ? (
-                <MdArrowBack className="my-[6px] w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10 text-slate-100" />
+                <MdArrowBack className="my-[6px] h-6 w-6 text-slate-100 md:h-8 md:w-8 lg:h-10 lg:w-10" />
               ) : (
                 <></>
               )}
-              <span className="pl-2 sm:my-2 sm:pl-3 text-slate-100 text-sm sm:text-base md:text-lg lg:text-xl">
+              <span className="pl-2 text-sm text-slate-100 sm:my-2 sm:pl-3 sm:text-base md:text-lg lg:text-xl">
                 {opt.name}
               </span>
             </div>
-          </Link>
+          </a>
         ))}
       </div>
     </>
   );
 };
 export const CollapsedOptions = ({ li, isActive }: OptProps) => {
+  const router = useRouter();
   return (
     <>
-      <div className="w-screen sm:w-12 sm:h-screen flex flex-row sm:flex-col items-end sm:items-start space-y-1 sm:justify-center">
+      <div className="flex w-screen flex-row items-end space-y-1 sm:h-screen sm:w-12 sm:flex-col sm:items-start sm:justify-center">
         {/* "h-screen flex flex-col items-center justify-center space-y-1" */}
         {menuOptions.map((opt) => (
-          <Link href={`${opt.value}?li=${li}`} key={opt.name}>
+          <a
+            href={`${opt.value}?li=${li}`}
+            key={opt.name}
+            onClick={(e) => {
+              e.preventDefault();
+              router.push(`${opt.value}?li=${li}`);
+            }}
+          >
             <div
-              className={`flex px-2 py-2 md:p-4 mx-[6px] sm:mx-3 focus:outline-none font-bold hover:bg-gray-500 ${
+              className={`mx-[6px] flex px-2 py-2 font-bold hover:bg-gray-500 focus:outline-none sm:mx-3 md:p-4 ${
                 isActive(opt.value) ? "bg-gray-700 hover:bg-gray-700" : ""
               } rounded-2xl`}
             >
               {opt.name === "Home" ? (
-                <FaHome className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10 text-slate-100" />
+                <FaHome className="h-6 w-6 text-slate-100 md:h-8 md:w-8 lg:h-10 lg:w-10" />
               ) : opt.name === "Trade Entry" ? (
-                <FaPencilAlt className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10 text-slate-100" />
+                <FaPencilAlt className="h-6 w-6 text-slate-100 md:h-8 md:w-8 lg:h-10 lg:w-10" />
               ) : opt.name === "Manage Entries" ? (
-                <FaCalculator className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10 text-slate-100" />
+                <FaCalculator className="h-6 w-6 text-slate-100 md:h-8 md:w-8 lg:h-10 lg:w-10" />
               ) : opt.name === "Manage Account" ? (
-                <MdOutlineAccountBalance className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10 text-slate-100" />
+                <MdOutlineAccountBalance className="h-6 w-6 text-slate-100 md:h-8 md:w-8 lg:h-10 lg:w-10" />
               ) : opt.name === "Users" ? (
-                <FaUserFriends className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10 text-slate-100" />
+                <FaUserFriends className="h-6 w-6 text-slate-100 md:h-8 md:w-8 lg:h-10 lg:w-10" />
               ) : opt.value === "/" ? (
-                <MdArrowBack className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10 text-slate-100" />
+                <MdArrowBack className="h-6 w-6 text-slate-100 md:h-8 md:w-8 lg:h-10 lg:w-10" />
               ) : (
                 <></>
               )}
             </div>
-          </Link>
+          </a>
         ))}
       </div>
     </>

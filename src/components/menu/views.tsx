@@ -6,25 +6,25 @@ import { Separator } from "../ui/separator";
 interface Props {
   li: string;
   isActive: (x: string) => boolean;
-  setOpen: (isOpen: boolean) => void;
+  setOpen: (isOpen: boolean) => boolean;
   isOpen: boolean;
 }
 
 export const OpenView = ({ li, isActive, setOpen, isOpen }: Props) => {
   return (
     <>
-      <div className="fixed flex flex-col p-2 h-screen opacity-90 bg-black w-[245px] sm:w-[250px] md:w-1/8 lg:w-1/4">
+      <div className="md:w-1/8 fixed flex h-screen w-[245px] flex-col bg-black p-2 opacity-90 sm:w-[250px] lg:w-1/4">
         <div
           onClick={() => setOpen(!isOpen)}
-          className=" focus:outline-none hover:bg-gray-500 rounded-lg p-2"
+          className="rounded-lg p-2 hover:bg-gray-500 focus:outline-none"
         >
           {isOpen ? (
-            <BsChevronBarLeft className="text-white text-xl sm:text-xl md:text-xl lg:text-xl mx-auto m-1" />
+            <BsChevronBarLeft className="m-1 mx-auto text-xl text-white sm:text-xl md:text-xl lg:text-xl" />
           ) : (
             <BsChevronBarRight />
           )}
         </div>
-        <OpenOptions li={li} isActive={isActive} />
+        <OpenOptions li={li} isActive={isActive} setOpen={setOpen} />
       </div>
     </>
   );
@@ -33,15 +33,15 @@ export const OpenView = ({ li, isActive, setOpen, isOpen }: Props) => {
 export const CollapsedView = ({ li, isActive, setOpen, isOpen }: Props) => {
   return (
     <>
-      <div className="fixed flex flex-row bottom-0 sm:flex-col p-2 max-w-screen sm:h-screen opacity-90 bg-black sm:w-16 md:w-24 lg:w-32">
+      <div className="max-w-screen fixed bottom-0 flex flex-row bg-black p-2 opacity-90 sm:h-screen sm:w-16 sm:flex-col md:w-24 lg:w-32">
         <div
           onClick={() => setOpen(!isOpen)}
-          className="focus:outline-none hover:bg-gray-500 rounded-lg p-2"
+          className="rounded-lg p-2 hover:bg-gray-500 focus:outline-none"
         >
           {isOpen ? (
             <BsChevronBarLeft className="text-white" />
           ) : (
-            <BsChevronBarRight className="text-white text-xl sm:text-xl md:text-xl lg:text-xl mx-auto m-1 -rotate-90 sm:rotate-0" />
+            <BsChevronBarRight className="m-1 mx-auto -rotate-90 text-xl text-white sm:rotate-0 sm:text-xl md:text-xl lg:text-xl" />
           )}
         </div>
         <Separator orientation="vertical" className="mx-3" />
