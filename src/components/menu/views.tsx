@@ -1,15 +1,16 @@
 import { BsChevronBarLeft, BsChevronBarRight } from "react-icons/bs";
 import { OpenOptions } from "./menuOptions";
-import { CollapsedOptions } from "./menuOptions";
-import { Separator } from "../ui/separator";
 import { MenuProps } from "@/utils/helpful";
+import { Menu } from "lucide-react";
 
-interface ViewProps extends MenuProps {
+type ClosedViewProps = {
   setOpen: (isOpen: boolean) => void;
   isOpen: boolean;
-}
+};
 
-export const OpenView = ({ li, isActive, setOpen, isOpen }: ViewProps) => {
+interface OpenViewProps extends MenuProps, ClosedViewProps {}
+
+export const OpenView = ({ li, isActive, setOpen, isOpen }: OpenViewProps) => {
   return (
     <>
       <div className="md:w-1/8 fixed flex h-screen w-[245px] flex-col bg-black p-2 opacity-90 sm:w-[250px] lg:w-1/4">
@@ -29,22 +30,14 @@ export const OpenView = ({ li, isActive, setOpen, isOpen }: ViewProps) => {
   );
 };
 
-export const CollapsedView = ({ li, isActive, setOpen, isOpen }: ViewProps) => {
+export const CollapsedView = ({ isOpen, setOpen }: ClosedViewProps) => {
   return (
     <>
-      <div className="max-w-screen fixed bottom-0 flex flex-row bg-black p-2 opacity-90 sm:h-screen sm:w-16 sm:flex-col md:w-24 lg:w-32">
-        <div
-          onClick={() => setOpen(!isOpen)}
-          className="rounded-lg p-2 hover:bg-gray-500 focus:outline-none"
-        >
-          {isOpen ? (
-            <BsChevronBarLeft className="text-white" />
-          ) : (
-            <BsChevronBarRight className="m-1 mx-auto -rotate-90 text-xl text-white sm:rotate-0 sm:text-xl md:text-xl lg:text-xl" />
-          )}
-        </div>
-        <Separator orientation="vertical" className="mx-3" />
-        <CollapsedOptions li={li} isActive={isActive} />
+      <div
+        className="fixed flex rounded-lg p-2 hover:bg-slate-300 focus:outline-none"
+        onClick={() => setOpen(!isOpen)}
+      >
+        <Menu className="m-2 text-xl font-black" />
       </div>
     </>
   );

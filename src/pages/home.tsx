@@ -2,8 +2,8 @@ import { NextPage } from "next";
 import { FaHome } from "react-icons/fa";
 import * as React from "react";
 import { useRouter } from "next/router";
-import HomeTable from "@/components/home/homeTable";
 import withKey from "@/components/keyChecker";
+import { TradeOverview } from "@/components/home/HomeOverview";
 
 export type HomeData = {
   accountName: string;
@@ -56,13 +56,13 @@ const Home: NextPage = () => {
             <FaHome className="h-10 w-10" />
             <h1 className="m-1 font-bold">Home</h1>
           </div>
-          <div className="mt-5 p-2 text-center">
+          <div className="mt-5 space-y-3 p-2 text-center">
             <h1 className="text-2xl font-extrabold sm:text-2xl md:text-3xl lg:text-4xl">
               {user ? `Welcome ${user}` : "..."}
             </h1>
-          </div>
-          <div className="mx-auto">
-            {user ? <HomeTable data={data} /> : "loading"}
+            <div className="flex flex-row justify-center space-x-1">
+              {user ? <TradeOverview data={data} /> : "loading"}
+            </div>
           </div>
         </div>
       </div>
