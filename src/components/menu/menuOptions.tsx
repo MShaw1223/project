@@ -23,12 +23,14 @@ export const OpenOptions = ({ li, isActive, setOpen }: OpenOpts) => {
       <div className="flex h-screen flex-col justify-center space-y-1">
         {menuOptions.map((opt) => (
           <a
-            // href={}
+            href={opt.value != "/" ? `${opt.value}?li=${li}` : `${opt.value}`}
             key={opt.name}
             onClick={(e) => {
               e.preventDefault();
               setOpen(false);
-              router.push(`${opt.value}?li=${li}`);
+              router.push(
+                opt.value != "/" ? `${opt.value}?li=${li}` : `${opt.value}`,
+              );
             }}
           >
             <div
@@ -69,11 +71,13 @@ export const CollapsedOptions = ({ li, isActive }: ClosedOpts) => {
         {/* "h-screen flex flex-col items-center justify-center space-y-1" */}
         {menuOptions.map((opt) => (
           <a
-            href={`${opt.value}?li=${li}`}
+            href={opt.value != "/" ? `${opt.value}?li=${li}` : `${opt.value}`}
             key={opt.name}
             onClick={(e) => {
               e.preventDefault();
-              router.push(`${opt.value}?li=${li}`);
+              router.push(
+                opt.value != "/" ? `${opt.value}?li=${li}` : `${opt.value}`,
+              );
             }}
           >
             <div
