@@ -7,7 +7,7 @@ type tableData = {
 export const TradeOverviewTile = ({ data }: tableData) => {
   return (
     <>
-        <div className="w-full md:w-1/2 lg:w-1/3 flex-grow rounded-2xl bg-black bg-opacity-85 p-2 text-left">
+        <div className="min-w-56 md:w-1/2 lg:w-1/3 flex-grow rounded-2xl bg-black bg-opacity-85 p-2 text-left">
           <div className="mx-2 my-3 rounded-xl bg-gray-400 text-center">
             <h1 className="p-1 font-black">Account: {data.accountName}</h1>
           </div>
