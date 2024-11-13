@@ -22,11 +22,7 @@ export default function App({ Component, pageProps }: AppProps) {
         }
       `}</style>
       <QueryClientProvider client={queryClient}>
-        {router.pathname !== "/" && router.pathname !== "/signUp" ? (
-          <Menu />
-        ) : (
-          <></>
-        )}
+        {router.pathname !== "/" && router.pathname !== "/signUp" && <Menu />}
         <main>
           <Component {...pageProps} />
         </main>
