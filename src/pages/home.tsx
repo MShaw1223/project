@@ -4,6 +4,7 @@ import * as React from "react";
 import { useRouter } from "next/router";
 import HomeTable from "@/components/home/homeTable";
 import withKey from "@/components/keyChecker";
+import { TradeOverviewTile } from "@/components/home/HomeOverview";
 
 export type HomeData = {
   accountName: string;
@@ -63,6 +64,13 @@ const Home: NextPage = () => {
           </div>
           <div className="mx-auto">
             {user ? <HomeTable data={data} /> : "loading"}
+            <div className="flex flex-col sm:flex-row justify-center space-y-1 sm:space-x-1 sm:space-y-0">
+              {user ? (
+                data.map((d) => (
+                  <TradeOverviewTile data={d} />
+                ))
+              ): "loading"}
+            </div>
           </div>
         </div>
       </div>
