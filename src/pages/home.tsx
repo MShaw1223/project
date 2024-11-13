@@ -62,7 +62,6 @@ const Home: NextPage = () => {
             </h1>
           </div>
           <div className="mx-auto">
-            {user ? <HomeTable data={data} /> : "loading"}
             <div className="flex flex-col sm:flex-row justify-center space-y-1 sm:space-x-1 sm:space-y-0">
               {user ? (
                 data.map((d) => (
