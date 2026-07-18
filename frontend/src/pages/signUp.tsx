@@ -5,7 +5,7 @@ import * as React from "react";
 import { SignupForm } from "@/components/signUp/signupForm";
 import { encoder } from "@/utils/encodeUser";
 
-const signUp: NextPage = () => {
+const SignUpPage: NextPage = () => {
   const router = useRouter();
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -47,4 +47,4 @@ const signUp: NextPage = () => {
     </>
   );
 };
-export default signUp;
+export default SignUpPage;

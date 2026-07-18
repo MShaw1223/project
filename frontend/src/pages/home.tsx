@@ -65,9 +65,14 @@ const Home: NextPage = () => {
             <div className="flex flex-col sm:flex-row justify-center space-y-1 sm:space-x-1 sm:space-y-0">
               {user ? (
                 data.map((d) => (
-                  <TradeOverviewTile data={d} />
+                  <TradeOverviewTile
+                    key={`${d.accountName}-${d.bestPair}-${d.worstPair}`}
+                    data={d}
+                  />
                 ))
-              ): "loading"}
+              ) : (
+                "loading"
+              )}
             </div>
           </div>
         </div>

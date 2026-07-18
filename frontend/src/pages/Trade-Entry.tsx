@@ -10,7 +10,7 @@ import { BasePairDropdown, QuotePairDropdown } from "@/components/selectPair";
 import { OutcomeDropdown } from "@/components/tradeEntry/outcome";
 import withKey from "@/components/keyChecker";
 
-const tradeEntry: NextPage = () => {
+const TradeEntryPage: NextPage = () => {
   const [selectedAccount, setSelectedAccount] = React.useState<string>("");
   const [selectedBasePair, setSelectedBasePair] = React.useState<string>("");
   const [selectedQuotePair, setSelectedQuotePair] = React.useState<string>("");
@@ -200,4 +200,4 @@ const tradeEntry: NextPage = () => {
     </>
   );
 };
-export default withKey(tradeEntry);
+export default withKey(TradeEntryPage);

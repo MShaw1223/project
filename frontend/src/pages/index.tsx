@@ -5,7 +5,7 @@ import { lginSignUpSchema } from "@/utils/schema";
 import { LoginForm } from "@/components/login/loginForm";
 import { encoder } from "@/utils/encodeUser";
 
-const login: NextPage = () => {
+const LoginPage: NextPage = () => {
   const router = useRouter();
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -43,4 +43,4 @@ const login: NextPage = () => {
     </>
   );
 };
-export default login;
+export default LoginPage;

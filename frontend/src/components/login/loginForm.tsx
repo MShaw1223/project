@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { BiSolidHide, BiSolidShow } from "react-icons/bi";
@@ -51,7 +52,7 @@ export const LoginForm = ({ handler }: LoginProps) => {
                   </div>
                   <div>
                     <p className="text-center text-sm hover:underline">
-                      <a href="/signUp">No account? Sign Up here</a>
+                      <Link href="/signUp">No account? Sign Up here</Link>
                     </p>
                   </div>
                 </form>
