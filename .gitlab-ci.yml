@@ -1,0 +1,48 @@
+stages:
+  - test
+  - build
+
+variables:
+  NODE_VERSION: "20"
+  GO_VERSION: "1.22"
+
+cache:
+  key: "$CI_COMMIT_REF_SLUG"
+  paths:
+    - frontend/node_modules/
+    - /go/pkg/mod/
+
+frontend:lint:
+  image: node:${NODE_VERSION}
+  stage: test
+  script:
+    - cd frontend
+    - npm ci
+    - npm run lint
+
+backend:test:
+  image: golang:${GO_VERSION}
+  stage: test
+  script:
+    - cd backend
+    - go mod download
+    - go test ./...
+
+frontend:build:
+  image: node:${NODE_VERSION}
+  stage: build
+  needs:
+    - frontend:lint
+  script:
+    - cd frontend
+    - npm ci
+    - npm run build
+
+backend:build:
+  image: golang:${GO_VERSION}
+  stage: build
+  needs:
+    - backend:test
+  script:
+    - cd backend
+    - go build ./cmd/server
