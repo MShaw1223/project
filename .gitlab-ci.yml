@@ -4,7 +4,7 @@ stages:
 
 variables:
   NODE_VERSION: "20"
-  GO_VERSION: "1.22"
+  GO_VERSION: "1.25"
 
 cache:
   key: "$CI_COMMIT_REF_SLUG"
@@ -45,4 +45,4 @@ backend:build:
     - backend:test
   script:
     - cd backend
-    - go build ./cmd/server
+    - go build
