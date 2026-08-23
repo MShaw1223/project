@@ -1,1 +1,3 @@
 This is a side project I come to here and there; initially my NEA project for my CS A-level (see tag [1.0](https://gitlab.com/personal-group4853029/project/-/tree/1.0?ref_type=tags) for the previous state). Frontend uses NextJS/TypeScript (considering a move to just react + tanstack + typescript), backend in GoLang but originally in typescript -- leveraged server components directly for calls to the db (first ever web project); persistence is postgres on Supabase. 
+
+More info on what the project does here: [frontend/README.md](https://gitlab.com/personal-group4853029/project/-/blob/main/frontend/README.md)
