@@ -59,7 +59,7 @@ function BasePairDropdown({ onPairChange: onPairChange }: BaseDropdownProps) {
       }
     };
     fetchAvailablePairs();
-  }, []);
+  }, [router.query]);
 
   const handleValueChange = (selectedPair: string) => {
     onPairChange(selectedPair);
@@ -100,7 +100,7 @@ function QuotePairDropdown({ onPairChange: onPairChange }: QuoteDropdownProps) {
     };
 
     fetchAvailablePairs();
-  }, []);
+  }, [router.query]);
 
   const handleValueChange = (selectedPair: string) => {
     onPairChange(selectedPair);
@@ -141,7 +141,7 @@ function PairDropdown({ onPairChange }: DropdownProps) {
     };
 
     fetchAvailablePairs();
-  }, []);
+  }, [router.query]);
 
   const handleValueChange = (selectedPair: string) => {
     onPairChange(selectedPair);

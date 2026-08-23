@@ -42,7 +42,7 @@ const DeleteUserPage: NextPage = () => {
       }
     }
     getuserID();
-  }, []);
+  }, [router.query]);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();

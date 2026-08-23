@@ -28,7 +28,7 @@ const EditUserPage: NextPage = () => {
       }
     };
     getUserID();
-  }, []);
+  }, [router.query]);
   const mutation = useMutation({
     mutationFn: async (data: string) => {
       const response = await fetch("/api/users", {

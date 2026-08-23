@@ -29,7 +29,7 @@ const DeleteCurrency: NextPage = () => {
       }
     }
     getUserID();
-  }, []);
+  }, [router.query]);
   const mutation = useMutation({
     mutationFn: async (formData: string) => {
       const response = await fetch("/api/currency", {

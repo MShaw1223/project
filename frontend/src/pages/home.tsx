@@ -45,7 +45,7 @@ const Home: NextPage = () => {
       }
     }
     getUser();
-  }, []);
+  }, [router.query]);
 
   return (
     <>

@@ -29,7 +29,7 @@ const NewCurrencyPage: NextPage = () => {
       }
     }
     getUser();
-  }, []);
+  }, [router]);
   const mutation = useMutation({
     mutationFn: async (formData: string) => {
       const response = await fetch("/api/currency", {

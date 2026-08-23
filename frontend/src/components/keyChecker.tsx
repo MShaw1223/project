@@ -13,7 +13,7 @@ function withKey(Component: ComponentType) {
         }
       };
       getLi();
-    }, []);
+    }, [router]);
 
     return <Component {...props} />;
   };

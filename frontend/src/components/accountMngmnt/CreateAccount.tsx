@@ -44,7 +44,7 @@ const CreateAccountPage = () => {
       }
     }
     getUser();
-  }, []);
+  }, [router.query]);
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const data = new FormData(event.target as HTMLFormElement);

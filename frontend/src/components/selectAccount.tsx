@@ -42,7 +42,7 @@ function AccountDropdown({ onAccountChange }: AccountDropdownProps) {
       }
     };
     fetchAvailableAccs();
-  }, []);
+  }, [router.query]);
   const handleValueChange = async (selectedAcc: string) => {
     onAccountChange(selectedAcc);
   };
