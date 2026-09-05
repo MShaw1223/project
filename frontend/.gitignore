@@ -4,3 +4,5 @@ myCode.sql
 .env.local
 .drawio
 .DS_Store
+next-env.d.ts
+tsconfig.tsbuildinfo
