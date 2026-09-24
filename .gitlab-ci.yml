@@ -20,6 +20,14 @@ frontend:lint:
     - npm ci
     - npm run lint
 
+frontend:test:
+  image: node:${NODE_VERSION}
+  stage: test
+  script:
+    - cd frontend
+    - npm ci
+    - npm test
+
 backend:test:
   image: golang:${GO_VERSION}
   stage: test

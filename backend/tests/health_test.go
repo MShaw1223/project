@@ -36,4 +36,3 @@ func TestHealthHandlerReturns200AndStatusPayload(t *testing.T) {
 		t.Fatal("expected response body, got empty string")
 	}
 }
-

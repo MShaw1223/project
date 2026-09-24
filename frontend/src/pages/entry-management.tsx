@@ -1,50 +1,34 @@
 import { NextPage } from "next";
-import { FaCalculator } from "react-icons/fa";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import * as React from "react";
-import NewCurrencyPage from "@/components/entryMngmnt/NewCurrency";
-import SearchEntry from "@/components/entryMngmnt/SearchEntry";
-import DeleteCurrency from "@/components/entryMngmnt/deleteCurrency";
-import DeleteEntry from "@/components/entryMngmnt/DeleteEntry";
-import withKey from "@/components/keyChecker";
+import { useState } from "react";
+import { Table2 } from "lucide-react";
+import AccountSelect from "@/components/AccountSelect";
+import TradeList from "@/components/entryManagement/TradeList";
+import { PageHeader } from "@/components/layout/PageHeader";
+import { Card, CardContent } from "@/components/ui/card";
+import withSession from "@/components/withSession";
 
 const EntryManagement: NextPage = () => {
+  const [accountId, setAccountId] = useState("");
   return (
     <>
-      <title>FXTrax - Entries</title>
-
-      <div className="flex h-screen bg-slate-200">
-        <div className="flex flex-1 flex-col items-center overflow-hidden">
-          <div className="flex justify-center p-3 text-3xl">
-            <FaCalculator className="h-10 w-10"></FaCalculator>
-            <span className="ml-2 font-bold">Entry Management</span>
+      <title>FXTrax - Entry Management</title>
+      <PageHeader
+        icon={Table2}
+        title="Manage Entries"
+        description="Review and remove recorded trades."
+        actions={
+          <div className="w-full sm:w-52">
+            <AccountSelect value={accountId} onChange={setAccountId} />
           </div>
-          <div className="flex-1 overflow-auto">
-            <Tabs defaultValue="search" className="m-1 p-2">
-              <TabsList>
-                <TabsTrigger value="search">Search Entries</TabsTrigger>
-                <TabsTrigger value="addPair">Add Currencies</TabsTrigger>
-                <TabsTrigger value="delPair">Delete Currencies</TabsTrigger>
-                <TabsTrigger value="delete">Delete an Entry</TabsTrigger>
-              </TabsList>
-              <TabsContent value="search">
-                <SearchEntry />
-              </TabsContent>
-              <TabsContent value="addPair">
-                <NewCurrencyPage />
-              </TabsContent>
-              <TabsContent value="delPair">
-                <DeleteCurrency />
-              </TabsContent>
-              <TabsContent value="delete">
-                <DeleteEntry />
-              </TabsContent>
-            </Tabs>
-          </div>
-        </div>
-      </div>
+        }
+      />
+      <Card>
+        <CardContent className="p-4 sm:p-6">
+          <TradeList accountId={accountId} />
+        </CardContent>
+      </Card>
     </>
   );
 };
 
-export default withKey(EntryManagement);
+export default withSession(EntryManagement);
