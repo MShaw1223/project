@@ -5,7 +5,7 @@ description: Use when writing, reviewing, or refactoring code under frontend/ (N
 
 # Frontend code quality (Next.js pages router / React / TypeScript)
 
-Stack: Next.js (pages router, not app router), TypeScript, `react-query` for data fetching/mutations, `react-hook-form` + `zod` for forms (available but not always used), Tailwind + shadcn/radix components under `frontend/src/components/ui/`. There is currently **no test runner configured** in `frontend/package.json` and CI ([.gitlab-ci.yml](.gitlab-ci.yml)) only runs `lint` and `build` for the frontend, not tests.
+Stack: Next.js (pages router, not app router), TypeScript, `react-query` for data fetching/mutations, `react-hook-form` + `zod` for forms (available but not always used), Tailwind + shadcn/radix components under `frontend/src/components/ui/`. Vitest + jsdom + React Testing Library are configured (`npm test`, [frontend/vitest.config.ts](frontend/vitest.config.ts), tests colocated as `*.test.ts(x)`), and CI runs a `frontend:test` job next to lint and build.
 
 ## Code semantics & smells to check for
 
@@ -19,18 +19,20 @@ Stack: Next.js (pages router, not app router), TypeScript, `react-query` for dat
 8. **Missing loading/empty/error branches.** Check that a component handles all of react-query's states it actually needs (`isLoading`, `isError`, empty-array data) rather than only the happy path — this repo's `CreateAccount.tsx` only branches on `isLoading`, silently rendering nothing useful on error beyond the `alert`.
 9. **`any` or implicit `any` creeping into TypeScript.** This project has `strict`-friendly tooling available; treat a new `any` (explicit or via an untyped third-party callback) as something to flag and replace with a real type or `unknown` + narrowing.
 
+## Testing policy (set by the user)
+
+Frontend tests are **lower priority than backend tests**: add them for *critical* logic only, not for every component. Critical means: auth/session handling (`withSession`, login/signup wrappers), the `lib/*` API wrappers (URL, method, body, error surfacing), validation schemas, and anything that could leak credentials or bypass the session. Purely presentational components and layout need no tests. Existing examples: [schema.test.ts](frontend/src/utils/schema.test.ts), [accounts.test.ts](frontend/src/lib/accounts.test.ts), [withSession.test.tsx](frontend/src/components/withSession.test.tsx).
+
+Setup gotchas found the hard way (Node 20): use `vitest@^3` (v5 needs a newer `@types/node`) and `jsdom@^26` (v30 fails with `ERR_REQUIRE_ESM`). `@testing-library/jest-dom` is not installed, so assert with plain matchers (`container.innerHTML`, `screen.findByText`) rather than `toBeInTheDocument()`.
+
 ## Unit testing conventions
 
-No test runner is installed yet. When asked to add tests (or when adding significant new logic that should have coverage):
+The runner is already installed. When asked to add tests (or when adding significant new logic that should have coverage):
 
-1. **Set up Vitest + React Testing Library** if not already present — it's the lowest-friction choice for this Next.js + TS stack:
-   ```
-   npm install -D vitest @vitejs/plugin-react jsdom @testing-library/react @testing-library/jest-dom @testing-library/user-event
-   ```
-   Add a `test` script to `frontend/package.json` and a `vitest.config.ts` with `environment: "jsdom"`. Mirror the existing file layout by colocating tests as `*.test.ts(x)` next to the source file, or under a parallel `__tests__/` folder — ask the user's preference if it isn't obvious from context, but default to colocated `*.test.tsx` since this repo has no existing convention to match.
-2. **Unit-test pure logic separately from components.** Anything in `frontend/src/utils/` or `frontend/src/lib/` (e.g. [frontend/src/lib/utils.ts](frontend/src/lib/utils.ts)) should get plain function-level tests with no rendering involved — these are the cheapest, most valuable tests to add first given there's currently zero coverage.
+1. **Vitest + React Testing Library are already set up** (see the policy above). Only install extra packages if a test truly needs them. Tests are colocated as `*.test.ts(x)` next to the source, and `vitest.config.ts` uses `environment: "jsdom"` with the `@` alias.
+2. **Unit-test pure logic separately from components.** Anything in `frontend/src/utils/` or `frontend/src/lib/` (e.g. [frontend/src/lib/utils.ts](frontend/src/lib/utils.ts)) should get plain function-level tests with no rendering involved — these are the cheapest, most valuable tests to add first.
 3. **Test components through user-visible behavior, not implementation.** Use `@testing-library/react`'s `render` + `screen.getByRole`/`getByLabelText` and `@testing-library/user-event` to simulate typing/clicking, and assert on rendered output — not on internal state or by reaching into component internals.
 4. **Mock `fetch` and `react-query` at the boundary.** When a component calls a fetch-wrapper function (per smell #2 above), mock that wrapper function in the component test rather than mocking global `fetch` directly — this stays valid even if the fetch implementation changes. For hooks-level tests of the fetch wrapper itself, mock global `fetch`/`msw`.
 5. **Test both the success and validation/error paths** for forms — e.g. for `CreateAccount`, one test submits matching account names and asserts the mutation fires with the right payload; another submits mismatched/empty names and asserts the mutation does *not* fire and an error is shown.
 6. **Avoid snapshot tests as the primary assertion.** Prefer explicit `expect(screen.getByText(...)).toBeInTheDocument()`-style assertions over large snapshots, which tend to rot silently in a codebase with no existing test culture.
-7. **Wire tests into CI once added.** If you add a `test` script, also add a `frontend:test` job to [.gitlab-ci.yml](.gitlab-ci.yml) alongside `frontend:lint`, so coverage doesn't silently go stale the way the integration-style backend tests currently do.
+7. **CI already runs them** via the `frontend:test` job in [.gitlab-ci.yml](.gitlab-ci.yml); keep `npm test` green.

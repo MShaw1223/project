@@ -1,49 +1,63 @@
+import { FormEvent, useState } from "react";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { lginSignUpSchema } from "@/utils/schema";
-import * as React from "react";
+import { credentialsSchema } from "@/utils/schema";
 import { SignupForm } from "@/components/signUp/signupForm";
-import { encoder } from "@/utils/encodeUser";
+import { CheckEmail } from "@/components/signUp/CheckEmail";
+import { signup } from "@/lib/auth";
 
 const SignUpPage: NextPage = () => {
   const router = useRouter();
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  const [error, setError] = useState<string | null>(null);
+  // set once the account exists but Supabase is waiting on the user to confirm this address
+  const [pendingEmail, setPendingEmail] = useState<string | null>(null);
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const data = new FormData(event.target as HTMLFormElement);
-    const confirmPasswd = data.get("confirmPassword") as string;
-    const parsedData = lginSignUpSchema.parse({
-      passwd: data.get("firstPassword") as string,
-      username: data.get("user") as string,
+    const data = new FormData(event.currentTarget);
+    const parsed = credentialsSchema.safeParse({
+      email: data.get("email"),
+      password: data.get("firstPassword"),
     });
-    // the if statement checks the password has been entered correctly before submitting the parsedData object to the api to be submitted to the Neon database
-    if (parsedData.passwd === confirmPasswd) {
-      const response = await fetch("/api/auth/userPwd", {
-        method: "POST",
-        body: JSON.stringify(parsedData),
-        headers: {
-          "Content-Type": "application/json",
-        },
-        cache: "no-store",
-      });
-      if (response.ok) {
-        // if the response returns a 200, the encoder function takes the username entered above as a param to generate a key the key will be used as a logged in identifier
-        const { username } = parsedData;
-        const key = encoder(username);
-        router.push(`/home?li=${key}`);
-      }
-      if (!response.ok) {
-        alert("Failed to sign up, try another username");
-        return;
-      }
-    } else {
-      alert("Passwords do not match");
+    if (!parsed.success) {
+      setError(parsed.error.issues[0].message);
       return;
     }
+    if (parsed.data.password !== data.get("confirmPassword")) {
+      setError("Passwords do not match");
+      return;
+    }
+    let confirmationRequired: boolean;
+    try {
+      const response = await signup(parsed.data.email, parsed.data.password);
+      if (!response.ok) {
+        setError("Failed to sign up, check your details or try another email.");
+        return;
+      }
+      const body = await response.json().catch(() => ({}));
+      confirmationRequired = body.email_confirmation_required === true;
+    } catch {
+      setError("Unable to reach the server. Please try again.");
+      return;
+    }
+    if (confirmationRequired) {
+      setPendingEmail(parsed.data.email);
+      return;
+    }
+    // signing up does not start a session, the user logs in afterwards
+    router.push("/");
+  }
+  if (pendingEmail !== null) {
+    return (
+      <>
+        <title>FXTrax - Check your email</title>
+        <CheckEmail email={pendingEmail} />
+      </>
+    );
   }
   return (
     <>
       <title>FXTrax - Sign Up</title>
-      <SignupForm handler={handleSubmit} />
+      <SignupForm handler={handleSubmit} error={error} />
     </>
   );
 };

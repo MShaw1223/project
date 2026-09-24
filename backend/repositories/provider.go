@@ -8,13 +8,18 @@ import (
 	"github.com/supabase-community/supabase-go"
 )
 
-
 func init() {
 	for _, path := range []string{".env", "../.env", "../../.env"} {
 		if err := godotenv.Load(path); err == nil {
 			break
 		}
 	}
+}
+
+// supabaseClientProvider is the interface repositories depend on, so tests can
+// inject a fake instead of talking to a real Supabase project.
+type supabaseClientProvider interface {
+	NewSupabaseClient() (*supabase.Client, error)
 }
 
 type SupabaseProvider struct{}

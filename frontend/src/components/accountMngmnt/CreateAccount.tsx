@@ -1,109 +1,55 @@
+import { FormEvent, useState } from "react";
+import { useMutation, useQueryClient } from "react-query";
+import { Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { useMutation } from "react-query";
-import { FormEvent, useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Field, SubmitButton } from "@/components/FormField";
+import { FormError, FormSuccess } from "@/components/FormFeedback";
+import { ACCOUNTS_QUERY_KEY, ACCOUNT_NAME_MAX_LENGTH, createAccount } from "@/lib/accounts";
 
-const CreateAccountPage = () => {
-  const [user, setUser] = useState<string | null>(null);
-  const router = useRouter();
-  const mutation = useMutation({
-    mutationFn: async (formData: string) => {
-      const response = await fetch("/api/accountManagement", {
-        method: "POST",
-        body: formData,
-        cache: "no-store",
-      });
-      if (!response.ok) {
-        alert("Failed to send off new account");
-      }
-      return response.json();
-    },
-    onError: () => {
-      alert("Program error");
-      return;
-    },
+const CreateAccount = () => {
+  const queryClient = useQueryClient();
+  const [formError, setFormError] = useState<string | null>(null);
+  const mutation = useMutation(createAccount, {
+    onSuccess: () => queryClient.invalidateQueries(ACCOUNTS_QUERY_KEY),
   });
-  useEffect(() => {
-    async function getUser() {
-      const { li: loggedInVal } = router.query;
-      if (loggedInVal !== undefined) {
-        try {
-          const response = await fetch("/api/auth/IDFromHash", {
-            method: "POST",
-            body: JSON.stringify(loggedInVal),
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-          const lgdin = await response.json();
-          setUser(lgdin);
-        } catch (error) {
-          alert("Error fetching user");
-        }
-      }
-    }
-    getUser();
-  }, [router.query]);
+
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const data = new FormData(event.target as HTMLFormElement);
-    const accountname = data.get("accountName")! as string;
-    const reEntered = data.get("reEnteredAccountName")! as string;
-    if (accountname !== reEntered) {
-      alert("Entries do not match");
+    const form = event.currentTarget;
+    const accountName = new FormData(form).get("accountName");
+    const trimmed = typeof accountName === "string" ? accountName.trim() : "";
+    if (trimmed === "") {
+      setFormError("Enter a name for the account");
       return;
     }
-    if (!accountname || !reEntered) {
-      alert("Enter the new account in both fields");
-      return;
-    }
-    if (accountname === reEntered && user !== null) {
-      mutation.mutate(
-        JSON.stringify({
-          accountname,
-          userid: user,
-        })
-      );
-    }
+    setFormError(null);
+    mutation.mutate(trimmed, { onSuccess: () => form.reset() });
   }
+
   return (
-    <>
-      <div className="flex">
-        {mutation.isLoading && <p>Submitting New Account</p>}
-        {!mutation.isLoading && (
-          <div className="flex-col mx-auto">
-            <form onSubmit={handleSubmit}>
-              <div className="p-2 flex-row">
-                <h3>Enter the name of the new account</h3>
-                <Input
-                  id="accountName"
-                  name="accountName"
-                  placeholder="New Account Name....."
-                  className="sm:w-48 md:w-[280px] lg:w-[340px]"
-                  maxLength={15}
-                />
-              </div>
-              <div className="p-2 flex-row">
-                <h3>Re-enter the Account Name</h3>
-                <Input
-                  id="reEnteredAccountName"
-                  name="reEnteredAccountName"
-                  placeholder="Re-enter Account Name..."
-                  className="sm:w-48 md:w-[280px] lg:w-[340px]"
-                  maxLength={15}
-                />
-              </div>
-              <div className="p-3 text-center">
-                <Button type="submit" className="w-24 md:w-36 lg:w-52">
-                  Submit New
-                </Button>
-              </div>
-            </form>
-          </div>
-        )}
-      </div>
-    </>
+    <Card>
+      <CardHeader>
+        <CardTitle>New account</CardTitle>
+        <CardDescription>Add a brokerage account to record trades against.</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <Field label="Account name" htmlFor="accountName" hint={`Up to ${ACCOUNT_NAME_MAX_LENGTH} characters`}>
+            <Input id="accountName" name="accountName" placeholder="e.g. Main" maxLength={ACCOUNT_NAME_MAX_LENGTH} />
+          </Field>
+          {(formError || mutation.isError) && (
+            <FormError message={formError ?? "Failed to create the account. Please try again."} />
+          )}
+          {mutation.isSuccess && <FormSuccess message="Account created." />}
+          <SubmitButton pending={mutation.isLoading} className="w-full">
+            <Plus />
+            Create account
+          </SubmitButton>
+        </form>
+      </CardContent>
+    </Card>
   );
 };
-export default CreateAccountPage;
+
+export default CreateAccount;
