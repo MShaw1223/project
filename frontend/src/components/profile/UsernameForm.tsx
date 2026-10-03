@@ -1,29 +1,25 @@
 import { FormEvent, useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Field, SubmitButton } from "@/components/FormField";
-import { FormError, FormSuccess } from "@/components/FormFeedback";
-import {
-  ApiError,
-  PROFILE_QUERY_KEY,
-  USERNAME_MAX_LENGTH,
-  USERNAME_PATTERN,
-  getProfile,
-  updateUsername,
-} from "@/lib/profile";
+import { Field, SubmitButton } from "@/components/form/FormField";
+import { FormError, FormSuccess } from "@/components/form/FormFeedback";
+import { ApiError } from "@/lib/api";
+import { PROFILE_QUERY_KEY, getProfile, updateUsername } from "@/lib/profile";
+import { LIMITS, parseForm, usernameSchema } from "@/lib/validation";
 
 function mutationErrorMessage(error: unknown): string {
   if (error instanceof ApiError && error.status === 409) return "That username is already taken.";
   return "Failed to save the username. Please try again.";
 }
 
-const UsernameForm = () => {
+export const UsernameForm = () => {
   const queryClient = useQueryClient();
-  const profileQuery = useQuery(PROFILE_QUERY_KEY, getProfile);
+  const profileQuery = useQuery({ queryKey: PROFILE_QUERY_KEY, queryFn: getProfile });
   const [formError, setFormError] = useState<string | null>(null);
-  const mutation = useMutation(updateUsername, {
+  const mutation = useMutation({
+    mutationFn: updateUsername,
     onSuccess: (profile) => {
       queryClient.setQueryData(PROFILE_QUERY_KEY, profile);
     },
@@ -32,14 +28,9 @@ const UsernameForm = () => {
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const username = new FormData(event.currentTarget).get("username");
-    const trimmed = typeof username === "string" ? username.trim() : "";
-    if (!USERNAME_PATTERN.test(trimmed)) {
-      setFormError("Use 3-20 letters, numbers or underscores");
-      return;
-    }
-    setFormError(null);
-    mutation.mutate(trimmed);
+    const parsed = parseForm(usernameSchema, event.currentTarget);
+    setFormError(parsed.error ?? null);
+    if (parsed.data) mutation.mutate(parsed.data.username);
   }
 
   return (
@@ -64,7 +55,7 @@ const UsernameForm = () => {
                 defaultValue={current ?? ""}
                 placeholder="e.g. trader_1"
                 autoComplete="username"
-                maxLength={USERNAME_MAX_LENGTH}
+                maxLength={LIMITS.usernameMax}
               />
             </Field>
             {(formError || mutation.isError) && (
@@ -72,7 +63,7 @@ const UsernameForm = () => {
             )}
             {mutation.isSuccess && <FormSuccess message="Username saved." />}
             <div className="flex justify-end">
-              <SubmitButton pending={mutation.isLoading}>{current ? "Change username" : "Save username"}</SubmitButton>
+              <SubmitButton pending={mutation.isPending}>{current ? "Change username" : "Save username"}</SubmitButton>
             </div>
           </form>
         )}
@@ -80,5 +71,3 @@ const UsernameForm = () => {
     </Card>
   );
 };
-
-export default UsernameForm;

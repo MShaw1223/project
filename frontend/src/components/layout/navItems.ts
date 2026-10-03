@@ -1,4 +1,5 @@
 import { LayoutDashboard, LucideIcon, PenLine, Table2, UserRound, Wallet } from "lucide-react";
+import { ROUTES } from "@/lib/routes";
 
 export type NavItem = {
   name: string;
@@ -7,12 +8,9 @@ export type NavItem = {
 };
 
 export const NAV_ITEMS: NavItem[] = [
-  { name: "Home", href: "/home", icon: LayoutDashboard },
-  { name: "Trade Entry", href: "/Trade-Entry", icon: PenLine },
-  { name: "Manage Entries", href: "/entry-management", icon: Table2 },
-  { name: "Manage Accounts", href: "/account-management", icon: Wallet },
-  { name: "Profile", href: "/users", icon: UserRound },
+  { name: "Dashboard", href: ROUTES.dashboard, icon: LayoutDashboard },
+  { name: "New Trade", href: ROUTES.newTrade, icon: PenLine },
+  { name: "Trades", href: ROUTES.trades, icon: Table2 },
+  { name: "Accounts", href: ROUTES.accounts, icon: Wallet },
+  { name: "Profile", href: ROUTES.profile, icon: UserRound },
 ];
-
-// routes that render without the app shell, they are reachable while signed out
-export const PUBLIC_ROUTES = ["/", "/signUp"];

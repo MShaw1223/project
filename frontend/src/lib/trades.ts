@@ -1,8 +1,4 @@
-import { BACKEND_PREFIX } from "@/lib/auth";
-
-// mirrors the Go backend's validation for currency_pair (backend/services/trades.go)
-export const CURRENCY_PAIR_PATTERN = /^[A-Z]{3,10}$/;
-export const TRADE_NOTES_MAX_LENGTH = 1000;
+import { json, request } from "@/lib/api";
 
 export type TradeOutcome = "win" | "loss" | "breakeven";
 
@@ -48,34 +44,14 @@ export type CurrencyPair = {
 export const tradesQueryKey = (accountId: string) => ["trades", accountId];
 export const CURRENCY_PAIRS_QUERY_KEY = ["currency-pairs"];
 
-// every call authenticates with the httpOnly session cookie the backend set at login
-async function request(path: string, init?: RequestInit): Promise<Response> {
-  const response = await fetch(`${BACKEND_PREFIX}${path}`, {
-    cache: "no-store",
-    ...init,
-  });
-  if (!response.ok) {
-    const { error } = await response.json().catch(() => ({ error: undefined }));
-    throw new Error(error ?? `request failed: ${response.status}`);
-  }
-  return response;
-}
-
-const jsonBody = (body: unknown): RequestInit => ({
-  body: JSON.stringify(body),
-  headers: { "Content-Type": "application/json" },
-});
-
 export async function getTrades(accountId: string): Promise<Trade[]> {
-  const response = await request(`/trades?account_id=${encodeURIComponent(accountId)}`);
-  const { trades } = await response.json();
-  return trades as Trade[];
+  const { trades } = await request<{ trades: Trade[] }>(`/trades?account_id=${encodeURIComponent(accountId)}`);
+  return trades;
 }
 
 export async function createTrade(trade: NewTrade): Promise<Trade> {
-  const response = await request("/trades", { method: "POST", ...jsonBody(trade) });
-  const { trade: created } = await response.json();
-  return created as Trade;
+  const { trade: created } = await request<{ trade: Trade }>("/trades", json("POST", trade));
+  return created;
 }
 
 export async function deleteTrade(id: string): Promise<void> {
@@ -83,17 +59,11 @@ export async function deleteTrade(id: string): Promise<void> {
 }
 
 export async function getCurrencyPairs(): Promise<CurrencyPair[]> {
-  const response = await request("/currency-pairs");
-  const { pairs } = await response.json();
-  return pairs as CurrencyPair[];
+  const { pairs } = await request<{ pairs: CurrencyPair[] }>("/currency-pairs");
+  return pairs;
 }
 
 export async function createCurrencyPair(symbol: string): Promise<CurrencyPair> {
-  const response = await request("/currency-pairs", { method: "POST", ...jsonBody({ symbol }) });
-  const { pair } = await response.json();
-  return pair as CurrencyPair;
-}
-
-export async function deleteCurrencyPair(id: string): Promise<void> {
-  await request(`/currency-pairs/${id}`, { method: "DELETE" });
+  const { pair } = await request<{ pair: CurrencyPair }>("/currency-pairs", json("POST", { symbol }));
+  return pair;
 }

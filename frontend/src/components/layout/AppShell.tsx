@@ -1,23 +1,26 @@
-import { ReactNode, useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/router";
+import { ReactNode, useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router";
 import { CandlestickChart, LogOut, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { ThemeToggle } from "@/components/theme/ThemeToggle";
+import { useQueryClient } from "@tanstack/react-query";
+import { ThemeToggle } from "@/components/layout/ThemeToggle";
 import { NAV_ITEMS } from "@/components/layout/navItems";
+import { FormError } from "@/components/form/FormFeedback";
+import { useSession } from "@/hooks/useSession";
 import { logout } from "@/lib/auth";
+import { ROUTES } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 
 const Brand = () => (
-  <Link href="/home" className="flex items-center gap-2 font-semibold">
+  <Link to={ROUTES.dashboard} className="flex items-center gap-2 font-semibold">
     <CandlestickChart className="size-5" />
     <span>FXTrax</span>
   </Link>
 );
 
 function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
-  const { pathname } = useRouter();
+  const { pathname } = useLocation();
   return (
     <nav className="grid gap-1">
       {NAV_ITEMS.map(({ name, href, icon: Icon }) => {
@@ -25,7 +28,7 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
         return (
           <Link
             key={href}
-            href={href}
+            to={href}
             onClick={onNavigate}
             aria-current={active ? "page" : undefined}
             className={cn(
@@ -43,14 +46,14 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
 }
 
 function LogoutButton() {
-  const router = useRouter();
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
   async function handleLogout() {
-    try {
-      await logout();
-    } catch {
-      // the login page is still the right place to land, the cookie expires on its own
-    }
-    router.push("/");
+    // the login page is still the right place to land if this fails, the cookie expires on its own
+    await logout().catch(() => undefined);
+    // leave the signed-in pages before clearing, so nothing refetches, then drop this user's data
+    await navigate(ROUTES.login);
+    queryClient.clear();
   }
   return (
     <Button variant="ghost" className="w-full justify-start gap-3 px-3 text-muted-foreground" onClick={handleLogout}>
@@ -60,9 +63,27 @@ function LogoutButton() {
   );
 }
 
-// signed-in layout: fixed sidebar on desktop, a top bar with a slide-out menu on mobile
+// signed-in layout: fixed sidebar on desktop, a top bar with a slide-out menu on mobile. Every page
+// inside it is guarded by the session cookie and only renders once the user is known
 export function AppShell({ children }: { children: ReactNode }) {
+  const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const session = useSession();
+  const signedOut = session.isSuccess && session.data === null;
+
+  useEffect(() => {
+    if (signedOut) navigate(ROUTES.login, { replace: true });
+  }, [signedOut, navigate]);
+
+  if (session.isError) {
+    return (
+      <div className="mx-auto max-w-md p-8">
+        <FormError message="Unable to reach the server. Please try again." />
+      </div>
+    );
+  }
+  if (!session.data) return null;
+
   return (
     <div className="min-h-screen">
       <aside className="fixed inset-y-0 left-0 hidden w-60 flex-col border-r bg-card md:flex">
@@ -78,7 +99,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         </div>
       </aside>
 
-      <header className="sticky top-0 z-40 flex h-14 items-center gap-2 border-b bg-background/95 px-4 backdrop-blur md:hidden">
+      <header className="sticky top-0 z-40 flex h-14 items-center gap-2 border-b bg-background/95 px-4 backdrop-blur-sm md:hidden">
         <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
           <SheetTrigger asChild>
             <Button variant="ghost" size="icon" aria-label="Open menu">

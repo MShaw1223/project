@@ -1,5 +1,5 @@
 // Post-deploy checks against a running environment, through the same path a browser takes: TLS at
-// Traefik, the Next.js app, its /backend proxy to the Go server and on to Supabase. They only read or use
+// Traefik, nginx serving the app, its /backend proxy to the Go server and on to Supabase. They only read or use
 // throwaway inputs, so they are safe to run against any environment.
 // Run with: BASE_URL=https://<host> node --test
 import assert from "node:assert/strict";
@@ -34,7 +34,7 @@ test("plain http doesn't serve the app", async () => {
   assert.equal(res.status, 404);
 });
 
-test("the backend is reachable through the Next.js proxy", async () => {
+test("the backend is reachable through the frontend proxy", async () => {
   const res = await fetch(`${base}/backend/health`);
   assert.equal(res.status, 200);
   assert.deepEqual(await res.json(), { status: "ok" });

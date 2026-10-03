@@ -1,11 +1,11 @@
 ---
 name: frontend-code-quality
-description: Use when writing, reviewing, or refactoring code under frontend/ (Next.js pages, React components, hooks, utils) — covers code smells/semantics review and unit testing conventions for this project's Next.js (pages router) + TypeScript + react-query frontend. Trigger on requests like "review this component", "add tests for this page", "is this React code clean", or any change under frontend/.
+description: Use when writing, reviewing, or refactoring code under frontend/ (pages, React components, hooks, utils) — covers code smells/semantics review and unit testing conventions for this project's React (Vite + React Router) + TypeScript + react-query frontend. Trigger on requests like "review this component", "add tests for this page", "is this React code clean", or any change under frontend/.
 ---
 
-# Frontend code quality (Next.js pages router / React / TypeScript)
+# Frontend code quality (React / Vite / TypeScript)
 
-Stack: Next.js (pages router, not app router), TypeScript, `react-query` for data fetching/mutations, `react-hook-form` + `zod` for forms (available but not always used), Tailwind + shadcn/radix components under `frontend/src/components/ui/`. Vitest + jsdom + React Testing Library are configured (`npm test`, [frontend/vitest.config.ts](frontend/vitest.config.ts), tests colocated as `*.test.ts(x)`), and CI runs a `frontend:test` job next to lint and build.
+Stack: React 19 built with Vite (a client-rendered SPA, no Next.js), React Router (route table in `frontend/src/router.tsx`, page components in `frontend/src/pages/`), TypeScript, TanStack Query v5 (`@tanstack/react-query`) for data fetching/mutations, `zod` schemas in `lib/validation.ts` for every form (no react-hook-form), Tailwind + shadcn/radix components under `frontend/src/components/ui/` (only the ones in use are kept), ESLint 10 flat config (`eslint.config.mjs`: `typescript-eslint` + `eslint-plugin-react-hooks`). Page titles are a bare `<title>` in the page component, which React 19 hoists into `<head>`. Theming is `ThemeProvider` + `hooks/useTheme.ts` (no `next-themes`). Vitest + jsdom + React Testing Library are configured (`npm test`, [frontend/vite.config.mts](frontend/vite.config.mts), tests colocated as `*.test.ts(x)`), and CI runs a `frontend:test` job next to lint and build.
 
 ## Code semantics & smells to check for
 
@@ -21,7 +21,7 @@ Stack: Next.js (pages router, not app router), TypeScript, `react-query` for dat
 
 ## Testing policy (set by the user)
 
-Frontend tests are **lower priority than backend tests**: add them for *critical* logic only, not for every component. Critical means: auth/session handling (`withSession`, login/signup wrappers), the `lib/*` API wrappers (URL, method, body, error surfacing), validation schemas, and anything that could leak credentials or bypass the session. Purely presentational components and layout need no tests. Existing examples: [schema.test.ts](frontend/src/utils/schema.test.ts), [accounts.test.ts](frontend/src/lib/accounts.test.ts), [withSession.test.tsx](frontend/src/components/withSession.test.tsx).
+Frontend tests are **lower priority than backend tests**: add them for *critical* logic only, not for every component. Critical means: auth/session handling (`withSession`, login/signup wrappers), the `lib/*` API wrappers (URL, method, body, error surfacing), validation schemas, and anything that could leak credentials or bypass the session. Purely presentational components and layout need no tests. Existing examples: [api.test.ts](frontend/src/lib/api.test.ts), [validation.test.ts](frontend/src/lib/validation.test.ts), [queryClient.test.ts](frontend/src/lib/queryClient.test.ts), [AppShell.test.tsx](frontend/src/components/layout/AppShell.test.tsx), [router.test.tsx](frontend/src/router.test.tsx). In v5 `mutationFn` receives a second context argument, so assert on `mock.calls[0][0]` rather than `toHaveBeenCalledWith` when the function is passed straight in; `renderWithQueryClient` returns its `queryClient` for cache assertions.
 
 Setup gotchas found the hard way (Node 20): use `vitest@^3` (v5 needs a newer `@types/node`) and `jsdom@^26` (v30 fails with `ERR_REQUIRE_ESM`). `@testing-library/jest-dom` is not installed, so assert with plain matchers (`container.innerHTML`, `screen.findByText`) rather than `toBeInTheDocument()`.
 
@@ -29,7 +29,7 @@ Setup gotchas found the hard way (Node 20): use `vitest@^3` (v5 needs a newer `@
 
 The runner is already installed. When asked to add tests (or when adding significant new logic that should have coverage):
 
-1. **Vitest + React Testing Library are already set up** (see the policy above). Only install extra packages if a test truly needs them. Tests are colocated as `*.test.ts(x)` next to the source, and `vitest.config.ts` uses `environment: "jsdom"` with the `@` alias.
+1. **Vitest + React Testing Library are already set up** (see the policy above). Only install extra packages if a test truly needs them. Tests are colocated as `*.test.ts(x)` next to the source (render with `renderWithQueryClient`, which also provides a router for `<Link>`; stub navigation by mocking `useNavigate` from `react-router`), and `vite.config.mts` uses `environment: "jsdom"` with the `@` alias.
 2. **Unit-test pure logic separately from components.** Anything in `frontend/src/utils/` or `frontend/src/lib/` (e.g. [frontend/src/lib/utils.ts](frontend/src/lib/utils.ts)) should get plain function-level tests with no rendering involved — these are the cheapest, most valuable tests to add first.
 3. **Test components through user-visible behavior, not implementation.** Use `@testing-library/react`'s `render` + `screen.getByRole`/`getByLabelText` and `@testing-library/user-event` to simulate typing/clicking, and assert on rendered output — not on internal state or by reaching into component internals.
 4. **Mock `fetch` and `react-query` at the boundary.** When a component calls a fetch-wrapper function (per smell #2 above), mock that wrapper function in the component test rather than mocking global `fetch` directly — this stays valid even if the fetch implementation changes. For hooks-level tests of the fetch wrapper itself, mock global `fetch`/`msw`.

@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { ApiError, deleteAccount, getProfile, updatePassword, updateUsername } from "@/lib/profile";
+import { ApiError } from "@/lib/api";
+import { deleteUser, getProfile, updatePassword, updateUsername } from "@/lib/profile";
 
 const respond = (status: number, body?: unknown) =>
   new Response(body === undefined ? null : JSON.stringify(body), { status });
@@ -28,17 +29,13 @@ describe("profile api", () => {
     const fetchMock = vi.fn().mockResolvedValue(respond(204));
     vi.stubGlobal("fetch", fetchMock);
 
-    await deleteAccount();
+    await deleteUser();
 
     const [url, init] = fetchMock.mock.calls[0];
     expect(url).toBe("/backend/profile");
     expect(init).toMatchObject({ method: "DELETE" });
   });
 
-  it("falls back to the status when the error body is not json", async () => {
-    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(respond(502)));
-    await expect(deleteAccount()).rejects.toThrow("request failed: 502");
-  });
 
   it("gets the caller's profile", async () => {
     const fetchMock = vi.fn().mockResolvedValue(respond(200, { profile: { username: null } }));

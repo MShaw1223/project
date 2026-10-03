@@ -15,7 +15,7 @@ Test is private: with `web_access = "admin"` (the default in `infra/oci`), only 
 
 ## Layout
 
-- `base/`: the backend and frontend Deployments and Services, and the Ingress. Only the frontend has an Ingress; the browser reaches the Go server through the Next.js `/backend` proxy.
+- `base/`: the backend and frontend Deployments and Services, and the Ingress. Only the frontend has an Ingress; the browser reaches the Go server through the `/backend` proxy of the nginx that serves the frontend (`frontend/nginx.conf`).
 - `overlays/<env>/`: namespace, image tags, hostname, `APP_ORIGINS`.
 - `platform/`: cluster-wide pieces, applied once per cluster: cert-manager, the Let's Encrypt issuers and Traefik settings.
 - `../infra/oci/`: OpenTofu for the Oracle server and its network.
@@ -104,4 +104,4 @@ After every deploy to test, CI runs two jobs from the runner against the public 
 By hand:
 
 - `curl -I https://<host>` should return 200 with a valid certificate.
-- Log in and check that the `Set-Cookie` header for the session cookie includes `Secure`. That only happens if `X-Forwarded-Proto` makes it through Traefik and the Next.js proxy.
+- Log in and check that the `Set-Cookie` header for the session cookie includes `Secure`. That only happens if `X-Forwarded-Proto` makes it through Traefik and the frontend's nginx.

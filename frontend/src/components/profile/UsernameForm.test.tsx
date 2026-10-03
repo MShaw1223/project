@@ -1,7 +1,8 @@
 import { cleanup, fireEvent, screen, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import UsernameForm from "@/components/profile/UsernameForm";
+import { UsernameForm } from "@/components/profile/UsernameForm";
 import * as profileApi from "@/lib/profile";
+import { ApiError } from "@/lib/api";
 import { renderWithQueryClient } from "@/test/renderWithQueryClient";
 
 vi.mock("@/lib/profile", async () => {
@@ -28,7 +29,7 @@ describe("UsernameForm", () => {
 
     await renderAndSubmit("  trader_1 ");
 
-    await waitFor(() => expect(profileApi.updateUsername).toHaveBeenCalledWith("trader_1"));
+    await waitFor(() => expect(vi.mocked(profileApi.updateUsername).mock.calls[0]?.[0]).toEqual("trader_1"));
     expect((await screen.findByRole("status")).textContent).toBe("Username saved.");
   });
 
@@ -52,11 +53,20 @@ describe("UsernameForm", () => {
   it("says when the username is already taken", async () => {
     vi.mocked(profileApi.getProfile).mockResolvedValue({ username: null });
     vi.mocked(profileApi.updateUsername).mockRejectedValue(
-      new profileApi.ApiError(409, "username is already taken")
+      new ApiError(409, "username is already taken")
     );
 
     await renderAndSubmit("taken_name");
 
     expect((await screen.findByRole("alert")).textContent).toMatch(/already taken/i);
+  });
+
+  it("shows a generic error for other failures", async () => {
+    vi.mocked(profileApi.getProfile).mockResolvedValue({ username: null });
+    vi.mocked(profileApi.updateUsername).mockRejectedValue(new ApiError(500, "failed to update username"));
+
+    await renderAndSubmit("trader_1");
+
+    expect((await screen.findByRole("alert")).textContent).toMatch(/failed to save the username/i);
   });
 });

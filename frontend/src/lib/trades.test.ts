@@ -2,7 +2,6 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   createCurrencyPair,
   createTrade,
-  deleteCurrencyPair,
   deleteTrade,
   getCurrencyPairs,
   getTrades,
@@ -74,17 +73,4 @@ describe("trades api", () => {
     ]);
   });
 
-  it("deletes a currency pair by id", async () => {
-    const fetchMock = vi.fn().mockResolvedValue(respond(204));
-    vi.stubGlobal("fetch", fetchMock);
-
-    await deleteCurrencyPair("pair-1");
-
-    expect(fetchMock.mock.calls[0]).toMatchObject(["/backend/currency-pairs/pair-1", { method: "DELETE" }]);
-  });
-
-  it("falls back to the status when the error body is not json", async () => {
-    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(respond(502)));
-    await expect(getTrades("acc-1")).rejects.toThrow("request failed: 502");
-  });
 });

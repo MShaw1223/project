@@ -1,6 +1,6 @@
 import { cleanup, fireEvent, screen, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import ChangePassword from "@/components/profile/ChangePassword";
+import { ChangePassword } from "@/components/profile/ChangePassword";
 import * as profileApi from "@/lib/profile";
 import { renderWithQueryClient } from "@/test/renderWithQueryClient";
 
@@ -27,7 +27,7 @@ describe("ChangePassword", () => {
 
     fillAndSubmit("new-secret", "new-secret");
 
-    await waitFor(() => expect(profileApi.updatePassword).toHaveBeenCalledWith("new-secret"));
+    await waitFor(() => expect(vi.mocked(profileApi.updatePassword).mock.calls[0]?.[0]).toEqual("new-secret"));
     const status = await screen.findByRole("status");
     expect(status.textContent).toBe("Password updated.");
   });
