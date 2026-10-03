@@ -20,6 +20,19 @@ export default defineConfig({
   resolve: { alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) } },
   server,
   preview: server,
-  // vmThreads sets jsdom up once per worker rather than once per test file, still isolating the files
-  test: { environment: "jsdom", include: ["src/**/*.test.{ts,tsx}"], pool: "vmThreads" },
+  test: {
+    environment: "jsdom",
+    include: ["src/**/*.test.{ts,tsx}"],
+    // vmThreads sets jsdom up once per worker rather than once per test file, still isolating the files
+    pool: "vmThreads",
+    // only collected by `npm run test:coverage`. Every source file counts, including the ones no test
+    // imports, so the figures are for the whole app rather than for the files that happen to be tested
+    coverage: {
+      provider: "v8",
+      include: ["src/**/*.{ts,tsx}"],
+      exclude: ["src/**/*.test.{ts,tsx}", "src/test/**", "src/**/*.d.ts"],
+      // text-summary is what CI reads the percentage from, cobertura what GitLab annotates diffs with
+      reporter: ["text", "text-summary", "html", "cobertura"],
+    },
+  },
 });
