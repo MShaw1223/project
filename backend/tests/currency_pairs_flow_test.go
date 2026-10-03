@@ -118,8 +118,23 @@ func TestCurrencyPairsServiceErrorsMapToStatusCodes(t *testing.T) {
 		if got := currencyPairsRequest(router, http.MethodGet, "/currency-pairs", "").Code; got != tc.want {
 			t.Errorf("get (%s): expected %d, got %d", tc.name, tc.want, got)
 		}
+		if got := currencyPairsRequest(router, http.MethodPost, "/currency-pairs", `{"symbol":"EURUSD"}`).Code; got != tc.want {
+			t.Errorf("create (%s): expected %d, got %d", tc.name, tc.want, got)
+		}
 		if got := currencyPairsRequest(router, http.MethodDelete, "/currency-pairs/"+validID, "").Code; got != tc.want {
 			t.Errorf("delete (%s): expected %d, got %d", tc.name, tc.want, got)
 		}
+	}
+}
+
+func TestCreatePairRejectsAnInvalidBody(t *testing.T) {
+	svc := &fakeCurrencyPairsService{}
+	recorder := currencyPairsRequest(newCurrencyPairsFlowRouter(svc), http.MethodPost, "/currency-pairs", `not json`)
+
+	if recorder.Code != http.StatusBadRequest {
+		t.Fatalf("expected %d, got %d", http.StatusBadRequest, recorder.Code)
+	}
+	if svc.gotToken != "" {
+		t.Fatal("an invalid body must be rejected before the service")
 	}
 }

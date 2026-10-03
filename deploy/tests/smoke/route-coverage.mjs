@@ -1,20 +1,20 @@
 // Route coverage of the smoke checks: how many of the backend's routes they send a request to. It says
 // what the checks reach in a deployed environment, not how much code runs (the unit tests measure that).
-// The routes are read from backend/main.go, the requests from the file the checks write (REQUESTS_FILE).
+// The routes are read from backend/server/router.go, the requests from the file the checks write (REQUESTS_FILE).
 // Run with: node route-coverage.mjs <requests.json> [<report.json>]
 import { readFileSync, writeFileSync } from "node:fs";
 
 const [requestsFile, reportFile] = process.argv.slice(2);
 if (!requestsFile) throw new Error("usage: node route-coverage.mjs <requests.json> [<report.json>]");
 
-const mainGo = readFileSync(new URL("../../../backend/main.go", import.meta.url), "utf8");
-const routes = [...mainGo.matchAll(/router\.(GET|POST|PUT|PATCH|DELETE)\("([^"]+)"/g)].map(([, method, path]) => ({
+const routerGo = readFileSync(new URL("../../../backend/server/router.go", import.meta.url), "utf8");
+const routes = [...routerGo.matchAll(/router\.(GET|POST|PUT|PATCH|DELETE)\("([^"]+)"/g)].map(([, method, path]) => ({
   method,
   path,
   // :id matches one path segment
   pattern: new RegExp(`^${path.replace(/:[^/]+/g, "[^/]+")}$`),
 }));
-if (routes.length === 0) throw new Error("no routes found in backend/main.go");
+if (routes.length === 0) throw new Error("no routes found in backend/server/router.go");
 
 // the checks reach the backend through the frontend's /backend proxy
 const requests = JSON.parse(readFileSync(requestsFile, "utf8"))

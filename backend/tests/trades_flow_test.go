@@ -153,8 +153,23 @@ func TestTradesServiceErrorsMapToStatusCodes(t *testing.T) {
 		if got := tradesRequest(router, http.MethodGet, "/trades?account_id="+validID, "").Code; got != tc.want {
 			t.Errorf("get (%s): expected %d, got %d", tc.name, tc.want, got)
 		}
+		if got := tradesRequest(router, http.MethodPost, "/trades", `{"account_id":"`+validID+`"}`).Code; got != tc.want {
+			t.Errorf("create (%s): expected %d, got %d", tc.name, tc.want, got)
+		}
 		if got := tradesRequest(router, http.MethodDelete, "/trades/"+validID, "").Code; got != tc.want {
 			t.Errorf("delete (%s): expected %d, got %d", tc.name, tc.want, got)
 		}
+	}
+}
+
+func TestCreateTradeRejectsAnInvalidBody(t *testing.T) {
+	svc := &fakeTradesService{}
+	recorder := tradesRequest(newTradesFlowRouter(svc), http.MethodPost, "/trades", `not json`)
+
+	if recorder.Code != http.StatusBadRequest {
+		t.Fatalf("expected %d, got %d", http.StatusBadRequest, recorder.Code)
+	}
+	if svc.gotToken != "" {
+		t.Fatal("an invalid body must be rejected before the service")
 	}
 }
