@@ -59,8 +59,14 @@ func TestAccountWritesRejectMalformedID(t *testing.T) {
 }
 
 func TestAccountWritesRejectInvalidBody(t *testing.T) {
-	if got := doAccountsRequest(http.MethodPost, "/accounts", `not json`, true).Code; got != http.StatusBadRequest {
-		t.Errorf("expected %d, got %d", http.StatusBadRequest, got)
+	cases := []struct{ method, path string }{
+		{http.MethodPost, "/accounts"},
+		{http.MethodPut, "/accounts/" + validID},
+	}
+	for _, tc := range cases {
+		if got := doAccountsRequest(tc.method, tc.path, `not json`, true).Code; got != http.StatusBadRequest {
+			t.Errorf("%s %s: expected %d, got %d", tc.method, tc.path, http.StatusBadRequest, got)
+		}
 	}
 }
 

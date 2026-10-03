@@ -145,3 +145,24 @@ func TestAuthHandlerGetUserMissingAuthHeader(t *testing.T) {
 		t.Fatalf("expected status %d, got %d", http.StatusUnauthorized, recorder.Code)
 	}
 }
+
+func TestAuthHandlerGetUserServiceError(t *testing.T) {
+	recorder := httptest.NewRecorder()
+	c, _ := gin.CreateTestContext(recorder)
+	c.Request = httptest.NewRequest(http.MethodGet, "/auth/user", nil)
+	c.Request.Header.Set("Authorization", "Bearer test-token")
+
+	h := &handlers.AuthHandler{
+		Service:  &fakeAuthService{err: errors.New("supabase unavailable")},
+		Provider: &handlers.HandlerProvider{},
+	}
+
+	h.GetUser(c)
+
+	if recorder.Code != http.StatusInternalServerError {
+		t.Fatalf("expected status %d, got %d", http.StatusInternalServerError, recorder.Code)
+	}
+	if body := recorder.Body.String(); strings.Contains(body, "supabase unavailable") {
+		t.Fatalf("expected the cause to stay out of the response, got %s", body)
+	}
+}

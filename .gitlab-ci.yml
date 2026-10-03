@@ -64,10 +64,10 @@ frontend:test:
         coverage_format: cobertura
         path: frontend/coverage/cobertura-coverage.xml
 
-# modules and the compiler's build cache, moved into the project so they can be cached
-backend:test:
+# modules and the compiler's build cache, moved into the project so they can be cached. backend:test
+# writes the cache, backend:integration only reads it
+.go-cache:
   image: golang:${GO_VERSION}
-  stage: test
   variables:
     GOPATH: $CI_PROJECT_DIR/.go
     GOCACHE: $CI_PROJECT_DIR/.go/build-cache
@@ -80,6 +80,15 @@ backend:test:
     paths:
       - .go/pkg/mod/
       - .go/build-cache/
+    policy: pull
+
+# the unit tests: Supabase is a fake server (backend/tests/fake_supabase_test.go), so they need no
+# network or variables and run on every branch
+backend:test:
+  extends: .go-cache
+  stage: test
+  cache:
+    policy: pull-push
   script:
     - cd backend
     - go build ./...
@@ -99,6 +108,31 @@ backend:test:
       coverage_report:
         coverage_format: cobertura
         path: backend/coverage.xml
+
+# the repositories against the test environment's real Supabase project, which the unit tests replace
+# with a fake: what this checks is that Supabase answers the way the fake assumes. Its results and
+# coverage are its own, apart from backend:test's. No `coverage:` figure, for the reason given at
+# verify:smoke; the percentage is of the repositories only, in the log and the HTML report.
+# SUPABASE_TEST_EMAIL and SUPABASE_TEST_PASSWORD are a user kept for these tests, protected and scoped
+# to the "test" environment like SUPABASE_URL and SUPABASE_KEY. Nothing needs this job, so Supabase
+# being unreachable doesn't hold up the images or the deploy
+backend:integration:
+  extends: .go-cache
+  stage: test
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  environment:
+    name: test
+    action: verify
+  script:
+    - cd backend
+    - go test -tags=integration -run 'Integration$' -v -coverpkg=./repositories/ -coverprofile=integration.out ./tests/
+    - go tool cover -func=integration.out | tail -n 1
+    - go tool cover -html=integration.out -o integration-coverage.html
+  artifacts:
+    expire_in: 30 days
+    paths:
+      - backend/integration-coverage.html
 
 # on the default branch the image build below runs the same build, so this is for other branches.
 # $CI_COMMIT_BRANCH is unset in merge request pipelines, where the test jobs don't exist to be needed

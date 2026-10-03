@@ -72,7 +72,7 @@ func (l *RateLimiter) now() time.Time {
 
 // RateLimitByClientIP rejects requests over the limiter's budget with 429 and a Retry-After header,
 // keyed by gin's ClientIP. That is the connecting address unless the router trusts a proxy in front of
-// it (see main.go), so a client can't pick its own key by sending X-Forwarded-For.
+// it (see server/router.go), so a client can't pick its own key by sending X-Forwarded-For.
 func RateLimitByClientIP(limiter *RateLimiter) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if allowed, retryAfter := limiter.Allow(c.ClientIP()); !allowed {
