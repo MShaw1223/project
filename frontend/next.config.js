@@ -18,6 +18,8 @@ if (process.env.NODE_ENV === "production") {
 
 const nextConfig = {
   reactStrictMode: true,
+  // self-contained server.js + minimal node_modules for the container image (see Dockerfile)
+  output: "standalone",
   // proxies /backend/* to the Go server so the browser stays same-origin (the Go server has no CORS middleware)
   async rewrites() {
     return [{ source: "/backend/:path*", destination: `${BACKEND_URL}/:path*` }];

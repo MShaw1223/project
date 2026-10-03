@@ -1,0 +1,8 @@
+# GitLab-managed state for project personal-group4853029/project (id 84575151), state name "oracle-test".
+# Use with: tofu init -backend-config=gitlab.tfbackend
+address        = "https://gitlab.com/api/v4/projects/84575151/terraform/state/oracle-test"
+lock_address   = "https://gitlab.com/api/v4/projects/84575151/terraform/state/oracle-test/lock"
+unlock_address = "https://gitlab.com/api/v4/projects/84575151/terraform/state/oracle-test/lock"
+lock_method    = "POST"
+unlock_method  = "DELETE"
+retry_wait_min = 5

@@ -1,0 +1,36 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: fxtrax
+resources:
+  - namespace.yaml
+  - ../../base
+images:
+  # CI replaces newTag with the commit being deployed
+  - name: backend
+    newName: registry.gitlab.com/personal-group4853029/project/backend
+    newTag: latest
+  - name: frontend
+    newName: registry.gitlab.com/personal-group4853029/project/frontend
+    newTag: latest
+configMapGenerator:
+  - name: backend-config
+    literals:
+      - APP_ORIGINS=https://fxtrax-test.132-145-29-125.sslip.io
+      # the k3s pod network (Traefik, the Next.js proxy), so ClientIP is the real client. Test isn't
+      # behind Cloudflare; an overlay that is adds Cloudflare's ranges (see deploy/README.md)
+      - TRUSTED_PROXIES=10.42.0.0/16
+# the hostname uses the sslip_domain output of infra/oci (here and in APP_ORIGINS), eg
+# 132-145-1-2.sslip.io: the address is in the name, so there's no DNS to set up
+patches:
+  - target: { kind: Ingress, name: fxtrax }
+    patch: |-
+      # not behind Cloudflare: certificates via HTTP-01, which port 80 is open for
+      - op: replace
+        path: /metadata/annotations/cert-manager.io~1cluster-issuer
+        value: letsencrypt-prod
+      - op: replace
+        path: /spec/tls/0/hosts/0
+        value: fxtrax-test.132-145-29-125.sslip.io
+      - op: replace
+        path: /spec/rules/0/host
+        value: fxtrax-test.132-145-29-125.sslip.io

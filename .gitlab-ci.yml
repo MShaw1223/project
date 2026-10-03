@@ -1,9 +1,19 @@
 stages:
   - test
   - build
+  - package
+  - deploy
+  - verify
+
+# every job runs on the self-hosted ARM runner on Oracle (infra/oci/runner.tf): it doesn't use the Free
+# tier's compute minutes, matches the servers' CPU, and its fixed IP may reach the test environment
+default:
+  tags:
+    - oracle-arm
 
 variables:
-  NODE_VERSION: "20"
+  NODE_VERSION: "22"
+  TEST_URL: https://fxtrax-test.132-145-29-125.sslip.io
   GO_VERSION: "1.25"
 
 cache:
@@ -54,3 +64,107 @@ backend:build:
   script:
     - cd backend
     - go build
+
+# arm64 images, built natively on the ARM runner: both the Oracle (Ampere) and Hetzner (CAX) servers
+# are ARM. The Docker-in-Docker daemon is private to the job, so it's reached without TLS
+.image:
+  stage: package
+  image: docker:27
+  services:
+    - docker:27-dind
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ""
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  script:
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
+    - docker build -t "$CI_REGISTRY_IMAGE/$COMPONENT:$CI_COMMIT_SHORT_SHA" "$COMPONENT"
+    - docker push "$CI_REGISTRY_IMAGE/$COMPONENT:$CI_COMMIT_SHORT_SHA"
+
+backend:image:
+  extends: .image
+  needs:
+    - backend:build
+  variables:
+    COMPONENT: backend
+
+frontend:image:
+  extends: .image
+  needs:
+    - frontend:build
+  variables:
+    COMPONENT: frontend
+
+# kubectl talking to the test cluster through the GitLab agent (.gitlab/agents/oracle-test), so no
+# kubeconfig is stored here
+.kubectl:
+  image: alpine:3.22
+  before_script:
+    - apk add --no-cache curl
+    - arch=$(uname -m | sed -e 's/aarch64/arm64/' -e 's/x86_64/amd64/')
+    - curl -fsSLo /usr/local/bin/kubectl "https://dl.k8s.io/release/$(curl -fsSL https://dl.k8s.io/release/stable.txt)/bin/linux/$arch/kubectl"
+    - chmod +x /usr/local/bin/kubectl
+    - kubectl config use-context "$CI_PROJECT_PATH:oracle-test"
+
+# SUPABASE_URL and SUPABASE_KEY are protected CI/CD variables scoped to the "test" environment
+deploy:test:
+  extends: .kubectl
+  stage: deploy
+  needs:
+    - backend:image
+    - frontend:image
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  environment:
+    name: test
+    url: $TEST_URL
+  script:
+    - 'sed -i "s/newTag: .*/newTag: $CI_COMMIT_SHORT_SHA/" deploy/overlays/test/kustomization.yaml'
+    - kubectl apply -f deploy/overlays/test/namespace.yaml
+    - >
+      kubectl -n fxtrax create secret generic backend-secrets
+      --from-literal=SUPABASE_URL="$SUPABASE_URL" --from-literal=SUPABASE_KEY="$SUPABASE_KEY"
+      --dry-run=client -o yaml | kubectl apply -f -
+    - kubectl apply -k deploy/overlays/test
+    - kubectl -n fxtrax rollout status deployment/backend --timeout=5m
+    - kubectl -n fxtrax rollout status deployment/frontend --timeout=5m
+
+# checks of the deployed test environment from outside, through its firewall: the runner's IP is
+# allowed to reach it (infra/oci)
+.verify-test:
+  stage: verify
+  needs:
+    - deploy:test
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+verify:smoke:
+  extends: .verify-test
+  image: node:${NODE_VERSION}-alpine
+  variables:
+    BASE_URL: $TEST_URL
+  script:
+    - >
+      node --test deploy/tests/smoke/smoke.test.mjs
+      --test-reporter=spec --test-reporter-destination=stdout
+      --test-reporter=junit --test-reporter-destination=smoke-junit.xml
+  artifacts:
+    when: always
+    reports:
+      junit: smoke-junit.xml
+
+verify:lighthouse:
+  extends: .verify-test
+  image: node:${NODE_VERSION}-bookworm
+  variables:
+    BASE_URL: $TEST_URL
+    CHROME_PATH: /usr/bin/chromium
+  script:
+    - apt-get update -qq && apt-get install -y -qq chromium
+    - npx --yes @lhci/cli@0.15.1 autorun --config=deploy/tests/lighthouse/lighthouserc.cjs
+  artifacts:
+    when: always
+    expire_in: 30 days
+    paths:
+      - lighthouse-reports/

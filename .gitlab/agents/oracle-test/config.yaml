@@ -1,0 +1,5 @@
+# GitLab agent for Kubernetes running in the Oracle test cluster. It dials out to GitLab, so CI jobs in
+# this project can use the cluster without its API port being open to the internet.
+ci_access:
+  projects:
+    - id: personal-group4853029/project

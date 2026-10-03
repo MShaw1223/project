@@ -1,0 +1,32 @@
+#cloud-config
+package_update: true
+package_upgrade: true
+packages:
+  - unattended-upgrades
+  - docker.io
+
+write_files:
+  - path: /usr/local/sbin/install-gitlab-runner.sh
+    permissions: "0755"
+    content: |
+      #!/bin/sh
+      set -eu
+      # Oracle's Ubuntu images REJECT forwarded traffic, which container networking needs
+      sed -i '/icmp-host-prohibited/d' /etc/iptables/rules.v4
+      iptables-restore < /etc/iptables/rules.v4
+      systemctl restart docker
+
+      curl -fsSL https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh | bash
+      apt-get install -y gitlab-runner
+      # registered afterwards with a token from GitLab, so the token never sits in user data or state
+      # (see deploy/README.md)
+
+  # CI jobs leave images, containers and build cache behind; clear anything unused for 3 days
+  - path: /etc/cron.daily/docker-prune
+    permissions: "0755"
+    content: |
+      #!/bin/sh
+      docker system prune --all --force --filter until=72h
+
+runcmd:
+  - /usr/local/sbin/install-gitlab-runner.sh

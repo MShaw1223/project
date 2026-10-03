@@ -1,2 +1,7 @@
 .env
 .DS_Store
+
+# OpenTofu state can hold secrets and is never committed, wherever tofu was run from
+*.tfstate
+*.tfstate.*
+.terraform/

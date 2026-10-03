@@ -1,0 +1,4 @@
+# copy to terraform.tfvars (gitignored) and fill in
+tenancy_ocid = "ocid1.tenancy.oc1..xxxx"
+region       = "uk-london-1"
+admin_cidrs  = ["203.0.113.7/32"] # curl -4 ifconfig.me
