@@ -3,11 +3,23 @@
 // throwaway inputs, so they are safe to run against any environment.
 // Run with: BASE_URL=https://<host> node --test
 import assert from "node:assert/strict";
-import { test } from "node:test";
+import { writeFileSync } from "node:fs";
+import { after, test } from "node:test";
 
 const base = process.env.BASE_URL;
 assert.ok(base, "BASE_URL must be set");
 const origin = new URL(base).origin;
+
+// every request the checks make is noted, so route-coverage.mjs can report which of the backend's
+// routes they reach. Written to REQUESTS_FILE when that is set
+const requests = [];
+const fetch = (url, init = {}) => {
+  requests.push({ method: init.method ?? "GET", path: new URL(url).pathname });
+  return globalThis.fetch(url, init);
+};
+after(() => {
+  if (process.env.REQUESTS_FILE) writeFileSync(process.env.REQUESTS_FILE, JSON.stringify(requests));
+});
 
 const post = (path, body, headers = {}) =>
   fetch(`${base}${path}`, {

@@ -98,8 +98,23 @@ Cloudflare's IP ranges appear in three places: the firewall (fetched on every `t
 ## Checking a deploy
 
 After every deploy to test, CI runs two jobs from the runner against the public URL:
-- `verify:smoke`: `deploy/tests/smoke/`, nine checks through the full path (TLS, security headers, the backend proxy, a `Secure` session cookie, Supabase, cross-site and oversized requests refused). Results show in the pipeline's Tests tab. Run them locally with `BASE_URL=https://<host> node --test deploy/tests/smoke/smoke.test.mjs`.
-- `verify:lighthouse`: Lighthouse CI on the login and sign-up pages, three runs each, failing below the thresholds in `deploy/tests/lighthouse/lighthouserc.cjs`. The HTML reports are kept as job artifacts for 30 days.
+- `verify:smoke`: `deploy/tests/smoke/`, nine checks through the full path (TLS, security headers, the backend proxy, a `Secure` session cookie, Supabase, cross-site and oversized requests refused). Results show in the pipeline's Tests tab. Run them locally with `BASE_URL=https://<host> node --test deploy/tests/smoke/smoke.test.mjs`. The job then prints which of the backend's routes the checks reached (`route-coverage.mjs`) and keeps the list as `smoke-coverage.json`.
+- `verify:lighthouse`: Lighthouse CI on the login and sign-up pages, three runs each, failing below the thresholds in `deploy/tests/lighthouse/lighthouserc.cjs`. The HTML reports are kept as job artifacts for 30 days. With them is `page-coverage.json`, which of the app's pages were audited (`page-coverage.mjs`).
+
+## Coverage
+
+Four figures, each printed in its job's log:
+
+| Job | What it measures | Locally |
+| --- | --- | --- |
+| `frontend:test` | statements, branches, functions and lines of `frontend/src` run by the Vitest tests | `npm run test:coverage` in `frontend/`, then open `coverage/index.html` |
+| `backend:test` | statements of the Go packages run by `backend/tests` | `go test -coverpkg=./... -coverprofile=coverage.out ./...` in `backend/`, then `go tool cover -html=coverage.out` |
+| `verify:smoke` | backend routes the smoke checks send a request to | `REQUESTS_FILE=requests.json` on the smoke command above, then `node deploy/tests/smoke/route-coverage.mjs requests.json` |
+| `verify:lighthouse` | pages Lighthouse audits | `node deploy/tests/lighthouse/page-coverage.mjs lighthouse-reports/manifest.json` |
+
+The first two are code coverage. GitLab shows them on the pipeline and its jobs (the pipeline's figure is their average), marks covered and uncovered lines in merge request diffs, and keeps the HTML reports as job artifacts for 30 days. A file no test imports still counts, as uncovered.
+
+The last two say how much of the app the checks of a deployed environment reach, not how much code runs, so they are kept out of GitLab's coverage figure. The signed-in pages and most routes need an account, which those checks don't have.
 
 By hand:
 

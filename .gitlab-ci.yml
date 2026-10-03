@@ -14,7 +14,7 @@ default:
 variables:
   NODE_VERSION: "24"
   TEST_URL: https://fxtrax-test.132-145-29-125.sslip.io
-  GO_VERSION: "1.25"
+  GO_VERSION: "1.27"
   # npm's download cache, inside the project so the runner can cache it (it only caches paths in there)
   npm_config_cache: $CI_PROJECT_DIR/.npm
   npm_config_prefer_offline: "true"
@@ -51,7 +51,18 @@ frontend:test:
   script:
     - cd frontend
     - npm ci
-    - npm test
+    - npm run test:coverage
+  # the job's coverage figure is the statements one, as Go's is; branches, functions and lines are in
+  # the log above it and per file in the HTML report
+  coverage: '/Statements\s*:\s*(\d+\.?\d*)%/'
+  artifacts:
+    expire_in: 30 days
+    paths:
+      - frontend/coverage/
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: frontend/coverage/cobertura-coverage.xml
 
 # modules and the compiler's build cache, moved into the project so they can be cached
 backend:test:
@@ -72,7 +83,22 @@ backend:test:
   script:
     - cd backend
     - go build ./...
-    - go test ./...
+    # the tests are a package of their own (backend/tests), so without -coverpkg nothing they run in
+    # the other packages would be counted
+    - go test -coverpkg=./... -coverprofile=coverage.out ./...
+    - go tool cover -func=coverage.out | tail -n 1
+    - go tool cover -html=coverage.out -o coverage.html
+    # the format GitLab annotates merge request diffs from
+    - go run github.com/boumenot/gocover-cobertura@v1.5.0 < coverage.out > coverage.xml
+  coverage: '/total:\s+\(statements\)\s+(\d+\.?\d*)%/'
+  artifacts:
+    expire_in: 30 days
+    paths:
+      - backend/coverage.html
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: backend/coverage.xml
 
 # on the default branch the image build below runs the same build, so this is for other branches.
 # $CI_COMMIT_BRANCH is unset in merge request pipelines, where the test jobs don't exist to be needed
@@ -172,14 +198,21 @@ verify:smoke:
   image: node:${NODE_VERSION}-alpine
   variables:
     BASE_URL: $TEST_URL
+    REQUESTS_FILE: smoke-requests.json
   script:
     - >
       node --test
       --test-reporter=spec --test-reporter-destination=stdout
       --test-reporter=junit --test-reporter-destination=smoke-junit.xml
       deploy/tests/smoke/smoke.test.mjs
+    # which of the backend's routes the checks reached. Not a `coverage:` figure: GitLab averages those
+    # into the pipeline's coverage, which is the code coverage of the unit tests
+    - node deploy/tests/smoke/route-coverage.mjs smoke-requests.json smoke-coverage.json
   artifacts:
     when: always
+    expire_in: 30 days
+    paths:
+      - smoke-coverage.json
     reports:
       junit: smoke-junit.xml
 
@@ -200,6 +233,8 @@ verify:lighthouse:
     # without the recommended packages (systemd, CUPS, polkit...), which Chromium doesn't need headless
     - apt-get update -qq && apt-get install -y -qq --no-install-recommends chromium fonts-liberation > /dev/null
     - npx --yes @lhci/cli@0.15.1 autorun --config=deploy/tests/lighthouse/lighthouserc.cjs
+    # which of the app's pages were audited, kept with the reports
+    - node deploy/tests/lighthouse/page-coverage.mjs lighthouse-reports/manifest.json lighthouse-reports/page-coverage.json
   artifacts:
     when: always
     expire_in: 30 days

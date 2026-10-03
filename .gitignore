@@ -1,6 +1,9 @@
 .env
 .DS_Store
 
+# coverage output of the backend tests (deploy/README.md)
+/backend/coverage.*
+
 # OpenTofu state can hold secrets and is never committed, wherever tofu was run from
 *.tfstate
 *.tfstate.*

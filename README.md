@@ -1,3 +1,6 @@
+[![frontend coverage](https://gitlab.com/personal-group4853029/project/badges/main/coverage.svg?job=frontend:test&key_text=frontend+coverage&key_width=130)](https://gitlab.com/personal-group4853029/project/-/pipelines)
+[![backend coverage](https://gitlab.com/personal-group4853029/project/badges/main/coverage.svg?job=backend:test&key_text=backend+coverage&key_width=130)](https://gitlab.com/personal-group4853029/project/-/pipelines)
+
 This is a side project I come to here and there; initially my NEA project for my CS A-level (see tag [1.0](https://gitlab.com/personal-group4853029/project/-/tree/1.0?ref_type=tags) for the previous state). Frontend is React/TypeScript on Vite with React Router and TanStack Query (originally NextJS), backend in GoLang but originally in typescript -- leveraged server components directly for calls to the db (first ever web project); persistence is postgres on Supabase. 
 
 More info on what the project does here: [frontend/README.md](https://gitlab.com/personal-group4853029/project/-/blob/main/frontend/README.md)
