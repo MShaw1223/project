@@ -15,15 +15,28 @@ variables:
   NODE_VERSION: "22"
   TEST_URL: https://fxtrax-test.132-145-29-125.sslip.io
   GO_VERSION: "1.25"
+  # npm's download cache, inside the project so the runner can cache it (it only caches paths in there)
+  npm_config_cache: $CI_PROJECT_DIR/.npm
+  npm_config_prefer_offline: "true"
+  npm_config_fund: "false"
+  npm_config_update_notifier: "false"
 
-cache:
-  key: "$CI_COMMIT_REF_SLUG"
-  paths:
-    - frontend/node_modules/
-    - /go/pkg/mod/
+# caches are per job, only where there's something to restore, and keyed on the lockfile so they're
+# rebuilt only when dependencies change. npm ci deletes node_modules, so it's npm's download cache
+# that is kept. One job writes each cache, the others only read it
+.npm-cache:
+  image: node:${NODE_VERSION}
+  cache:
+    key:
+      files:
+        - frontend/package-lock.json
+      prefix: npm
+    paths:
+      - .npm/
+    policy: pull
 
 frontend:lint:
-  image: node:${NODE_VERSION}
+  extends: .npm-cache
   stage: test
   script:
     - cd frontend
@@ -31,42 +44,53 @@ frontend:lint:
     - npm run lint
 
 frontend:test:
-  image: node:${NODE_VERSION}
+  extends: .npm-cache
   stage: test
+  cache:
+    policy: pull-push
   script:
     - cd frontend
     - npm ci
     - npm test
 
+# modules and the compiler's build cache, moved into the project so they can be cached
 backend:test:
   image: golang:${GO_VERSION}
   stage: test
+  variables:
+    GOPATH: $CI_PROJECT_DIR/.go
+    GOCACHE: $CI_PROJECT_DIR/.go/build-cache
+    GOFLAGS: -modcacherw
+  cache:
+    key:
+      files:
+        - backend/go.sum
+      prefix: go
+    paths:
+      - .go/pkg/mod/
+      - .go/build-cache/
   script:
     - cd backend
-    - go mod download
+    - go build ./...
     - go test ./...
 
+# on the default branch the image build below runs the same next build, so this is for other branches
 frontend:build:
-  image: node:${NODE_VERSION}
+  extends: .npm-cache
   stage: build
   needs:
     - frontend:lint
+  rules:
+    - if: $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH
   script:
     - cd frontend
     - npm ci
     - npm run build
 
-backend:build:
-  image: golang:${GO_VERSION}
-  stage: build
-  needs:
-    - backend:test
-  script:
-    - cd backend
-    - go build
-
 # arm64 images, built natively on the ARM runner: both the Oracle (Ampere) and Hetzner (CAX) servers
-# are ARM. The Docker-in-Docker daemon is private to the job, so it's reached without TLS
+# are ARM. The Docker-in-Docker daemon is private to the job, so it's reached without TLS. It starts
+# empty every time, so BuildKit's layer cache is kept in the registry (the "buildcache" tag): a
+# component whose files haven't changed is not rebuilt
 .image:
   stage: package
   image: docker:27
@@ -78,33 +102,36 @@ backend:build:
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
   script:
-    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
-    - docker build -t "$CI_REGISTRY_IMAGE/$COMPONENT:$CI_COMMIT_SHORT_SHA" "$COMPONENT"
-    - docker push "$CI_REGISTRY_IMAGE/$COMPONENT:$CI_COMMIT_SHORT_SHA"
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY" 2> /dev/null
+    - docker buildx create --use
+    - >
+      docker buildx build --push --provenance=false
+      --cache-from "type=registry,ref=$CI_REGISTRY_IMAGE/$COMPONENT:buildcache"
+      --cache-to "type=registry,ref=$CI_REGISTRY_IMAGE/$COMPONENT:buildcache,mode=max"
+      -t "$CI_REGISTRY_IMAGE/$COMPONENT:$CI_COMMIT_SHORT_SHA" "$COMPONENT"
 
 backend:image:
   extends: .image
   needs:
-    - backend:build
+    - backend:test
   variables:
     COMPONENT: backend
 
 frontend:image:
   extends: .image
   needs:
-    - frontend:build
+    - frontend:lint
+    - frontend:test
   variables:
     COMPONENT: frontend
 
 # kubectl talking to the test cluster through the GitLab agent (.gitlab/agents/oracle-test), so no
 # kubeconfig is stored here
 .kubectl:
-  image: alpine:3.22
+  image:
+    name: alpine/kubectl:1.37.1
+    entrypoint: [""]
   before_script:
-    - apk add --no-cache curl
-    - arch=$(uname -m | sed -e 's/aarch64/arm64/' -e 's/x86_64/amd64/')
-    - curl -fsSLo /usr/local/bin/kubectl "https://dl.k8s.io/release/$(curl -fsSL https://dl.k8s.io/release/stable.txt)/bin/linux/$arch/kubectl"
-    - chmod +x /usr/local/bin/kubectl
     - kubectl config use-context "$CI_PROJECT_PATH:oracle-test"
 
 # SUPABASE_URL and SUPABASE_KEY are protected CI/CD variables scoped to the "test" environment
@@ -146,9 +173,10 @@ verify:smoke:
     BASE_URL: $TEST_URL
   script:
     - >
-      node --test deploy/tests/smoke/smoke.test.mjs
+      node --test
       --test-reporter=spec --test-reporter-destination=stdout
       --test-reporter=junit --test-reporter-destination=smoke-junit.xml
+      deploy/tests/smoke/smoke.test.mjs
   artifacts:
     when: always
     reports:
@@ -160,8 +188,16 @@ verify:lighthouse:
   variables:
     BASE_URL: $TEST_URL
     CHROME_PATH: /usr/bin/chromium
+    DEBIAN_FRONTEND: noninteractive
+    # the deprecation warnings are for Lighthouse CI's own dependencies
+    npm_config_loglevel: error
+  cache:
+    key: lhci-0.15.1
+    paths:
+      - .npm/
   script:
-    - apt-get update -qq && apt-get install -y -qq chromium
+    # without the recommended packages (systemd, CUPS, polkit...), which Chromium doesn't need headless
+    - apt-get update -qq && apt-get install -y -qq --no-install-recommends chromium fonts-liberation > /dev/null
     - npx --yes @lhci/cli@0.15.1 autorun --config=deploy/tests/lighthouse/lighthouserc.cjs
   artifacts:
     when: always

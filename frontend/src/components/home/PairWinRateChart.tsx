@@ -37,7 +37,7 @@ export function PairWinRateChart({ data }: { data: PairWinRate[] }) {
             offset={8}
             className="fill-foreground"
             fontSize={12}
-            formatter={(value: number) => `${value}%`}
+            formatter={(value) => `${value}%`}
           />
         </Bar>
       </BarChart>

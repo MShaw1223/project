@@ -15,11 +15,14 @@ const LoginPage: NextPage = () => {
   useEffect(() => {
     const hash = new URLSearchParams(window.location.hash.slice(1));
     if (hash.get("type") !== "signup" && !hash.has("error")) return;
+    // the page is prerendered, so the hash can only be read once it's in the browser
+    /* eslint-disable react-hooks/set-state-in-effect */
     if (hash.has("error")) {
       setError("That confirmation link is invalid or has expired. Sign up again to get a new one.");
     } else {
       setNotice("Your email is confirmed. Log in to get started.");
     }
+    /* eslint-enable react-hooks/set-state-in-effect */
     // the hash can carry tokens, drop it from the address bar and history
     window.history.replaceState(null, "", window.location.pathname + window.location.search);
   }, []);
