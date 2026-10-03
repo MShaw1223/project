@@ -1,11 +1,11 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { act, cleanup, fireEvent, screen } from "@testing-library/react";
+import { renderWithQueryClient } from "@/test/renderWithQueryClient";
 import { RESEND_COOLDOWN_SECONDS, ResendConfirmationButton } from "@/components/auth/ResendConfirmationButton";
 import { resendConfirmation } from "@/lib/auth";
+import { ApiError } from "@/lib/api";
 
 vi.mock("@/lib/auth", () => ({ resendConfirmation: vi.fn() }));
-
-const respond = (status: number) => new Response(null, { status });
 
 afterEach(() => {
   vi.clearAllMocks();
@@ -22,8 +22,8 @@ async function clickResend() {
 describe("ResendConfirmationButton", () => {
   it("resends, confirms, and waits out the cooldown before allowing another", async () => {
     vi.useFakeTimers();
-    vi.mocked(resendConfirmation).mockResolvedValue(respond(204));
-    render(<ResendConfirmationButton email="trader@example.com" />);
+    vi.mocked(resendConfirmation).mockResolvedValue(undefined);
+    renderWithQueryClient(<ResendConfirmationButton email="trader@example.com" />);
 
     await clickResend();
 
@@ -42,22 +42,20 @@ describe("ResendConfirmationButton", () => {
   });
 
   it("waits a minute when Supabase refuses without saying how long", async () => {
-    vi.mocked(resendConfirmation).mockResolvedValue(respond(429));
-    render(<ResendConfirmationButton email="trader@example.com" />);
+    vi.mocked(resendConfirmation).mockRejectedValue(new ApiError(429, "too many requests"));
+    renderWithQueryClient(<ResendConfirmationButton email="trader@example.com" />);
 
     await clickResend();
 
-    expect(screen.getByRole("alert").textContent).toMatch(/too many emails/i);
+    expect((await screen.findByRole("alert")).textContent).toMatch(/too many emails/i);
     const button = screen.getByRole("button", { name: /resend/i }) as HTMLButtonElement;
     expect(button.disabled).toBe(true);
     expect(button.textContent).toMatch("(1:00)");
   });
 
   it("waits as long as the backend's Retry-After says", async () => {
-    vi.mocked(resendConfirmation).mockResolvedValue(
-      new Response(null, { status: 429, headers: { "Retry-After": "125" } })
-    );
-    render(<ResendConfirmationButton email="trader@example.com" />);
+    vi.mocked(resendConfirmation).mockRejectedValue(new ApiError(429, "too many requests", 125));
+    renderWithQueryClient(<ResendConfirmationButton email="trader@example.com" />);
 
     await clickResend();
 
@@ -65,12 +63,21 @@ describe("ResendConfirmationButton", () => {
   });
 
   it("lets the user retry straight away after an unexpected failure", async () => {
-    vi.mocked(resendConfirmation).mockResolvedValue(respond(500));
-    render(<ResendConfirmationButton email="trader@example.com" />);
+    vi.mocked(resendConfirmation).mockRejectedValue(new ApiError(500, "failed"));
+    renderWithQueryClient(<ResendConfirmationButton email="trader@example.com" />);
 
     await clickResend();
 
-    expect(screen.getByRole("alert").textContent).toMatch(/couldn't resend/i);
+    expect((await screen.findByRole("alert")).textContent).toMatch(/couldn't resend/i);
     expect((screen.getByRole("button", { name: /resend/i }) as HTMLButtonElement).disabled).toBe(false);
+  });
+
+  it("says the server is unreachable when the request never gets there", async () => {
+    vi.mocked(resendConfirmation).mockRejectedValue(new TypeError("Failed to fetch"));
+    renderWithQueryClient(<ResendConfirmationButton email="trader@example.com" />);
+
+    await clickResend();
+
+    expect((await screen.findByRole("alert")).textContent).toMatch(/unable to reach the server/i);
   });
 });

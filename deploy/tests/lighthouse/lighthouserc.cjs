@@ -8,7 +8,7 @@ if (!base) throw new Error("BASE_URL must be set");
 module.exports = {
   ci: {
     collect: {
-      url: [`${base}/`, `${base}/signUp`],
+      url: [`${base}/`, `${base}/signup`],
       numberOfRuns: 3,
       settings: {
         // containers have no sandbox support and a small /dev/shm

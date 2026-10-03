@@ -1,16 +1,18 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { cleanup, fireEvent, screen, waitFor } from "@testing-library/react";
+import { renderWithQueryClient } from "@/test/renderWithQueryClient";
 import LoginPage from "@/pages/index";
 import { login, resendConfirmation } from "@/lib/auth";
+import { ApiError } from "@/lib/api";
 
-const push = vi.fn();
-vi.mock("next/router", () => ({ useRouter: () => ({ push }) }));
+const navigate = vi.fn();
+vi.mock("react-router", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("react-router")>()),
+  useNavigate: () => navigate,
+}));
 vi.mock("@/lib/auth", () => ({ login: vi.fn(), resendConfirmation: vi.fn() }));
 
-const respond = (status: number, body?: unknown) =>
-  new Response(body === undefined ? null : JSON.stringify(body), { status });
-
-beforeEach(() => push.mockReset());
+beforeEach(() => navigate.mockReset());
 afterEach(() => {
   vi.clearAllMocks();
   cleanup();
@@ -24,20 +26,33 @@ function submit() {
 }
 
 describe("login page", () => {
+  it("starts the new session from an empty cache and goes to the dashboard", async () => {
+    const user = { id: "u2", email: "trader@example.com" };
+    vi.mocked(login).mockResolvedValue(user);
+    const { queryClient } = renderWithQueryClient(<LoginPage />);
+    queryClient.setQueryData(["accounts"], [{ id: "a1", name: "previous user's account" }]);
+
+    submit();
+
+    await waitFor(() => expect(navigate).toHaveBeenCalledWith("/dashboard"));
+    expect(queryClient.getQueryData(["accounts"])).toBeUndefined();
+    expect(queryClient.getQueryData(["session"])).toEqual(user);
+  });
+
   it("tells the user to confirm their email when the backend says it isn't confirmed", async () => {
-    vi.mocked(login).mockResolvedValue(respond(403, { error: "email not confirmed" }));
-    render(<LoginPage />);
+    vi.mocked(login).mockRejectedValue(new ApiError(403, "email not confirmed"));
+    renderWithQueryClient(<LoginPage />);
 
     submit();
 
     expect((await screen.findByRole("alert")).textContent).toMatch(/confirm your email before logging in/i);
-    expect(push).not.toHaveBeenCalled();
+    expect(navigate).not.toHaveBeenCalled();
   });
 
   it("offers to resend the confirmation email to the address that couldn't log in", async () => {
-    vi.mocked(login).mockResolvedValue(respond(403, { error: "email not confirmed" }));
-    vi.mocked(resendConfirmation).mockResolvedValue(respond(204));
-    render(<LoginPage />);
+    vi.mocked(login).mockRejectedValue(new ApiError(403, "email not confirmed"));
+    vi.mocked(resendConfirmation).mockResolvedValue(undefined);
+    renderWithQueryClient(<LoginPage />);
 
     submit();
     fireEvent.click(await screen.findByRole("button", { name: /resend confirmation email/i }));
@@ -47,8 +62,8 @@ describe("login page", () => {
   });
 
   it("says the email or password is wrong on a 401", async () => {
-    vi.mocked(login).mockResolvedValue(respond(401, { error: "invalid email or password" }));
-    render(<LoginPage />);
+    vi.mocked(login).mockRejectedValue(new ApiError(401, "invalid email or password"));
+    renderWithQueryClient(<LoginPage />);
 
     submit();
 
@@ -57,10 +72,8 @@ describe("login page", () => {
   });
 
   it("says how long to wait when login attempts are rate limited", async () => {
-    vi.mocked(login).mockResolvedValue(
-      new Response(JSON.stringify({ error: "too many requests" }), { status: 429, headers: { "Retry-After": "240" } })
-    );
-    render(<LoginPage />);
+    vi.mocked(login).mockRejectedValue(new ApiError(429, "too many requests", 240));
+    renderWithQueryClient(<LoginPage />);
 
     submit();
 
@@ -69,7 +82,7 @@ describe("login page", () => {
 
   it("confirms the email and clears the tokens from the url after the confirmation link", async () => {
     window.history.replaceState(null, "", "/#access_token=secret&type=signup");
-    render(<LoginPage />);
+    renderWithQueryClient(<LoginPage />);
 
     expect((await screen.findByRole("status")).textContent).toMatch(/your email is confirmed/i);
     expect(window.location.hash).toBe("");
@@ -77,7 +90,7 @@ describe("login page", () => {
 
   it("explains an expired confirmation link", async () => {
     window.history.replaceState(null, "", "/#error=access_denied&error_code=otp_expired");
-    render(<LoginPage />);
+    renderWithQueryClient(<LoginPage />);
 
     expect((await screen.findByRole("alert")).textContent).toMatch(/invalid or has expired/i);
     expect(window.location.hash).toBe("");

@@ -22,9 +22,9 @@ func main() {
 	addr := ":8080"
 	log.Printf("starting server on %s", addr)
 	router := gin.Default()
-	// ClientIP (used for rate limiting) only honours X-Forwarded-For from proxies listed here. The
-	// Next.js rewrite passes a client-supplied X-Forwarded-For straight through, so it isn't trusted
-	// by default; set TRUSTED_PROXIES (comma-separated IPs/CIDRs) for a proxy that overwrites the header.
+	// ClientIP (used for rate limiting) only honours X-Forwarded-For from proxies listed here. A
+	// client can send its own X-Forwarded-For, so nothing is trusted by default; set TRUSTED_PROXIES
+	// (comma-separated IPs/CIDRs) to the proxies in front of this server, which append the address they saw.
 	proxies := trustedProxies()
 	if err := router.SetTrustedProxies(proxies); err != nil {
 		log.Fatalf("invalid TRUSTED_PROXIES: %v", err)
@@ -128,7 +128,7 @@ func trustedProxies() []string {
 }
 
 // appOrigins parses APP_ORIGINS (comma-separated, eg "https://fxtrax.app"), the origins allowed to
-// make state-changing requests. Defaults to the local Next.js dev server.
+// make state-changing requests. Defaults to the local frontend dev server.
 func appOrigins() []string {
 	var origins []string
 	for _, origin := range strings.Split(os.Getenv("APP_ORIGINS"), ",") {

@@ -15,17 +15,13 @@ spec:
         - name: gitlab-registry
       securityContext:
         runAsNonRoot: true
-        runAsUser: 1000 # the image's "node" user
+        runAsUser: 101 # the image's "nginx" user
         seccompProfile: { type: RuntimeDefault }
       containers:
         - name: frontend
           image: frontend
           ports:
             - containerPort: 3000
-          env:
-            # Kubernetes sets HOSTNAME to the pod name, which the standalone server would bind to
-            - name: HOSTNAME
-              value: "0.0.0.0"
           readinessProbe:
             tcpSocket: { port: 3000 }
             periodSeconds: 5
@@ -33,17 +29,18 @@ spec:
             tcpSocket: { port: 3000 }
             periodSeconds: 20
           resources:
-            requests: { cpu: 100m, memory: 192Mi }
-            limits: { memory: 512Mi }
+            requests: { cpu: 10m, memory: 16Mi }
+            limits: { memory: 64Mi }
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
             capabilities: { drop: [ALL] }
           volumeMounts:
-            - name: next-cache
-              mountPath: /app/.next/cache
+            # nginx keeps its pid file and request buffers here
+            - name: tmp
+              mountPath: /tmp
       volumes:
-        - name: next-cache
+        - name: tmp
           emptyDir: {}
 ---
 apiVersion: v1

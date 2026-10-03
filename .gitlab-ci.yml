@@ -12,7 +12,7 @@ default:
     - oracle-arm
 
 variables:
-  NODE_VERSION: "22"
+  NODE_VERSION: "24"
   TEST_URL: https://fxtrax-test.132-145-29-125.sslip.io
   GO_VERSION: "1.25"
   # npm's download cache, inside the project so the runner can cache it (it only caches paths in there)
@@ -74,7 +74,7 @@ backend:test:
     - go build ./...
     - go test ./...
 
-# on the default branch the image build below runs the same next build, so this is for other branches.
+# on the default branch the image build below runs the same build, so this is for other branches.
 # $CI_COMMIT_BRANCH is unset in merge request pipelines, where the test jobs don't exist to be needed
 frontend:build:
   extends: .npm-cache

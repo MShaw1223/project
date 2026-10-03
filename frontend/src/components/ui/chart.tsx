@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 import * as RechartsPrimitive from "recharts";
 
@@ -35,7 +33,7 @@ const ChartContainer = React.forwardRef<
           "flex aspect-video justify-center text-xs",
           // recessive chrome: hairline grid, muted axis ink, no focus outline on the svg
           "[&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground [&_.recharts-cartesian-grid_line]:stroke-border [&_.recharts-cartesian-axis-line]:stroke-border [&_.recharts-reference-line_line]:stroke-border",
-          "[&_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-muted [&_.recharts-surface]:outline-none [&_.recharts-sector]:outline-none",
+          "[&_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-muted [&_.recharts-surface]:outline-hidden [&_.recharts-sector]:outline-hidden",
           className
         )}
         {...props}
@@ -75,7 +73,7 @@ const ChartTooltipContent = ({
   if (!active || !payload?.length) return null;
   const title = labelKey ? payload[0].payload?.[labelKey] : label;
   return (
-    <div className="grid min-w-[8rem] gap-1.5 rounded-lg border bg-popover px-2.5 py-1.5 text-xs text-popover-foreground shadow-md">
+    <div className="grid min-w-32 gap-1.5 rounded-lg border bg-popover px-2.5 py-1.5 text-xs text-popover-foreground shadow-md">
       {title !== undefined && title !== null && <div className="font-medium">{String(title)}</div>}
       <div className="grid gap-1">
         {payload.map((item) => {

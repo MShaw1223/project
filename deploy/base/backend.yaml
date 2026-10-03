@@ -48,7 +48,7 @@ kind: Service
 metadata:
   name: backend
 spec:
-  # no Ingress points here: the browser only reaches the Go server through the Next.js /backend proxy
+  # no Ingress points here: the browser only reaches the Go server through the frontend's /backend proxy (nginx)
   selector: { app: backend }
   ports:
     - port: 8080

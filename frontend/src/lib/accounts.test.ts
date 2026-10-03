@@ -16,7 +16,7 @@ describe("accounts api", () => {
   });
 
   it("addresses updates and deletes by id and never sends a token itself", async () => {
-    const fetchMock = vi.fn().mockResolvedValue(respond(200, { account: { id: "abc", name: "new" } }));
+    const fetchMock = vi.fn().mockImplementation(async () => respond(200, { account: { id: "abc", name: "new" } }));
     vi.stubGlobal("fetch", fetchMock);
 
     await updateAccount("abc", "new");
@@ -30,13 +30,17 @@ describe("accounts api", () => {
     expect(JSON.stringify(fetchMock.mock.calls)).not.toMatch(/authorization/i);
   });
 
+  it("creates an account and returns it", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(respond(201, { account: { id: "abc", name: "main" } }));
+    vi.stubGlobal("fetch", fetchMock);
+
+    await expect(createAccount("main")).resolves.toEqual({ id: "abc", name: "main" });
+    expect(fetchMock.mock.calls[0]).toMatchObject(["/backend/accounts", { method: "POST", body: JSON.stringify({ name: "main" }) }]);
+  });
+
   it("surfaces the backend error message on failure", async () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue(respond(400, { error: "invalid account name" })));
     await expect(createAccount("")).rejects.toThrow("invalid account name");
   });
 
-  it("falls back to the status when the error body is not json", async () => {
-    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(respond(502)));
-    await expect(getAccounts()).rejects.toThrow("request failed: 502");
-  });
 });

@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { CandlestickChart } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ThemeToggle } from "@/components/theme/ThemeToggle";
+import { ThemeToggle } from "@/components/layout/ThemeToggle";
 
 interface AuthLayoutProps {
   title: string;
