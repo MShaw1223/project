@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: fxtrax
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-cloudflare
+    # https only: port 80 then only answers Let's Encrypt's HTTP-01 challenges, so it can be open to the
+    # internet even where 443 isn't
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+spec:
+  ingressClassName: traefik
+  tls:
+    - hosts: [HOST]
+      secretName: fxtrax-tls
+  rules:
+    - host: HOST
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port: { number: 3000 }

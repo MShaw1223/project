@@ -1,10 +1,15 @@
 package main
 
 import (
+	"context"
+	"errors"
 	"fmt"
 	"log"
+	"net/http"
 	"os"
+	"os/signal"
 	"strings"
+	"syscall"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -24,6 +29,8 @@ func main() {
 	if err := router.SetTrustedProxies(proxies); err != nil {
 		log.Fatalf("invalid TRUSTED_PROXIES: %v", err)
 	}
+	// every request body is a small JSON object; refuse anything big enough to pressure memory
+	router.Use(handlers.LimitRequestBody(64 << 10))
 	// refuse cross-site state changes (CSRF), including login CSRF which SameSite cookies don't cover
 	router.Use(handlers.RequireSameOrigin(appOrigins()))
 	baseProvider := &repositories.SupabaseProvider{}
@@ -56,9 +63,11 @@ func main() {
 		loginMiddleware = append(loginMiddleware, handlers.RateLimitByClientIP(&handlers.RateLimiter{Limit: 30, Window: 15 * time.Minute}))
 	}
 	router.POST("/auth/login", append(loginMiddleware, authHandler.CreateSession)...)
-	router.POST("/auth/signup", authHandler.Signup)
-	// every resend sends an email from the project's quota, so cap it per client on top of Supabase's
-	// own per-address limit
+	// signups and resends each send an email from the project's quota, and Supabase's own per-IP limits
+	// see this server's address for every user, so one client could use them up for everyone; cap both
+	// per client here
+	signupLimiter := &handlers.RateLimiter{Limit: 5, Window: 15 * time.Minute}
+	router.POST("/auth/signup", handlers.RateLimitByClientIP(signupLimiter), authHandler.Signup)
 	resendLimiter := &handlers.RateLimiter{Limit: 5, Window: 15 * time.Minute}
 	router.POST("/auth/resend", handlers.RateLimitByClientIP(resendLimiter), authHandler.ResendConfirmation)
 	router.POST("/auth/logout", authHandler.DeleteSession)
@@ -86,8 +95,22 @@ func main() {
 	router.POST("/currency-pairs", currencyPairsHandler.CreatePair)
 	router.DELETE("/currency-pairs/:id", currencyPairsHandler.DeletePair)
 
-	if err := router.Run(addr); err != nil {
-		log.Fatalf("server failed: %v", err)
+	// Kubernetes sends SIGTERM on every rollout, so stop accepting connections and let in-flight
+	// requests finish instead of dropping them
+	srv := &http.Server{Addr: addr, Handler: router.Handler(), ReadHeaderTimeout: 10 * time.Second}
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
+	go func() {
+		if err := srv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+			log.Fatalf("server failed: %v", err)
+		}
+	}()
+	<-ctx.Done()
+
+	shutdownCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	if err := srv.Shutdown(shutdownCtx); err != nil {
+		log.Printf("shutdown: %v", err)
 	}
 
 	fmt.Println("server stopped")

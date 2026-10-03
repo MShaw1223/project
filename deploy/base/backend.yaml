@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  labels: { app: backend }
+spec:
+  # the rate limiters keep their state in memory, so more replicas would each get their own budget
+  replicas: 1
+  selector:
+    matchLabels: { app: backend }
+  template:
+    metadata:
+      labels: { app: backend }
+    spec:
+      imagePullSecrets:
+        - name: gitlab-registry
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile: { type: RuntimeDefault }
+      containers:
+        - name: backend
+          image: backend
+          ports:
+            - containerPort: 8080
+          env:
+            - name: GIN_MODE
+              value: release
+          envFrom:
+            - configMapRef: { name: backend-config }
+            # SUPABASE_URL, SUPABASE_KEY; created by CI from GitLab variables, never committed
+            - secretRef: { name: backend-secrets }
+          readinessProbe:
+            httpGet: { path: /health, port: 8080 }
+            periodSeconds: 5
+          livenessProbe:
+            httpGet: { path: /health, port: 8080 }
+            periodSeconds: 20
+          resources:
+            requests: { cpu: 50m, memory: 64Mi }
+            limits: { memory: 256Mi }
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: { drop: [ALL] }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+spec:
+  # no Ingress points here: the browser only reaches the Go server through the Next.js /backend proxy
+  selector: { app: backend }
+  ports:
+    - port: 8080
+      targetPort: 8080

@@ -1,0 +1,26 @@
+#cloud-config
+package_update: true
+package_upgrade: true
+packages:
+  - unattended-upgrades
+
+write_files:
+  - path: /usr/local/sbin/install-k3s.sh
+    permissions: "0755"
+    content: |
+      #!/bin/sh
+      set -eu
+      # Oracle's Ubuntu images ship iptables rules that REJECT everything but SSH, including forwarded
+      # pod traffic; the VCN security list is the firewall instead
+      sed -i '/icmp-host-prohibited/d' /etc/iptables/rules.v4
+      iptables-restore < /etc/iptables/rules.v4
+
+      # the public IP has to be in the API server certificate to use kubectl from outside
+      public_ip=$(curl -fsS https://checkip.amazonaws.com)
+      mkdir -p /etc/rancher/k3s
+      printf 'write-kubeconfig-mode: "0600"\ntls-san:\n  - "%s"\n' "$public_ip" > /etc/rancher/k3s/config.yaml
+
+      curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION="${k3s_version}" sh -
+
+runcmd:
+  - /usr/local/sbin/install-k3s.sh

@@ -1,0 +1,41 @@
+# needs cert-manager's CRDs: on a fresh cluster the first apply fails here, re-run it once cert-manager is up
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-staging
+spec:
+  acme:
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    privateKeySecretRef: { name: letsencrypt-staging }
+    solvers:
+      - http01:
+          ingress: { ingressClassName: traefik }
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-prod
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    privateKeySecretRef: { name: letsencrypt-prod }
+    solvers:
+      - http01:
+          ingress: { ingressClassName: traefik }
+---
+# DNS-01 through the Cloudflare API: works however the firewall and Cloudflare's proxy are set up, since
+# Let's Encrypt never has to reach the server. Needs the cloudflare-api-token Secret (see deploy/README.md)
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-cloudflare
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    privateKeySecretRef: { name: letsencrypt-cloudflare }
+    solvers:
+      - dns01:
+          cloudflare:
+            apiTokenSecretRef:
+              name: cloudflare-api-token
+              key: api-token

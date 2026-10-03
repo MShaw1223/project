@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  labels: { app: frontend }
+spec:
+  replicas: 1
+  selector:
+    matchLabels: { app: frontend }
+  template:
+    metadata:
+      labels: { app: frontend }
+    spec:
+      imagePullSecrets:
+        - name: gitlab-registry
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000 # the image's "node" user
+        seccompProfile: { type: RuntimeDefault }
+      containers:
+        - name: frontend
+          image: frontend
+          ports:
+            - containerPort: 3000
+          env:
+            # Kubernetes sets HOSTNAME to the pod name, which the standalone server would bind to
+            - name: HOSTNAME
+              value: "0.0.0.0"
+          readinessProbe:
+            tcpSocket: { port: 3000 }
+            periodSeconds: 5
+          livenessProbe:
+            tcpSocket: { port: 3000 }
+            periodSeconds: 20
+          resources:
+            requests: { cpu: 100m, memory: 192Mi }
+            limits: { memory: 512Mi }
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: { drop: [ALL] }
+          volumeMounts:
+            - name: next-cache
+              mountPath: /app/.next/cache
+      volumes:
+        - name: next-cache
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+spec:
+  selector: { app: frontend }
+  ports:
+    - port: 3000
+      targetPort: 3000

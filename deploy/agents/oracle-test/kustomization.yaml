@@ -1,0 +1,7 @@
+# the GitLab agent for the Oracle test cluster, applied once: kubectl apply -k deploy/agents/oracle-test
+# Its token lives in the gitlab-agent-token Secret, created when the agent is registered (deploy/README.md)
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - namespace.yaml
+  - agent.yaml
