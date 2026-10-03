@@ -74,14 +74,15 @@ backend:test:
     - go build ./...
     - go test ./...
 
-# on the default branch the image build below runs the same next build, so this is for other branches
+# on the default branch the image build below runs the same next build, so this is for other branches.
+# $CI_COMMIT_BRANCH is unset in merge request pipelines, where the test jobs don't exist to be needed
 frontend:build:
   extends: .npm-cache
   stage: build
   needs:
     - frontend:lint
   rules:
-    - if: $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_BRANCH && $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH
   script:
     - cd frontend
     - npm ci
@@ -147,7 +148,7 @@ deploy:test:
     name: test
     url: $TEST_URL
   script:
-    - 'sed -i "s/newTag: .*/newTag: $CI_COMMIT_SHORT_SHA/" deploy/overlays/test/kustomization.yaml'
+    - 'sed -i "s/newTag: .*/newTag: \"$CI_COMMIT_SHORT_SHA\"/" deploy/overlays/test/kustomization.yaml'
     - kubectl apply -f deploy/overlays/test/namespace.yaml
     - >
       kubectl -n fxtrax create secret generic backend-secrets
